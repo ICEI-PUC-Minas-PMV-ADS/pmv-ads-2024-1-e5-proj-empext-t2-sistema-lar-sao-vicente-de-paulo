@@ -1,23 +1,25 @@
-# TÍTULO DO PROJETO
+# Sistema Lar São Vicente de Paula
 
-`CURSO`
+`ANÁLISE E DESENVOLVIMENTO DE SISTEMAS`
 
-`DISCIPLINA`
+`DESENVOLVIMENTO DE UM SISTEMA SOCIOTÉCNICO INOVADOR`
 
-`SEMESTRE`
+`5° SEMESTRE`
 
 Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo desenvolvido.
 
 ## Integrantes
 
-* Nome completo do aluno 1
-* Nome completo do aluno 2
-* Nome completo do aluno 3
-* Nome completo do aluno 4
+* Ana Carolina do Carmo Vaz
+* Gustavo Augusto Ferreira de Lira
+* Jéssica Gonçalves dos Santos
+* João Paulo Jorges da Silva
+* Mariano Teixeira Barbosa Contin
+* Thiago Terra da Silva
 
 ## Orientador
 
-* Nome completo do professor 1
+* Soraia Lúcia da Silva
 
 ## Instruções de utilização
 
