@@ -1,4 +1,4 @@
-# Sistema Lar São Vicente de Paula
+# Sistema do Lar São Vicente de Paulo | Alterosa-MG
 
 `ANÁLISE E DESENVOLVIMENTO DE SISTEMAS`
 
@@ -10,16 +10,16 @@ Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo de
 
 ## Integrantes
 
-* Ana Carolina do Carmo Vaz
-* Gustavo Augusto Ferreira de Lira
-* Jéssica Gonçalves dos Santos
-* João Paulo Jorges da Silva
-* Mariano Teixeira Barbosa Contin
-* Thiago Terra da Silva
+- Ana Carolina do Carmo Vaz
+- Gustavo Augusto Ferreira de Lira
+- Jéssica Gonçalves dos Santos
+- João Paulo Jorges da Silva
+- Mariano Teixeira Barbosa Contin
+- Thiago Terra da Silva
 
 ## Orientador
 
-* Soraia Lúcia da Silva
+- Soraia Lúcia da Silva
 
 ## Instruções de utilização
 
