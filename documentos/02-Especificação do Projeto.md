@@ -71,15 +71,11 @@ O projeto está restrito pelos itens apresentados na tabela a seguir.
 
 | ID  | Restrição                                             |
 | --- | ----------------------------------------------------- |
-| 01  | O projeto deverá ser entregue até o final do semestre |
-| 02  | Não pode ser desenvolvido um módulo de backend        |
-
-Enumere as restrições à sua solução. Lembre-se de que as restrições geralmente limitam a solução candidata.
-
-> **Links Úteis**:
->
-> - [O que são Requisitos Funcionais e Requisitos Não Funcionais?](https://codificar.com.br/requisitos-funcionais-nao-funcionais/)
-> - [O que são requisitos funcionais e requisitos não funcionais?](https://analisederequisitos.com.br/requisitos-funcionais-e-requisitos-nao-funcionais-o-que-sao/)
+| 01  | Prazo de entrega até 23/06 deste a ano.               |
+| 02  | Acesso restrito à rede local do cliente.              |
+| 03  | Desenvolvimento como sistema web.                     |
+| 04  | Compatibilidade com os navegadores da rede local.     |
+| 05  | Restrições orçamentárias para o desenvolvimento.      |
 
 ## Diagrama de Casos de Uso
 
@@ -97,13 +93,7 @@ As referências abaixo irão auxiliá-lo na geração do artefato “Diagrama de
 
 ## Modelo ER (Projeto Conceitual)
 
-O Modelo ER representa através de um diagrama como as entidades (coisas, objetos) se relacionam entre si na aplicação interativa.
-
-Sugestão de ferramentas para geração deste artefato: LucidChart e Draw.io.
-
-A referência abaixo irá auxiliá-lo na geração do artefato “Modelo ER”.
-
-> - [Como fazer um diagrama entidade relacionamento | Lucidchart](https://www.lucidchart.com/pages/pt/como-fazer-um-diagrama-entidade-relacionamento)
+O modelo ER abaixo representa através de um diagrama como as entidades do sistema de relacionam entre si na aplicação, através deste também é possível verificar a cardinalidade entre as relações.
 
 ## Projeto da Base de Dados
 
