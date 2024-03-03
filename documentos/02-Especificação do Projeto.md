@@ -95,6 +95,8 @@ As referências abaixo irão auxiliá-lo na geração do artefato “Diagrama de
 
 O modelo ER abaixo representa através de um diagrama como as entidades do sistema de relacionam entre si na aplicação, através deste também é possível verificar a cardinalidade entre as relações.
 
+![Diagrama ER](img/diagrama-er.jpg)
+
 ## Projeto da Base de Dados
 
 O projeto da base de dados corresponde à representação das entidades e relacionamentos identificadas no Modelo ER, no formato de tabelas, com colunas e chaves primárias/estrangeiras necessárias para representar corretamente as restrições de integridade.
