@@ -30,4 +30,24 @@ $ yarn run test:e2e
 $ yarn run test:cov
 ```
 
-GO
+## Docker Compose
+
+```bash
+# init docker
+$ docker compose -f stack-compose.yml up -d postgres
+
+```
+
+## Prisma
+
+```bash
+# init migrate
+$ yarn prisma migrate dev --name init
+
+# start migrates in database
+$ yarn prisma migrate reset
+
+# start database view
+$ yarn prisma studio
+
+```
