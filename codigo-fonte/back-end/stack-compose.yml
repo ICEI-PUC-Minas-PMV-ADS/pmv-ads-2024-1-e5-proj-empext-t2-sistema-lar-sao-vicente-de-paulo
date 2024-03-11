@@ -15,7 +15,7 @@ services:
         build: .
         environment:
             - SERVER_PORT=3030
-            - DATABASE_URL=postgresql://postgres:postgres@192.168.1.102:5432/backend-dev-local # my-ip
+            - DATABASE_URL="postgresql://postgres:postgres@{$YourIpAddress}:5432/backend-dev-local"
         ports:
             - 3030:3030
 
