@@ -16,6 +16,7 @@ model Usuario {
   cpf_cnh       String   @db.VarChar(11)
   email         String   @db.VarChar(255)
   senha         String   @db.VarChar(511)
+  situacao      String   @default("ATIVO") @db.VarChar(255) // ATIVO, INATIVO
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
@@ -26,6 +27,7 @@ model Usuario {
   FichaNutricional FichaNutricional[]
   Perroca          Perroca[]
   EscalaBraden     EscalaBraden[]
+  Idoso            Idoso[]
 
   @@map("usuarios")
 }
@@ -33,17 +35,19 @@ model Usuario {
 model Idoso {
   id                   BigInt             @id @default(autoincrement()) @db.BigInt
   uid                  String             @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  usuario_id           BigInt             @db.BigInt
   foto                 Bytes?             @db.ByteA
   nome                 String             @db.VarChar(255)
-  data_nascimento      DateTime           @db.Date
+  data_nascimento      DateTime?          @db.Date
   data_admissao        DateTime           @db.Date
   cpf_cnh              String             @db.VarChar(11)
   nome_pai             String?            @db.VarChar(255)
-  nome_mae             String             @db.VarChar(255)
+  nome_mae             String?            @db.VarChar(255)
   responsavel          String             @db.VarChar(255)
   telefone_responsavel String             @db.VarChar(11)
   genero               String             @db.VarChar(9)
-  leito                String             @db.VarChar(255)
+  leito                String?            @db.VarChar(255)
+  situacao             String             @default("ATIVO") @db.VarChar(255) // ATIVO, INATIVO
   criado_em            DateTime           @default(now()) @db.Timestamp
   atualizado_em        DateTime           @updatedAt @db.Timestamp
   Prontuario           Prontuario[]
@@ -51,6 +55,8 @@ model Idoso {
   FichaNutricional     FichaNutricional[]
   Perroca              Perroca[]
   EscalaBraden         EscalaBraden[]
+
+  usuario Usuario @relation(fields: [usuario_id], references: [id])
 
   @@map("idosos")
 }
@@ -116,7 +122,7 @@ model Prontuario {
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   idoso_id      BigInt   @db.BigInt
   usuario_id    BigInt   @db.BigInt
-  relatorio     String?  @db.Text
+  relatorio     String   @db.Text
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
@@ -149,7 +155,7 @@ model PerguntaRelatorio {
   relatorio_pia_id BigInt   @db.BigInt
   pergunta         String   @db.VarChar(255)
   sim_nao          Boolean  @db.Boolean
-  observacao       String   @db.Text
+  observacao       String?  @db.Text
   criado_em        DateTime @default(now()) @db.Timestamp
   atualizado_em    DateTime @updatedAt @db.Timestamp
 
@@ -204,7 +210,7 @@ model FichaNutricional {
 
   idoso                        Idoso                          @relation(fields: [idoso_id], references: [id])
   usuario                      Usuario                        @relation(fields: [usuario_id], references: [id])
-  AntropometriaAdmissional     AntropometriaAdmissional[]
+  AntropometriaAdmissional     AntropometriaAdmissional?
   CondutaNutricional           CondutaNutricional[]
   QuadroClinico                QuadroClinico[]
   AcompanhamentoAntropometrico AcompanhamentoAntropometrico[]
@@ -215,7 +221,7 @@ model FichaNutricional {
 model AntropometriaAdmissional {
   id                             BigInt   @id @default(autoincrement()) @db.BigInt
   uid                            String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  ficha_nutricional_id           BigInt   @db.BigInt
+  ficha_nutricional_id           BigInt   @unique @db.BigInt
   triagem                        String   @db.VarChar(255)
   escore                         Int      @db.Integer
   triagem_classificacao          String   @db.VarChar(255)
@@ -291,6 +297,7 @@ model AcompanhamentoAntropometrico {
   id                   BigInt   @id @default(autoincrement()) @db.BigInt
   uid                  String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   ficha_nutricional_id BigInt   @db.BigInt
+  data                 DateTime @db.Date
   altura               Float
   peso                 Float
   ascite               String?  @db.VarChar(255)
@@ -313,21 +320,21 @@ model Perroca {
   uid                        String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   idoso_id                   BigInt   @db.BigInt
   usuario_id                 BigInt   @db.BigInt
-  estado_metal_conciencia    Int?     @db.Integer
-  oxigenacao                 Int?     @db.Integer
-  sinais_vitais              Int?     @db.Integer
-  nutricao_hidratacao        Int?     @db.Integer
-  motilidade                 Int?     @db.Integer
-  locomocao                  Int?     @db.Integer
-  cuidado_corporal           Int?     @db.Integer
-  eliminacoes                Int?     @db.Integer
-  terapeutica                Int?     @db.Integer
-  educacao_saude             Int?     @db.Integer
-  comportamento              Int?     @db.Integer
-  comunicacao                Int?     @db.Integer
-  integridade_cutaneo_mucosa Int?     @db.Integer
-  tipo_cuidado_pontuacao     Int?     @db.Integer
-  tipo_cuidado_classificacao Int?     @db.Integer
+  estado_metal_conciencia    Int      @db.Integer
+  oxigenacao                 Int      @db.Integer
+  sinais_vitais              Int      @db.Integer
+  nutricao_hidratacao        Int      @db.Integer
+  motilidade                 Int      @db.Integer
+  locomocao                  Int      @db.Integer
+  cuidado_corporal           Int      @db.Integer
+  eliminacoes                Int      @db.Integer
+  terapeutica                Int      @db.Integer
+  educacao_saude             Int      @db.Integer
+  comportamento              Int      @db.Integer
+  comunicacao                Int      @db.Integer
+  integridade_cutaneo_mucosa Int      @db.Integer
+  tipo_cuidado_pontuacao     Int      @db.Integer
+  tipo_cuidado_classificacao Int      @db.Integer
   criado_em                  DateTime @default(now()) @db.Timestamp
   atualizado_em              DateTime @updatedAt @db.Timestamp
 
@@ -342,13 +349,13 @@ model EscalaBraden {
   uid                  String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   idoso_id             BigInt   @db.BigInt
   usuario_id           BigInt   @db.BigInt
-  pontuacao_escala     String?  @db.VarChar(255)
-  percepcao_sensorial  String?  @db.VarChar(255)
-  umidade              String?  @db.VarChar(255)
-  atividade            String?  @db.VarChar(255)
-  mobilidade           String?  @db.VarChar(255)
-  nutricao             String?  @db.VarChar(255)
-  friccao_cisalhamento String?  @db.VarChar(255)
+  pontuacao_escala     String   @db.VarChar(255)
+  percepcao_sensorial  String   @db.VarChar(255)
+  umidade              String   @db.VarChar(255)
+  atividade            String   @db.VarChar(255)
+  mobilidade           String   @db.VarChar(255)
+  nutricao             String   @db.VarChar(255)
+  friccao_cisalhamento String   @db.VarChar(255)
   criado_em            DateTime @default(now()) @db.Timestamp
   atualizado_em        DateTime @updatedAt @db.Timestamp
 
