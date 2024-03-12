@@ -8,6 +8,7 @@ CREATE TABLE "usuarios" (
     "cpf_cnh" VARCHAR(11) NOT NULL,
     "email" VARCHAR(255) NOT NULL,
     "senha" VARCHAR(511) NOT NULL,
+    "situacao" VARCHAR(255) NOT NULL DEFAULT 'ATIVO',
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
 
@@ -18,17 +19,19 @@ CREATE TABLE "usuarios" (
 CREATE TABLE "idosos" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "usuario_id" BIGINT NOT NULL,
     "foto" BYTEA,
     "nome" VARCHAR(255) NOT NULL,
-    "data_nascimento" DATE NOT NULL,
+    "data_nascimento" DATE,
     "data_admissao" DATE NOT NULL,
     "cpf_cnh" VARCHAR(11) NOT NULL,
     "nome_pai" VARCHAR(255),
-    "nome_mae" VARCHAR(255) NOT NULL,
+    "nome_mae" VARCHAR(255),
     "responsavel" VARCHAR(255) NOT NULL,
     "telefone_responsavel" VARCHAR(11) NOT NULL,
     "genero" VARCHAR(9) NOT NULL,
-    "leito" VARCHAR(255) NOT NULL,
+    "leito" VARCHAR(255),
+    "situacao" VARCHAR(255) NOT NULL DEFAULT 'ATIVO',
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
 
@@ -89,7 +92,7 @@ CREATE TABLE "prontuario" (
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
     "idoso_id" BIGINT NOT NULL,
     "usuario_id" BIGINT NOT NULL,
-    "relatorio" TEXT,
+    "relatorio" TEXT NOT NULL,
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
 
@@ -116,7 +119,7 @@ CREATE TABLE "pergunta_relatorio" (
     "relatorio_pia_id" BIGINT NOT NULL,
     "pergunta" VARCHAR(255) NOT NULL,
     "sim_nao" BOOLEAN NOT NULL,
-    "observacao" TEXT NOT NULL,
+    "observacao" TEXT,
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
 
@@ -246,6 +249,7 @@ CREATE TABLE "acompanhamento_antropometrico" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
     "ficha_nutricional_id" BIGINT NOT NULL,
+    "data" DATE NOT NULL,
     "altura" DOUBLE PRECISION NOT NULL,
     "peso" DOUBLE PRECISION NOT NULL,
     "ascite" VARCHAR(255),
@@ -267,21 +271,21 @@ CREATE TABLE "perroca" (
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
     "idoso_id" BIGINT NOT NULL,
     "usuario_id" BIGINT NOT NULL,
-    "estado_metal_conciencia" INTEGER,
-    "oxigenacao" INTEGER,
-    "sinais_vitais" INTEGER,
-    "nutricao_hidratacao" INTEGER,
-    "motilidade" INTEGER,
-    "locomocao" INTEGER,
-    "cuidado_corporal" INTEGER,
-    "eliminacoes" INTEGER,
-    "terapeutica" INTEGER,
-    "educacao_saude" INTEGER,
-    "comportamento" INTEGER,
-    "comunicacao" INTEGER,
-    "integridade_cutaneo_mucosa" INTEGER,
-    "tipo_cuidado_pontuacao" INTEGER,
-    "tipo_cuidado_classificacao" INTEGER,
+    "estado_metal_conciencia" INTEGER NOT NULL,
+    "oxigenacao" INTEGER NOT NULL,
+    "sinais_vitais" INTEGER NOT NULL,
+    "nutricao_hidratacao" INTEGER NOT NULL,
+    "motilidade" INTEGER NOT NULL,
+    "locomocao" INTEGER NOT NULL,
+    "cuidado_corporal" INTEGER NOT NULL,
+    "eliminacoes" INTEGER NOT NULL,
+    "terapeutica" INTEGER NOT NULL,
+    "educacao_saude" INTEGER NOT NULL,
+    "comportamento" INTEGER NOT NULL,
+    "comunicacao" INTEGER NOT NULL,
+    "integridade_cutaneo_mucosa" INTEGER NOT NULL,
+    "tipo_cuidado_pontuacao" INTEGER NOT NULL,
+    "tipo_cuidado_classificacao" INTEGER NOT NULL,
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
 
@@ -294,13 +298,13 @@ CREATE TABLE "escala_braden" (
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
     "idoso_id" BIGINT NOT NULL,
     "usuario_id" BIGINT NOT NULL,
-    "pontuacao_escala" VARCHAR(255),
-    "percepcao_sensorial" VARCHAR(255),
-    "umidade" VARCHAR(255),
-    "atividade" VARCHAR(255),
-    "mobilidade" VARCHAR(255),
-    "nutricao" VARCHAR(255),
-    "friccao_cisalhamento" VARCHAR(255),
+    "pontuacao_escala" VARCHAR(255) NOT NULL,
+    "percepcao_sensorial" VARCHAR(255) NOT NULL,
+    "umidade" VARCHAR(255) NOT NULL,
+    "atividade" VARCHAR(255) NOT NULL,
+    "mobilidade" VARCHAR(255) NOT NULL,
+    "nutricao" VARCHAR(255) NOT NULL,
+    "friccao_cisalhamento" VARCHAR(255) NOT NULL,
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
 
@@ -347,6 +351,9 @@ CREATE UNIQUE INDEX "ficha_nutricional_uid_key" ON "ficha_nutricional"("uid");
 CREATE UNIQUE INDEX "antropometria_admissional_uid_key" ON "antropometria_admissional"("uid");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "antropometria_admissional_ficha_nutricional_id_key" ON "antropometria_admissional"("ficha_nutricional_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "conduta_nutricional_uid_key" ON "conduta_nutricional"("uid");
 
 -- CreateIndex
@@ -363,6 +370,9 @@ CREATE UNIQUE INDEX "escala_braden_uid_key" ON "escala_braden"("uid");
 
 -- AddForeignKey
 ALTER TABLE "usuarios" ADD CONSTRAINT "usuarios_cargo_id_fkey" FOREIGN KEY ("cargo_id") REFERENCES "modelo_cargo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "idosos" ADD CONSTRAINT "idosos_usuario_id_fkey" FOREIGN KEY ("usuario_id") REFERENCES "usuarios"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "modelo_cargo_permissao" ADD CONSTRAINT "modelo_cargo_permissao_cargo_id_fkey" FOREIGN KEY ("cargo_id") REFERENCES "modelo_cargo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
