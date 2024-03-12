@@ -43,11 +43,12 @@ model Idoso {
   cpf_cnh              String             @db.VarChar(11)
   nome_pai             String?            @db.VarChar(255)
   nome_mae             String?            @db.VarChar(255)
-  responsavel          String             @db.VarChar(255)
-  telefone_responsavel String             @db.VarChar(11)
+  responsavel          String?            @db.VarChar(255)
+  telefone_responsavel String?            @db.VarChar(11)
   genero               String             @db.VarChar(9)
   leito                String?            @db.VarChar(255)
   situacao             String             @default("ATIVO") @db.VarChar(255) // ATIVO, INATIVO
+  motivo_inativacao    String?            @db.VarChar(255)
   criado_em            DateTime           @default(now()) @db.Timestamp
   atualizado_em        DateTime           @updatedAt @db.Timestamp
   Prontuario           Prontuario[]
