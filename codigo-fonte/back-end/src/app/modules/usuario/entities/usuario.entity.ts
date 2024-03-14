@@ -9,19 +9,16 @@ export class Usuario implements UsuarioModel {
     uid: string;
 
     @ApiProperty()
-    created_at: Date;
+    cargo_id: bigint;
 
     @ApiProperty()
-    updated_at: Date;
+    foto: Buffer;
 
     @ApiProperty()
-    is_admin: boolean;
+    nome: string;
 
     @ApiProperty()
-    primeiro_nome: string;
-
-    @ApiProperty()
-    nome_completo: string;
+    cpf_cnh: string;
 
     @ApiProperty()
     email: string;
@@ -30,8 +27,11 @@ export class Usuario implements UsuarioModel {
     senha: string;
 
     @ApiProperty()
-    telefone: string;
+    situacao: string;
 
     @ApiProperty()
-    situacao: string;
+    criado_em: Date;
+
+    @ApiProperty()
+    atualizado_em: Date;
 }
