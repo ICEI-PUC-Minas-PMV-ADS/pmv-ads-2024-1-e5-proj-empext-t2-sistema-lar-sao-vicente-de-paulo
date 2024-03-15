@@ -10,17 +10,17 @@ generator client {
 model Usuario {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  cargo_id      BigInt   @db.BigInt
+  cargo_id      BigInt?  @db.BigInt
   foto          Bytes?   @db.ByteA
   nome          String   @db.VarChar(255)
-  cpf_cnh       String   @db.VarChar(11)
-  email         String   @db.VarChar(255)
+  cpf_cnh       String   @unique @db.VarChar(11) 
+  email         String   @unique @db.VarChar(255)
   senha         String   @db.VarChar(511)
   situacao      String   @default("ATIVO") @db.VarChar(255) // ATIVO, INATIVO
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  cargo Cargo @relation(fields: [cargo_id], references: [id])
+  cargo Cargo? @relation(fields: [cargo_id], references: [id])
 
   Prontuario       Prontuario[]
   RelatorioPia     RelatorioPia[]

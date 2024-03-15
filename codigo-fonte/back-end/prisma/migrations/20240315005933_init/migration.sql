@@ -2,7 +2,7 @@
 CREATE TABLE "usuarios" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "cargo_id" BIGINT NOT NULL,
+    "cargo_id" BIGINT,
     "foto" BYTEA,
     "nome" VARCHAR(255) NOT NULL,
     "cpf_cnh" VARCHAR(11) NOT NULL,
@@ -316,6 +316,12 @@ CREATE TABLE "escala_braden" (
 CREATE UNIQUE INDEX "usuarios_uid_key" ON "usuarios"("uid");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "usuarios_cpf_cnh_key" ON "usuarios"("cpf_cnh");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "usuarios_email_key" ON "usuarios"("email");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "idosos_uid_key" ON "idosos"("uid");
 
 -- CreateIndex
@@ -370,7 +376,7 @@ CREATE UNIQUE INDEX "perroca_uid_key" ON "perroca"("uid");
 CREATE UNIQUE INDEX "escala_braden_uid_key" ON "escala_braden"("uid");
 
 -- AddForeignKey
-ALTER TABLE "usuarios" ADD CONSTRAINT "usuarios_cargo_id_fkey" FOREIGN KEY ("cargo_id") REFERENCES "modelo_cargo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "usuarios" ADD CONSTRAINT "usuarios_cargo_id_fkey" FOREIGN KEY ("cargo_id") REFERENCES "modelo_cargo"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "idosos" ADD CONSTRAINT "idosos_usuario_id_fkey" FOREIGN KEY ("usuario_id") REFERENCES "usuarios"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
