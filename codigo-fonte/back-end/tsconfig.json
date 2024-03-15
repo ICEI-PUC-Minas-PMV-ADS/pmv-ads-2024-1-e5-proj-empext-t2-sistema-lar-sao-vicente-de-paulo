@@ -20,7 +20,7 @@
 
         "paths": {
             "@utils/*": ["src/common/utils/*"],
-            "@/*": ["src/*"]
+            "@/*": ["./src/*"]
         }
     }
 }
