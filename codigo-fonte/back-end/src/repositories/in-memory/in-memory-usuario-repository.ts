@@ -2,6 +2,7 @@ import { Prisma, Usuario } from '@prisma/client';
 import { usuarioRepository } from '../usuario-repository';
 import { randomUUID } from 'crypto';
 import { UpdateUsuarioDto } from '@/app/modules/usuario/dtos/update-usuario.dto';
+import { AppError } from '@utils/app-error';
 
 export class InMemoryUsuarioRepository implements usuarioRepository {
   async alreadyExists(email: string, cpf_cnh: string) {
@@ -51,7 +52,7 @@ export class InMemoryUsuarioRepository implements usuarioRepository {
       (usuario) => usuario.uid === uid,
     );
     if (usuarioIndex === -1) {
-      throw new Error('Usuário não encontrado.');
+      throw new AppError('Nenhum usuário encontrado');
     }
     const usuario = this.items[usuarioIndex];
     this.items[usuarioIndex] = {
@@ -66,7 +67,7 @@ export class InMemoryUsuarioRepository implements usuarioRepository {
       (usuario) => usuario.uid === data.uid,
     );
     if (usuarioIndex === -1) {
-      throw new Error('Usuário não encontrado.');
+      throw new AppError('Nenhum usuário encontrado');
     }
     const usuario = this.items[usuarioIndex];
     this.items[usuarioIndex] = {

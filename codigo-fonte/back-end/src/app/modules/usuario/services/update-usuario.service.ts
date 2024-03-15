@@ -8,7 +8,7 @@ import { AppError } from '@utils/app-error';
 export class UpdateUsuarioService {
     constructor(private usuarioRepository: PrismaUsuarioRepository) { }
 
-    async execute(uid: string, data: UpdateUsuarioDto): Promise<Usuario> {
+    async execute(uid: string, data: UpdateUsuarioDto): Promise<Usuario | null> {
         const usuario = await this.usuarioRepository.update(uid, data);
 
         if (!usuario) {

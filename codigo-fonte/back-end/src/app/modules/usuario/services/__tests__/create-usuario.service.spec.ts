@@ -7,13 +7,13 @@ import { AppError } from "@/common/utils/app-error";
 let usuarioRepository: InMemoryUsuarioRepository
 let sut: CreateUsuarioService
 
-describe("Create Usuario Use Case", () => {
+describe("Criar Usuario Caso de Uso", () => {
     beforeEach(() => {
         usuarioRepository = new InMemoryUsuarioRepository();
         sut = new CreateUsuarioService(usuarioRepository)
     })
 
-    it("should be able to register", async () => {
+    it("deveria poder se cadastrar", async () => {
         const { usuario } = await sut.execute({
             nome: "John Doe",
             cpf_cnh: "11111111111",
@@ -24,7 +24,7 @@ describe("Create Usuario Use Case", () => {
         expect(usuario.uid).toEqual(expect.any(String));
     })
 
-    it("should hash user password upon registration", async () => {
+    it("deve usuário no momento do registro ter uma hash senha", async () => {
         const { usuario } = await sut.execute({
             nome: "John Doe",
             cpf_cnh: "11111111111",
@@ -40,7 +40,7 @@ describe("Create Usuario Use Case", () => {
         expect(isPasswordCorrectlyHashed).toBe(true);
     });
 
-    it("should not be able to register with same email twice", async () => {
+    it("não deve ser possível registrar-se com o mesmo e-mail duas vezes", async () => {
         const email = "johndoe@example.com";
 
         await sut.execute({
@@ -60,7 +60,7 @@ describe("Create Usuario Use Case", () => {
         ).rejects.toThrow(AppError);
     });
 
-    it("should not be able to register with same cpf_cnh twice", async () => {
+    it("não deveria conseguir se cadastrar duas vezes no mesmo cpf_cnh", async () => {
         const cpf_cnh = "11111111111";
 
         await sut.execute({
