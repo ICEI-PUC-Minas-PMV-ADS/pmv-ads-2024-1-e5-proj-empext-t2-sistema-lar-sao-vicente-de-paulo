@@ -1,19 +1,16 @@
-import { Prisma, Usuario } from "@prisma/client";
-import { usuarioRepository } from "../usuario-repository";
-import { prisma } from "@/database/prisma.service";
+import { Prisma, Usuario } from '@prisma/client';
+import { usuarioRepository } from '../usuario-repository';
+import { prisma } from '@/database/prisma.service';
+import { UpdateUsuarioDto } from '@/app/modules/usuario/dtos/update-usuario.dto';
 
 export class PrismaUsuarioRepository implements usuarioRepository {
-
   async alreadyExists(email: string, cpf_cnh: string) {
     const usuario = await prisma.usuario.findFirst({
       where: {
-        OR: [
-          { email },
-          { cpf_cnh },
-        ]
-      }
-    })
-    return usuario
+        OR: [{ email }, { cpf_cnh }],
+      },
+    });
+    return usuario;
   }
 
   async findByCpf(cpf_cnh: string) {
@@ -42,25 +39,24 @@ export class PrismaUsuarioRepository implements usuarioRepository {
     return usuario;
   }
 
-  async update(data: Usuario) {
+  async update(uid: string, data: UpdateUsuarioDto) {
     const usuario = await prisma.usuario.update({
       where: {
-        uid: data.uid,
+        uid,
       },
       data,
     });
 
     return usuario;
   }
-  async delete(uid: string) {
-    try {
-      await prisma.usuario.delete({
-        where: {
-          uid: uid,
-        },
-      });
-    } catch (error) {
-      throw new Error("Erro ao excluir o usuário.");
-    }
+  async save(data: Usuario) {
+    const usuario = await prisma.usuario.update({
+      where: {
+        uid: data.uid,
+      },
+      data
+    });
+
+    return usuario;
   }
 }

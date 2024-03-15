@@ -1,12 +1,8 @@
 import { resolve } from 'path';
 import { defineConfig } from 'vitest/config';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, './src'),
-      // Adicione outros aliases conforme necessário
-    },
-  },
+  plugins: [tsconfigPaths()],
   // Outras configurações do Vitest...
 });

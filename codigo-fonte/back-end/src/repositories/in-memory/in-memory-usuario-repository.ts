@@ -1,19 +1,20 @@
-import { Prisma, Usuario } from "@prisma/client";
-import { usuarioRepository } from "../usuario-repository";
-import { randomUUID } from "crypto";
+import { Prisma, Usuario } from '@prisma/client';
+import { usuarioRepository } from '../usuario-repository';
+import { randomUUID } from 'crypto';
+import { UpdateUsuarioDto } from '@/app/modules/usuario/dtos/update-usuario.dto';
 
 export class InMemoryUsuarioRepository implements usuarioRepository {
   async alreadyExists(email: string, cpf_cnh: string) {
     return (
-      this.items.find((usuario) => usuario.email === email) && this.items.find((usuario) => usuario.cpf_cnh === cpf_cnh) || null
-    )
+      (this.items.find((usuario) => usuario.email === email) &&
+        this.items.find((usuario) => usuario.cpf_cnh === cpf_cnh)) ||
+      null
+    );
   }
   public items: Usuario[] = [];
 
   async findByEmail(email: string) {
-    return (
-      this.items.find((usuario) => usuario.email === email) || null
-    )
+    return this.items.find((usuario) => usuario.email === email) || null;
   }
 
   async findByCpf(cpf_cnh: string) {
@@ -45,12 +46,12 @@ export class InMemoryUsuarioRepository implements usuarioRepository {
   async findByUid(uid: string) {
     return this.items.find((usuario) => usuario.uid === uid) || null;
   }
-  async update(data: Usuario) {
+  async update(uid: string, data: UpdateUsuarioDto) {
     const usuarioIndex = this.items.findIndex(
-      (usuario) => usuario.uid === data.uid,
+      (usuario) => usuario.uid === uid,
     );
     if (usuarioIndex === -1) {
-      throw new Error("Usuário não encontrado.");
+      throw new Error('Usuário não encontrado.');
     }
     const usuario = this.items[usuarioIndex];
     this.items[usuarioIndex] = {
@@ -60,13 +61,18 @@ export class InMemoryUsuarioRepository implements usuarioRepository {
     };
     return this.items[usuarioIndex];
   }
-  async delete(uid: string) {
+  async save(data: Usuario) {
     const usuarioIndex = this.items.findIndex(
-      (usuario) => usuario.uid === uid,
+      (usuario) => usuario.uid === data.uid,
     );
     if (usuarioIndex === -1) {
-      throw new Error("Usuário não encontrado.");
+      throw new Error('Usuário não encontrado.');
     }
-    this.items.splice(usuarioIndex, 1);
+    const usuario = this.items[usuarioIndex];
+    this.items[usuarioIndex] = {
+      ...usuario,
+      atualizado_em: new Date(),
+    };
+    return this.items[usuarioIndex];
   }
 }
