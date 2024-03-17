@@ -1,37 +1,37 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Usuario as UsuarioModel } from '@prisma/client';
+import { ApiProperty } from "@nestjs/swagger";
+import { Usuario as UsuarioModel } from "@prisma/client";
 
 export class Usuario implements UsuarioModel {
     @ApiProperty()
-    id: bigint;
+      id: bigint;
 
     @ApiProperty()
-    uid: string;
+      uid: string;
 
     @ApiProperty()
-    created_at: Date;
+      foto: Buffer;
 
     @ApiProperty()
-    updated_at: Date;
+      cargo_id: bigint | null;
 
     @ApiProperty()
-    is_admin: boolean;
+      nome: string;
 
     @ApiProperty()
-    primeiro_nome: string;
+      cpf_cnh: string;
 
     @ApiProperty()
-    nome_completo: string;
+      email: string;
 
     @ApiProperty()
-    email: string;
+      senha: string;
 
     @ApiProperty()
-    senha: string;
+      situacao: string;
 
     @ApiProperty()
-    telefone: string;
+      criado_em: Date;
 
     @ApiProperty()
-    situacao: string;
+      atualizado_em: Date;
 }

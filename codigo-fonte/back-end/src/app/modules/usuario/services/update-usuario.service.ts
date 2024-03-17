@@ -1,19 +1,20 @@
-import { PrismaService } from '@/database/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { UpdateUsuarioDto } from '../dtos/update-usuario.dto';
+import { PrismaUsuarioRepository } from '@/repositories/prisma/prisma-usuario-repository';
+import { Usuario } from '@prisma/client';
+import { AppError } from '@utils/app-error';
 
 @Injectable()
 export class UpdateUsuarioService {
-    constructor(private prisma: PrismaService) {}
+    constructor(private usuarioRepository: PrismaUsuarioRepository) { }
 
-    async execute(uid: string, data: UpdateUsuarioDto): Promise<void> {
-        await this.prisma.usuario.update({
-            where: {
-                uid,
-            },
-            data,
-        });
+    async execute(uid: string, data: UpdateUsuarioDto): Promise<Usuario | null> {
+        const usuario = await this.usuarioRepository.update(uid, data);
 
-        return;
+        if (!usuario) {
+            throw new AppError('Nenhum usuário encontrado');
+        }
+
+        return usuario;
     }
 }

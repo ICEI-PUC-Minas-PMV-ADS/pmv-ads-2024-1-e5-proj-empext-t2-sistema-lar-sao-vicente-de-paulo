@@ -1,12 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-    IsBoolean,
-    IsEmail,
-    IsEnum,
-    IsOptional,
-    IsPhoneNumber,
-    IsString,
-} from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
 
 enum UsuarioSituacao {
     ATIVO = 'ATIVO',
@@ -16,16 +9,11 @@ enum UsuarioSituacao {
 export class CreateUsuarioDto {
     @ApiProperty()
     @IsString()
-    primeiro_nome: string;
+    nome: string;
 
     @ApiProperty()
     @IsString()
-    nome_completo: string;
-
-    @ApiPropertyOptional()
-    @IsOptional()
-    @IsBoolean()
-    is_admin?: boolean;
+    cpf_cnh: string;
 
     @ApiProperty()
     @IsEmail({}, { message: 'E-mail no formato incorreto' })
@@ -41,10 +29,4 @@ export class CreateUsuarioDto {
     @IsOptional()
     @IsEnum(UsuarioSituacao)
     situacao?: UsuarioSituacao;
-
-    @ApiProperty()
-    @IsPhoneNumber('BR', {
-        message: 'Telefone no formato incorreto',
-    })
-    telefone: string;
 }
