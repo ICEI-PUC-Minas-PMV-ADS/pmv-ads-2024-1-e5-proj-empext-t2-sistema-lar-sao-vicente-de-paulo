@@ -325,6 +325,9 @@ CREATE UNIQUE INDEX "usuarios_email_key" ON "usuarios"("email");
 CREATE UNIQUE INDEX "idosos_uid_key" ON "idosos"("uid");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "idosos_cpf_cnh_key" ON "idosos"("cpf_cnh");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "modelo_cargo_uid_key" ON "modelo_cargo"("uid");
 
 -- CreateIndex
