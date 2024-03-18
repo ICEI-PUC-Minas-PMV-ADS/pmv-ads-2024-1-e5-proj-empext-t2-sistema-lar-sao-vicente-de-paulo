@@ -2,20 +2,20 @@ import { PrismaIdosoRepository } from "@/repositories/prisma/prisma-idoso-reposi
 import { Injectable } from "@nestjs/common";
 import { Idoso } from "../entities/idoso.entity";
 import { AppError } from "@utils/app-error";
-import { DeleteIdosoDto } from "../dtos/delete-idoso.dto";
+import { UpdateIdosoDto } from "../dtos/update-idoso.dto";
 
 @Injectable()
-export class DeleteIdosoService {
+export class UpdateIdosoService {
     constructor(private idosoRepository: PrismaIdosoRepository) { }
 
-    async execute(data: DeleteIdosoDto, uid: string): Promise<Idoso> {
+    async execute(data: UpdateIdosoDto, uid: string): Promise<Idoso> {
         const idoso = await this.idosoRepository.findByUid(uid)
 
         if (!idoso) {
             throw new AppError('Nenhum usuário encontrado');
         }
 
-        await this.idosoRepository.delete(data, idoso)
+        await this.idosoRepository.update(data, idoso)
 
         return idoso
 

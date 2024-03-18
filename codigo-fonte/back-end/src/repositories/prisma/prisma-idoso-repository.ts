@@ -2,6 +2,7 @@ import { Idoso, Prisma } from "@prisma/client";
 import { idosoRepository } from "../idoso.repository";
 import { prisma } from "@/database/prisma.service";
 import { DeleteIdosoDto } from "@/app/modules/idoso/dtos/delete-idoso.dto";
+import { UpdateIdosoDto } from "@/app/modules/idoso/dtos/update-idoso.dto";
 
 export class PrismaIdosoRepository implements idosoRepository {
     async create(data: Prisma.IdosoUncheckedCreateInput) {
@@ -40,7 +41,18 @@ export class PrismaIdosoRepository implements idosoRepository {
         return idoso
     }
 
-    async save(data: DeleteIdosoDto, from: Idoso) {
+    async update(data: UpdateIdosoDto, from: Idoso) {
+        const idoso = await prisma.idoso.update({
+            where: {
+                uid: from.uid
+            },
+            data,
+        })
+
+        return idoso
+    }
+
+    async delete(data: DeleteIdosoDto, from: Idoso) {
         const idoso = await prisma.idoso.update({
             where: {
                 uid: from.uid

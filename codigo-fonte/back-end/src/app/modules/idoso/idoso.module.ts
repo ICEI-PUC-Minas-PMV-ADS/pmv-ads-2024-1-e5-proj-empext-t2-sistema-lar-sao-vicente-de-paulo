@@ -11,22 +11,26 @@ import { FindUidIdosoController } from "./controllers/find-uid-idoso.controller"
 import { FindUidIdosoService } from "./services/find-uid-idoso.service";
 import { DeleteIdosoService } from "./services/delete-idoso.service";
 import { DeleteIdosoController } from "./controllers/delete-idoso.controller";
+import { UpdateIdosoService } from "./services/update-idoso.service";
+import { UpdateIdosoController } from "./controllers/update-idoso.controller";
 
 @Module({
     providers: [
         CreateIdosoService,
         FindAllIdososService,
         FindUidIdosoService,
+        UpdateIdosoService,
         DeleteIdosoService,
         PrismaIdosoRepository,
         PrismaUsuarioRepository,
         PrismaService,
-        QueryBuilderService,
+        QueryBuilderService
     ],
     controllers: [
         CreateIdosoController,
         FindAllIdosoController,
         FindUidIdosoController,
+        UpdateIdosoController,
         DeleteIdosoController
     ]
 })
