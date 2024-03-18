@@ -7,11 +7,14 @@ import { FindAllIdososService } from "./services/find-all-idoso.service";
 import { FindAllIdosoController } from "./controllers/find-all-idoso.controller";
 import { PrismaService } from "@/database/prisma.service";
 import { QueryBuilderService } from "@utils/query-builder/query-builder.service";
+import { FindUidIdosoController } from "./controllers/find-uid-idoso.controller";
+import { FindUidIdosoService } from "./services/find-uid-idoso.service";
 
 @Module({
     providers: [
         CreateIdosoService,
         FindAllIdososService,
+        FindUidIdosoService,
         PrismaIdosoRepository,
         PrismaUsuarioRepository,
         PrismaService,
@@ -20,6 +23,7 @@ import { QueryBuilderService } from "@utils/query-builder/query-builder.service"
     controllers: [
         CreateIdosoController,
         FindAllIdosoController,
+        FindUidIdosoController
     ]
 })
 export class IdosoModule { }
