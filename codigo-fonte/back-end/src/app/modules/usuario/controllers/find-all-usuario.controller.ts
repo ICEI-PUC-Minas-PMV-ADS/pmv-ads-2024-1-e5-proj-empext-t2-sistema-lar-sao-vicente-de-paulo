@@ -1,20 +1,21 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { FindAllUsuarioService } from '../services/find-all-usuario.service';
 import { AppResponse } from '@/common/utils/app-response';
 import { Usuario } from '../entities/usuario.entity';
 import { QueryBuilderService } from '@utils/query-builder/query-builder.service';
 import { QueryValidator } from '@utils/query-builder/dto/queryValidator.dto';
 
-@ApiTags('usuarios')
+@ApiTags('Usuarios')
 @Controller('usuarios')
 export class FindAllUsuarioController {
     constructor(
         private findAllUsuario: FindAllUsuarioService,
         private query: QueryBuilderService,
-    ) {}
+    ) { }
 
     @Get()
+    @ApiOperation({ summary: 'Lista todos os usuários com paginação' })
     @ApiQuery({
         type: QueryValidator,
     })
