@@ -40,7 +40,7 @@ model Idoso {
   nome                 String             @db.VarChar(255)
   data_nascimento      DateTime?          @db.Date
   data_admissao        DateTime           @db.Date
-  cpf_cnh              String             @db.VarChar(11)
+  cpf_cnh              String             @unique @db.VarChar(11)
   nome_pai             String?            @db.VarChar(255)
   nome_mae             String?            @db.VarChar(255)
   responsavel          String?            @db.VarChar(255)
