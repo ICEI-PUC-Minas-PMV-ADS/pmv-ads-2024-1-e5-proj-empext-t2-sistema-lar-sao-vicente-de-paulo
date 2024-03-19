@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "Situacao" AS ENUM ('ATIVO', 'INATIVO', 'PENDENTE');
+
 -- CreateTable
 CREATE TABLE "usuarios" (
     "id" BIGSERIAL NOT NULL,
@@ -6,9 +9,9 @@ CREATE TABLE "usuarios" (
     "foto" BYTEA,
     "nome" VARCHAR(255) NOT NULL,
     "cpf_cnh" VARCHAR(11) NOT NULL,
-    "email" VARCHAR(255) NOT NULL,
-    "senha" VARCHAR(511) NOT NULL,
-    "situacao" VARCHAR(255) NOT NULL DEFAULT 'ATIVO',
+    "email" VARCHAR(254) NOT NULL,
+    "senha" VARCHAR(60) NOT NULL,
+    "situacao" "Situacao" NOT NULL DEFAULT 'ATIVO',
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
 
@@ -21,22 +24,56 @@ CREATE TABLE "idosos" (
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
     "usuario_id" BIGINT NOT NULL,
     "foto" BYTEA,
-    "nome" VARCHAR(255) NOT NULL,
-    "data_nascimento" DATE,
-    "data_admissao" DATE NOT NULL,
-    "cpf_cnh" VARCHAR(11) NOT NULL,
-    "nome_pai" VARCHAR(255),
-    "nome_mae" VARCHAR(255),
-    "responsavel" VARCHAR(255),
-    "telefone_responsavel" VARCHAR(11),
-    "genero" VARCHAR(9) NOT NULL,
-    "leito" VARCHAR(255),
-    "situacao" VARCHAR(255) NOT NULL DEFAULT 'ATIVO',
-    "motivo_inativacao" VARCHAR(255),
+    "nome_completo" VARCHAR(255) NOT NULL,
+    "data_nascimento" DATE NOT NULL,
+    "naturalidade" VARCHAR(100) NOT NULL,
+    "estado" VARCHAR(2) NOT NULL,
+    "pais" VARCHAR(100) NOT NULL,
+    "estado_civil" VARCHAR(20) NOT NULL,
+    "religiao" VARCHAR(50) NOT NULL,
+    "escolaridade" VARCHAR(50) NOT NULL,
+    "nome_pai" VARCHAR(255) NOT NULL,
+    "nome_mae" VARCHAR(255) NOT NULL,
+    "data_ingresso" DATE NOT NULL,
+    "cpf" VARCHAR(11),
+    "cnh" VARCHAR(8),
+    "rg" VARCHAR(10),
+    "rg_orgao_expedidor" VARCHAR(255),
+    "titulo_eleitor" VARCHAR(12),
+    "titulo_eleitor_secao" VARCHAR(4),
+    "titulo_eleitor_zona" VARCHAR(3),
+    "certidao_nascimento" VARCHAR(30),
+    "certidao_nascimento_folha" VARCHAR(20),
+    "certidao_nascimento_livro" VARCHAR(20),
+    "certidao_casamento" VARCHAR(30),
+    "certidao_casamento_folha" VARCHAR(20),
+    "certidao_casamento_livro" VARCHAR(20),
+    "situacao" "Situacao" NOT NULL DEFAULT 'ATIVO',
+    "motivo_inativacao" VARCHAR(100),
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
 
     CONSTRAINT "idosos_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "responsaveis_idosos" (
+    "id" BIGSERIAL NOT NULL,
+    "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "idoso_id" BIGINT NOT NULL,
+    "parentesco" VARCHAR(50) NOT NULL,
+    "nome_completo" VARCHAR(255) NOT NULL,
+    "endereco" VARCHAR(100) NOT NULL,
+    "endereco_numero" VARCHAR(20) NOT NULL,
+    "bairro" VARCHAR(50) NOT NULL,
+    "cep" VARCHAR(50) NOT NULL,
+    "estado" VARCHAR(2) NOT NULL,
+    "telefone_1" VARCHAR(20) NOT NULL,
+    "telefone_2" VARCHAR(20),
+    "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "atualizado_em" TIMESTAMP NOT NULL,
+
+    CONSTRAINT "responsaveis_idosos_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -325,7 +362,16 @@ CREATE UNIQUE INDEX "usuarios_email_key" ON "usuarios"("email");
 CREATE UNIQUE INDEX "idosos_uid_key" ON "idosos"("uid");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "idosos_cpf_cnh_key" ON "idosos"("cpf_cnh");
+CREATE UNIQUE INDEX "idosos_cpf_key" ON "idosos"("cpf");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "idosos_cnh_key" ON "idosos"("cnh");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "idosos_rg_key" ON "idosos"("rg");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "responsaveis_idosos_uid_key" ON "responsaveis_idosos"("uid");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "modelo_cargo_uid_key" ON "modelo_cargo"("uid");
@@ -383,6 +429,9 @@ ALTER TABLE "usuarios" ADD CONSTRAINT "usuarios_cargo_id_fkey" FOREIGN KEY ("car
 
 -- AddForeignKey
 ALTER TABLE "idosos" ADD CONSTRAINT "idosos_usuario_id_fkey" FOREIGN KEY ("usuario_id") REFERENCES "usuarios"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "responsaveis_idosos" ADD CONSTRAINT "responsaveis_idosos_idoso_id_fkey" FOREIGN KEY ("idoso_id") REFERENCES "idosos"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "modelo_cargo_permissao" ADD CONSTRAINT "modelo_cargo_permissao_cargo_id_fkey" FOREIGN KEY ("cargo_id") REFERENCES "modelo_cargo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
