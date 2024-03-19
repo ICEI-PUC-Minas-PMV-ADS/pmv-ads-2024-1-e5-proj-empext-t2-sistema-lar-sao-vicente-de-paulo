@@ -1,7 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags, ApiParam, ApiOperation } from '@nestjs/swagger';
 import { AppResponse } from '@/common/utils/app-response';
-import { FindAllIdososService } from '../services/find-all-idoso.service';
 import { Idoso } from '../entities/idoso.entity';
 import { FindUidIdosoService } from '../services/find-uid-idoso.service';
 
@@ -11,6 +10,8 @@ export class FindUidIdosoController {
     constructor(private findUidIdoso: FindUidIdosoService) { }
 
     @Get(':uid')
+    @ApiOperation({ summary: 'Retorna um idoso com base no seu UID' })
+    @ApiParam({ name: 'uid', description: 'O UID do idoso a ser encontrado' })
     @ApiOkResponse({
         type: Idoso,
     })
