@@ -1,9 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Situacao } from "@prisma/client";
 import { IsString } from "class-validator";
 
 export class DeleteIdosoDto {
     @IsString()
-    situacao = "INATIVO"
+    situacao = Situacao.INATIVO
 
     @ApiProperty()
     @IsString()

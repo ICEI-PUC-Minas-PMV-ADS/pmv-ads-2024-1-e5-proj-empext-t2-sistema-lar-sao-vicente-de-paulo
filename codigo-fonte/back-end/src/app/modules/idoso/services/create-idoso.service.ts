@@ -13,13 +13,13 @@ export class CreateIdosoService {
     ) { }
 
     async execute(data: CreateIdosoDto): Promise<Idoso> {
-        const usuario = await this.usuarioRepository.findByUid(data.usuario_id)
+        const usuario = await this.usuarioRepository.findById(data.usuario_id)
 
         if (!usuario) {
             throw new AppError("Usuário não encontrado.");
         }
 
-        const idosoWithSameCpf = await this.idosoRepository.findByCpf(data.cpf_cnh)
+        const idosoWithSameCpf = await this.idosoRepository.findByCpf(data.cpf)
 
         if (idosoWithSameCpf) {
             throw new AppError("Idoso já cadastrado.");
@@ -27,7 +27,7 @@ export class CreateIdosoService {
 
         const idoso = await this.idosoRepository.create({
             ...data,
-            usuario_id: usuario.id
+            usuario_id: data.usuario_id
         })
 
         return idoso

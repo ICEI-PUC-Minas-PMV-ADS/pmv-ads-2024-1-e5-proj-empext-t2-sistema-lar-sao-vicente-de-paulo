@@ -7,16 +7,16 @@ import { UpdateIdosoDto } from "@/app/modules/idoso/dtos/update-idoso.dto";
 export class PrismaIdosoRepository implements idosoRepository {
     async create(data: Prisma.IdosoUncheckedCreateInput) {
         const idoso = await prisma.idoso.create({
-            data,
+            data
         })
 
         return idoso
     }
 
-    async findByCpf(cpf_cnh: string) {
+    async findByCpf(cpf: string) {
         const idoso = await prisma.idoso.findUnique({
             where: {
-                cpf_cnh
+                cpf
             }
         })
 
@@ -29,9 +29,10 @@ export class PrismaIdosoRepository implements idosoRepository {
                 uid
             },
             include: {
-                Prontuario: true,
-                RelatorioPia: true,
-                FichaNutricional: true,
+                ResponsaveisIdoso: true,
+                Prontuarios: true,
+                RelatoriosPia: true,
+                FichasNutricionais: true,
                 Perroca: true,
                 EscalaBraden: true
             }
