@@ -16,7 +16,7 @@ export class CreateIdosoService {
         const usuario = await this.usuarioRepository.findByUid(data.usuario_id)
 
         if (!usuario) {
-            throw new AppError("Recurso não encontrado.");
+            throw new AppError("Usuário não encontrado.");
         }
 
         const idosoWithSameCpf = await this.idosoRepository.findByCpf(data.cpf_cnh)

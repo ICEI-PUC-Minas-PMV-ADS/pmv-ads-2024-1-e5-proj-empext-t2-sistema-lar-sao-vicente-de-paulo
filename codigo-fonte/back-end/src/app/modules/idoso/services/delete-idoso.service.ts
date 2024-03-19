@@ -15,9 +15,9 @@ export class DeleteIdosoService {
             throw new AppError('Nenhum usuário encontrado');
         }
 
-        await this.idosoRepository.delete(data, idoso)
+        const deletedIdoso = await this.idosoRepository.delete(data, idoso)
 
-        return idoso
+        return deletedIdoso
 
     }
 }

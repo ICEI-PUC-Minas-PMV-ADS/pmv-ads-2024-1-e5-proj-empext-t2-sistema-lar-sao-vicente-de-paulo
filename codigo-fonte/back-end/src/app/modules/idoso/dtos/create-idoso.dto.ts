@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsDate, IsDateString, IsEnum, IsInt, IsNumber, IsOptional, IsString, isInt, isNumber, isNumberString, isString } from "class-validator";
 
-enum IdosoGenero {
+export enum IdosoGenero {
     MASCULINO = 'MASCULINO',
     FEMININO = 'FEMININO'
 }
