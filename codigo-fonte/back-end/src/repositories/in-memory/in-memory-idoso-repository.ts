@@ -4,12 +4,21 @@ import { idosoRepository } from "../idoso.repository";
 import { DeleteIdosoDto } from '@/app/modules/idoso/dtos/delete-idoso.dto';
 import { UpdateIdosoDto } from '@/app/modules/idoso/dtos/update-idoso.dto';
 import { randomUUID } from 'crypto';
+interface IdosoComArrays extends Idoso {
+    ResponsaveisIdoso: any[];
+    Prontuarios: any[];
+    RelatoriosPia: any[];
+    FichasNutricionais: any[];
+    Perroca: any[];
+    EscalaBraden: any[];
+}
 
 export class InMemoryIdosoRepository implements idosoRepository {
-    private items: Idoso[] = [];
+    private idososArray: IdosoComArrays[] = [];
 
     async create(data: Prisma.IdosoUncheckedCreateInput) {
-        const idoso: Idoso = {
+
+        const idoso: IdosoComArrays = {
             id: data.id ? BigInt(data.id) : undefined,
             uid: randomUUID(),
             usuario_id: data.id ? BigInt(data.id) : undefined,
@@ -41,60 +50,56 @@ export class InMemoryIdosoRepository implements idosoRepository {
             situacao: 'ATIVO',
             motivo_inativacao: data.motivo_inativacao,
             criado_em: new Date(),
-            atualizado_em: new Date()
+            atualizado_em: new Date(),
+            ResponsaveisIdoso: [],
+            Prontuarios: [],
+            RelatoriosPia: [],
+            FichasNutricionais: [],
+            Perroca: [],
+            EscalaBraden: [],
         }
 
-        this.items.push(idoso);
+        this.idososArray.push(idoso);
 
         return idoso;
     }
 
     async findByCpf(cpf: string) {
         return (
-            this.items.find((usuario) => usuario.cpf === cpf) || null
+            this.idososArray.find((usuario) => usuario.cpf === cpf) || null
         );
     }
     async findByUid(uid: string) {
-        const idoso = this.items.find((usuario) => usuario.uid === uid)
-        if (idoso) {
-            return {
-                ...idoso,
-                Prontuario: [],
-                RelatorioPia: [],
-                FichaNutricional: [],
-                Perroca: [],
-                EscalaBraden: [],
-            }
-        }
-
-        return null;
+        return (
+            this.idososArray.find((idoso) => idoso.uid === uid) || null
+        )
     }
     async update(data: UpdateIdosoDto, from: Idoso): Promise<Idoso> {
-        const idosoIndex = this.items.findIndex(item => item.uid === from.uid);
+        const idosoIndex = this.idososArray.findIndex(item => item.uid === from.uid);
         if (idosoIndex === -1) {
             throw new Error('Nenhum usuário encontrado');
         }
-        const idoso = this.items[idosoIndex];
-        this.items[idosoIndex] = {
+        const idoso = this.idososArray[idosoIndex];
+        this.idososArray[idosoIndex] = {
             ...idoso,
             ...data,
             atualizado_em: new Date(),
         };
-        return this.items[idosoIndex];
+        return this.idososArray[idosoIndex];
     }
     async delete(data: DeleteIdosoDto, from: Idoso) {
-        const idosoIndex = this.items.findIndex(item => item.uid === from.uid);
+        const idosoIndex = this.idososArray.findIndex(item => item.uid === from.uid);
 
         if (idosoIndex === -1) {
             throw new Error('Idoso not found.');
         }
 
-        const idoso = this.items[idosoIndex];
-        this.items[idosoIndex] = {
+        const idoso = this.idososArray[idosoIndex];
+        this.idososArray[idosoIndex] = {
             ...idoso,
             ...data
         }
 
-        return this.items[idosoIndex];
+        return this.idososArray[idosoIndex];
     }
 }
