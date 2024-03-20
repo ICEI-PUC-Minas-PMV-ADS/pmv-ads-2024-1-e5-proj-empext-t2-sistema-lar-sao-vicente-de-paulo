@@ -9,7 +9,7 @@ export class CreateUsuarioController {
     constructor(private createUsuario: CreateUsuarioService) { }
 
     @Post()
-    @ApiOperation({ summary: 'Cria um novo usuário' })
+    @ApiOperation({ summary: 'Cadastra um novo usuário' })
     @ApiBody({ type: CreateUsuarioDto, description: 'Dados do usuário a ser criado' })
     async handle(@Body() data: CreateUsuarioDto): Promise<void> {
         await this.createUsuario.execute(data);
