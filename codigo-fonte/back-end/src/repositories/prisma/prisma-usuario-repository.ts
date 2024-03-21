@@ -1,9 +1,18 @@
-import { Prisma, Usuario } from '@prisma/client';
+import { $Enums, Prisma, Usuario } from '@prisma/client';
 import { usuarioRepository } from '../usuario-repository';
 import { prisma } from '@/database/prisma.service';
 import { UpdateUsuarioDto } from '@/app/modules/usuario/dtos/update-usuario.dto';
 
 export class PrismaUsuarioRepository implements usuarioRepository {
+  async findById(id: bigint) {
+    const usuario = prisma.usuario.findFirst({
+      where: {
+        id,
+      }
+    });
+
+    return usuario;
+  }
   async alreadyExists(email: string, cpf_cnh: string) {
     const usuario = await prisma.usuario.findFirst({
       where: {

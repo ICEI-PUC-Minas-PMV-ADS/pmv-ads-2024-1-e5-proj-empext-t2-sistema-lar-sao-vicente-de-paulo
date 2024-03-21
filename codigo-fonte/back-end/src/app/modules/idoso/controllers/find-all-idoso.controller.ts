@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiQuery, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { AppResponse } from '@/common/utils/app-response';
 import { QueryBuilderService } from '@utils/query-builder/query-builder.service';
 import { QueryValidator } from '@utils/query-builder/dto/queryValidator.dto';
@@ -15,6 +15,7 @@ export class FindAllIdosoController {
     ) { }
 
     @Get()
+    @ApiOperation({ summary: 'Retorna uma lista de todos os idosos' })
     @ApiQuery({
         type: QueryValidator,
     })

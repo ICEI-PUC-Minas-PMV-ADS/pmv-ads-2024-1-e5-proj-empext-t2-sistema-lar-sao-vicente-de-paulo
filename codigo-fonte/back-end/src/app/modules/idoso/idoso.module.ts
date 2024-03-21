@@ -21,6 +21,7 @@ import { UpdateIdosoController } from "./controllers/update-idoso.controller";
         FindUidIdosoService,
         UpdateIdosoService,
         DeleteIdosoService,
+        PrismaService,
         PrismaIdosoRepository,
         PrismaUsuarioRepository,
         PrismaService,

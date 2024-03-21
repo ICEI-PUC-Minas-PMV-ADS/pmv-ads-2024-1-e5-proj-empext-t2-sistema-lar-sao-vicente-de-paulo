@@ -7,59 +7,99 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Situacao {
+  ATIVO
+  INATIVO
+  PENDENTE
+}
+
 model Usuario {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  cargo         Cargo?   @relation(fields: [cargo_id], references: [id])
   cargo_id      BigInt?  @db.BigInt
   foto          Bytes?   @db.ByteA
   nome          String   @db.VarChar(255)
-  cpf_cnh       String   @unique @db.VarChar(11) 
-  email         String   @unique @db.VarChar(255)
-  senha         String   @db.VarChar(511)
-  situacao      String   @default("ATIVO") @db.VarChar(255) // ATIVO, INATIVO
+  cpf_cnh       String   @unique @db.VarChar(11)
+  email         String   @unique @db.VarChar(254)
+  senha         String   @db.VarChar(60)
+  situacao      Situacao @default(ATIVO)
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  cargo Cargo? @relation(fields: [cargo_id], references: [id])
-
-  Prontuario       Prontuario[]
-  RelatorioPia     RelatorioPia[]
-  FichaNutricional FichaNutricional[]
-  Perroca          Perroca[]
-  EscalaBraden     EscalaBraden[]
-  Idoso            Idoso[]
+  Idosos             Idoso[]
+  Prontuarios        Prontuario[]
+  RelatoriosPia      RelatorioPia[]
+  FichasNutricionais FichaNutricional[]
+  Perroca            Perroca[]
+  EscalaBraden       EscalaBraden[]
 
   @@map("usuarios")
 }
 
 model Idoso {
-  id                   BigInt             @id @default(autoincrement()) @db.BigInt
-  uid                  String             @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  usuario_id           BigInt             @db.BigInt
-  foto                 Bytes?             @db.ByteA
-  nome                 String             @db.VarChar(255)
-  data_nascimento      DateTime?          @db.Date
-  data_admissao        DateTime           @db.Date
-  cpf_cnh              String             @unique @db.VarChar(11)
-  nome_pai             String?            @db.VarChar(255)
-  nome_mae             String?            @db.VarChar(255)
-  responsavel          String?            @db.VarChar(255)
-  telefone_responsavel String?            @db.VarChar(11)
-  genero               String             @db.VarChar(9)
-  leito                String?            @db.VarChar(255)
-  situacao             String             @default("ATIVO") @db.VarChar(255) // ATIVO, INATIVO
-  motivo_inativacao    String?            @db.VarChar(255)
-  criado_em            DateTime           @default(now()) @db.Timestamp
-  atualizado_em        DateTime           @updatedAt @db.Timestamp
-  Prontuario           Prontuario[]
-  RelatorioPia         RelatorioPia[]
-  FichaNutricional     FichaNutricional[]
-  Perroca              Perroca[]
-  EscalaBraden         EscalaBraden[]
+  id                        BigInt   @id @default(autoincrement()) @db.BigInt
+  uid                       String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  usuario                   Usuario  @relation(fields: [usuario_id], references: [id])
+  usuario_id                BigInt   @db.BigInt
+  foto                      Bytes?   @db.ByteA
+  nome_completo             String   @db.VarChar(255)
+  data_nascimento           DateTime @db.Date()
+  naturalidade              String   @db.VarChar(100)
+  estado                    String   @db.VarChar(2)
+  pais                      String   @db.VarChar(100)
+  estado_civil              String   @db.VarChar(20)
+  religiao                  String   @db.VarChar(50)
+  escolaridade              String   @db.VarChar(50)
+  nome_pai                  String   @db.VarChar(255)
+  nome_mae                  String   @db.VarChar(255)
+  data_ingresso             DateTime @db.Date()
+  cpf                       String?  @unique @db.VarChar(11)
+  cnh                       String?  @unique @db.VarChar(8)
+  rg                        String?  @unique @db.VarChar(10)
+  rg_orgao_expedidor        String?  @db.VarChar(255)
+  titulo_eleitor            String?  @db.VarChar(12)
+  titulo_eleitor_secao      String?  @db.VarChar(4)
+  titulo_eleitor_zona       String?  @db.VarChar(3)
+  certidao_nascimento       String?  @db.VarChar(30)
+  certidao_nascimento_folha String?  @db.VarChar(20)
+  certidao_nascimento_livro String?  @db.VarChar(20)
+  certidao_casamento        String?  @db.VarChar(30)
+  certidao_casamento_folha  String?  @db.VarChar(20)
+  certidao_casamento_livro  String?  @db.VarChar(20)
+  situacao                  Situacao @default(ATIVO)
+  motivo_inativacao         String?  @db.VarChar(100)
+  criado_em                 DateTime @default(now()) @db.Timestamp()
+  atualizado_em             DateTime @updatedAt @db.Timestamp()
 
-  usuario Usuario @relation(fields: [usuario_id], references: [id])
+  ResponsaveisIdoso  ResponsavelIdoso[]
+  Prontuarios        Prontuario[]
+  RelatoriosPia      RelatorioPia[]
+  FichasNutricionais FichaNutricional[]
+  Perroca            Perroca[]
+  EscalaBraden       EscalaBraden[]
 
   @@map("idosos")
+}
+
+model ResponsavelIdoso {
+  id              BigInt   @id @default(autoincrement()) @db.BigInt
+  uid             String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  idoso           Idoso    @relation(fields: [idoso_id], references: [id])
+  idoso_id        BigInt   @db.BigInt
+  parentesco      String   @db.VarChar(50)
+  nome_completo   String   @db.VarChar(255)
+  endereco        String   @db.VarChar(100)
+  endereco_numero String   @db.VarChar(20)
+  bairro          String   @db.VarChar(50)
+  cep             String   @db.VarChar(50)
+  estado          String   @db.VarChar(2)
+  telefone_1      String   @db.VarChar(20)
+  telefone_2      String?  @db.VarChar(20)
+  criado_em       DateTime @default(now()) @db.Timestamp()
+  atualizado_em   DateTime @updatedAt @db.Timestamp()
+
+  @@map("responsaveis_idosos")
 }
 
 model Cargo {
