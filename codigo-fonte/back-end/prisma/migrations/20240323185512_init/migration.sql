@@ -2,10 +2,9 @@
 CREATE TYPE "Situacao" AS ENUM ('ATIVO', 'INATIVO', 'PENDENTE');
 
 -- CreateTable
-CREATE TABLE "usuarios" (
+CREATE TABLE "usuario" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "cargo_id" BIGINT,
     "foto" BYTEA,
     "nome" VARCHAR(255) NOT NULL,
     "cpf_cnh" VARCHAR(11) NOT NULL,
@@ -14,15 +13,15 @@ CREATE TABLE "usuarios" (
     "situacao" "Situacao" NOT NULL DEFAULT 'ATIVO',
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
+    "id_cargo" BIGINT NOT NULL,
 
-    CONSTRAINT "usuarios_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "usuario_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "idosos" (
+CREATE TABLE "idoso" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "usuario_id" BIGINT NOT NULL,
     "foto" BYTEA,
     "nome_completo" VARCHAR(255) NOT NULL,
     "data_nascimento" DATE NOT NULL,
@@ -52,15 +51,15 @@ CREATE TABLE "idosos" (
     "motivo_inativacao" VARCHAR(100),
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
+    "id_usuario" BIGINT NOT NULL,
 
-    CONSTRAINT "idosos_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "idoso_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "responsaveis_idosos" (
+CREATE TABLE "responsavel_idoso" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "idoso_id" BIGINT NOT NULL,
     "parentesco" VARCHAR(50) NOT NULL,
     "nome_completo" VARCHAR(255) NOT NULL,
     "endereco" VARCHAR(100) NOT NULL,
@@ -72,8 +71,9 @@ CREATE TABLE "responsaveis_idosos" (
     "telefone_2" VARCHAR(20),
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
+    "id_idoso" BIGINT NOT NULL,
 
-    CONSTRAINT "responsaveis_idosos_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "responsavel_idoso_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -91,10 +91,11 @@ CREATE TABLE "modelo_cargo" (
 CREATE TABLE "modelo_cargo_permissao" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "cargo_id" BIGINT NOT NULL,
-    "permissao_id" BIGINT NOT NULL,
+    "ativo" BOOLEAN NOT NULL DEFAULT true,
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
+    "id_cargo" BIGINT NOT NULL,
+    "id_permissao" BIGINT NOT NULL,
 
     CONSTRAINT "modelo_cargo_permissao_pkey" PRIMARY KEY ("id")
 );
@@ -103,11 +104,11 @@ CREATE TABLE "modelo_cargo_permissao" (
 CREATE TABLE "permissao" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "grupo_permissao_id" BIGINT NOT NULL,
     "nome" VARCHAR(255) NOT NULL,
     "codigo" INTEGER NOT NULL,
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
+    "id_grupo_permissao" BIGINT NOT NULL,
 
     CONSTRAINT "permissao_pkey" PRIMARY KEY ("id")
 );
@@ -128,11 +129,11 @@ CREATE TABLE "grupo_permissao" (
 CREATE TABLE "prontuario" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "idoso_id" BIGINT NOT NULL,
-    "usuario_id" BIGINT NOT NULL,
     "relatorio" TEXT NOT NULL,
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
+    "id_idoso" BIGINT NOT NULL,
+    "id_usuario" BIGINT NOT NULL,
 
     CONSTRAINT "prontuario_pkey" PRIMARY KEY ("id")
 );
@@ -141,11 +142,11 @@ CREATE TABLE "prontuario" (
 CREATE TABLE "relatorio_pia" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "modelo_relatorio_pia_id" BIGINT NOT NULL,
-    "idoso_id" BIGINT NOT NULL,
-    "usuario_id" BIGINT NOT NULL,
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
+    "id_idoso" BIGINT NOT NULL,
+    "id_usuario" BIGINT NOT NULL,
+    "modelo_relatorio_pia_id" BIGINT NOT NULL,
 
     CONSTRAINT "relatorio_pia_pkey" PRIMARY KEY ("id")
 );
@@ -154,12 +155,12 @@ CREATE TABLE "relatorio_pia" (
 CREATE TABLE "pergunta_relatorio" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "relatorio_pia_id" BIGINT NOT NULL,
     "pergunta" VARCHAR(255) NOT NULL,
     "sim_nao" BOOLEAN NOT NULL,
     "observacao" TEXT,
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
+    "id_relatorio_pia" BIGINT NOT NULL,
 
     CONSTRAINT "pergunta_relatorio_pkey" PRIMARY KEY ("id")
 );
@@ -176,23 +177,21 @@ CREATE TABLE "modelo_relatorio_pia" (
 );
 
 -- CreateTable
-CREATE TABLE "perguntas" (
+CREATE TABLE "pergunta" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "modelo_id" BIGINT NOT NULL,
     "pergunta" VARCHAR(255) NOT NULL,
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
+    "id_modelo_relatorio_pia" BIGINT NOT NULL,
 
-    CONSTRAINT "perguntas_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "pergunta_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "ficha_nutricional" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "idoso_id" BIGINT NOT NULL,
-    "usuario_id" BIGINT NOT NULL,
     "diagnostico_clinico" VARCHAR(255),
     "edema" VARCHAR(255),
     "local_edema" VARCHAR(255),
@@ -206,6 +205,8 @@ CREATE TABLE "ficha_nutricional" (
     "hidrica_observacao" VARCHAR(255),
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
+    "id_idoso" BIGINT NOT NULL,
+    "id_usuario" BIGINT NOT NULL,
 
     CONSTRAINT "ficha_nutricional_pkey" PRIMARY KEY ("id")
 );
@@ -214,7 +215,6 @@ CREATE TABLE "ficha_nutricional" (
 CREATE TABLE "antropometria_admissional" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "ficha_nutricional_id" BIGINT NOT NULL,
     "triagem" VARCHAR(255) NOT NULL,
     "escore" INTEGER NOT NULL,
     "triagem_classificacao" VARCHAR(255) NOT NULL,
@@ -236,6 +236,7 @@ CREATE TABLE "antropometria_admissional" (
     "circ_abdominal" DOUBLE PRECISION,
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
+    "id_ficha_nutricional" BIGINT NOT NULL,
 
     CONSTRAINT "antropometria_admissional_pkey" PRIMARY KEY ("id")
 );
@@ -244,7 +245,6 @@ CREATE TABLE "antropometria_admissional" (
 CREATE TABLE "conduta_nutricional" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "ficha_nutricional_id" BIGINT NOT NULL,
     "data" DATE NOT NULL,
     "dieta" VARCHAR(255),
     "volume" VARCHAR(255),
@@ -254,6 +254,7 @@ CREATE TABLE "conduta_nutricional" (
     "agua_ml" VARCHAR(255),
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
+    "id_ficha_nutricional" BIGINT NOT NULL,
 
     CONSTRAINT "conduta_nutricional_pkey" PRIMARY KEY ("id")
 );
@@ -262,7 +263,6 @@ CREATE TABLE "conduta_nutricional" (
 CREATE TABLE "quadro_clinico" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "ficha_nutricional_id" BIGINT NOT NULL,
     "data" DATE NOT NULL,
     "aceitacao_alimentar" VARCHAR(255),
     "suplemento_oral" VARCHAR(255),
@@ -278,6 +278,7 @@ CREATE TABLE "quadro_clinico" (
     "observacao" TEXT,
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
+    "id_ficha_nutricional" BIGINT NOT NULL,
 
     CONSTRAINT "quadro_clinico_pkey" PRIMARY KEY ("id")
 );
@@ -286,7 +287,6 @@ CREATE TABLE "quadro_clinico" (
 CREATE TABLE "acompanhamento_antropometrico" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "ficha_nutricional_id" BIGINT NOT NULL,
     "data" DATE NOT NULL,
     "altura" DOUBLE PRECISION NOT NULL,
     "peso" DOUBLE PRECISION NOT NULL,
@@ -299,6 +299,7 @@ CREATE TABLE "acompanhamento_antropometrico" (
     "observacao" TEXT,
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
+    "id_ficha_nutricional" BIGINT NOT NULL,
 
     CONSTRAINT "acompanhamento_antropometrico_pkey" PRIMARY KEY ("id")
 );
@@ -307,8 +308,6 @@ CREATE TABLE "acompanhamento_antropometrico" (
 CREATE TABLE "perroca" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "idoso_id" BIGINT NOT NULL,
-    "usuario_id" BIGINT NOT NULL,
     "estado_metal_conciencia" INTEGER NOT NULL,
     "oxigenacao" INTEGER NOT NULL,
     "sinais_vitais" INTEGER NOT NULL,
@@ -326,6 +325,8 @@ CREATE TABLE "perroca" (
     "tipo_cuidado_classificacao" INTEGER NOT NULL,
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
+    "id_idoso" BIGINT NOT NULL,
+    "id_usuario" BIGINT NOT NULL,
 
     CONSTRAINT "perroca_pkey" PRIMARY KEY ("id")
 );
@@ -334,8 +335,6 @@ CREATE TABLE "perroca" (
 CREATE TABLE "escala_braden" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "idoso_id" BIGINT NOT NULL,
-    "usuario_id" BIGINT NOT NULL,
     "pontuacao_escala" VARCHAR(255) NOT NULL,
     "percepcao_sensorial" VARCHAR(255) NOT NULL,
     "umidade" VARCHAR(255) NOT NULL,
@@ -345,33 +344,35 @@ CREATE TABLE "escala_braden" (
     "friccao_cisalhamento" VARCHAR(255) NOT NULL,
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
+    "id_idoso" BIGINT NOT NULL,
+    "id_usuario" BIGINT NOT NULL,
 
     CONSTRAINT "escala_braden_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "usuarios_uid_key" ON "usuarios"("uid");
+CREATE UNIQUE INDEX "usuario_uid_key" ON "usuario"("uid");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "usuarios_cpf_cnh_key" ON "usuarios"("cpf_cnh");
+CREATE UNIQUE INDEX "usuario_cpf_cnh_key" ON "usuario"("cpf_cnh");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "usuarios_email_key" ON "usuarios"("email");
+CREATE UNIQUE INDEX "usuario_email_key" ON "usuario"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "idosos_uid_key" ON "idosos"("uid");
+CREATE UNIQUE INDEX "idoso_uid_key" ON "idoso"("uid");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "idosos_cpf_key" ON "idosos"("cpf");
+CREATE UNIQUE INDEX "idoso_cpf_key" ON "idoso"("cpf");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "idosos_cnh_key" ON "idosos"("cnh");
+CREATE UNIQUE INDEX "idoso_cnh_key" ON "idoso"("cnh");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "idosos_rg_key" ON "idosos"("rg");
+CREATE UNIQUE INDEX "idoso_rg_key" ON "idoso"("rg");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "responsaveis_idosos_uid_key" ON "responsaveis_idosos"("uid");
+CREATE UNIQUE INDEX "responsavel_idoso_uid_key" ON "responsavel_idoso"("uid");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "modelo_cargo_uid_key" ON "modelo_cargo"("uid");
@@ -398,7 +399,7 @@ CREATE UNIQUE INDEX "pergunta_relatorio_uid_key" ON "pergunta_relatorio"("uid");
 CREATE UNIQUE INDEX "modelo_relatorio_pia_uid_key" ON "modelo_relatorio_pia"("uid");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "perguntas_uid_key" ON "perguntas"("uid");
+CREATE UNIQUE INDEX "pergunta_uid_key" ON "pergunta"("uid");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "ficha_nutricional_uid_key" ON "ficha_nutricional"("uid");
@@ -407,16 +408,25 @@ CREATE UNIQUE INDEX "ficha_nutricional_uid_key" ON "ficha_nutricional"("uid");
 CREATE UNIQUE INDEX "antropometria_admissional_uid_key" ON "antropometria_admissional"("uid");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "antropometria_admissional_ficha_nutricional_id_key" ON "antropometria_admissional"("ficha_nutricional_id");
+CREATE UNIQUE INDEX "antropometria_admissional_id_ficha_nutricional_key" ON "antropometria_admissional"("id_ficha_nutricional");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "conduta_nutricional_uid_key" ON "conduta_nutricional"("uid");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "conduta_nutricional_id_ficha_nutricional_key" ON "conduta_nutricional"("id_ficha_nutricional");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "quadro_clinico_uid_key" ON "quadro_clinico"("uid");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "quadro_clinico_id_ficha_nutricional_key" ON "quadro_clinico"("id_ficha_nutricional");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "acompanhamento_antropometrico_uid_key" ON "acompanhamento_antropometrico"("uid");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "acompanhamento_antropometrico_id_ficha_nutricional_key" ON "acompanhamento_antropometrico"("id_ficha_nutricional");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "perroca_uid_key" ON "perroca"("uid");
@@ -425,70 +435,70 @@ CREATE UNIQUE INDEX "perroca_uid_key" ON "perroca"("uid");
 CREATE UNIQUE INDEX "escala_braden_uid_key" ON "escala_braden"("uid");
 
 -- AddForeignKey
-ALTER TABLE "usuarios" ADD CONSTRAINT "usuarios_cargo_id_fkey" FOREIGN KEY ("cargo_id") REFERENCES "modelo_cargo"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "usuario" ADD CONSTRAINT "usuario_id_cargo_fkey" FOREIGN KEY ("id_cargo") REFERENCES "modelo_cargo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "idosos" ADD CONSTRAINT "idosos_usuario_id_fkey" FOREIGN KEY ("usuario_id") REFERENCES "usuarios"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "idoso" ADD CONSTRAINT "idoso_id_usuario_fkey" FOREIGN KEY ("id_usuario") REFERENCES "usuario"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "responsaveis_idosos" ADD CONSTRAINT "responsaveis_idosos_idoso_id_fkey" FOREIGN KEY ("idoso_id") REFERENCES "idosos"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "responsavel_idoso" ADD CONSTRAINT "responsavel_idoso_id_idoso_fkey" FOREIGN KEY ("id_idoso") REFERENCES "idoso"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "modelo_cargo_permissao" ADD CONSTRAINT "modelo_cargo_permissao_cargo_id_fkey" FOREIGN KEY ("cargo_id") REFERENCES "modelo_cargo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "modelo_cargo_permissao" ADD CONSTRAINT "modelo_cargo_permissao_id_cargo_fkey" FOREIGN KEY ("id_cargo") REFERENCES "modelo_cargo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "modelo_cargo_permissao" ADD CONSTRAINT "modelo_cargo_permissao_permissao_id_fkey" FOREIGN KEY ("permissao_id") REFERENCES "permissao"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "modelo_cargo_permissao" ADD CONSTRAINT "modelo_cargo_permissao_id_permissao_fkey" FOREIGN KEY ("id_permissao") REFERENCES "permissao"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "permissao" ADD CONSTRAINT "permissao_grupo_permissao_id_fkey" FOREIGN KEY ("grupo_permissao_id") REFERENCES "grupo_permissao"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "permissao" ADD CONSTRAINT "permissao_id_grupo_permissao_fkey" FOREIGN KEY ("id_grupo_permissao") REFERENCES "grupo_permissao"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "prontuario" ADD CONSTRAINT "prontuario_idoso_id_fkey" FOREIGN KEY ("idoso_id") REFERENCES "idosos"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "prontuario" ADD CONSTRAINT "prontuario_id_idoso_fkey" FOREIGN KEY ("id_idoso") REFERENCES "idoso"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "prontuario" ADD CONSTRAINT "prontuario_usuario_id_fkey" FOREIGN KEY ("usuario_id") REFERENCES "usuarios"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "prontuario" ADD CONSTRAINT "prontuario_id_usuario_fkey" FOREIGN KEY ("id_usuario") REFERENCES "usuario"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "relatorio_pia" ADD CONSTRAINT "relatorio_pia_idoso_id_fkey" FOREIGN KEY ("idoso_id") REFERENCES "idosos"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "relatorio_pia" ADD CONSTRAINT "relatorio_pia_id_idoso_fkey" FOREIGN KEY ("id_idoso") REFERENCES "idoso"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "relatorio_pia" ADD CONSTRAINT "relatorio_pia_usuario_id_fkey" FOREIGN KEY ("usuario_id") REFERENCES "usuarios"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "relatorio_pia" ADD CONSTRAINT "relatorio_pia_id_usuario_fkey" FOREIGN KEY ("id_usuario") REFERENCES "usuario"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "relatorio_pia" ADD CONSTRAINT "relatorio_pia_modelo_relatorio_pia_id_fkey" FOREIGN KEY ("modelo_relatorio_pia_id") REFERENCES "modelo_relatorio_pia"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "pergunta_relatorio" ADD CONSTRAINT "pergunta_relatorio_relatorio_pia_id_fkey" FOREIGN KEY ("relatorio_pia_id") REFERENCES "relatorio_pia"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "pergunta_relatorio" ADD CONSTRAINT "pergunta_relatorio_id_relatorio_pia_fkey" FOREIGN KEY ("id_relatorio_pia") REFERENCES "relatorio_pia"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "perguntas" ADD CONSTRAINT "perguntas_modelo_id_fkey" FOREIGN KEY ("modelo_id") REFERENCES "modelo_relatorio_pia"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "pergunta" ADD CONSTRAINT "pergunta_id_modelo_relatorio_pia_fkey" FOREIGN KEY ("id_modelo_relatorio_pia") REFERENCES "modelo_relatorio_pia"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ficha_nutricional" ADD CONSTRAINT "ficha_nutricional_idoso_id_fkey" FOREIGN KEY ("idoso_id") REFERENCES "idosos"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ficha_nutricional" ADD CONSTRAINT "ficha_nutricional_id_idoso_fkey" FOREIGN KEY ("id_idoso") REFERENCES "idoso"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ficha_nutricional" ADD CONSTRAINT "ficha_nutricional_usuario_id_fkey" FOREIGN KEY ("usuario_id") REFERENCES "usuarios"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ficha_nutricional" ADD CONSTRAINT "ficha_nutricional_id_usuario_fkey" FOREIGN KEY ("id_usuario") REFERENCES "usuario"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "antropometria_admissional" ADD CONSTRAINT "antropometria_admissional_ficha_nutricional_id_fkey" FOREIGN KEY ("ficha_nutricional_id") REFERENCES "ficha_nutricional"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "antropometria_admissional" ADD CONSTRAINT "antropometria_admissional_id_ficha_nutricional_fkey" FOREIGN KEY ("id_ficha_nutricional") REFERENCES "ficha_nutricional"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "conduta_nutricional" ADD CONSTRAINT "conduta_nutricional_ficha_nutricional_id_fkey" FOREIGN KEY ("ficha_nutricional_id") REFERENCES "ficha_nutricional"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "conduta_nutricional" ADD CONSTRAINT "conduta_nutricional_id_ficha_nutricional_fkey" FOREIGN KEY ("id_ficha_nutricional") REFERENCES "ficha_nutricional"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "quadro_clinico" ADD CONSTRAINT "quadro_clinico_ficha_nutricional_id_fkey" FOREIGN KEY ("ficha_nutricional_id") REFERENCES "ficha_nutricional"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "quadro_clinico" ADD CONSTRAINT "quadro_clinico_id_ficha_nutricional_fkey" FOREIGN KEY ("id_ficha_nutricional") REFERENCES "ficha_nutricional"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "acompanhamento_antropometrico" ADD CONSTRAINT "acompanhamento_antropometrico_ficha_nutricional_id_fkey" FOREIGN KEY ("ficha_nutricional_id") REFERENCES "ficha_nutricional"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "acompanhamento_antropometrico" ADD CONSTRAINT "acompanhamento_antropometrico_id_ficha_nutricional_fkey" FOREIGN KEY ("id_ficha_nutricional") REFERENCES "ficha_nutricional"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "perroca" ADD CONSTRAINT "perroca_idoso_id_fkey" FOREIGN KEY ("idoso_id") REFERENCES "idosos"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "perroca" ADD CONSTRAINT "perroca_id_idoso_fkey" FOREIGN KEY ("id_idoso") REFERENCES "idoso"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "perroca" ADD CONSTRAINT "perroca_usuario_id_fkey" FOREIGN KEY ("usuario_id") REFERENCES "usuarios"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "perroca" ADD CONSTRAINT "perroca_id_usuario_fkey" FOREIGN KEY ("id_usuario") REFERENCES "usuario"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "escala_braden" ADD CONSTRAINT "escala_braden_idoso_id_fkey" FOREIGN KEY ("idoso_id") REFERENCES "idosos"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "escala_braden" ADD CONSTRAINT "escala_braden_id_idoso_fkey" FOREIGN KEY ("id_idoso") REFERENCES "idoso"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "escala_braden" ADD CONSTRAINT "escala_braden_usuario_id_fkey" FOREIGN KEY ("usuario_id") REFERENCES "usuarios"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "escala_braden" ADD CONSTRAINT "escala_braden_id_usuario_fkey" FOREIGN KEY ("id_usuario") REFERENCES "usuario"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
