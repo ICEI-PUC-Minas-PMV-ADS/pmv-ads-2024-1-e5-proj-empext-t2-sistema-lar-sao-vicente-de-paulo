@@ -53,9 +53,10 @@ export class QueryValidator {
 
     @ApiPropertyOptional({
         type: SortFields,
+        isArray: true,
     })
     @Expose()
     @Type(() => SortFields)
     @ValidateNested({ each: true })
-    sort: SortFields;
+    sort: SortFields[];
 }

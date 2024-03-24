@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { Redis } from 'ioredis';
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
 import { AuthRedefinirSenhaDto } from '../dtos/redefinir-senha.dto';
-import { PrismaService } from '@/database/prisma.service';
 import { AwsSesService } from '@/core/providers/mail/aws-ses.service';
 import { AppError } from '@utils/app-error';
-import { BcryptService } from '@/core/providers/bcrypt/bcrypt.service';
 
 import * as crypto from 'crypto';
+import { PrismaService } from '@/core/providers/database/prisma.service';
+import { BcryptService } from '@/core/providers/crypto/bcrypt/bcrypt.service';
 
 interface IContentCodigo {
 	id_usuario: bigint;

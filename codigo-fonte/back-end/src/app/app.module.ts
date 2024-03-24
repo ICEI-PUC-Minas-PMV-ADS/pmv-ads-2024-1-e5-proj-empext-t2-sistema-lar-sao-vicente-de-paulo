@@ -6,9 +6,18 @@ import { AuthModule } from './modules/auth/auth.module';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { JwtModule } from '@nestjs/jwt';
 import { authToken } from '@/config/auth';
+import { DatabaseModule } from '@/core/providers/database/database.module';
+import { CargoModule } from './modules/cargo/cargo.module';
+import { GrupoPermissaoModule } from './modules/grupo-permissao/grupo-permissao.module';
+import { CargoPermissaoModule } from './modules/cargo-permissao/cargo-permissao.module';
+import { PermissaoModule } from './modules/permissao/permissao.module';
+import { APP_GUARD } from '@nestjs/core';
+import { RedisGuard } from '@/core/guards/auth.guard';
+import { RolesGuard } from '@/core/guards/role.guard';
 
 @Module({
 	imports: [
+		DatabaseModule,
 		ConfigModule.forRoot({
 			isGlobal: true,
 		}),
@@ -27,7 +36,20 @@ import { authToken } from '@/config/auth';
 		AuthModule,
 		UsuarioModule,
 		IdosoModule,
+		CargoModule,
+		CargoPermissaoModule,
+		GrupoPermissaoModule,
+		PermissaoModule,
 	],
-	providers: [],
+	providers: [
+		{
+			provide: APP_GUARD,
+			useClass: RedisGuard,
+		},
+		{
+			provide: APP_GUARD,
+			useClass: RolesGuard,
+		},
+	],
 })
 export class AppModule {}

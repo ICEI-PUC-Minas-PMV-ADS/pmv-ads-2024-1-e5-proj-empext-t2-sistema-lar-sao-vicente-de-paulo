@@ -1,9 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class SortFields {
-    @ApiProperty()
+    @ApiPropertyOptional({
+        enum: ['asc', 'desc'],
+    })
     @IsEnum(['asc', 'desc'])
     @IsOptional()
     @Expose()

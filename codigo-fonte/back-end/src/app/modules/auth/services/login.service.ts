@@ -1,12 +1,11 @@
-import { PrismaService } from '@/database/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { AuthLoginDto } from '../dtos/login.dto';
 import { AppError } from '@/common/utils/app-error';
-
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
-import { BcryptService } from '@/core/providers/bcrypt/bcrypt.service';
+import { PrismaService } from '@/core/providers/database/prisma.service';
+import { BcryptService } from '@/core/providers/crypto/bcrypt/bcrypt.service';
 
 @Injectable()
 export class AuthLoginService {

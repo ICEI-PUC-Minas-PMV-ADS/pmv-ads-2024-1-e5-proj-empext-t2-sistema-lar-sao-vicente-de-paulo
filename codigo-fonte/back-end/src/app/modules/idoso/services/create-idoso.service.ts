@@ -16,13 +16,13 @@ export class CreateIdosoService {
 		const usuario = await this.usuarioRepository.findById(data.id_usuario);
 
 		if (!usuario) {
-			throw new AppError('Usuário não encontrado.');
+			throw new AppError('Usuário não encontrado');
 		}
 
 		const idosoWithSameCpf = await this.idosoRepository.findByCpf(data.cpf);
 
 		if (idosoWithSameCpf) {
-			throw new AppError('Idoso já cadastrado.');
+			throw new AppError('Idoso já cadastrado');
 		}
 
 		const idoso = await this.idosoRepository.create({

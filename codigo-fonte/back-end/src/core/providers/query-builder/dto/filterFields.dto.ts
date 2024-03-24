@@ -19,7 +19,6 @@ export class FilterFields {
         type: '',
     })
     @Expose()
-    @IsString()
     @IsNotEmpty()
     @ValidateIf((obj) => !obj?.filter || obj?.value)
     value: any;
