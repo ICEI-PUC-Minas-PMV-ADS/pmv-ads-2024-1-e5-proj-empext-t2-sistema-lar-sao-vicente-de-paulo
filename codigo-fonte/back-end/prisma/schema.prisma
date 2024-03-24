@@ -115,7 +115,7 @@ model Cargo {
   usuario         Usuario[]
   cargo_permissao CargoPermissao[]
 
-  @@map("modelo_cargo")
+  @@map("cargo")
 }
 
 model CargoPermissao {
@@ -131,7 +131,7 @@ model CargoPermissao {
   id_permissao BigInt    @db.BigInt
   permissao    Permissao @relation(fields: [id_permissao], references: [id])
 
-  @@map("modelo_cargo_permissao")
+  @@map("cargo_permissao")
 }
 
 model Permissao {

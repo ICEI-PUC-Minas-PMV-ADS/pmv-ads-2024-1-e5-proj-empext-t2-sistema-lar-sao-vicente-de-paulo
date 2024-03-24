@@ -12,6 +12,9 @@ const generateSeed = async (file: string) => {
 async function main() {
 	await generateSeed('grupo-permissao.sql');
 	await generateSeed('permissao.sql');
+	await generateSeed('cargo-gerente.sql');
+	await generateSeed('cargo-gerente-permissao.sql');
+	await generateSeed('user-admin.sql');
 }
 
 main()

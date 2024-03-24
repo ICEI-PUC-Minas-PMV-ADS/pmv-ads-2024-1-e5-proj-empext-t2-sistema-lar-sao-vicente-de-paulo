@@ -1,11 +1,12 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { FindUidPermissaoService } from '../services/find-uid-permissao.service';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Permissao } from '../entities/permissao.entity';
 import { AppResponse } from '@utils/app-response';
 
 @Controller('permissoes')
 @ApiTags('permissoes')
+@ApiBearerAuth()
 export class FindUidPermissaoController {
 	constructor(private findUidPermissao: FindUidPermissaoService) {}
 

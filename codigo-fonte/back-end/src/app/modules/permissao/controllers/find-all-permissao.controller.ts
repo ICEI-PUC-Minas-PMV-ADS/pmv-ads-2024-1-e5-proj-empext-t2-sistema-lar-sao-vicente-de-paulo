@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { FindAllPermissaoService } from '../services/find-all-permissao.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Permissao } from '../entities/permissao.entity';
 import { AppResponse } from '@utils/app-response';
 import { QueryBuilderService } from '@/core/providers/query-builder/query-builder.service';
@@ -10,6 +10,7 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 
 @Controller('permissoes')
 @ApiTags('permissoes')
+@ApiBearerAuth()
 export class FindAllPermissaoController {
 	constructor(
 		private findAllPermissao: FindAllPermissaoService,

@@ -77,18 +77,18 @@ CREATE TABLE "responsavel_idoso" (
 );
 
 -- CreateTable
-CREATE TABLE "modelo_cargo" (
+CREATE TABLE "cargo" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
     "nome" VARCHAR(255) NOT NULL,
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
 
-    CONSTRAINT "modelo_cargo_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "cargo_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "modelo_cargo_permissao" (
+CREATE TABLE "cargo_permissao" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
     "ativo" BOOLEAN NOT NULL DEFAULT true,
@@ -97,7 +97,7 @@ CREATE TABLE "modelo_cargo_permissao" (
     "id_cargo" BIGINT NOT NULL,
     "id_permissao" BIGINT NOT NULL,
 
-    CONSTRAINT "modelo_cargo_permissao_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "cargo_permissao_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -375,10 +375,10 @@ CREATE UNIQUE INDEX "idoso_rg_key" ON "idoso"("rg");
 CREATE UNIQUE INDEX "responsavel_idoso_uid_key" ON "responsavel_idoso"("uid");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "modelo_cargo_uid_key" ON "modelo_cargo"("uid");
+CREATE UNIQUE INDEX "cargo_uid_key" ON "cargo"("uid");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "modelo_cargo_permissao_uid_key" ON "modelo_cargo_permissao"("uid");
+CREATE UNIQUE INDEX "cargo_permissao_uid_key" ON "cargo_permissao"("uid");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "permissao_uid_key" ON "permissao"("uid");
@@ -435,7 +435,7 @@ CREATE UNIQUE INDEX "perroca_uid_key" ON "perroca"("uid");
 CREATE UNIQUE INDEX "escala_braden_uid_key" ON "escala_braden"("uid");
 
 -- AddForeignKey
-ALTER TABLE "usuario" ADD CONSTRAINT "usuario_id_cargo_fkey" FOREIGN KEY ("id_cargo") REFERENCES "modelo_cargo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "usuario" ADD CONSTRAINT "usuario_id_cargo_fkey" FOREIGN KEY ("id_cargo") REFERENCES "cargo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "idoso" ADD CONSTRAINT "idoso_id_usuario_fkey" FOREIGN KEY ("id_usuario") REFERENCES "usuario"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -444,10 +444,10 @@ ALTER TABLE "idoso" ADD CONSTRAINT "idoso_id_usuario_fkey" FOREIGN KEY ("id_usua
 ALTER TABLE "responsavel_idoso" ADD CONSTRAINT "responsavel_idoso_id_idoso_fkey" FOREIGN KEY ("id_idoso") REFERENCES "idoso"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "modelo_cargo_permissao" ADD CONSTRAINT "modelo_cargo_permissao_id_cargo_fkey" FOREIGN KEY ("id_cargo") REFERENCES "modelo_cargo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "cargo_permissao" ADD CONSTRAINT "cargo_permissao_id_cargo_fkey" FOREIGN KEY ("id_cargo") REFERENCES "cargo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "modelo_cargo_permissao" ADD CONSTRAINT "modelo_cargo_permissao_id_permissao_fkey" FOREIGN KEY ("id_permissao") REFERENCES "permissao"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "cargo_permissao" ADD CONSTRAINT "cargo_permissao_id_permissao_fkey" FOREIGN KEY ("id_permissao") REFERENCES "permissao"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "permissao" ADD CONSTRAINT "permissao_id_grupo_permissao_fkey" FOREIGN KEY ("id_grupo_permissao") REFERENCES "grupo_permissao"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -1,5 +1,5 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { FindUidGrupoPermissaoService } from '../services/find-uid-grupo-permissao.service';
 import { AppResponse } from '@utils/app-response';
 import { GrupoPermissao } from '../entities/grupo-permissao.entity';
@@ -8,6 +8,7 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 
 @Controller('grupo-permissoes')
 @ApiTags('grupo-permissoes')
+@ApiBearerAuth()
 export class FindUidGrupoPermissaoController {
 	constructor(private findUidGrupoPermissao: FindUidGrupoPermissaoService) {}
 

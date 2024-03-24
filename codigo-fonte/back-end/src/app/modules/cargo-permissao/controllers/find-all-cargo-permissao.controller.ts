@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AppResponse } from '@utils/app-response';
 import { FindAllCargoPermissaoService } from '../services/find-all-cargo-permissao.service';
 import { QueryBuilderService } from '@/core/providers/query-builder/query-builder.service';
@@ -7,9 +7,12 @@ import { CargoPermissao } from '../entities/modelo-cargo-permissao.entity';
 import { ApiPaginatedResponse } from '@/common/decorators/api-paginated-response.decorator';
 import { ApiQueryBuilder } from '@/common/decorators/api-query-builder.decorator';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleCargo } from '@/common/enums/roles';
 
 @Controller('cargo-permissoes')
 @ApiTags('cargo-permissoes')
+@ApiBearerAuth()
 export class FindAllCargoPermissaoController {
 	constructor(
 		private findAllCargoPermissao: FindAllCargoPermissaoService,
@@ -19,6 +22,7 @@ export class FindAllCargoPermissaoController {
 	@Get()
 	@ApiPaginatedResponse(CargoPermissao)
 	@ApiQueryBuilder()
+	@Roles(RoleCargo.FIND)
 	@ApiResponseError()
 	async handle(): Promise<AppResponse<CargoPermissao[]>> {
 		const { page_limit, page_number, ...query } =

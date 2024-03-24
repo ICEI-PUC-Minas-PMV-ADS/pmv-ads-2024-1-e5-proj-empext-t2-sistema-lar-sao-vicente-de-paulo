@@ -1,15 +1,19 @@
 import { Body, Controller, Param, Put } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UpdateCargoService } from '../services/update-cargo.service';
 import { UpdateCargoDto } from '../dtos/update-cargo-dto';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleCargo } from '@/common/enums/roles';
 
 @Controller('cargos')
 @ApiTags('cargos')
+@ApiBearerAuth()
 export class UpdateCargoController {
 	constructor(private updateCargo: UpdateCargoService) {}
 
 	@Put(':uid')
+	@Roles(RoleCargo.UPDATE)
 	@ApiResponseError()
 	async handle(
 		@Param('uid') uid: string,
