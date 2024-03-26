@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { CreateUsuarioAdmin } from './create-usuario-admin';
 
 const generateSeed = async (file: string) => {
 	const sql = fs.readFileSync(path.join(__dirname, file)).toString();
@@ -12,9 +13,7 @@ const generateSeed = async (file: string) => {
 async function main() {
 	await generateSeed('grupo-permissao.sql');
 	await generateSeed('permissao.sql');
-	await generateSeed('cargo-gerente.sql');
-	await generateSeed('cargo-gerente-permissao.sql');
-	await generateSeed('user-admin.sql');
+	await CreateUsuarioAdmin();
 }
 
 main()
