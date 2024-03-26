@@ -1,13 +1,10 @@
 import { Prisma, Usuario } from '@prisma/client';
 import { usuarioRepository } from '../usuario-repository';
 import { UpdateUsuarioDto } from '@/app/modules/usuario/dtos/update-usuario.dto';
-import { PrismaService } from '@/core/providers/database/prisma.service';
-
+import { prisma } from '@/core/providers/database/prisma.service';
 export class PrismaUsuarioRepository implements usuarioRepository {
-	constructor(private prisma: PrismaService) {}
-
 	async findById(id: bigint) {
-		const usuario = this.prisma.usuario.findFirst({
+		const usuario = prisma.usuario.findFirst({
 			where: {
 				id,
 			},
@@ -17,7 +14,7 @@ export class PrismaUsuarioRepository implements usuarioRepository {
 	}
 
 	async alreadyExists(email: string, cpf_cnh: string) {
-		const usuario = await this.prisma.usuario.findFirst({
+		const usuario = await prisma.usuario.findFirst({
 			where: {
 				OR: [{ email }, { cpf_cnh }],
 			},
@@ -26,7 +23,7 @@ export class PrismaUsuarioRepository implements usuarioRepository {
 	}
 
 	async findByCpf(cpf_cnh: string) {
-		const usuario = await this.prisma.usuario.findUnique({
+		const usuario = await prisma.usuario.findUnique({
 			where: {
 				cpf_cnh,
 			},
@@ -35,7 +32,7 @@ export class PrismaUsuarioRepository implements usuarioRepository {
 	}
 
 	async create(data: Prisma.UsuarioCreateInput) {
-		const usuario = await this.prisma.usuario.create({
+		const usuario = await prisma.usuario.create({
 			data,
 		});
 
@@ -43,7 +40,7 @@ export class PrismaUsuarioRepository implements usuarioRepository {
 	}
 
 	async findByUid(uid: string) {
-		const usuario = await this.prisma.usuario.findUnique({
+		const usuario = await prisma.usuario.findUnique({
 			where: {
 				uid,
 			},
@@ -53,7 +50,7 @@ export class PrismaUsuarioRepository implements usuarioRepository {
 	}
 
 	async update(uid: string, data: UpdateUsuarioDto) {
-		const usuario = await this.prisma.usuario.update({
+		const usuario = await prisma.usuario.update({
 			where: {
 				uid,
 			},
@@ -64,7 +61,7 @@ export class PrismaUsuarioRepository implements usuarioRepository {
 	}
 
 	async save(data: Usuario) {
-		const usuario = await this.prisma.usuario.update({
+		const usuario = await prisma.usuario.update({
 			where: {
 				uid: data.uid,
 			},

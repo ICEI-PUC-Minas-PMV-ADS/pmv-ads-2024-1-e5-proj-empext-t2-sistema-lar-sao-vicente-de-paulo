@@ -3,14 +3,17 @@ import { CreateUsuarioService } from '../create-usuario.service';
 import { expect, describe, it, beforeEach } from 'vitest';
 import { compare } from 'bcrypt';
 import { AppError } from '@/common/utils/app-error';
+import { BcryptService } from '@/core/providers/crypto/bcrypt/bcrypt.service';
 
 let usuarioRepository: InMemoryUsuarioRepository;
+let bcrypt: BcryptService;
 let sut: CreateUsuarioService;
 
 describe('Criar Usuario Caso de Uso', () => {
 	beforeEach(() => {
 		usuarioRepository = new InMemoryUsuarioRepository();
-		sut = new CreateUsuarioService(usuarioRepository);
+		bcrypt = new BcryptService();
+		sut = new CreateUsuarioService(usuarioRepository, bcrypt);
 	});
 
 	it('deveria poder se cadastrar', async () => {
