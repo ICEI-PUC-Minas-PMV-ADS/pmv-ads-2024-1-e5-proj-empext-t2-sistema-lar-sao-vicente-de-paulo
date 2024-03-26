@@ -16,8 +16,6 @@ enum Situacao {
 model Usuario {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  cargo         Cargo?   @relation(fields: [cargo_id], references: [id])
-  cargo_id      BigInt?  @db.BigInt
   foto          Bytes?   @db.ByteA
   nome          String   @db.VarChar(255)
   cpf_cnh       String   @unique @db.VarChar(11)
@@ -27,21 +25,22 @@ model Usuario {
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  Idosos             Idoso[]
-  Prontuarios        Prontuario[]
-  RelatoriosPia      RelatorioPia[]
-  FichasNutricionais FichaNutricional[]
-  Perroca            Perroca[]
-  EscalaBraden       EscalaBraden[]
+  id_cargo BigInt @db.BigInt
+  cargo    Cargo? @relation(fields: [id_cargo], references: [id])
 
-  @@map("usuarios")
+  idosos              Idoso[]
+  prontuarios         Prontuario[]
+  relatorios_pia      RelatorioPia[]
+  fichas_nutricionais FichaNutricional[]
+  perroca             Perroca[]
+  escala_braden       EscalaBraden[]
+
+  @@map("usuario")
 }
 
 model Idoso {
   id                        BigInt   @id @default(autoincrement()) @db.BigInt
   uid                       String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  usuario                   Usuario  @relation(fields: [usuario_id], references: [id])
-  usuario_id                BigInt   @db.BigInt
   foto                      Bytes?   @db.ByteA
   nome_completo             String   @db.VarChar(255)
   data_nascimento           DateTime @db.Date()
@@ -72,21 +71,22 @@ model Idoso {
   criado_em                 DateTime @default(now()) @db.Timestamp()
   atualizado_em             DateTime @updatedAt @db.Timestamp()
 
-  ResponsaveisIdoso  ResponsavelIdoso[]
-  Prontuarios        Prontuario[]
-  RelatoriosPia      RelatorioPia[]
-  FichasNutricionais FichaNutricional[]
-  Perroca            Perroca[]
-  EscalaBraden       EscalaBraden[]
+  id_usuario BigInt  @db.BigInt
+  usuario    Usuario @relation(fields: [id_usuario], references: [id])
 
-  @@map("idosos")
+  responsaveis_idoso  ResponsavelIdoso[]
+  prontuarios         Prontuario[]
+  relatorios_pia      RelatorioPia[]
+  fichas_nutricionais FichaNutricional[]
+  perroca             Perroca[]
+  escala_braden       EscalaBraden[]
+
+  @@map("idoso")
 }
 
 model ResponsavelIdoso {
   id              BigInt   @id @default(autoincrement()) @db.BigInt
   uid             String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  idoso           Idoso    @relation(fields: [idoso_id], references: [id])
-  idoso_id        BigInt   @db.BigInt
   parentesco      String   @db.VarChar(50)
   nome_completo   String   @db.VarChar(255)
   endereco        String   @db.VarChar(100)
@@ -99,7 +99,10 @@ model ResponsavelIdoso {
   criado_em       DateTime @default(now()) @db.Timestamp()
   atualizado_em   DateTime @updatedAt @db.Timestamp()
 
-  @@map("responsaveis_idosos")
+  id_idoso BigInt @db.BigInt
+  idoso    Idoso  @relation(fields: [id_idoso], references: [id])
+
+  @@map("responsavel_idoso")
 }
 
 model Cargo {
@@ -109,38 +112,40 @@ model Cargo {
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  Usuario        Usuario[]
-  CargoPermissao CargoPermissao[]
+  usuario         Usuario[]
+  cargo_permissao CargoPermissao[]
 
-  @@map("modelo_cargo")
+  @@map("cargo")
 }
 
 model CargoPermissao {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  cargo_id      BigInt   @db.BigInt
-  permissao_id  BigInt   @db.BigInt
+  ativo         Boolean  @default(true)
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  cargo     Cargo     @relation(fields: [cargo_id], references: [id])
-  permissao Permissao @relation(fields: [permissao_id], references: [id])
+  id_cargo BigInt @db.BigInt
+  cargo    Cargo  @relation(fields: [id_cargo], references: [id])
 
-  @@map("modelo_cargo_permissao")
+  id_permissao BigInt    @db.BigInt
+  permissao    Permissao @relation(fields: [id_permissao], references: [id])
+
+  @@map("cargo_permissao")
 }
 
 model Permissao {
-  id                 BigInt   @id @default(autoincrement()) @db.BigInt
-  uid                String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  grupo_permissao_id BigInt   @db.BigInt
-  nome               String   @db.VarChar(255)
-  codigo             Int      @db.Integer()
-  criado_em          DateTime @default(now()) @db.Timestamp
-  atualizado_em      DateTime @updatedAt @db.Timestamp
+  id            BigInt   @id @default(autoincrement()) @db.BigInt
+  uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nome          String   @db.VarChar(255)
+  codigo        Int      @db.Integer()
+  criado_em     DateTime @default(now()) @db.Timestamp
+  atualizado_em DateTime @updatedAt @db.Timestamp
 
-  CargoPermissao CargoPermissao[]
+  id_grupo_permissao BigInt         @db.BigInt
+  grupo_permissao    GrupoPermissao @relation(fields: [id_grupo_permissao], references: [id])
 
-  grupoPermissao GrupoPermissao @relation(fields: [grupo_permissao_id], references: [id])
+  cargo_permissao CargoPermissao[]
 
   @@map("permissao")
 }
@@ -153,7 +158,7 @@ model GrupoPermissao {
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  Permissao Permissao[]
+  permissao Permissao[]
 
   @@map("grupo_permissao")
 }
@@ -161,80 +166,83 @@ model GrupoPermissao {
 model Prontuario {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  idoso_id      BigInt   @db.BigInt
-  usuario_id    BigInt   @db.BigInt
   relatorio     String   @db.Text
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  idoso   Idoso   @relation(fields: [idoso_id], references: [id])
-  usuario Usuario @relation(fields: [usuario_id], references: [id])
+  id_idoso BigInt @db.BigInt
+  idoso    Idoso  @relation(fields: [id_idoso], references: [id])
+
+  id_usuario BigInt  @db.BigInt
+  usuario    Usuario @relation(fields: [id_usuario], references: [id])
 
   @@map("prontuario")
 }
 
 model RelatorioPia {
-  id                      BigInt   @id @default(autoincrement()) @db.BigInt
-  uid                     String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  modelo_relatorio_pia_id BigInt   @db.BigInt
-  idoso_id                BigInt   @db.BigInt
-  usuario_id              BigInt   @db.BigInt
-  criado_em               DateTime @default(now()) @db.Timestamp
-  atualizado_em           DateTime @updatedAt @db.Timestamp
+  id            BigInt   @id @default(autoincrement()) @db.BigInt
+  uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  criado_em     DateTime @default(now()) @db.Timestamp
+  atualizado_em DateTime @updatedAt @db.Timestamp
 
-  idoso              Idoso               @relation(fields: [idoso_id], references: [id])
-  usuario            Usuario             @relation(fields: [usuario_id], references: [id])
-  modeloRelatorioPia ModeloRelatorioPia  @relation(fields: [modelo_relatorio_pia_id], references: [id])
-  PerguntaRelatorio  PerguntaRelatorio[]
+  id_idoso BigInt @db.BigInt
+  idoso    Idoso  @relation(fields: [id_idoso], references: [id])
+
+  id_usuario BigInt  @db.BigInt
+  usuario    Usuario @relation(fields: [id_usuario], references: [id])
+
+  id_modelo_relatorio_pia BigInt             @map("modelo_relatorio_pia_id") @db.BigInt
+  modelo_relatorio_pia    ModeloRelatorioPia @relation(fields: [id_modelo_relatorio_pia], references: [id])
+
+  pergunta_relatorio PerguntaRelatorio[]
 
   @@map("relatorio_pia")
 }
 
 model PerguntaRelatorio {
-  id               BigInt   @id @default(autoincrement()) @db.BigInt
-  uid              String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  relatorio_pia_id BigInt   @db.BigInt
-  pergunta         String   @db.VarChar(255)
-  sim_nao          Boolean  @db.Boolean
-  observacao       String?  @db.Text
-  criado_em        DateTime @default(now()) @db.Timestamp
-  atualizado_em    DateTime @updatedAt @db.Timestamp
+  id            BigInt   @id @default(autoincrement()) @db.BigInt
+  uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  pergunta      String   @db.VarChar(255)
+  sim_nao       Boolean  @db.Boolean
+  observacao    String?  @db.Text
+  criado_em     DateTime @default(now()) @db.Timestamp
+  atualizado_em DateTime @updatedAt @db.Timestamp
 
-  relatorioPia RelatorioPia @relation(fields: [relatorio_pia_id], references: [id])
+  id_relatorio_pia BigInt       @db.BigInt
+  relatorio_pia    RelatorioPia @relation(fields: [id_relatorio_pia], references: [id])
 
   @@map("pergunta_relatorio")
 }
 
 model ModeloRelatorioPia {
-  id            BigInt         @id @default(autoincrement()) @db.BigInt
-  uid           String         @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  nome          String         @db.VarChar(255)
-  criado_em     DateTime       @default(now()) @db.Timestamp
-  atualizado_em DateTime       @updatedAt @db.Timestamp
-  RelatorioPia  RelatorioPia[]
-  Perguntas     Perguntas[]
+  id            BigInt   @id @default(autoincrement()) @db.BigInt
+  uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nome          String   @db.VarChar(255)
+  criado_em     DateTime @default(now()) @db.Timestamp
+  atualizado_em DateTime @updatedAt @db.Timestamp
+
+  relatorio_pia RelatorioPia[]
+  pergunta      Pergunta[]
 
   @@map("modelo_relatorio_pia")
 }
 
-model Perguntas {
+model Pergunta {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  modelo_id     BigInt   @db.BigInt
   pergunta      String   @db.VarChar(255)
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  modeloRelatorioPia ModeloRelatorioPia @relation(fields: [modelo_id], references: [id])
+  id_modelo_relatorio_pia BigInt             @db.BigInt
+  modelo_relatorio_pia    ModeloRelatorioPia @relation(fields: [id_modelo_relatorio_pia], references: [id])
 
-  @@map("perguntas")
+  @@map("pergunta")
 }
 
 model FichaNutricional {
   id                      BigInt   @id @default(autoincrement()) @db.BigInt
   uid                     String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  idoso_id                BigInt   @db.BigInt
-  usuario_id              BigInt   @db.BigInt
   diagnostico_clinico     String?  @db.VarChar(255)
   edema                   String?  @db.VarChar(255)
   local_edema             String?  @db.VarChar(255)
@@ -249,12 +257,16 @@ model FichaNutricional {
   criado_em               DateTime @default(now()) @db.Timestamp
   atualizado_em           DateTime @updatedAt @db.Timestamp
 
-  idoso                        Idoso                          @relation(fields: [idoso_id], references: [id])
-  usuario                      Usuario                        @relation(fields: [usuario_id], references: [id])
-  AntropometriaAdmissional     AntropometriaAdmissional?
-  CondutaNutricional           CondutaNutricional[]
-  QuadroClinico                QuadroClinico[]
-  AcompanhamentoAntropometrico AcompanhamentoAntropometrico[]
+  id_idoso BigInt @db.BigInt
+  idoso    Idoso  @relation(fields: [id_idoso], references: [id])
+
+  id_usuario BigInt  @db.BigInt
+  usuario    Usuario @relation(fields: [id_usuario], references: [id])
+
+  antropometria_admissional     AntropometriaAdmissional?
+  conduta_nutricional           CondutaNutricional[]
+  quadro_clinico                QuadroClinico[]
+  acompanhamento_antropometrico AcompanhamentoAntropometrico[]
 
   @@map("ficha_nutricional")
 }
@@ -262,7 +274,6 @@ model FichaNutricional {
 model AntropometriaAdmissional {
   id                             BigInt   @id @default(autoincrement()) @db.BigInt
   uid                            String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  ficha_nutricional_id           BigInt   @unique @db.BigInt
   triagem                        String   @db.VarChar(255)
   escore                         Int      @db.Integer
   triagem_classificacao          String   @db.VarChar(255)
@@ -285,73 +296,74 @@ model AntropometriaAdmissional {
   criado_em                      DateTime @default(now()) @db.Timestamp
   atualizado_em                  DateTime @updatedAt @db.Timestamp
 
-  fichaNutricional FichaNutricional @relation(fields: [ficha_nutricional_id], references: [id])
+  id_ficha_nutricional BigInt           @unique @db.BigInt
+  ficha_nutricional    FichaNutricional @relation(fields: [id_ficha_nutricional], references: [id])
 
   @@map("antropometria_admissional")
 }
 
 model CondutaNutricional {
-  id                   BigInt   @id @default(autoincrement()) @db.BigInt
-  uid                  String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  ficha_nutricional_id BigInt   @db.BigInt
-  data                 DateTime @db.Date
-  dieta                String?  @db.VarChar(255)
-  volume               String?  @db.VarChar(255)
-  fracionamento        String?  @db.VarChar(255)
-  kcal_dia             String?  @db.VarChar(255)
-  ptn_dia              Int?     @db.Integer
-  agua_ml              String?  @db.VarChar(255)
-  criado_em            DateTime @default(now()) @db.Timestamp
-  atualizado_em        DateTime @updatedAt @db.Timestamp
+  id            BigInt   @id @default(autoincrement()) @db.BigInt
+  uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  data          DateTime @db.Date
+  dieta         String?  @db.VarChar(255)
+  volume        String?  @db.VarChar(255)
+  fracionamento String?  @db.VarChar(255)
+  kcal_dia      String?  @db.VarChar(255)
+  ptn_dia       Int?     @db.Integer
+  agua_ml       String?  @db.VarChar(255)
+  criado_em     DateTime @default(now()) @db.Timestamp
+  atualizado_em DateTime @updatedAt @db.Timestamp
 
-  fichaNutricional FichaNutricional @relation(fields: [ficha_nutricional_id], references: [id])
+  id_ficha_nutricional BigInt           @unique @db.BigInt
+  ficha_nutricional    FichaNutricional @relation(fields: [id_ficha_nutricional], references: [id])
 
   @@map("conduta_nutricional")
 }
 
 model QuadroClinico {
-  id                   BigInt   @id @default(autoincrement()) @db.BigInt
-  uid                  String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  ficha_nutricional_id BigInt   @db.BigInt
-  data                 DateTime @db.Date
-  aceitacao_alimentar  String?  @db.VarChar(255)
-  suplemento_oral      String?  @db.VarChar(255)
-  apetite              String?  @db.VarChar(255)
-  mastigacao           String?  @db.VarChar(255)
-  disfagia             String?  @db.VarChar(255)
-  odinofagia           String?  @db.VarChar(255)
-  dispneia             String?  @db.VarChar(255)
-  nausea_vomito        String?  @db.VarChar(255)
-  dor_abdominal        String?  @db.VarChar(255)
-  evacuacao            String?  @db.VarChar(255)
-  diurese              String?  @db.VarChar(255)
-  observacao           String?  @db.Text
-  criado_em            DateTime @default(now()) @db.Timestamp
-  atualizado_em        DateTime @updatedAt @db.Timestamp
+  id                  BigInt   @id @default(autoincrement()) @db.BigInt
+  uid                 String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  data                DateTime @db.Date
+  aceitacao_alimentar String?  @db.VarChar(255)
+  suplemento_oral     String?  @db.VarChar(255)
+  apetite             String?  @db.VarChar(255)
+  mastigacao          String?  @db.VarChar(255)
+  disfagia            String?  @db.VarChar(255)
+  odinofagia          String?  @db.VarChar(255)
+  dispneia            String?  @db.VarChar(255)
+  nausea_vomito       String?  @db.VarChar(255)
+  dor_abdominal       String?  @db.VarChar(255)
+  evacuacao           String?  @db.VarChar(255)
+  diurese             String?  @db.VarChar(255)
+  observacao          String?  @db.Text
+  criado_em           DateTime @default(now()) @db.Timestamp
+  atualizado_em       DateTime @updatedAt @db.Timestamp
 
-  fichaNutricional FichaNutricional @relation(fields: [ficha_nutricional_id], references: [id])
+  id_ficha_nutricional BigInt           @unique @db.BigInt
+  ficha_nutricional    FichaNutricional @relation(fields: [id_ficha_nutricional], references: [id])
 
   @@map("quadro_clinico")
 }
 
 model AcompanhamentoAntropometrico {
-  id                   BigInt   @id @default(autoincrement()) @db.BigInt
-  uid                  String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  ficha_nutricional_id BigInt   @db.BigInt
-  data                 DateTime @db.Date
-  altura               Float
-  peso                 Float
-  ascite               String?  @db.VarChar(255)
-  edema                String?  @db.VarChar(255)
-  imc                  Float
-  ca                   Float?
-  cb                   Float?
-  cp                   Float?
-  observacao           String?  @db.Text
-  criado_em            DateTime @default(now()) @db.Timestamp
-  atualizado_em        DateTime @updatedAt @db.Timestamp
+  id            BigInt   @id @default(autoincrement()) @db.BigInt
+  uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  data          DateTime @db.Date
+  altura        Float
+  peso          Float
+  ascite        String?  @db.VarChar(255)
+  edema         String?  @db.VarChar(255)
+  imc           Float
+  ca            Float?
+  cb            Float?
+  cp            Float?
+  observacao    String?  @db.Text
+  criado_em     DateTime @default(now()) @db.Timestamp
+  atualizado_em DateTime @updatedAt @db.Timestamp
 
-  fichaNutricional FichaNutricional @relation(fields: [ficha_nutricional_id], references: [id])
+  id_ficha_nutricional BigInt           @unique @db.BigInt
+  ficha_nutricional    FichaNutricional @relation(fields: [id_ficha_nutricional], references: [id])
 
   @@map("acompanhamento_antropometrico")
 }
@@ -359,8 +371,6 @@ model AcompanhamentoAntropometrico {
 model Perroca {
   id                         BigInt   @id @default(autoincrement()) @db.BigInt
   uid                        String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  idoso_id                   BigInt   @db.BigInt
-  usuario_id                 BigInt   @db.BigInt
   estado_metal_conciencia    Int      @db.Integer
   oxigenacao                 Int      @db.Integer
   sinais_vitais              Int      @db.Integer
@@ -379,8 +389,11 @@ model Perroca {
   criado_em                  DateTime @default(now()) @db.Timestamp
   atualizado_em              DateTime @updatedAt @db.Timestamp
 
-  idoso   Idoso   @relation(fields: [idoso_id], references: [id])
-  usuario Usuario @relation(fields: [usuario_id], references: [id])
+  id_idoso BigInt @db.BigInt
+  idoso    Idoso  @relation(fields: [id_idoso], references: [id])
+
+  id_usuario BigInt  @db.BigInt
+  usuario    Usuario @relation(fields: [id_usuario], references: [id])
 
   @@map("perroca")
 }
@@ -388,8 +401,6 @@ model Perroca {
 model EscalaBraden {
   id                   BigInt   @id @default(autoincrement()) @db.BigInt
   uid                  String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  idoso_id             BigInt   @db.BigInt
-  usuario_id           BigInt   @db.BigInt
   pontuacao_escala     String   @db.VarChar(255)
   percepcao_sensorial  String   @db.VarChar(255)
   umidade              String   @db.VarChar(255)
@@ -400,8 +411,11 @@ model EscalaBraden {
   criado_em            DateTime @default(now()) @db.Timestamp
   atualizado_em        DateTime @updatedAt @db.Timestamp
 
-  idoso   Idoso   @relation(fields: [idoso_id], references: [id])
-  usuario Usuario @relation(fields: [usuario_id], references: [id])
+  id_idoso BigInt @db.BigInt
+  idoso    Idoso  @relation(fields: [id_idoso], references: [id])
+
+  id_usuario BigInt  @db.BigInt
+  usuario    Usuario @relation(fields: [id_usuario], references: [id])
 
   @@map("escala_braden")
 }

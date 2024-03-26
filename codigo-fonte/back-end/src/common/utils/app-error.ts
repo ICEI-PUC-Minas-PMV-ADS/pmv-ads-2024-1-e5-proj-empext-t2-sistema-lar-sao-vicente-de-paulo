@@ -1,16 +1,25 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export class AppError {
-    public message: string;
+	@ApiProperty()
+	public message: string;
 
-    public statusCode: number;
+	@ApiProperty()
+	public statusCode: number;
 
-    public detail?: string[];
+	@ApiProperty()
+	public detail?: string[];
 
-    public timetamps?: Date;
+	@ApiProperty()
+	public timetamps?: Date;
 
-    constructor(message: string, statusCode = 400, detail?: string[]) {
-        this.message = message;
-        this.statusCode = statusCode;
-        this.detail = detail;
-        this.timetamps = new Date();
-    }
+	@ApiProperty()
+	public path?: string;
+
+	constructor(message: string, statusCode = 400, detail?: string[]) {
+		this.message = message;
+		this.statusCode = statusCode;
+		this.detail = detail;
+		this.timetamps = new Date();
+	}
 }
