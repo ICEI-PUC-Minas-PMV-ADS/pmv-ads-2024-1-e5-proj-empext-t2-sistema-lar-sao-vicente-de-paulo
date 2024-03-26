@@ -1,7 +1,6 @@
 import { Logo } from "@/components/logo";
 import ProfileIcon from "@/components/logo/Profile";
 import { Dropdown, MenuProps, Space } from "antd";
-import Image from "next/image";
 
 const cadastros: MenuProps['items'] = [
   {

@@ -15,6 +15,8 @@ module.exports = {
       black: "#2D2D29",
       white: "#FFFFFF",
       azul2: "#005FB3",
+      cinza: "#F8F8F8",
+      cinza2: "#E0E0CC"
     },
   },
   plugins: [],
