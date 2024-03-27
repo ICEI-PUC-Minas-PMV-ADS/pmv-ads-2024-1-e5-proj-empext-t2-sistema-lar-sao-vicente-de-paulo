@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUsuarioDto } from '../dtos/create-usuario.dto';
 import { AppError } from '@/common/utils/app-error';
-import { PrismaUsuarioRepository } from '@/repositories/prisma/prisma-usuario-repository';
+import { PrismaUsuarioRepository } from '@/app/modules/usuario/repositories/prisma/prisma-usuario-repository';
 import { BcryptService } from '@/core/providers/crypto/bcrypt/bcrypt.service';
 import { Usuario } from '../entities/usuario.entity';
 

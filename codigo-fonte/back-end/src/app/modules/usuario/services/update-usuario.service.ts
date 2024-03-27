@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateUsuarioDto } from '../dtos/update-usuario.dto';
-import { PrismaUsuarioRepository } from '@/repositories/prisma/prisma-usuario-repository';
+import { PrismaUsuarioRepository } from '@/app/modules/usuario/repositories/prisma/prisma-usuario-repository';
 import { AppError } from '@utils/app-error';
 import { Usuario } from '../entities/usuario.entity';
 

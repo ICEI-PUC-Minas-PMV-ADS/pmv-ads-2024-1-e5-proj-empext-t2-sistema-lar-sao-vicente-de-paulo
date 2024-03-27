@@ -1,4 +1,4 @@
-import { InMemoryUsuarioRepository } from '@/repositories/in-memory/in-memory-usuario-repository';
+import { InMemoryUsuarioRepository } from '@/app/modules/usuario/repositories/in-memory/in-memory-usuario-repository';
 import { CreateUsuarioService } from '../create-usuario.service';
 import { expect, describe, it, beforeEach } from 'vitest';
 import { compare } from 'bcrypt';

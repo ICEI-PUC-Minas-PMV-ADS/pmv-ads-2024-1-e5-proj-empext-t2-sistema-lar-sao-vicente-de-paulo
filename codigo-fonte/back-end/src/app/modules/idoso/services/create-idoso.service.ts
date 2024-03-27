@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateIdosoDto } from '../dtos/create-idoso.dto';
-import { PrismaUsuarioRepository } from '@/repositories/prisma/prisma-usuario-repository';
+import { PrismaUsuarioRepository } from '@/app/modules/usuario/repositories/prisma/prisma-usuario-repository';
 import { AppError } from '@utils/app-error';
-import { PrismaIdosoRepository } from '@/repositories/prisma/prisma-idoso-repository';
 import { Idoso } from '../entities/idoso.entity';
+import { PrismaIdosoRepository } from '../repositories/prisma/prisma-idoso-repository';
 
 @Injectable()
 export class CreateIdosoService {

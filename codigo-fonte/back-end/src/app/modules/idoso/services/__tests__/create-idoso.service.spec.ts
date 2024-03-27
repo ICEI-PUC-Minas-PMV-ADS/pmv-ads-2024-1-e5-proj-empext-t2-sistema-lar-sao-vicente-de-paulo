@@ -1,7 +1,7 @@
-import { InMemoryIdosoRepository } from '@/repositories/in-memory/in-memory-idoso-repository';
+import { InMemoryIdosoRepository } from '@/app/modules/usuario/repositories/in-memory/in-memory-idoso-repository';
 import { CreateIdosoService } from '../create-idoso.service';
 import { expect, describe, it, beforeEach } from 'vitest';
-import { InMemoryUsuarioRepository } from '@/repositories/in-memory/in-memory-usuario-repository';
+import { InMemoryUsuarioRepository } from '@/app/modules/usuario/repositories/in-memory/in-memory-usuario-repository';
 import { AppError } from '@utils/app-error';
 
 let idosoRepository: InMemoryIdosoRepository;

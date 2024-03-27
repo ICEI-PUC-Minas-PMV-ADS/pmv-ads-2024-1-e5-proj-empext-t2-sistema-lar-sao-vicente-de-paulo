@@ -1,8 +1,8 @@
-import { PrismaIdosoRepository } from '@/repositories/prisma/prisma-idoso-repository';
 import { Injectable } from '@nestjs/common';
 import { Idoso } from '../entities/idoso.entity';
 import { AppError } from '@utils/app-error';
 import { DeleteIdosoDto } from '../dtos/delete-idoso.dto';
+import { PrismaIdosoRepository } from '../repositories/prisma/prisma-idoso-repository';
 
 @Injectable()
 export class DeleteIdosoService {

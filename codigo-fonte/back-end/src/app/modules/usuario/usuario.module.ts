@@ -9,7 +9,7 @@ import { UpdateUsuarioService } from './services/update-usuario.service';
 import { UpdateUsuarioController } from './controllers/update-usuario.controller';
 import { DeleteUsuarioService } from './services/delete-usuario.service';
 import { DeleteUsuarioController } from './controllers/delete-usuario.controller';
-import { PrismaUsuarioRepository } from '@/repositories/prisma/prisma-usuario-repository';
+import { PrismaUsuarioRepository } from '@/app/modules/usuario/repositories/prisma/prisma-usuario-repository';
 import { CryptoModule } from '@/core/providers/crypto/crypto.module';
 import { QueryBuilderModule } from '@/core/providers/query-builder/query-builder.module';
 import { DatabaseModule } from '@/core/providers/database/database.module';
