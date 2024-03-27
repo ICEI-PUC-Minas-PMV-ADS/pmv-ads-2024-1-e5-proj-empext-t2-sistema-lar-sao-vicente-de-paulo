@@ -13,7 +13,9 @@ const cadastros: MenuProps["items"] = [
   },
   {
     key: "key-usuario",
-    label: "Usuário",
+    label: (
+      <a href="/usuario">Usuários</a>
+    ),
     style: {
       width: "10.125rem",
       height: "2.5rem",
@@ -107,7 +109,7 @@ export const Header = () => {
           <Logo />
           <div className="ml-16 w-[10.125rem] h-full justify-center flex hover:bg-azul2 transition-all cursor-pointer">
             <Dropdown
-              placement="topCenter"
+              placement="top"
               menu={{ items: cadastros }}
               className="w-full flex justify-center items-center"
             >
@@ -118,7 +120,7 @@ export const Header = () => {
           </div>
           <div className="w-[10.125rem] h-full justify-center flex hover:bg-azul2 cursor-pointer transition-all">
             <Dropdown
-              placement="topCenter"
+              placement="top"
               menu={{ items: relatorios }}
               className="w-full flex justify-center items-center"
             >
@@ -129,7 +131,7 @@ export const Header = () => {
           </div>
         </div>
         <div className="w-[10.125rem] h-full justify-center flex cursor-pointer">
-          <Dropdown placement="topCenter" menu={{ items: perfil }}>
+          <Dropdown placement="top" menu={{ items: perfil }}>
             <Space>
               <div className="flex h-full justify-center flex-row-reverse items-center gap-3">
                 <ProfileIcon />
