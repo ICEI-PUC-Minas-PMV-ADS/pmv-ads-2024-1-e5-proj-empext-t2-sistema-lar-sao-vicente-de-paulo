@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { authToken } from "@/config/authToken";
 import { api } from "../service/api";
 import { useAppDispatch } from "./useRedux";
-import { setAuthToken, setAuthUser } from "@/redux/slices/auth.slice";
+import { setAuthToken, setAuthUsuario } from "@/redux/slices/auth.slice";
 
 // tipagem de erro, padrão enviado pela API
 interface IErrorState {
@@ -117,7 +117,7 @@ export function useFetch<T = unknown>(
         removeCookie(authToken.nome, {
           path: "/",
         });
-        dispatch(setAuthUser(null as any));
+        dispatch(setAuthUsuario(null as any));
         dispatch(setAuthToken(null as any));
       }
     }

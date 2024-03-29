@@ -7,37 +7,41 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpExceptionFilter } from './core/filters/http-exception.filter';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+	const app = await NestFactory.create(AppModule);
 
-    app.useGlobalPipes(
-        new ValidationPipe({
-            whitelist: true,
-            transform: true,
-            forbidNonWhitelisted: true,
-        }),
-    );
+	app.enableCors({
+		origin: '*',
+	});
 
-    app.useGlobalFilters(new HttpExceptionFilter());
+	app.useGlobalPipes(
+		new ValidationPipe({
+			whitelist: true,
+			transform: true,
+			forbidNonWhitelisted: true,
+		}),
+	);
 
-    const config = new DocumentBuilder()
-        .addBearerAuth()
-        .setTitle('API - Sistema Lar São Vicente de Paulo')
-        .setDescription('Documentação das rotas e tipagem')
-        .setVersion('1.0')
-        .build();
+	app.useGlobalFilters(new HttpExceptionFilter());
 
-    const document = SwaggerModule.createDocument(app, config);
+	const config = new DocumentBuilder()
+		.setTitle('API - Sistema Lar São Vicente de Paulo')
+		.setDescription('Documentação das rotas e tipagem')
+		.setVersion('1.0')
+		.addBearerAuth()
+		.build();
 
-    SwaggerModule.setup('api-doc', app, document, {
-        swaggerOptions: {
-            docExpansion: 'none',
-        },
-    });
+	const document = SwaggerModule.createDocument(app, config);
 
-    await app.listen(Number(process.env.SERVER_PORT) || 3030, () => {
-        const logger = new Logger('Server');
+	SwaggerModule.setup('api-doc', app, document, {
+		swaggerOptions: {
+			docExpansion: 'none',
+		},
+	});
 
-        logger.log('Is running: ' + (process.env.SERVER_PORT || 3030));
-    });
+	await app.listen(Number(process.env.SERVER_PORT) || 3030, () => {
+		const logger = new Logger('Server');
+
+		logger.log('Is running: ' + (process.env.SERVER_PORT || 3030));
+	});
 }
 bootstrap();

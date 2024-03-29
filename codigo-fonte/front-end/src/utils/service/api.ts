@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "https://sistema.com.br", //trocar para url da api do sistema
+  baseURL: "http://localhost:3030", //trocar para url da api do sistema
 });
