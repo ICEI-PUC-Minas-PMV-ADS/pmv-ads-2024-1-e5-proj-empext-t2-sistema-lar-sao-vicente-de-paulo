@@ -17,8 +17,7 @@ interface ILoginFormData {
 export default function LoginPage() {
   const router = useRouter();
 
-  const { register, handleSubmit, getValues, control } =
-    useForm<ILoginFormData>();
+  const { handleSubmit, control } = useForm<ILoginFormData>();
   const [, setCookie] = useCookies([authToken.nome]);
   const dispatch = useAppDispatch();
 
