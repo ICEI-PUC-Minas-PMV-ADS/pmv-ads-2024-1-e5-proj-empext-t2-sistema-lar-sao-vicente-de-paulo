@@ -74,25 +74,6 @@ const columns = [
 export default function Usuario() {
   return (
     <>
-      <div className="h-11">
-        <Breadcrumb
-          items={[
-            {
-              href: "/",
-              title: "Home",
-            },
-            {
-              title: (
-                <>
-                  <UserOutlined />
-                  <span>Usuários</span>
-                </>
-              ),
-            },
-          ]}
-        />
-      </div>
-      <div className="w-full h-[1px] bg-cinza2"></div>
       <div className="flex mt-7 gap-5">
         <Button type="primary" size="large" icon={<UserAddOutlined />}>
           Cadastrar

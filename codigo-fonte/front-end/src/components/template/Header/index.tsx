@@ -13,14 +13,10 @@ import { Dropdown, Space } from "antd";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
 
-const headerMenus = [
+export const headerMenus = [
   {
-    menu: (
-      <>
-        <UserOutlined />
-        Cadastros
-      </>
-    ),
+    icon: <UserOutlined />,
+    menu: "Cadastros",
     key: "menu-cadastro",
     itens: [
       {
@@ -41,12 +37,9 @@ const headerMenus = [
     ],
   },
   {
-    menu: (
-      <>
-        <FileTextOutlined />
-        Relatórios
-      </>
-    ),
+    icon: <FileTextOutlined />,
+    menu: "Relatórios",
+
     key: "menu-relatorio",
     itens: [
       {
@@ -105,13 +98,13 @@ export const Header = () => {
     <nav className="bg-primaria">
       <div className="h-[4.25rem] ml-16 mr-16 flex flex-row md:flex-row items-center justify-between">
         <div className="flex h-full items-center">
-          <Link href="/" className="hover:cursor-pointer">
+          <Link href="/" className="hover:cursor-pointer hover:opacity-90">
             <Logo className="mr-16" />
           </Link>
           {headerMenus.map((header) => (
             <div
               key={header.key}
-              className="w-[10.125rem] h-full justify-center flex hover:bg-azul2 transition-all cursor-pointer"
+              className="w-[10.125rem] h-full justify-center flex hover:bg-azul2/30 transition-all cursor-pointer"
             >
               <Dropdown
                 placement="top"
@@ -132,6 +125,7 @@ export const Header = () => {
               >
                 <Space>
                   <div className="text-lg text-white font-medium flex gap-[8px]">
+                    {header.icon}
                     {header.menu}
                   </div>
                 </Space>
@@ -163,8 +157,7 @@ export const Header = () => {
             )}
           >
             <Space>
-              <div className="flex h-full justify-center flex-row-reverse items-center gap-3">
-                <ProfileIcon />
+              <div className="flex h-full items-center gap-3 justify-end hover:bg-azul2/30 min-w-[170px] rounded-full p-[8px]">
                 <div className="flex flex-col text-right">
                   <strong className="text-white text-sm font-semibold">
                     {usuario.nome}
@@ -173,6 +166,7 @@ export const Header = () => {
                     {usuario.cargo.nome}
                   </span>
                 </div>
+                <ProfileIcon />
               </div>
             </Space>
           </Dropdown>
