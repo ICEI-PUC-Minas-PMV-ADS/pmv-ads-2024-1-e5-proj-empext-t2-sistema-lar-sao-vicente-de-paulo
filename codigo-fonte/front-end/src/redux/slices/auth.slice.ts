@@ -1,8 +1,8 @@
-import { IUsuario } from "@/interface/IUsuario";
+import { IUsuarioAuth } from "@/interface/IUsuarioAuth";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
-  usuario: IUsuario;
+  usuario: IUsuarioAuth;
   token: string;
 }
 

@@ -1,4 +1,4 @@
-export interface IUsuario {
+export interface IUsuarioAuth {
   id: bigint;
   uid: string;
   foto: string;

@@ -1,6 +1,6 @@
 "use client";
 import { authToken } from "@/config/authToken";
-import { IUsuario } from "@/interface/IUsuario";
+import { IUsuarioAuth } from "@/interface/IUsuarioAuth";
 import { setAuthToken, setAuthUsuario } from "@/redux/slices/auth.slice";
 import { useMutation } from "@/utils/hooks/useMutation";
 import { useAppDispatch } from "@/utils/hooks/useRedux";
@@ -23,7 +23,7 @@ export default function LoginPage() {
 
   const { mutate: mutateLogin } = useMutation<
     ILoginFormData,
-    { token: string; usuario: IUsuario }
+    { token: string; usuario: IUsuarioAuth }
   >("/auth/login", {
     method: "post",
     onSuccess: ({ data }) => {

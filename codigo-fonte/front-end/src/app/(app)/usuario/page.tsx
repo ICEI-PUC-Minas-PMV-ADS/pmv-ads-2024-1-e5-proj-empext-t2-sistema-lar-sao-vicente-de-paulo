@@ -1,58 +1,23 @@
 "use client";
 
-import { Breadcrumb, Button, Input, Select, Table } from "antd";
+import { Button, Input, Select, Table } from "antd";
 import {
   EditOutlined,
   SearchOutlined,
   UserAddOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
-import { Header } from "@/components/template/Header";
-import { Footer } from "@/components/template/Footer";
-
-const dataSource = [
-  {
-    key: "1",
-    nome: "José da Silva",
-    cargo: "Gerente",
-    email: "jose@gmail.com",
-  },
-  {
-    key: "2",
-    nome: "Lucas",
-    cargo: "Admin",
-    email: "lucas@gmail.com",
-  },
-  {
-    key: "3",
-    nome: "Ricardo",
-    cargo: "Operador",
-    email: "jose@gmail.com",
-  },
-  {
-    key: "4",
-    nome: "Maria",
-    cargo: "RH",
-    email: "maria@gmail.com",
-  },
-  {
-    key: "5",
-    nome: "Pedro",
-    cargo: "Gerente",
-    email: "pedro@gmail.com",
-  },
-];
+import { useFetch } from "@/utils/hooks/useFetch";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { IUsuario } from "./Interface/IUsuario";
+import { queryBuilder } from "@/utils/functions/query-builder";
+import { Situacao } from "@/interface/ISituacao";
 
 const columns = [
   {
     title: "Nome",
     dataIndex: "nome",
     key: "nome",
-  },
-  {
-    title: "Cargo",
-    dataIndex: "cargo",
-    key: "cargo",
   },
   {
     title: "E-mail",
@@ -71,7 +36,34 @@ const columns = [
   },
 ];
 
+interface IFiltro {
+  pesquisa?: string;
+  situacao: Situacao;
+}
+
 export default function Usuario() {
+  const filterMethods = useForm<IFiltro>({
+    defaultValues: {
+      situacao: Situacao.ATIVO,
+    },
+  });
+
+  const [filtro, setFiltro] = useState<any[]>([]);
+  const [pageLimit, setPageLimit] = useState<number>(10);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const { data, totalCount } = useFetch<IUsuario[]>(
+    "/usuarios",
+    [filtro, pageLimit, currentPage],
+    {
+      params: queryBuilder({
+        page_limit: pageLimit,
+        page_number: currentPage,
+        filter: filtro,
+      }),
+    }
+  );
+
   return (
     <>
       <div className="flex mt-7 gap-5">
@@ -93,7 +85,7 @@ export default function Usuario() {
         />
       </div>
       <div className="mt-[15px]">
-        <Table dataSource={dataSource} columns={columns} size="middle" />
+        <Table dataSource={data} columns={columns} size="middle" />
       </div>
     </>
   );

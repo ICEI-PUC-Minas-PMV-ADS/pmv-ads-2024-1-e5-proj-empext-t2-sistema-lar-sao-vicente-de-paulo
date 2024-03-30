@@ -7,7 +7,7 @@ import { useCookies } from "react-cookie";
 import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
 import { useFetch } from "../hooks/useFetch";
 import { setAuthToken, setAuthUsuario } from "@/redux/slices/auth.slice";
-import { IUsuario } from "@/interface/IUsuario";
+import { IUsuarioAuth } from "@/interface/IUsuarioAuth";
 
 export const AuthApp = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
@@ -16,7 +16,7 @@ export const AuthApp = ({ children }: { children: ReactNode }) => {
   const dispatch = useAppDispatch();
   const usuario = useAppSelector((r) => r.auth.usuario);
 
-  useFetch<{ token: string; usuario: IUsuario }>(
+  useFetch<{ token: string; usuario: IUsuarioAuth }>(
     "/auth/recover",
     ["auth-recover"],
     {
