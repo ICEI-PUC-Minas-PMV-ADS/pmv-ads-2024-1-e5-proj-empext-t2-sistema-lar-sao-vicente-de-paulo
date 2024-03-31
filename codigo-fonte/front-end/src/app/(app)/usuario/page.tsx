@@ -59,7 +59,7 @@ export default function Usuario() {
       value: situacao,
     });
 
-  const { data, isLoading } = useFetch<IUsuario[]>(
+  const { data, isLoading, totalCount } = useFetch<IUsuario[]>(
     "/usuarios",
     [pesquisa, situacao, pageLimit, currentPage],
     {
@@ -99,9 +99,19 @@ export default function Usuario() {
         <Table
           dataSource={data}
           columns={columns}
-          size="large"
+          size="middle"
           loading={isLoading}
-          pagination={{}}
+          pagination={{
+            total: totalCount || 0,
+            showTotal: (total) => `Total de ${total} items`,
+            onChange: (page, pageSize) => {
+              setPageLimit(pageSize);
+              setCurrentPage(page);
+            },
+            showSizeChanger: true,
+            pageSizeOptions: [10, 20, 30, 50, 100],
+            size: "default",
+          }}
         />
       </div>
     </>
