@@ -1,18 +1,17 @@
 "use client";
 
-import { Button, Input, Select, Table } from "antd";
+import { Input, Select, Table } from "antd";
 import {
   EditOutlined,
   SearchOutlined,
-  UserAddOutlined,
 } from "@ant-design/icons";
 import { useFetch } from "@/utils/hooks/useFetch";
-import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { IUsuario } from "./Interface/IUsuario";
 import { queryBuilder } from "@/utils/functions/query-builder";
 import { Situacao } from "@/interface/ISituacao";
 import { UsuarioModal } from "@/components/modal/UsuarioModal";
+import { Filter } from "@/interface/IQuery";
 
 const columns = [
   {
@@ -37,54 +36,80 @@ const columns = [
   },
 ];
 
-interface IFiltro {
-  pesquisa?: string;
-  situacao: Situacao;
-}
-
 export default function Usuario() {
-  const filterMethods = useForm<IFiltro>({
-    defaultValues: {
-      situacao: Situacao.ATIVO,
-    },
-  });
-
-  const [filtro, setFiltro] = useState<any[]>([]);
   const [pageLimit, setPageLimit] = useState<number>(10);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pesquisa, setPesquisa] = useState<string>("");
+  const [situacao, setSituacao] = useState<Situacao>(Situacao.ATIVO);
 
-  const { data, totalCount } = useFetch<IUsuario[]>(
+  let filtros = new Array();
+
+  if (pesquisa !== "")
+    filtros.push({
+      path: "nome",
+      operator: "contains",
+      value: pesquisa,
+      insensitive: true,
+    });
+
+  if (situacao)
+    filtros.push({
+      path: "situacao",
+      operator: "equals",
+      value: situacao,
+    });
+
+  const { data, isLoading, totalCount } = useFetch<IUsuario[]>(
     "/usuarios",
-    [filtro, pageLimit, currentPage],
+    [pesquisa, situacao, pageLimit, currentPage],
     {
       params: queryBuilder({
         page_limit: pageLimit,
         page_number: currentPage,
-        filter: filtro,
+        filter: filtros as Filter | undefined,
       }),
     }
   );
-
   return (
     <>
       <div className="flex mt-7 gap-5">
         <UsuarioModal />
         <Input
           placeholder="Buscar"
+          onChange={(e) => setPesquisa(e.target.value)}
           suffix={<SearchOutlined className="cursor-pointer opacity-50" />}
         />
+
         <Select
-          defaultValue="Ativos"
           className="w-[105px]"
           size="large"
+          onChange={(e) => setSituacao(e as Situacao)}
+          defaultValue="ATIVO"
           options={[
-            { value: "ativos", label: "Ativos" },
-            { value: "inativos", label: "Inativos" },
+            { value: "ATIVO", label: "Ativos" },
+            { value: "INATIVO", label: "Inativos" },
+            { value: "", label: "Todos" },
           ]}
         />
-      </div>
+      </div >
       <div className="mt-[15px]">
-        <Table dataSource={data} columns={columns} size="middle" />
+        <Table
+          dataSource={data}
+          columns={columns}
+          size="middle"
+          loading={isLoading}
+          pagination={{
+            total: totalCount || 0,
+            showTotal: (total) => `Total de ${total} items`,
+            onChange: (page, pageSize) => {
+              setPageLimit(pageSize);
+              setCurrentPage(page);
+            },
+            showSizeChanger: true,
+            pageSizeOptions: [10, 20, 30, 50, 100],
+            size: "default",
+          }}
+        />
       </div>
     </>
   );
