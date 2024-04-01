@@ -16,7 +16,9 @@ module.exports = {
       white: "#FFFFFF",
       azul2: "#005FB3",
       cinza: "#F8F8F8",
-      cinza2: "#E0E0CC"
+      cinza2: "#E0E0CC",
+      border: "#D9D9D9",
+      borderSecondary: "#F0F0F0",
     },
   },
   plugins: [],

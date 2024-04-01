@@ -12,6 +12,7 @@ import { useState } from "react";
 import { IUsuario } from "./Interface/IUsuario";
 import { queryBuilder } from "@/utils/functions/query-builder";
 import { Situacao } from "@/interface/ISituacao";
+import { UsuarioModal } from "@/components/modal/UsuarioModal";
 
 const columns = [
   {
@@ -67,9 +68,7 @@ export default function Usuario() {
   return (
     <>
       <div className="flex mt-7 gap-5">
-        <Button type="primary" size="large" icon={<UserAddOutlined />}>
-          Cadastrar
-        </Button>
+        <UsuarioModal />
         <Input
           placeholder="Buscar"
           suffix={<SearchOutlined className="cursor-pointer opacity-50" />}
