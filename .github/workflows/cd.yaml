@@ -1,23 +1,8 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy Node.js app to Azure Web App  - azure-deploy-with-gh-actions-web-app
+name: Build/Deploy App in Azure
 on:
   push:
     branches:
       - main
-    paths-ignore:
-      - "README.md"
-      - ".github/**"
-      - "apresentacao/**"
-      - "atas/**"
-      - "documentos/**"
-      - "proex/**"
-
-env:
-  AZURE_WEBAPP_NAME: sai-larsaovicente
-  AZURE_WEBAPP_PACKAGE_PATH: "codigo-fonte/back-end"
-  NODE_VERSION: "18.x"
 
 jobs:
   build:
@@ -29,7 +14,7 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: "18.x"
 
       - name: npm install, build, and test
         run: |
@@ -42,6 +27,6 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          app-name: sai-larsaovicente
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          package: "./codigo-fonte/back-end"
