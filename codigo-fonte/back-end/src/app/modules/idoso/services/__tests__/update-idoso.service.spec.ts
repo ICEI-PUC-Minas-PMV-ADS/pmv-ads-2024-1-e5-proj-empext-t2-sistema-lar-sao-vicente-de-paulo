@@ -1,8 +1,8 @@
-import { InMemoryIdosoRepository } from '@/app/modules/usuario/repositories/in-memory/in-memory-idoso-repository';
 import { expect, describe, it, beforeEach } from 'vitest';
 import { AppError } from '@utils/app-error';
 import { UpdateIdosoService } from '../update-idoso.service';
 import { UpdateIdosoDto } from '../../dtos/update-idoso.dto';
+import { InMemoryIdosoRepository } from '../../repositories/in-memory/in-memory-idoso-repository';
 
 let idosoRepository: InMemoryIdosoRepository;
 let sut: UpdateIdosoService;
@@ -14,7 +14,7 @@ describe('Atualizar Idoso Caso de Uso', async () => {
 		sut = new UpdateIdosoService(idosoRepository);
 
 		existingIdoso = await idosoRepository.create({
-			usuario_id: 1,
+			id_usuario: 1,
 			nome_completo: 'João da Silva',
 			data_nascimento: '1970-01-01',
 			naturalidade: 'Cidade Fictícia',

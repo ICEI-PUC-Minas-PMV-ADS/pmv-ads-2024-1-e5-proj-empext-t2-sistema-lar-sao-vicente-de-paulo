@@ -1,10 +1,10 @@
-import { InMemoryIdosoRepository } from '@/app/modules/usuario/repositories/in-memory/in-memory-idoso-repository';
 import { expect, describe, it, beforeEach } from 'vitest';
 import { InMemoryUsuarioRepository } from '@/app/modules/usuario/repositories/in-memory/in-memory-usuario-repository';
 import { DeleteIdosoService } from '../delete-idoso.service';
 import { DeleteIdosoDto } from '../../dtos/delete-idoso.dto';
 import { AppError } from '@utils/app-error';
 import { Situacao } from '@prisma/client';
+import { InMemoryIdosoRepository } from '../../repositories/in-memory/in-memory-idoso-repository';
 
 let idosoRepository: InMemoryIdosoRepository;
 let usuarioRepository: InMemoryUsuarioRepository;
@@ -18,7 +18,7 @@ describe('Remoção Idoso Caso de Uso', async () => {
 		sut = new DeleteIdosoService(idosoRepository);
 
 		existingIdoso = await idosoRepository.create({
-			usuario_id: 1,
+			id_usuario: 1,
 			nome_completo: 'João da Silva',
 			data_nascimento: '1970-01-01',
 			naturalidade: 'Cidade Fictícia',

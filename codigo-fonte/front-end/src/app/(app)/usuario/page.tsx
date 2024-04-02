@@ -1,10 +1,7 @@
 "use client";
 
 import { Input, Select, Table } from "antd";
-import {
-  EditOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, SearchOutlined } from "@ant-design/icons";
 import { useFetch } from "@/utils/hooks/useFetch";
 import { useState } from "react";
 import { IUsuario } from "./Interface/IUsuario";
@@ -42,7 +39,7 @@ export default function Usuario() {
   const [pesquisa, setPesquisa] = useState<string>("");
   const [situacao, setSituacao] = useState<Situacao>(Situacao.ATIVO);
 
-  let filtros = new Array();
+  let filtros: Filter | undefined = new Array();
 
   if (pesquisa !== "")
     filtros.push({
@@ -66,10 +63,11 @@ export default function Usuario() {
       params: queryBuilder({
         page_limit: pageLimit,
         page_number: currentPage,
-        filter: filtros as Filter | undefined,
+        filter: filtros,
       }),
     }
   );
+
   return (
     <>
       <div className="flex mt-7 gap-5">
@@ -91,7 +89,7 @@ export default function Usuario() {
             { value: "", label: "Todos" },
           ]}
         />
-      </div >
+      </div>
       <div className="mt-[15px]">
         <Table
           dataSource={data}

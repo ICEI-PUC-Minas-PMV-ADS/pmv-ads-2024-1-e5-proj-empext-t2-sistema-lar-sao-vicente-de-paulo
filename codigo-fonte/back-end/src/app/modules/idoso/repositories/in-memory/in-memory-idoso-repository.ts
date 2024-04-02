@@ -4,12 +4,12 @@ import { DeleteIdosoDto } from '@/app/modules/idoso/dtos/delete-idoso.dto';
 import { UpdateIdosoDto } from '@/app/modules/idoso/dtos/update-idoso.dto';
 import { randomUUID } from 'crypto';
 interface IdosoComArrays extends Idoso {
-	ResponsaveisIdoso: any[];
-	Prontuarios: any[];
-	RelatoriosPia: any[];
-	FichasNutricionais: any[];
-	Perroca: any[];
-	EscalaBraden: any[];
+	responsaveis_idoso: any[];
+	prontuarios: any[];
+	relatorios_pia: any[];
+	fichas_nutricionais: any[];
+	perroca: any[];
+	escala_braden: any[];
 }
 
 export class InMemoryIdosoRepository implements idosoRepository {
@@ -49,12 +49,12 @@ export class InMemoryIdosoRepository implements idosoRepository {
 			motivo_inativacao: data.motivo_inativacao,
 			criado_em: new Date(),
 			atualizado_em: new Date(),
-			ResponsaveisIdoso: [],
-			Prontuarios: [],
-			RelatoriosPia: [],
-			FichasNutricionais: [],
-			Perroca: [],
-			EscalaBraden: [],
+			responsaveis_idoso: [],
+			prontuarios: [],
+			relatorios_pia: [],
+			fichas_nutricionais: [],
+			perroca: [],
+			escala_braden: [],
 		};
 
 		this.idososArray.push(idoso);
@@ -73,7 +73,7 @@ export class InMemoryIdosoRepository implements idosoRepository {
 			(item) => item.uid === from.uid,
 		);
 		if (idosoIndex === -1) {
-			throw new Error('Nenhum usuário encontrado');
+			throw new Error('Nenhum idoso encontrado');
 		}
 		const idoso = this.idososArray[idosoIndex];
 		this.idososArray[idosoIndex] = {
