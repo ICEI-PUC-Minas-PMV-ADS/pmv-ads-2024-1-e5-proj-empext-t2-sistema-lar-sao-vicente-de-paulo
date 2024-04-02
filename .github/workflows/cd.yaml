@@ -22,7 +22,6 @@ jobs:
           cache: "npm"
 
       - name: npm install, build, and test
-        project_folder: codigo-fonte/back-end
         run: |
           npm install -g @nestjs/cli
           npm install
