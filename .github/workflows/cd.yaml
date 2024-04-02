@@ -26,19 +26,19 @@ jobs:
         uses: borales/actions-yarn@v4
         with:
           cmd: install # will run `yarn install` command
-          path: codigo-fonte/back-end/
+          dir: codigo-fonte/back-end/
           
       - name: Build production bundle
         uses: borales/actions-yarn@v4
         with:
           cmd: build # will run `yarn build` command
-          path: codigo-fonte/back-end/
+          dir: codigo-fonte/back-end/
           
       - name: Test the app
         uses: borales/actions-yarn@v4
         with:
           cmd: test # will run `yarn test` command
-          path: codigo-fonte/back-end/
+          dir: codigo-fonte/back-end/
           
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
