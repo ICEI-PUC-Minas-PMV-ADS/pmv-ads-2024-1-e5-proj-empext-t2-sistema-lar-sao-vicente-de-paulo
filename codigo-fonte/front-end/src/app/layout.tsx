@@ -6,8 +6,13 @@ import { Providers } from "@/utils/providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Sistema de Acompanhamento de Idosos",
+  title: "SAI | Lar São Vicente de Paulo",
   description: "Sistema de Acompanhamento de Idosos - Lar São Vicente de Paulo",
+  icons: {
+    icon: "/favicon.png",
+    apple: "/favicon.png",
+    shortcut: "/favicon.png",
+  },
 };
 
 export default function RootLayout({

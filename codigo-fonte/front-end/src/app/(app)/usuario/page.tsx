@@ -1,113 +1,114 @@
 "use client";
 
-import { Breadcrumb, Button, Input, Select, Table } from "antd";
-import { EditOutlined, SearchOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
-import { Header } from "@/components/template/Header";
-import { Footer } from "@/components/template/Footer";
-
-const dataSource = [
-  {
-    key: '1',
-    nome: 'José da Silva',
-    cargo: 'Gerente',
-    email: 'jose@gmail.com',
-  },
-  {
-    key: '2',
-    nome: 'Lucas',
-    cargo: 'Admin',
-    email: 'lucas@gmail.com',
-  },
-  {
-    key: '3',
-    nome: 'Ricardo',
-    cargo: 'Operador',
-    email: 'jose@gmail.com',
-  },
-  {
-    key: '4',
-    nome: 'Maria',
-    cargo: 'RH',
-    email: 'maria@gmail.com',
-  },
-  {
-    key: '5',
-    nome: 'Pedro',
-    cargo: 'Gerente',
-    email: 'pedro@gmail.com',
-  },
-]
+import { Input, Select, Table } from "antd";
+import { EditOutlined, SearchOutlined } from "@ant-design/icons";
+import { useFetch } from "@/utils/hooks/useFetch";
+import { useState } from "react";
+import { IUsuario } from "./Interface/IUsuario";
+import { queryBuilder } from "@/utils/functions/query-builder";
+import { Situacao } from "@/interface/ISituacao";
+import { UsuarioModal } from "@/components/modal/UsuarioModal";
+import { Filter } from "@/interface/IQuery";
 
 const columns = [
   {
-    title: 'Nome',
-    dataIndex: 'nome',
-    key: 'nome',
+    title: "Nome",
+    dataIndex: "nome",
+    key: "nome",
   },
   {
-    title: 'Cargo',
-    dataIndex: 'cargo',
-    key: 'cargo',
+    title: "E-mail",
+    dataIndex: "email",
+    key: "email",
   },
   {
-    title: 'E-mail',
-    dataIndex: 'email',
-    key: 'email',
-  },
-  {
-    key: 'ação',
+    key: "ação",
     render: () => (
       <div className="flex justify-end opacity-70 cursor-pointer">
-        <a className="text-black"><EditOutlined style={{ fontSize: 18 }} /></a>
+        <a className="text-black">
+          <EditOutlined style={{ fontSize: 18 }} />
+        </a>
       </div>
-
-    )
-  }
-]
+    ),
+  },
+];
 
 export default function Usuario() {
+  const [pageLimit, setPageLimit] = useState<number>(10);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pesquisa, setPesquisa] = useState<string>("");
+  const [situacao, setSituacao] = useState<Situacao>(Situacao.ATIVO);
+
+  let filtros: Filter | undefined = new Array();
+
+  if (pesquisa !== "")
+    filtros.push({
+      path: "nome",
+      operator: "contains",
+      value: pesquisa,
+      insensitive: true,
+    });
+
+  if (situacao)
+    filtros.push({
+      path: "situacao",
+      operator: "equals",
+      value: situacao,
+    });
+
+  const { data, isLoading, totalCount } = useFetch<IUsuario[]>(
+    "/usuarios",
+    [pesquisa, situacao, pageLimit, currentPage],
+    {
+      params: queryBuilder({
+        page_limit: pageLimit,
+        page_number: currentPage,
+        filter: filtros,
+      }),
+    }
+  );
+
   return (
     <>
-      <Header />
-      <div className="mx-16 my-7">
-        <div className="h-11">
-          <Breadcrumb
-            items={[
-              {
-                href: '/',
-                title: 'Home',
-              },
-              {
-                title: (
-                  <>
-                    <UserOutlined />
-                    <span>Usuários</span>
-                  </>
-                ),
-              },
-            ]}
-          />
-        </div>
-        <div className="w-full h-[1px] bg-cinza2"></div>
-        <div className="flex mt-7 gap-5">
-          <Button type="primary" size="large" icon={<UserAddOutlined />}>
-            Cadastrar
-          </Button>
-          <Input placeholder="Buscar" suffix={<SearchOutlined className="cursor-pointer opacity-50" />} />
-          <Select
-            defaultValue="Ativos"
-            className="w-[105px]"
-            size="large"
-            options={[
-              { value: 'ativos', label: 'Ativos' },
-              { value: 'inativos', label: 'Inativos' },
-            ]} />
-        </div>
-        <div className="mt-[15px]">
-          <Table dataSource={dataSource} columns={columns} size="middle" />
-        </div>
+      <div className="flex mt-7 gap-5">
+        <UsuarioModal />
+        <Input
+          placeholder="Buscar"
+          onChange={(e) => setPesquisa(e.target.value)}
+          suffix={<SearchOutlined className="cursor-pointer opacity-50" />}
+        />
+
+        <Select
+          className="w-[105px]"
+          size="large"
+          onChange={(e) => setSituacao(e as Situacao)}
+          defaultValue="ATIVO"
+          options={[
+            { value: "ATIVO", label: "Ativos" },
+            { value: "INATIVO", label: "Inativos" },
+            { value: "", label: "Todos" },
+          ]}
+        />
       </div>
-      <Footer />
+      <div className="mt-[15px]">
+        <Table
+          dataSource={data}
+          columns={columns}
+          size="middle"
+          loading={isLoading}
+          pagination={{
+            total: totalCount || 0,
+            showTotal: (total) => `Total de ${total} items`,
+            onChange: (page, pageSize) => {
+              setPageLimit(pageSize);
+              setCurrentPage(page);
+            },
+            showSizeChanger: true,
+            pageSizeOptions: [10, 20, 30, 50, 100],
+            size: "default",
+          }}
+        />
+      </div>
     </>
   );
 }

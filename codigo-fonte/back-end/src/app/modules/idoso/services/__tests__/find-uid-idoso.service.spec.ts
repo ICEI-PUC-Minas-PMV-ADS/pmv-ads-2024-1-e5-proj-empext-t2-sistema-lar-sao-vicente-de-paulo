@@ -1,7 +1,7 @@
-import { InMemoryIdosoRepository } from '@/app/modules/usuario/repositories/in-memory/in-memory-idoso-repository';
 import { expect, describe, it, beforeEach } from 'vitest';
 import { AppError } from '@utils/app-error';
 import { FindUidIdosoService } from '../find-uid-idoso.service';
+import { InMemoryIdosoRepository } from '../../repositories/in-memory/in-memory-idoso-repository';
 
 let idosoRepository: InMemoryIdosoRepository;
 let sut: FindUidIdosoService;
@@ -13,7 +13,7 @@ describe('Buscar UID Idoso Caso de Uso', async () => {
 		sut = new FindUidIdosoService(idosoRepository);
 
 		existingIdoso = await idosoRepository.create({
-			usuario_id: 1,
+			id_usuario: 1,
 			nome_completo: 'João da Silva',
 			data_nascimento: '1970-01-01',
 			naturalidade: 'Cidade Fictícia',
