@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: codigo-fonte/back-end/
+        working-directory: codigo-fonte/back-end
     steps:
       - uses: actions/checkout@v3
 
@@ -21,9 +21,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: '/codigo-fonte/back-end/package-lock.json'
-          
+  
       - name: npm install, build, and test
         run: |
           npm install -g @nestjs/cli
