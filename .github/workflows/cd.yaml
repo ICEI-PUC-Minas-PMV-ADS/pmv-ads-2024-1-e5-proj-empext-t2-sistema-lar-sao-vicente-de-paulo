@@ -23,10 +23,10 @@ jobs:
       - name: npm install, build, and test
         working-directory: codigo-fonte/back-end
         run: |
-          npm install -g @nestjs/cli
-          npm install
-          npm run build
-          npm run test
+          yarn install -g @nestjs/cli
+          yarn install
+          yarn run build
+          yarn run test
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
