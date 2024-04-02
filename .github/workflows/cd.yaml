@@ -1,0 +1,32 @@
+name: Build/Deploy App in Azure
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      - name: npm install, build, and test
+        run: |
+          npm install -g @nestjs/cli
+          npm install
+          npm run build
+          npm run test
+
+      - name: "Deploy to Azure Web App"
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: sai-larsaovicente
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: "./codigo-fonte/back-end"
