@@ -11,9 +11,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: codigo-fonte/back-end
+
     steps:
       - uses: actions/checkout@v3
 
@@ -23,6 +21,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
   
       - name: npm install, build, and test
+        working-directory: codigo-fonte/back-end
         run: |
           npm install -g @nestjs/cli
           npm install
@@ -33,7 +32,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: node-app
-          path: .
+          path: codigo-fonte/back-end
 
   deploy:
     runs-on: ubuntu-latest
