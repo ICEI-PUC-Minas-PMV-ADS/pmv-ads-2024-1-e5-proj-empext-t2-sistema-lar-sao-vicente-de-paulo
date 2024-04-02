@@ -22,8 +22,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
-          cache-dependency-path: './codigo-fonte/back-end/package-lock.json'
 
       - name: npm install, build, and test
         run: |
