@@ -2,10 +2,6 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - 'README.md'
-      - '.github/**'
-  workflow_dispatch:
 
 env:
   AZURE_WEBAPP_NAME: sai-larsaovicente
