@@ -2,5 +2,7 @@
     "appService.zipIgnorePattern": [
         "node_modules{,/**}",
         ".vscode{,/**}"
-    ]
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/ea56d260-8aaa-4172-b143-02bdad1de058/resourceGroups/sai-larsaovicente_group/providers/Microsoft.Web/sites/sai-larsaovicente",
+    "appService.deploySubpath": "codigo-fonte\\back-end"
 }
