@@ -17,6 +17,9 @@ export const Providers = ({ children }: { children: ReactNode }) => {
           <AntdRegistry>
             <ConfigProvider
               theme={{
+                components: {
+                  Form: { itemMarginBottom: 15 },
+                },
                 token: {
                   colorPrimary: "#0086FF",
                   "blue-1": "#0086FF",

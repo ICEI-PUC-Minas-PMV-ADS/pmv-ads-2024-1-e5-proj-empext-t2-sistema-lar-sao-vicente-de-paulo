@@ -7,8 +7,8 @@ import { useState } from "react";
 import { IUsuario } from "./Interface/IUsuario";
 import { queryBuilder } from "@/utils/functions/query-builder";
 import { Situacao } from "@/interface/ISituacao";
-import { UsuarioModal } from "@/components/modal/UsuarioModal";
 import { Filter } from "@/interface/IQuery";
+import { CriarUsuarioModal } from "./components";
 
 const columns = [
   {
@@ -56,7 +56,7 @@ export default function Usuario() {
       value: situacao,
     });
 
-  const { data, isLoading, totalCount } = useFetch<IUsuario[]>(
+  const { data, isLoading, totalCount, refetch } = useFetch<IUsuario[]>(
     "/usuarios",
     [pesquisa, situacao, pageLimit, currentPage],
     {
@@ -64,6 +64,7 @@ export default function Usuario() {
         page_limit: pageLimit,
         page_number: currentPage,
         filter: filtros,
+        sort: [{ field: "criado_em", criteria: "desc" }],
       }),
     }
   );
@@ -71,7 +72,7 @@ export default function Usuario() {
   return (
     <>
       <div className="flex mt-7 gap-5">
-        <UsuarioModal />
+        <CriarUsuarioModal refetchList={refetch} />
         <Input
           placeholder="Buscar"
           onChange={(e) => setPesquisa(e.target.value)}

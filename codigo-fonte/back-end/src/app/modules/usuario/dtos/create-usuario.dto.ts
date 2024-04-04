@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class CreateUsuarioDto {
@@ -7,6 +7,9 @@ export class CreateUsuarioDto {
 	@IsString()
 	@MaxLength(255)
 	nome: string;
+
+	@ApiPropertyOptional({ description: 'Foto do usuário' })
+	foto?: string;
 
 	@ApiProperty({ description: 'CPF ou CNH do usuário' })
 	@IsNotEmpty()

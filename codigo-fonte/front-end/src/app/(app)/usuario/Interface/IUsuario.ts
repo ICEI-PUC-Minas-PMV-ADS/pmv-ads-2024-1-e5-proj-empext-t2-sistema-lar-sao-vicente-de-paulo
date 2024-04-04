@@ -11,3 +11,13 @@ export interface IUsuario {
   criado_em: Date;
   atualizado_em: Date;
 }
+
+export interface ICreateUsuario {
+  foto: string;
+  id_cargo: bigint;
+  nome: string;
+  cpf_cnh: string;
+  email: string;
+  senha: string;
+  situacao: string;
+}

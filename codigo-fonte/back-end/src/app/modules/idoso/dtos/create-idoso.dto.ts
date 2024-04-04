@@ -1,5 +1,5 @@
 import { IsCPF } from '@/common/decorators/is-cpf.decorator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
 	IsNotEmpty,
 	IsString,
@@ -12,6 +12,10 @@ export class CreateIdosoDto {
 	@ApiProperty({ description: 'ID do usuário associado ao idoso' })
 	@IsNotEmpty()
 	id_usuario: bigint;
+
+	@ApiPropertyOptional({ description: 'Foto do usuário' })
+	@IsString()
+	foto?: string;
 
 	@ApiProperty({ description: 'Nome completo do idoso' })
 	@IsNotEmpty()
