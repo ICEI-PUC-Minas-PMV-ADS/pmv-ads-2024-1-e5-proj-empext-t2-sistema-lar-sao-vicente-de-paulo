@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import { Controller, useForm } from "react-hook-form";
 import { ILogin } from "./Interface/ILogin";
+import { WarningOutlined } from "@ant-design/icons";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function LoginPage() {
     { token: string; usuario: IUsuarioAuth }
   >("/auth/login", {
     method: "post",
+    messageSucess: "Login realizado com sucesso!",
     onSuccess: ({ data }) => {
       dispatch(setAuthToken(data.token));
       dispatch(setAuthUsuario(data.usuario));
@@ -48,20 +50,44 @@ export default function LoginPage() {
           <Controller
             control={control}
             name="email"
-            render={({ field: { onChange } }) => (
-              <Input placeholder="Email" size="large" onChange={onChange} />
+            rules={{ required: "Preencha o campo de e-mail" }}
+            render={({ field: { onChange }, fieldState: { error } }) => (
+              <div className="flex flex-col gap-1">
+                <Input
+                  status={error && "error"}
+                  placeholder="Email"
+                  size="large"
+                  onChange={onChange}
+                />
+                {error && (
+                  <div className="flex gap-2 items-center text-red-600 text-xs">
+                    <WarningOutlined />
+                    <p>{error.message}</p>
+                  </div>
+                )}
+              </div>
             )}
           />
           <Controller
             control={control}
             name="senha"
-            render={({ field: { onChange } }) => (
-              <Input.Password
-                type="password"
-                placeholder="Senha"
-                size="large"
-                onChange={onChange}
-              />
+            rules={{ required: "Preencha o campo da senha" }}
+            render={({ field: { onChange }, fieldState: { error } }) => (
+              <div className="flex flex-col gap-1">
+                <Input.Password
+                  status={error && "error"}
+                  type="password"
+                  placeholder="Senha"
+                  size="large"
+                  onChange={onChange}
+                />
+                {error && (
+                  <div className="flex gap-2 items-center text-red-600 text-xs">
+                    <WarningOutlined />
+                    <p>{error.message}</p>
+                  </div>
+                )}
+              </div>
             )}
           />
           <Button

@@ -6,6 +6,8 @@ import { authToken } from "@/config/authToken";
 import { api } from "../service/api";
 import { useAppDispatch } from "./useRedux";
 import { setAuthToken, setAuthUsuario } from "@/redux/slices/auth.slice";
+import { notification } from "antd";
+import { setLoading } from "@/redux/slices/app.slice";
 
 // tipagem de erro, padrão enviado pela API
 interface IErrorState {
@@ -46,7 +48,7 @@ export function useFetch<T = unknown>(
   async function runFetchingAPI() {
     const fetchAPI = url[0] === "/" ? api : axios; // decide se a api vai ser a padrão ou requisição para outras
 
-    //if (!options?.disableSpinnerLoading) dispatch(setLoading(true));
+    if (!options?.disableSpinnerLoading) dispatch(setLoading(true));
 
     try {
       return await fetchAPI(url, {
@@ -58,7 +60,7 @@ export function useFetch<T = unknown>(
         data: options?.body,
       });
     } finally {
-      //if (!options?.disableSpinnerLoading) dispatch(setLoading(false));
+      if (!options?.disableSpinnerLoading) dispatch(setLoading(false));
     }
   }
 
@@ -106,10 +108,17 @@ export function useFetch<T = unknown>(
       if (options?.messageError !== null) {
         // se mensagem de erro for passada nas options, será exibida ela
         if (options?.messageError) {
-          //toastError(options?.messageError || "Ocorreu um erro");
+          notification.open({
+            message: "Ocorreu um erro",
+            description: options?.messageError,
+            type: "error",
+          });
         } else {
-          console.log(error.response?.data.error.message);
-          //toastError(error.response?.data.error.message || "Ocorreu um erro");
+          notification.open({
+            message: "Ocorreu um erro",
+            description: error.response?.data.error.message,
+            type: "error",
+          });
         }
       }
 
@@ -130,7 +139,11 @@ export function useFetch<T = unknown>(
       if (options?.onSuccess) options.onSuccess({ data: data });
 
       if (options?.messageSucess) {
-        //toastSuccess(options.messageSucess);
+        notification.open({
+          message: "Operação realizada",
+          description: options.messageSucess,
+          type: "success",
+        });
       }
 
       setTotalCount(response?.data?.total_count);

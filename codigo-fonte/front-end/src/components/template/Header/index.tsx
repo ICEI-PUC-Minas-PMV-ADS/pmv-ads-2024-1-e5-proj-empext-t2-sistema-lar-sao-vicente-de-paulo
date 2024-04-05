@@ -86,6 +86,7 @@ export const Header = () => {
     "/auth/logout",
     {
       method: "post",
+      messageSucess: null,
       onSuccess: () => {
         dispatch(setAuthToken(null as any));
         dispatch(setAuthUsuario(null as any));

@@ -6,6 +6,7 @@ import { CookiesProvider } from "react-cookie";
 import { ReduxProvider } from "./ReduxProvider";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider } from "antd";
+import { LoadingGlobal } from "./LoadingApp";
 
 export const Providers = ({ children }: { children: ReactNode }) => {
   const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ export const Providers = ({ children }: { children: ReactNode }) => {
                 },
               }}
             >
+              <LoadingGlobal />
               {children}
             </ConfigProvider>
           </AntdRegistry>

@@ -56,7 +56,7 @@ export default function Usuario() {
       value: situacao,
     });
 
-  const { data, isLoading, totalCount, refetch } = useFetch<IUsuario[]>(
+  const { data, totalCount, refetch } = useFetch<IUsuario[]>(
     "/usuarios",
     [pesquisa, situacao, pageLimit, currentPage],
     {
@@ -95,8 +95,8 @@ export default function Usuario() {
         <Table
           dataSource={data}
           columns={columns}
+          rowKey={(data) => data.uid}
           size="middle"
-          loading={isLoading}
           pagination={{
             total: totalCount || 0,
             showTotal: (total) => `Total de ${total} items`,
