@@ -13,7 +13,7 @@ export interface IUsuario {
 }
 
 export interface ICreateUsuario {
-  foto: string;
+  foto: Buffer;
   id_cargo: bigint;
   nome: string;
   cpf_cnh: string;

@@ -20,6 +20,7 @@ export const Providers = ({ children }: { children: ReactNode }) => {
               theme={{
                 components: {
                   Form: { itemMarginBottom: 15 },
+                  Upload: { sizeStep: 50 },
                 },
                 token: {
                   colorPrimary: "#0086FF",

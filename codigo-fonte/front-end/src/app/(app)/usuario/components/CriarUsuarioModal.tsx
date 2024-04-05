@@ -1,11 +1,34 @@
 import { useMutation } from "@/utils/hooks/useMutation";
 import { CameraOutlined, UserAddOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Modal, Select } from "antd";
+import {
+  Button,
+  Form,
+  GetProp,
+  Modal,
+  Select,
+  Upload,
+  UploadFile,
+  UploadProps,
+  Image,
+} from "antd";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ICreateUsuario } from "../Interface/IUsuario";
 import { useFetch } from "@/utils/hooks/useFetch";
 import { queryBuilder } from "@/utils/functions/query-builder";
+import { invertCPF, regexCPF } from "@/utils/regex/regexCPF";
+import { InputForm, InputPassword, InputSelect } from "@/components/input";
+import { isCPF } from "@/utils/validator/isCPF";
+
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+
+const getBase64 = (file: FileType): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
 
 export const CriarUsuarioModal = ({
   refetchList,
@@ -13,6 +36,10 @@ export const CriarUsuarioModal = ({
   refetchList: () => void;
 }) => {
   const [open, setOpen] = useState(false);
+
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const showModal = () => {
     setOpen(true);
@@ -28,6 +55,7 @@ export const CriarUsuarioModal = ({
     "/usuarios",
     {
       method: "post",
+      messageSucess: "Usuário cadastrado com sucesso!",
       onSuccess: () => {
         reset();
         refetchList();
@@ -44,17 +72,29 @@ export const CriarUsuarioModal = ({
     }),
   });
 
-  const handleFileLogo = (file: FileList) => {
-    const fileLogo = file[0];
-    const fileReader = new FileReader();
-    fileReader.readAsBinaryString(fileLogo);
-    fileReader.onload = () => {
-      const content = fileReader.result;
-      /*  setValue(
-        "foto",
-        Buffer.from(content?.toString() || "", "binary").toString("base64")
-      ); */
-    };
+  const uploadButton = (
+    <button style={{ border: 0, background: "none" }} type="button">
+      <CameraOutlined className="text-[45px] opacity-20" />
+    </button>
+  );
+
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as FileType);
+    }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+  };
+
+  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
+    newFileList = newFileList.map((file) => {
+      if (file.error) {
+        file.status = "done";
+      }
+      return file;
+    });
+    setFileList(newFileList);
   };
 
   return (
@@ -83,60 +123,59 @@ export const CriarUsuarioModal = ({
         width={"700px"}
         styles={{
           content: { margin: 24 },
-          body: { marginTop: 24 },
+          body: { margin: "24px 0" },
           header: { marginBottom: 8 },
         }}
       >
-        <Form layout="vertical" className="w-full flex flex-col">
+        <form className="w-full flex flex-col gap-[15px]">
           <div className="flex items-center gap-[15px]">
-            <Controller
-              name="foto"
-              control={control}
-              render={({ field: { value } }) => (
-                <label
-                  htmlFor="foto-usuario"
-                  className="z-10 h-[80px] w-[80px] rounded-full hover:cursor-pointer hover:opacity-80"
-                >
-                  <input
-                    id="foto-usuario"
-                    type="file"
-                    style={{ display: "none" }}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      if (event.target.files)
-                        handleFileLogo(event.target.files);
-                    }}
-                  />
-                  <div
-                    style={{
-                      backgroundImage: `url("data:image/png;base64,${value}")`,
-                    }}
-                    className="flex h-[80px] w-[80px] items-center justify-center rounded-full bg-cinza bg-contain bg-center bg-no-repeat p-[15px] text-center text-base text-custom9"
-                  >
-                    {!value && (
-                      <CameraOutlined className="text-[36px] opacity-20" />
+            <div className="w-[140px] h-[100px] flex items-center">
+              <Controller
+                name="foto"
+                control={control}
+                render={() => (
+                  <>
+                    <Upload
+                      action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                      listType="picture-circle"
+                      fileList={fileList}
+                      onPreview={handlePreview}
+                      onChange={handleChange}
+                    >
+                      {fileList.length >= 1 ? null : uploadButton}
+                    </Upload>
+                    {previewImage && (
+                      <Image
+                        alt="foto-usuario"
+                        wrapperStyle={{ display: "none" }}
+                        preview={{
+                          visible: previewOpen,
+                          onVisibleChange: (visible) => setPreviewOpen(visible),
+                        }}
+                        src={previewImage}
+                      />
                     )}
-                  </div>
-                </label>
-              )}
-            />
+                  </>
+                )}
+              />
+            </div>
             <Controller
               name="nome"
               control={control}
               defaultValue=""
-              rules={{ required: "Insira o nome do usuário!" }}
+              rules={{ required: "Insira o nome do usuário" }}
               render={({
                 field: { onChange, value },
                 fieldState: { error },
               }) => (
-                <Form.Item label="Nome" required className="w-full">
-                  <Input
-                    onChange={onChange}
-                    value={value}
-                    size="large"
-                    placeholder="Maria da Silva"
-                  />
-                  <p className="text-red-600">{error?.message}</p>
-                </Form.Item>
+                <InputForm
+                  label="Nome"
+                  required
+                  error={error?.message}
+                  onChange={onChange}
+                  value={value}
+                  placeholder="Maria da Silva"
+                />
               )}
             />
           </div>
@@ -145,50 +184,51 @@ export const CriarUsuarioModal = ({
               name="cpf_cnh"
               control={control}
               defaultValue=""
-              rules={{ required: "Insira o CPF do usuário!" }}
+              rules={{
+                required: "Insira o CPF do usuário",
+                validate: (value) => {
+                  if (!isCPF(value)) return "Formato inválido do CPF";
+                  return true;
+                },
+              }}
               render={({
                 field: { onChange, value },
                 fieldState: { error },
               }) => (
-                <Form.Item label="CPF" required className="w-full">
-                  <Input
-                    onChange={onChange}
-                    value={value}
-                    size="large"
-                    placeholder="000.000.000-00"
-                  />
-                  <p className="text-red-600">{error?.message}</p>
-                </Form.Item>
+                <InputForm
+                  label="CPF"
+                  required
+                  error={error?.message}
+                  onChange={(e) => {
+                    onChange(invertCPF(e.target.value));
+                  }}
+                  value={regexCPF(value)}
+                  placeholder="000.000.000-00"
+                />
               )}
             />
             <Controller
               name="id_cargo"
               control={control}
-              rules={{ required: "Insira um cargo para o usuário!" }}
+              rules={{ required: "Insira um cargo para o usuário" }}
               render={({
                 field: { onChange, value },
                 fieldState: { error },
               }) => (
-                <Form.Item
-                  label="Cargo"
+                <InputSelect
                   tooltip="O cargo irá definir as permissões que o usuário terá no sistema."
+                  label="Cargo"
+                  onChange={onChange}
+                  error={error?.message}
                   required
-                  className="w-full"
+                  placeholder="Selecionar"
                 >
-                  <Select
-                    onChange={onChange}
-                    size="large"
-                    aria-required
-                    placeholder="Selecionar"
-                  >
-                    {cargos?.map((cargo) => (
-                      <option key={cargo.uid} value={cargo.id}>
-                        {cargo.nome}
-                      </option>
-                    ))}
-                  </Select>
-                  <p className="text-red-600">{error?.message}</p>
-                </Form.Item>
+                  {cargos?.map((cargo) => (
+                    <option key={cargo.uid} value={cargo.id}>
+                      {cargo.nome}
+                    </option>
+                  ))}
+                </InputSelect>
               )}
             />
           </div>
@@ -196,42 +236,41 @@ export const CriarUsuarioModal = ({
             <Controller
               name="email"
               control={control}
-              rules={{ required: "Insira o e-mail do usuário!" }}
+              rules={{ required: "Insira o e-mail do usuário" }}
               render={({
                 field: { onChange, value },
                 fieldState: { error },
               }) => (
-                <Form.Item label="E-mail" required className="w-full">
-                  <Input
-                    onChange={onChange}
-                    value={value}
-                    size="large"
-                    placeholder="maria@mail.com"
-                  />
-                  <p className="text-red-600">{error?.message}</p>
-                </Form.Item>
+                <InputForm
+                  label="E-mail"
+                  required
+                  error={error?.message}
+                  onChange={onChange}
+                  value={value}
+                  placeholder="maria@mail.com"
+                />
               )}
             />
             <Controller
               name="senha"
               control={control}
-              rules={{ required: "Insira a senha do usuário!" }}
+              rules={{ required: "Insira a senha do usuário" }}
               render={({
                 field: { onChange, value },
                 fieldState: { error },
               }) => (
-                <Form.Item label="Senha" required className="w-full">
-                  <Input.Password
-                    onChange={onChange}
-                    value={value}
-                    size="large"
-                  />
-                  <p className="text-red-600">{error?.message}</p>
-                </Form.Item>
+                <InputPassword
+                  label="Senha"
+                  required
+                  placeholder="********"
+                  error={error?.message}
+                  onChange={onChange}
+                  value={value}
+                />
               )}
             />
           </div>
-        </Form>
+        </form>
       </Modal>
     </>
   );
