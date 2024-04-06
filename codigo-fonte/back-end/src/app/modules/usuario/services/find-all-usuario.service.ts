@@ -10,6 +10,11 @@ export class FindAllUsuarioService {
 	async execute(
 		query?: Prisma.UsuarioFindManyArgs,
 	): Promise<{ count: number; usuarios: Usuario[] }> {
+		query = {
+			...query,
+			include: { cargo: { select: { nome: true } } },
+		};
+
 		const [usuarios, count] = await this.prisma.$transaction([
 			this.prisma.usuario.findMany(query),
 			this.prisma.usuario.count({

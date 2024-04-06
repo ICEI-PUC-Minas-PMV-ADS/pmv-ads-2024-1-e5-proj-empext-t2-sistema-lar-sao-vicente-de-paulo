@@ -6,6 +6,7 @@ import { CookiesProvider } from "react-cookie";
 import { ReduxProvider } from "./ReduxProvider";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider } from "antd";
+import { LoadingGlobal } from "./LoadingApp";
 
 export const Providers = ({ children }: { children: ReactNode }) => {
   const queryClient = new QueryClient();
@@ -17,6 +18,10 @@ export const Providers = ({ children }: { children: ReactNode }) => {
           <AntdRegistry>
             <ConfigProvider
               theme={{
+                components: {
+                  Form: { itemMarginBottom: 15 },
+                  Upload: { sizeStep: 50 },
+                },
                 token: {
                   colorPrimary: "#0086FF",
                   "blue-1": "#0086FF",
@@ -29,6 +34,7 @@ export const Providers = ({ children }: { children: ReactNode }) => {
                 },
               }}
             >
+              <LoadingGlobal />
               {children}
             </ConfigProvider>
           </AntdRegistry>

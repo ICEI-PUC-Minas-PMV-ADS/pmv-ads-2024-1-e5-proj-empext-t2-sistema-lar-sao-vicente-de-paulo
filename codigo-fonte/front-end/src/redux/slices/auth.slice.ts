@@ -6,7 +6,10 @@ interface AuthState {
   token: string;
 }
 
-const initialState = { usuario: null as any, token: null as any } as AuthState;
+const initialState = {
+  usuario: null as any,
+  token: null as any,
+} as AuthState;
 
 export const authSlice = createSlice({
   name: "auth",

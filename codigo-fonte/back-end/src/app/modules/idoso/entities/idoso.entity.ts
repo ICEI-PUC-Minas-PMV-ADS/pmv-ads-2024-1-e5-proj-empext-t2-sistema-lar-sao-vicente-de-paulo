@@ -12,7 +12,7 @@ export class Idoso implements IdosoModel {
 	id_usuario: bigint;
 
 	@ApiProperty({ description: 'Foto do idoso' })
-	foto: Buffer;
+	foto: string;
 
 	@ApiProperty({ description: 'Nome completo do idoso' })
 	nome_completo: string;

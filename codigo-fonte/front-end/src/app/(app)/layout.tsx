@@ -12,10 +12,12 @@ export default function RootLayout({
 }) {
   return (
     <AuthApp>
-      <Header />
-      <CommonBreadcrumbs />
-      <div className="mx-16 my-7">{children}</div>
-      <Footer />
+      <div className="relative min-h-[100vh]">
+        <Header />
+        <CommonBreadcrumbs />
+        <div className="mx-16 mt-7 content-wrap pb-[180px]">{children}</div>
+        <Footer />
+      </div>
     </AuthApp>
   );
 }

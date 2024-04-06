@@ -1,5 +1,12 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { $Enums } from '@prisma/client';
+import {
+	IsEmail,
+	IsNotEmpty,
+	IsOptional,
+	IsString,
+	MaxLength,
+} from 'class-validator';
 
 export class CreateUsuarioDto {
 	@ApiProperty({ description: 'Nome do usuário' })
@@ -7,6 +14,11 @@ export class CreateUsuarioDto {
 	@IsString()
 	@MaxLength(255)
 	nome: string;
+
+	@ApiPropertyOptional({ description: 'Foto do usuário' })
+	@IsString()
+	@IsOptional()
+	foto?: string;
 
 	@ApiProperty({ description: 'CPF ou CNH do usuário' })
 	@IsNotEmpty()
@@ -29,4 +41,9 @@ export class CreateUsuarioDto {
 	@ApiProperty({ description: 'Id do Cargo do usuário' })
 	@IsNotEmpty()
 	id_cargo: bigint;
+
+	@ApiPropertyOptional({ description: 'Situação do usuário' })
+	@IsString()
+	@IsOptional()
+	situacao?: $Enums.Situacao;
 }
