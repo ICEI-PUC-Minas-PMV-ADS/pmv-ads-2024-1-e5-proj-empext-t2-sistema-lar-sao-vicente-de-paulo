@@ -3,7 +3,7 @@ import { Logomarca } from "@/components/logo";
 
 export const Footer = () => {
   return (
-    <footer className="w-full bg-cinza footer">
+    <footer className="w-full bg-cinza absolute bottom-0">
       <div className="flex h-[6.5rem] bg-cinza ml-16 mr-16 flex-row md:flex-row items-center justify-between">
         <div className="max-w-[439px] flex h-[4rem] items-center">
           <Image width={52} height={46} src={"/footer/logopuc.png"} alt={""} />

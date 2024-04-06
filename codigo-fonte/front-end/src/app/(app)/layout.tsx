@@ -12,10 +12,10 @@ export default function RootLayout({
 }) {
   return (
     <AuthApp>
-      <div className="page-container">
+      <div className="relative min-h-[100vh]">
         <Header />
         <CommonBreadcrumbs />
-        <div className="mx-16 mt-7 content-wrap">{children}</div>
+        <div className="mx-16 mt-7 content-wrap pb-[180px]">{children}</div>
         <Footer />
       </div>
     </AuthApp>

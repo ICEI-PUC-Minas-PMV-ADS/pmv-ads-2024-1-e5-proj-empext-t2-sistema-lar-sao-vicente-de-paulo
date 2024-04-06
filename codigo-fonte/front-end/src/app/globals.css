@@ -9,18 +9,3 @@
 body {
   margin: 0;
 }
-
-.page-container {
-  position: relative;
-  min-height: 100vh;
-}
-
-.content-wrap {
-  padding-bottom: 180px;
-}
-
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-}
