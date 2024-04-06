@@ -53,7 +53,8 @@ export const CriarUsuarioModal = ({
       onSubmit={handleSubmit(createUsuario)}
       isFetching={isFetching}
       width="700px"
-      showModal={open}
+      setOpenModal={setOpen}
+      openModal={open}
     >
       <form className="w-full flex flex-col gap-[15px]">
         <div className="flex items-center gap-[15px]">

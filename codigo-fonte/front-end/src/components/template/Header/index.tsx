@@ -1,5 +1,4 @@
 import { Logo } from "@/components/logo";
-import ProfileIcon from "@/components/logo/Profile";
 import { authToken } from "@/config/authToken";
 import { setAuthToken, setAuthUsuario } from "@/redux/slices/auth.slice";
 import { useMutation } from "@/utils/hooks/useMutation";
@@ -167,7 +166,9 @@ export const Header = () => {
                     {usuario.cargo.nome}
                   </span>
                 </div>
-                <ProfileIcon />
+                <div className="w-[38px] h-[38px] bg-azul2 rounded-full flex justify-center items-center  text-black/90">
+                  <UserOutlined className="text-[21px]" />
+                </div>
               </div>
             </Space>
           </Dropdown>

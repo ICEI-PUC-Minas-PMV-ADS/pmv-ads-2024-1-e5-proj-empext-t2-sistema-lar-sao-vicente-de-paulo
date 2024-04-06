@@ -1,5 +1,5 @@
 import { Button, Modal } from "antd";
-import { ReactNode, useState } from "react";
+import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 
 interface IModalDefault {
   children: ReactNode;
@@ -9,7 +9,8 @@ interface IModalDefault {
   titleModal: string;
   onSubmit: () => void;
   isFetching?: boolean;
-  showModal?: boolean;
+  setOpenModal: Dispatch<SetStateAction<boolean>>;
+  openModal: boolean;
   width?: string;
   okText?: string;
   cancelText?: string;
@@ -19,7 +20,8 @@ export const ModalDefault = ({
   children,
   onSubmit,
   isFetching,
-  showModal,
+  setOpenModal,
+  openModal,
   customButtonOpenModal,
   nameButtonOpenModal,
   iconButtonOpenModal,
@@ -28,14 +30,12 @@ export const ModalDefault = ({
   okText,
   cancelText,
 }: IModalDefault) => {
-  const [open, setOpen] = useState(false);
-
   const showModalDefault = () => {
-    setOpen(true);
+    setOpenModal(true);
   };
 
   const handleCancel = () => {
-    setOpen(false);
+    setOpenModal(false);
   };
 
   return (
@@ -58,7 +58,7 @@ export const ModalDefault = ({
         centered
         keyboard
         title={titleModal}
-        open={showModal ? showModal : open}
+        open={openModal}
         onOk={onSubmit}
         confirmLoading={isFetching}
         onCancel={handleCancel}
