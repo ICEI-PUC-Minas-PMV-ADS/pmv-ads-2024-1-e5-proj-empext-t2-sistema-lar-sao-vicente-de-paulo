@@ -16,7 +16,7 @@ enum Situacao {
 model Usuario {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  foto          Bytes?   @db.ByteA
+  foto          String?  @db.Text
   nome          String   @db.VarChar(255)
   cpf_cnh       String   @unique @db.VarChar(11)
   email         String   @unique @db.VarChar(254)
@@ -41,7 +41,7 @@ model Usuario {
 model Idoso {
   id                        BigInt   @id @default(autoincrement()) @db.BigInt
   uid                       String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  foto                      Bytes?   @db.ByteA
+  foto                      String?  @db.Text
   nome_completo             String   @db.VarChar(255)
   data_nascimento           DateTime @db.Date()
   naturalidade              String   @db.VarChar(100)

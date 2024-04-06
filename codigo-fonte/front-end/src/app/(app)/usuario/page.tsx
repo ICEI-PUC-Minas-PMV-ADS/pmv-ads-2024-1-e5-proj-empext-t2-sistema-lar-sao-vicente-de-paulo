@@ -3,35 +3,15 @@
 import { Input, Select, Table } from "antd";
 import { EditOutlined, SearchOutlined } from "@ant-design/icons";
 import { useFetch } from "@/utils/hooks/useFetch";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { IUsuario } from "./Interface/IUsuario";
 import { queryBuilder } from "@/utils/functions/query-builder";
 import { Situacao } from "@/interface/ISituacao";
-import { UsuarioModal } from "@/components/modal/UsuarioModal";
 import { Filter } from "@/interface/IQuery";
-
-const columns = [
-  {
-    title: "Nome",
-    dataIndex: "nome",
-    key: "nome",
-  },
-  {
-    title: "E-mail",
-    dataIndex: "email",
-    key: "email",
-  },
-  {
-    key: "ação",
-    render: () => (
-      <div className="flex justify-end opacity-70 cursor-pointer">
-        <a className="text-black">
-          <EditOutlined style={{ fontSize: 18 }} />
-        </a>
-      </div>
-    ),
-  },
-];
+import { CriarUsuarioModal } from "./components";
+import { ColumnsType } from "antd/es/table";
+import { TableDefault } from "@/components/table/TableDefault";
+import { AtualizarUsuarioModal } from "./components/AtualizarUsuarioModal";
 
 export default function Usuario() {
   const [pageLimit, setPageLimit] = useState<number>(10);
@@ -56,7 +36,7 @@ export default function Usuario() {
       value: situacao,
     });
 
-  const { data, isLoading, totalCount } = useFetch<IUsuario[]>(
+  const { data, totalCount, refetch } = useFetch<IUsuario[]>(
     "/usuarios",
     [pesquisa, situacao, pageLimit, currentPage],
     {
@@ -64,20 +44,50 @@ export default function Usuario() {
         page_limit: pageLimit,
         page_number: currentPage,
         filter: filtros,
+        sort: [{ field: "criado_em", criteria: "desc" }],
       }),
     }
   );
 
+  const columns: ColumnsType<IUsuario> = [
+    {
+      title: "Nome",
+      dataIndex: "nome",
+      key: "nome",
+    },
+    {
+      title: "Cargo",
+      key: "cargo",
+      render(_: any, record: IUsuario) {
+        return record.cargo?.nome;
+      },
+    },
+    {
+      title: "E-mail",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      key: "atualizar_usuario",
+      render(_: any, record: IUsuario) {
+        return (
+          <div className="flex justify-end">
+            <AtualizarUsuarioModal item={record} refetchList={refetch} />
+          </div>
+        );
+      },
+    },
+  ];
+
   return (
-    <>
-      <div className="flex mt-7 gap-5">
-        <UsuarioModal />
+    <div className="flex flex-col gap-[15px] mt-8">
+      <div className="flex gap-5">
+        <CriarUsuarioModal refetchList={refetch} />
         <Input
           placeholder="Buscar"
           onChange={(e) => setPesquisa(e.target.value)}
           suffix={<SearchOutlined className="cursor-pointer opacity-50" />}
         />
-
         <Select
           className="w-[105px]"
           size="large"
@@ -90,25 +100,13 @@ export default function Usuario() {
           ]}
         />
       </div>
-      <div className="mt-[15px]">
-        <Table
-          dataSource={data}
-          columns={columns}
-          size="middle"
-          loading={isLoading}
-          pagination={{
-            total: totalCount || 0,
-            showTotal: (total) => `Total de ${total} items`,
-            onChange: (page, pageSize) => {
-              setPageLimit(pageSize);
-              setCurrentPage(page);
-            },
-            showSizeChanger: true,
-            pageSizeOptions: [10, 20, 30, 50, 100],
-            size: "default",
-          }}
-        />
-      </div>
-    </>
+      <TableDefault
+        dataSource={data}
+        columns={columns}
+        totalCount={totalCount}
+        setPageLimit={setPageLimit}
+        setCurrentPage={setCurrentPage}
+      />
+    </div>
   );
 }

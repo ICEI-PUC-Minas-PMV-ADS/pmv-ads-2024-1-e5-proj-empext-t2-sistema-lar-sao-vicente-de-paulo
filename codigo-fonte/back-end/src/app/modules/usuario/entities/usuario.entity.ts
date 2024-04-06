@@ -8,12 +8,8 @@ export class Usuario implements UsuarioModel {
 	@ApiProperty({ description: 'O UID do usuário' })
 	uid: string;
 
-	@ApiProperty({
-		type: 'string',
-		format: 'binary',
-		description: 'A foto do usuário',
-	})
-	foto: Buffer;
+	@ApiProperty({ description: 'A foto do usuário' })
+	foto: string | null;
 
 	@ApiProperty({
 		description: 'O ID do cargo associado ao usuário, se houver',

@@ -3,6 +3,9 @@ import { useState } from "react";
 import { useCookies } from "react-cookie";
 import { api } from "../service/api";
 import { authToken } from "@/config/authToken";
+import { useAppDispatch } from "./useRedux";
+import { setLoading } from "@/redux/slices/app.slice";
+import { notification } from "antd";
 
 interface IErrorState {
   detail: string[];
@@ -30,7 +33,7 @@ export function useMutation<TDataSend = unknown, TDataResponse = unknown>(
     notOpenModalWhithoutPermission?: boolean; // se TRUE o hook não irá enviar o codigo da permissao para o dispatch, sendo assim não vai abrir o modal
   }
 ) {
-  //const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const mutateAPI = url[0] === "/" ? api : axios; // decide se a api vai ser a padrão ou requisição para outras
 
@@ -69,7 +72,11 @@ export function useMutation<TDataSend = unknown, TDataResponse = unknown>(
         if (options?.onSuccess) options.onSuccess({ res, data: data });
 
         if (options?.messageSucess !== null) {
-          //toastSuccess(options?.messageSucess || 'Operação realizada');
+          notification.open({
+            message: "Operação realizada",
+            description: options?.messageSucess,
+            type: "success",
+          });
         }
       })
       .catch((err: AxiosError<{ error: IErrorState }>) => {
@@ -84,25 +91,28 @@ export function useMutation<TDataSend = unknown, TDataResponse = unknown>(
           err.response?.data?.error.statusCode !== 403
         ) {
           // se mensagem de erro for passada nas options, será exibida ela
-          //toastError(options?.messageError || err.response?.data?.error.message || 'Ocorreu um erro');
+          notification.open({
+            message: "Ocorreu um erro",
+            description:
+              options?.messageError || err.response?.data?.error.message,
+            type: "error",
+          });
         }
 
-        /* if (err.response?.data?.erro?.statusCode === 403) {
-                    if (!options?.notOpenModalWhithoutPermission) {
-                        dispatch(
-                            setModalAcessoRestrito({
-                                aberto: true,
-                                codigoPermissao: err.response?.data?.erro?.codigoPermissao || '',
-                            }),
-                        );
-                    }
-
-                    setWithoutPermission({ codigoPermissao: err.response?.data?.erro?.codigoPermissao || '' });
-                } */
+        if (err.response?.data?.error.statusCode === 403) {
+          if (!options?.notOpenModalWhithoutPermission) {
+            notification.open({
+              message: "Operação bloqueada",
+              description:
+                "Você não tem permissão para realizar essa operação!",
+              type: "warning",
+            });
+          }
+        }
       })
       .finally(() => {
         setIsFetching(false);
-        /* if (!options?.disableSpinnerLoading) dispatch(setLoading(false)); */
+        if (!options?.disableSpinnerLoading) dispatch(setLoading(false));
       });
 
   function mutate(dataMutate: TDataSend) {
@@ -110,7 +120,7 @@ export function useMutation<TDataSend = unknown, TDataResponse = unknown>(
 
     setIsFetching(true);
 
-    /* if (!options?.disableSpinnerLoading) dispatch(setLoading(true)); */
+    if (!options?.disableSpinnerLoading) dispatch(setLoading(true));
 
     if (options?.delay) {
       setTimeout(() => {
