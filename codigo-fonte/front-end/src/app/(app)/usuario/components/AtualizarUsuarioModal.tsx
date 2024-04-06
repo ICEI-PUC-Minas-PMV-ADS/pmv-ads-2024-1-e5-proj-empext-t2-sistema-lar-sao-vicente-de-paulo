@@ -91,6 +91,8 @@ export const AtualizarUsuarioModal = ({
         },
       ]}
       situation={item.situacao}
+      created_item={item.criado_em}
+      updated_item={item.atualizado_em}
     >
       <form className="w-full flex flex-col gap-[15px]">
         <div className="flex items-center gap-[15px]">

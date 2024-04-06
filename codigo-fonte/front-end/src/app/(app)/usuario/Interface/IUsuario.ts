@@ -1,13 +1,13 @@
 export interface IUsuario {
   id: bigint;
   uid: string;
-  foto: Buffer;
+  foto?: string;
   id_cargo: bigint;
   nome: string;
   cpf_cnh: string;
   email: string;
   senha: string;
-  situacao: "ATIVO" | "INATIVO";
+  situacao?: "ATIVO" | "INATIVO";
   criado_em: Date;
   atualizado_em: Date;
   cargo?: {
@@ -16,7 +16,7 @@ export interface IUsuario {
 }
 
 export interface IOperationUsuario {
-  foto: Buffer;
+  foto?: string;
   id_cargo: bigint;
   nome: string;
   cpf_cnh: string;
