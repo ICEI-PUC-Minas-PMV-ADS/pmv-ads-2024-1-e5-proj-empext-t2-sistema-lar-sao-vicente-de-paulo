@@ -11,6 +11,7 @@ import { Filter } from "@/interface/IQuery";
 import { CriarUsuarioModal } from "./components";
 import { ColumnsType } from "antd/es/table";
 import { TableDefault } from "@/components/table/TableDefault";
+import { AtualizarUsuarioModal } from "./components/AtualizarUsuarioModal";
 
 export default function Usuario() {
   const [pageLimit, setPageLimit] = useState<number>(10);
@@ -55,19 +56,26 @@ export default function Usuario() {
       key: "nome",
     },
     {
+      title: "Cargo",
+      key: "cargo",
+      render(_: any, record: IUsuario) {
+        return record.cargo?.nome;
+      },
+    },
+    {
       title: "E-mail",
       dataIndex: "email",
       key: "email",
     },
     {
-      key: "ação",
-      render: () => (
-        <div className="flex justify-end opacity-70 cursor-pointer">
-          <a className="text-black">
-            <EditOutlined style={{ fontSize: 18 }} />
-          </a>
-        </div>
-      ),
+      key: "atualizar_usuario",
+      render(_: any, record: IUsuario) {
+        return (
+          <div className="flex justify-end">
+            <AtualizarUsuarioModal item={record} refetchList={refetch} />
+          </div>
+        );
+      },
     },
   ];
 

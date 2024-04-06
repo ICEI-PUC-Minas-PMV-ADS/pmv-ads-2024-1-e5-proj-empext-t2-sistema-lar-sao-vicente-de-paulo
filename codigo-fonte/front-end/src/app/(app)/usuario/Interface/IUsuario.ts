@@ -7,17 +7,20 @@ export interface IUsuario {
   cpf_cnh: string;
   email: string;
   senha: string;
-  situacao: string;
+  situacao: "ATIVO" | "INATIVO";
   criado_em: Date;
   atualizado_em: Date;
+  cargo?: {
+    nome: string;
+  };
 }
 
-export interface ICreateUsuario {
+export interface IOperationUsuario {
   foto: Buffer;
   id_cargo: bigint;
   nome: string;
   cpf_cnh: string;
   email: string;
   senha: string;
-  situacao: string;
+  situacao: "ATIVO" | "INATIVO";
 }

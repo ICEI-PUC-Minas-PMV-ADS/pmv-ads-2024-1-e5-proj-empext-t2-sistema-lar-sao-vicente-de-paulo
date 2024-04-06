@@ -1,12 +1,12 @@
 import { QuestionCircleOutlined, WarningOutlined } from "@ant-design/icons";
 import { Select, Tooltip } from "antd";
-import { ChangeEvent, ChangeEventHandler, ReactNode } from "react";
+import { ChangeEventHandler, ReactNode } from "react";
 
 interface IInputSelect {
   label?: string;
   placeholder?: string;
   error?: string;
-  value?: ChangeEvent<HTMLInputElement> | null | undefined;
+  value?: any;
   onChange: ChangeEventHandler<HTMLInputElement> | undefined;
   required: boolean;
   children: ReactNode;

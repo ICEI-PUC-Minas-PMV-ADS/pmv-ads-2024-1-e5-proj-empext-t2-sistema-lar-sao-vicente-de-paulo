@@ -1,37 +1,51 @@
 import { useMutation } from "@/utils/hooks/useMutation";
-import { UserAddOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { CloseOutlined, EditOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { IOperationUsuario } from "../Interface/IUsuario";
+import { IOperationUsuario, IUsuario } from "../Interface/IUsuario";
 import { useFetch } from "@/utils/hooks/useFetch";
 import { queryBuilder } from "@/utils/functions/query-builder";
 import { invertCPF, regexCPF } from "@/utils/regex/regexCPF";
-import {
-  InputForm,
-  InputPassword,
-  InputSelect,
-  UploudAvatar,
-} from "@/components/input";
+import { InputForm, InputSelect, UploudAvatar } from "@/components/input";
 import { isCPF } from "@/utils/validator/isCPF";
 import { ModalDefault } from "@/components/modal/ModalDefault";
 
-export const CriarUsuarioModal = ({
+export const AtualizarUsuarioModal = ({
+  item,
   refetchList,
 }: {
+  item: IUsuario;
   refetchList: () => void;
 }) => {
   const [open, setOpen] = useState(false);
 
-  const { handleSubmit, control, reset } = useForm<IOperationUsuario>();
+  const { handleSubmit, control, reset } = useForm<Partial<IOperationUsuario>>({
+    defaultValues: {
+      nome: item.nome,
+      email: item.email,
+      cpf_cnh: item.cpf_cnh,
+      foto: item.foto,
+      id_cargo: item.id_cargo,
+    },
+  });
 
-  const { mutate: createUsuario, isFetching } = useMutation<IOperationUsuario>(
-    "/usuarios",
+  const { mutate: updateUsuario, isFetching: isUpdatingUsuario } = useMutation<
+    Partial<IOperationUsuario>
+  >("/usuarios/" + item.uid, {
+    method: "patch",
+    messageSucess: "Usuário atualizado com sucesso!",
+    onSuccess: () => {
+      refetchList();
+      setOpen(false);
+    },
+  });
+
+  const { mutate: redefirSenha } = useMutation<{ email: string }>(
+    "/auth/redefinir-senha",
     {
       method: "post",
-      messageSucess: "Usuário cadastrado com sucesso!",
+      messageSucess: "E-mail de redefinição de senha enviado para o usuário!",
       onSuccess: () => {
-        reset();
-        refetchList();
         setOpen(false);
       },
     }
@@ -47,15 +61,36 @@ export const CriarUsuarioModal = ({
 
   return (
     <ModalDefault
-      nameButtonOpenModal={"Cadastrar"}
-      iconButtonOpenModal={<UserAddOutlined />}
+      customButtonOpenModal={
+        <button
+          onClick={() => setOpen(true)}
+          className="text-black/30 hover:text-primaria h-full w-[50px]"
+        >
+          <EditOutlined className={"text-[18px]"} />
+        </button>
+      }
       titleModal={"Adicionando usuário"}
-      okText="Cadastrar"
-      onSubmit={handleSubmit(createUsuario)}
-      isFetching={isFetching}
+      okText="Atualizar"
+      onSubmit={handleSubmit(updateUsuario)}
+      isFetching={isUpdatingUsuario}
       width="700px"
       setOpenModal={setOpen}
       openModal={open}
+      onClose={() => reset()}
+      listOptions={[
+        {
+          label: "Redefinir senha",
+          onClick: () => redefirSenha({ email: item.email }),
+        },
+        {
+          label: item.situacao === "ATIVO" ? "Inativar" : "Reativar",
+          onClick: () =>
+            updateUsuario({
+              situacao: item.situacao === "ATIVO" ? "INATIVO" : "ATIVO",
+            }),
+        },
+      ]}
+      situation={item.situacao}
     >
       <form className="w-full flex flex-col gap-[15px]">
         <div className="flex items-center gap-[15px]">
@@ -91,7 +126,7 @@ export const CriarUsuarioModal = ({
             rules={{
               required: "Insira o CPF do usuário",
               validate: (value) => {
-                if (!isCPF(value)) return "Formato inválido do CPF";
+                if (value && !isCPF(value)) return "Formato inválido do CPF";
                 return true;
               },
             }}
@@ -103,7 +138,7 @@ export const CriarUsuarioModal = ({
                 onChange={(e) => {
                   onChange(invertCPF(e.target.value));
                 }}
-                value={regexCPF(value)}
+                value={value && regexCPF(value)}
                 placeholder="000.000.000-00"
               />
             )}
@@ -120,6 +155,7 @@ export const CriarUsuarioModal = ({
                 error={error?.message}
                 required
                 placeholder="Selecionar"
+                value={item.id_cargo}
               >
                 {cargos?.map((cargo) => (
                   <option key={cargo.uid} value={cargo.id}>
@@ -130,38 +166,22 @@ export const CriarUsuarioModal = ({
             )}
           />
         </div>
-        <div className="flex justify-between gap-4">
-          <Controller
-            name="email"
-            control={control}
-            rules={{ required: "Insira o e-mail do usuário" }}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <InputForm
-                label="E-mail"
-                required
-                error={error?.message}
-                onChange={onChange}
-                value={value}
-                placeholder="maria@mail.com"
-              />
-            )}
-          />
-          <Controller
-            name="senha"
-            control={control}
-            rules={{ required: "Insira a senha do usuário" }}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <InputPassword
-                label="Senha"
-                required
-                placeholder="********"
-                error={error?.message}
-                onChange={onChange}
-                value={value}
-              />
-            )}
-          />
-        </div>
+
+        <Controller
+          name="email"
+          control={control}
+          rules={{ required: "Insira o e-mail do usuário" }}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <InputForm
+              label="E-mail"
+              required
+              error={error?.message}
+              onChange={onChange}
+              value={value}
+              placeholder="maria@mail.com"
+            />
+          )}
+        />
       </form>
     </ModalDefault>
   );
