@@ -22,5 +22,5 @@ export interface IOperationUsuario {
   cpf_cnh: string;
   email: string;
   senha: string;
-  situacao: "ATIVO" | "INATIVO";
+  situacao?: "ATIVO" | "INATIVO";
 }
