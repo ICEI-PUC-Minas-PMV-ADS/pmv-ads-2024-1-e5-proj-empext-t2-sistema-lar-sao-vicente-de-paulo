@@ -7,8 +7,17 @@ export class CreateCargoService {
 	constructor(private prisma: PrismaService) {}
 
 	async execute(data: CreateCargoDto): Promise<void> {
-		await this.prisma.cargo.create({
-			data,
+		const cargo = await this.prisma.cargo.create({
+			data: { nome: data.nome },
+		});
+
+		const permissoes = await data.permissoes.map((permissao) => ({
+			...permissao,
+			id_cargo: cargo.id,
+		}));
+
+		await this.prisma.cargoPermissao.createMany({
+			data: permissoes,
 		});
 
 		return;

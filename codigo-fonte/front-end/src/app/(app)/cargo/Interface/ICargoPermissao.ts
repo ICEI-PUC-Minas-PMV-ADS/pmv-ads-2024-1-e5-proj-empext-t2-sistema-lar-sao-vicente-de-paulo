@@ -9,7 +9,6 @@ export interface ICargoPermissao {
 }
 
 export interface IOperationCargoPermissao {
-  id_cargo: number;
   id_permissao: number;
   ativo: boolean;
 }

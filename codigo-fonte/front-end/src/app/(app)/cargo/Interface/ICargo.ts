@@ -1,3 +1,5 @@
+import { IOperationCargoPermissao } from "./ICargoPermissao";
+
 export interface ICargo {
   id: bigint;
   uid: string;
@@ -8,4 +10,5 @@ export interface ICargo {
 
 export interface IOperationCargo {
   nome: string;
+  permissoes: IOperationCargoPermissao[];
 }
