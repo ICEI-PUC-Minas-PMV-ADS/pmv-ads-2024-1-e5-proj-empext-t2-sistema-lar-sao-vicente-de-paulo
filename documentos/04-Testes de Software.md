@@ -6,6 +6,12 @@ Enumere quais cenários de testes foram selecionados para teste. Neste tópico o
 
 # Sprint 1
 
+Funcionalidades desenvolvidas:
+# Login
+# Listagem/Criação/Edição e Inativação de Usuários
+# Listagem/Criação/Edição e exclusão de Cargos
+# Filtros nas duas listagens
+
 1. Verificar se a tela de login está responsiva
 2. Verificar se é possível logar no sistema
 3. Verificar se é possível cadastrar um usuário
