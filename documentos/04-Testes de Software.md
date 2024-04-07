@@ -37,6 +37,6 @@ Funcionalidades desenvolvidas:
     
     **Funcionalidade de auditoria pendente, será implementada na próxima sprint**
 22. Verificar se os dados sensíveis, como senhas, são armazenados de forma segura, utilizando técnicas adequadas de criptografia e proteção
-  !(imagens/teste 20.png)
+  !(imagens/documentos/img/Teste20.jpeg)
 
 
