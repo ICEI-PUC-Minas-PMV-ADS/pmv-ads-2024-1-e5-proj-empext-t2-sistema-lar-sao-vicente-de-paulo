@@ -20,14 +20,59 @@ Funcionalidades desenvolvidas:
 
 
 2. Verificar se é possível logar no sistema
+
+![teste1](img/Testes%20-%20Sprint%201/2.%20Tela%20Login/1.%20Tela%20Login.png)
+![teste1](img/Testes%20-%20Sprint%201/2.%20Tela%20Login/2.%20Tela%20Login%20-%20confirmacao.png)
+
 3. Verificar se é possível cadastrar um usuário
+
+![teste1](img/Testes%20-%20Sprint%201/3.%20Cadastrar%20Usu%C3%A1rio/1.%20Cadastrar%20Usu%C3%A1rio.png)
+![teste1](img/Testes%20-%20Sprint%201/3.%20Cadastrar%20Usu%C3%A1rio/2.%20Cadastrar%20Usu%C3%A1rio%20-%20Tela%20inicial.png)
+![teste1](img/Testes%20-%20Sprint%201/3.%20Cadastrar%20Usu%C3%A1rio/3.%20Cadastrar%20Usu%C3%A1rio%20-%20Tela%20cadastro.png)
+![teste1](img/Testes%20-%20Sprint%201/3.%20Cadastrar%20Usu%C3%A1rio/4.%20Cadastrar%20Usu%C3%A1rio%20-%20Validar%20CPF.png)
+![teste1](img/Testes%20-%20Sprint%201/3.%20Cadastrar%20Usu%C3%A1rio/5.%20Cadastrar%20Usu%C3%A1rio%20-%20Cadastro%20realizado.png)
+
 4. Verificar se é possível editar um usuário
+
+![teste1](img/Testes%20-%20Sprint%201/4.%20Editar%20Usu%C3%A1rio/1.%20Editar%20Usu%C3%A1rio.png)
+![teste1](img/Testes%20-%20Sprint%201/4.%20Editar%20Usu%C3%A1rio/2.%20Editar%20Usu%C3%A1rio%20-%20E-mail%20antigo.png)
+![teste1](img/Testes%20-%20Sprint%201/4.%20Editar%20Usu%C3%A1rio/3.%20Editar%20Usu%C3%A1rio%20-%20E-mail%20novo.png)
+![teste1](img/Testes%20-%20Sprint%201/4.%20Editar%20Usu%C3%A1rio/4.%20Editar%20Usu%C3%A1rio%20-%20Confirmar%20edicao%20do%20e-mail.png)
+
 5. Verificar critérios mínimos para criação de senha
+
+Funcionalidade pendente, será testada na próxima na próxima sprint.
+
 6. Verificar se é possível criar um cargo
+
+![teste1](img/Testes%20-%20Sprint%201/6.%20Criar%20um%20cargo/1.%20Criar%20Cargo%20-%20Tela%20inicial.png)
+![teste1](img/Testes%20-%20Sprint%201/6.%20Criar%20um%20cargo/2.%20Criar%20Cargo%20-%20Tela%20inicial%20-%20adicionar%20cargo.png)
+![teste1](img/Testes%20-%20Sprint%201/6.%20Criar%20um%20cargo/3.%20Criar%20Cargo%20-%20Tela%20inicial%20-%20informacoes%20cargo.png)
+![teste1](img/Testes%20-%20Sprint%201/6.%20Criar%20um%20cargo/4.%20Criar%20Cargo%20-%20confirmacao.png)
+
 7. Verificar se é possível editar um cargo
+
+![teste1](img/Testes%20-%20Sprint%201/7.%20Editar%20um%20cargo/1.%20Editar%20cargo%20-%20Tela%20inicial.png)
+![teste1](img/Testes%20-%20Sprint%201/7.%20Editar%20um%20cargo/2.%20Editar%20Cargo%20-%20Antigas%20configuracoes.png)
+![teste1](img/Testes%20-%20Sprint%201/7.%20Editar%20um%20cargo/3.%20Editar%20Cargo%20-%20Novas%20configuracoes.png)
+![teste1](img/Testes%20-%20Sprint%201/7.%20Editar%20um%20cargo/4.%20Editar%20Cargo%20-%20Confirmacao.png)
+
 8. Verificar se é possível deletar um cargo
+
+![teste1](img/Testes%20-%20Sprint%201/8.%20Deletar%20um%20cargo/1.%20Deletar%20Cargo%20-%20Tela%20inicial.png)
+![teste1](img/Testes%20-%20Sprint%201/8.%20Deletar%20um%20cargo/2.%20Deletar%20Cargo%20-%20Confimacao.png)
+
+
 9. Verificar se é possível deletar um usuário
+
+![teste1](img/Testes%20-%20Sprint%201/9.%20Deletar%20um%20Usu%C3%A1rio/9.%20Deletar%20um%20Usu%C3%A1rio%20-%20Confirmacao%20da%20NAO%20delecao.png)
+
 10. Verificar se é possível inativar um usuário
+
+![teste1](img/Testes%20-%20Sprint%201/10.%20Inativar%20um%20Usu%C3%A1rio/1.%20Inativar%20um%20Usuario%20-%20Tela%20inicial.png)
+![teste1](img/Testes%20-%20Sprint%201/10.%20Inativar%20um%20Usu%C3%A1rio/2.%20Inativar%20um%20Usuario%20-%20confirmacao%201.png)
+![teste1](img/Testes%20-%20Sprint%201/10.%20Inativar%20um%20Usu%C3%A1rio/3.%20Inativar%20um%20Usuario%20-%20confirmacao%202.png)
+
 11. Verificar se é possível reativar um usuário inativado
 
     ![teste11](img/teste11-usuarioInativo.png)
