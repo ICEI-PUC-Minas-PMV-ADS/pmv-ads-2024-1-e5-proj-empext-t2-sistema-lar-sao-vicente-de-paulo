@@ -29,7 +29,8 @@ Funcionalidades desenvolvidas:
 15. Verificar se há limites de caracteres adequados em campos de entrada, como nome de usuário, senha, e-mail
 16. Verificar se há validação de formato para campos como e-mail e CPF
 17. Verificar se há mensagens de erro claras e informativas para casos de entrada inválida ou operações malsucedidas
-18. Verificar se a sessão do usuário expira após um período de inatividade
+
+19. Verificar se a sessão do usuário expira após um período de inatividade
     
     **Funcionalidade pendente, será testada somente em produção**
 
