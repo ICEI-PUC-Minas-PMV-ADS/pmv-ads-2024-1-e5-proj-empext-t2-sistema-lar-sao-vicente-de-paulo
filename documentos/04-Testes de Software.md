@@ -30,10 +30,13 @@ Funcionalidades desenvolvidas:
 16. Verificar se há validação de formato para campos como e-mail e CPF
 17. Verificar se há mensagens de erro claras e informativas para casos de entrada inválida ou operações malsucedidas
 18. Verificar se a sessão do usuário expira após um período de inatividade
-**    Funcionalidade pendente, será testada somente em produção**
+    
+    **Funcionalidade pendente, será testada somente em produção**
 
 20. Verificar se há registros de auditoria para atividades importantes, como criação, edição e exclusão de usuários e cargos
-**    Funcionalidade de auditoria pendente, será implementada na próxima sprint**
-21. Verificar se os dados sensíveis, como senhas, são armazenados de forma segura, utilizando técnicas adequadas de criptografia e proteção
+    
+    **Funcionalidade de auditoria pendente, será implementada na próxima sprint**
+22. Verificar se os dados sensíveis, como senhas, são armazenados de forma segura, utilizando técnicas adequadas de criptografia e proteção
+  !(imagens/logo_github.png)
 
 
