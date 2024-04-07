@@ -1,6 +1,6 @@
 import { useMutation } from "@/utils/hooks/useMutation";
-import { CloseOutlined, EditOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { EditOutlined } from "@ant-design/icons";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { IOperationUsuario, IUsuario } from "../Interface/IUsuario";
 import { useFetch } from "@/utils/hooks/useFetch";
@@ -9,6 +9,7 @@ import { invertCPF, regexCPF } from "@/utils/regex/regexCPF";
 import { InputForm, InputSelect, UploudAvatar } from "@/components/input";
 import { isCPF } from "@/utils/validator/isCPF";
 import { ModalDefault } from "@/components/modal/ModalDefault";
+import { Tooltip } from "antd";
 
 export const AtualizarUsuarioModal = ({
   item,
@@ -62,15 +63,17 @@ export const AtualizarUsuarioModal = ({
   return (
     <ModalDefault
       customButtonOpenModal={
-        <button
-          onClick={() => setOpen(true)}
-          className="text-black/30 hover:text-primaria h-full w-[50px]"
-        >
-          <EditOutlined className={"text-[18px]"} />
-        </button>
+        <Tooltip title={"Editar"}>
+          <button
+            onClick={() => setOpen(true)}
+            className="text-black/30 hover:text-primaria h-full w-[50px]"
+          >
+            <EditOutlined className={"text-[18px]"} />
+          </button>
+        </Tooltip>
       }
-      titleModal={"Adicionando usuário"}
-      okText="Atualizar"
+      titleModal={"Editando usuário"}
+      okText="Salvar"
       onSubmit={handleSubmit(updateUsuario)}
       isFetching={isUpdatingUsuario}
       width="700px"

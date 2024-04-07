@@ -10,6 +10,16 @@ export class FindAllCargoService {
 	async execute(
 		query: Prisma.CargoFindManyArgs,
 	): Promise<{ count: number; cargos: Cargo[] }> {
+		query = {
+			...query,
+			include: {
+				cargo_permissao: {
+					select: { uid: true, ativo: true, id_permissao: true },
+				},
+				_count: { select: { usuario: true } },
+			},
+		};
+
 		const [cargos, count] = await this.prisma.$transaction([
 			this.prisma.cargo.findMany(query),
 			this.prisma.cargo.count({ where: query.where }),

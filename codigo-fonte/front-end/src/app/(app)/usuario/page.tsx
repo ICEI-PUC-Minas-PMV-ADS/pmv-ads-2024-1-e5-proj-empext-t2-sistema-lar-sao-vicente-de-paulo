@@ -1,17 +1,16 @@
 "use client";
 
-import { Input, Select, Table } from "antd";
-import { EditOutlined, SearchOutlined } from "@ant-design/icons";
+import { Input, Select } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import { useFetch } from "@/utils/hooks/useFetch";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import { IUsuario } from "./Interface/IUsuario";
 import { queryBuilder } from "@/utils/functions/query-builder";
 import { Situacao } from "@/interface/ISituacao";
 import { Filter } from "@/interface/IQuery";
-import { CriarUsuarioModal } from "./components";
+import { AtualizarUsuarioModal, CriarUsuarioModal } from "./components";
 import { ColumnsType } from "antd/es/table";
 import { TableDefault } from "@/components/table/TableDefault";
-import { AtualizarUsuarioModal } from "./components/AtualizarUsuarioModal";
 
 export default function Usuario() {
   const [pageLimit, setPageLimit] = useState<number>(10);
@@ -85,6 +84,7 @@ export default function Usuario() {
         <CriarUsuarioModal refetchList={refetch} />
         <Input
           placeholder="Buscar"
+          size="large"
           onChange={(e) => setPesquisa(e.target.value)}
           suffix={<SearchOutlined className="cursor-pointer opacity-50" />}
         />
