@@ -28,8 +28,8 @@ Funcionalidades desenvolvidas:
 
 ![teste1](img/Testes%20-%20Sprint%201/3.%20Cadastrar%20Usu%C3%A1rio/1.%20Cadastrar%20Usu%C3%A1rio.png)
 ![teste1](img/Testes%20-%20Sprint%201/3.%20Cadastrar%20Usu%C3%A1rio/2.%20Cadastrar%20Usu%C3%A1rio%20-%20Tela%20inicial.png)
-![teste1](img/Testes%20-%20Sprint%201/3.%20Cadastrar%20Usu%C3%A1rio/3.%20Cadastrar%20Usu%C3%A1rio%20-%20Tela%20cadastro.png)
 ![teste1](img/Testes%20-%20Sprint%201/3.%20Cadastrar%20Usu%C3%A1rio/4.%20Cadastrar%20Usu%C3%A1rio%20-%20Validar%20CPF.png)
+![teste1](img/Testes%20-%20Sprint%201/3.%20Cadastrar%20Usu%C3%A1rio/3.%20Cadastrar%20Usu%C3%A1rio%20-%20Tela%20cadastro.png)
 ![teste1](img/Testes%20-%20Sprint%201/3.%20Cadastrar%20Usu%C3%A1rio/5.%20Cadastrar%20Usu%C3%A1rio%20-%20Cadastro%20realizado.png)
 
 4. Verificar se é possível editar um usuário
@@ -64,6 +64,8 @@ Funcionalidade pendente, será testada na próxima na próxima sprint.
 
 
 9. Verificar se é possível deletar um usuário
+
+Funcionalidade pendente, será testada na próxima na próxima sprint.
 
 ![teste1](img/Testes%20-%20Sprint%201/9.%20Deletar%20um%20Usu%C3%A1rio/9.%20Deletar%20um%20Usu%C3%A1rio%20-%20Confirmacao%20da%20NAO%20delecao.png)
 
