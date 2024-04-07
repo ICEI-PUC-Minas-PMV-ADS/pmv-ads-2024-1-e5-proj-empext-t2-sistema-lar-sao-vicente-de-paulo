@@ -23,12 +23,16 @@ Funcionalidades desenvolvidas:
 9. Verificar se é possível deletar um usuário
 10. Verificar se é possível inativar um usuário
 11. Verificar se é possível reativar um usuário inativado
-12. Verificar se é possível criar usuários idênticos
-13. Verificar se é possível utilizar o mesmo CPF para usuários diferentes
-14. Verificar se é possível utilizar o mesmo e-mail para usuários diferentes
-15. Verificar se há limites de caracteres adequados em campos de entrada, como nome de usuário, senha, e-mail
-16. Verificar se há validação de formato para campos como e-mail e CPF
-17. Verificar se há mensagens de erro claras e informativas para casos de entrada inválida ou operações malsucedidas
+
+    ![teste11](documentos/img/teste11-usuarioInativo.png)
+    ![teste11](documentos/img/teste11-usuarioAtivo.png)
+
+13. Verificar se é possível criar usuários idênticos
+14. Verificar se é possível utilizar o mesmo CPF para usuários diferentes
+15. Verificar se é possível utilizar o mesmo e-mail para usuários diferentes
+16. Verificar se há limites de caracteres adequados em campos de entrada, como nome de usuário, senha, e-mail
+17. Verificar se há validação de formato para campos como e-mail e CPF
+18. Verificar se há mensagens de erro claras e informativas para casos de entrada inválida ou operações malsucedidas
 
 19. Verificar se a sessão do usuário expira após um período de inatividade
     
