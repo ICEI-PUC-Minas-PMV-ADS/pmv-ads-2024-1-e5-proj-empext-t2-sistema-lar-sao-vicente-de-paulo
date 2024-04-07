@@ -39,7 +39,7 @@ Funcionalidades desenvolvidas:
 
 5. Verificar critérios mínimos para criação de senha
 
-**Funcionalidade pendente, será testada na próxima na próxima sprint.**
+_Funcionalidade pendente, será testada na próxima na próxima sprint._
 
 6. Verificar se é possível criar um cargo
 
@@ -62,7 +62,7 @@ Funcionalidades desenvolvidas:
 
 9. Verificar se é possível deletar um usuário
 
-**Funcionalidade pendente, será testada na próxima na próxima sprint.**
+_Funcionalidade pendente, será testada na próxima na próxima sprint._
 
 ![teste9](img/Testes%20-%20Sprint%201/9.%20Deletar%20um%20Usu%C3%A1rio/9.%20Deletar%20um%20Usu%C3%A1rio%20-%20Confirmacao%20da%20NAO%20delecao.png)
 
@@ -107,14 +107,12 @@ Funcionalidades desenvolvidas:
 
 18. Verificar se a sessão do usuário expira após um período de inatividade
 
-    **Funcionalidade pendente, será testada somente em produção**
+    _Funcionalidade pendente, será testada somente em produção_
 
 19. Verificar se há registros de auditoria para atividades importantes, como criação, edição e exclusão de usuários e cargos
 
-    **Funcionalidade de auditoria pendente, será implementada na próxima sprint**
+    _Funcionalidade de auditoria pendente, será implementada na próxima sprint_
 
 20. Verificar se os dados sensíveis, como senhas, são armazenados de forma segura, utilizando técnicas adequadas de criptografia e proteção
 
 ![teste20](img/Testes%20-%20Sprint%201/20.%20Validar%20criptografia/Teste20.jpeg)
-
-    **Funcionalidade de auditoria pendente, será implementada na próxima sprint**
