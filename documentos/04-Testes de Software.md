@@ -32,8 +32,8 @@ Funcionalidades desenvolvidas:
     ![teste13](img/teste12.png) 
 15. Verificar se é possível utilizar o mesmo CPF para usuários diferentes
 
-    ![teste14](teste13-cpfrepetido.png)
-    ![teste14](teste13.1-cpfrepetido.png)
+    ![teste14](img/teste13-cpfrepetido.png)
+    ![teste14](img/teste13.1-cpfrepetido.png)
     
 17. Verificar se é possível utilizar o mesmo e-mail para usuários diferentes
 
