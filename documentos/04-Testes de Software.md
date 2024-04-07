@@ -32,12 +32,12 @@ Funcionalidades desenvolvidas:
     ![teste13](img/teste12.png) 
 15. Verificar se é possível utilizar o mesmo CPF para usuários diferentes
 
-    ![teste14](teste13-cpfrepetido.png)
-    ![teste14](teste13.1-cpfrepetido.png)
+    ![teste14](img/teste13-cpfrepetido.png)
+    ![teste14](img/teste13.1-cpfrepetido.png)
     
 17. Verificar se é possível utilizar o mesmo e-mail para usuários diferentes
 
-    ![teste14](teste14-emailrepetido.png)
+    ![teste14](img/teste14-emailrepetido.png)
     
 18. Verificar se há limites de caracteres adequados em campos de entrada, como nome de usuário, senha, e-mail
 
@@ -45,7 +45,6 @@ Funcionalidades desenvolvidas:
 19. Verificar se há validação de formato para campos como e-mail 
 
     ![teste16](img/teste16.1-erroValidacaoemail.png)
-    ![teste16](img/teste16.1-validacaoemail.png)
       
 20. Verificar se há mensagens de erro claras e informativas para casos de entrada inválida ou operações malsucedidas
 
@@ -61,6 +60,6 @@ Funcionalidades desenvolvidas:
     **Funcionalidade de auditoria pendente, será implementada na próxima sprint**
     
 23. Verificar se os dados sensíveis, como senhas, são armazenados de forma segura, utilizando técnicas adequadas de criptografia e proteção
-  ![teste20](img/Teste20.jpeg)
+    ![teste20](img/Teste20.jpeg)
 
 
