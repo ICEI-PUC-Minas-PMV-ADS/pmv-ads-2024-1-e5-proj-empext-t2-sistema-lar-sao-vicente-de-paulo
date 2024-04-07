@@ -30,11 +30,10 @@ Funcionalidades desenvolvidas:
 16. Verificar se há validação de formato para campos como e-mail e CPF
 17. Verificar se há mensagens de erro claras e informativas para casos de entrada inválida ou operações malsucedidas
 18. Verificar se a sessão do usuário expira após um período de inatividade
-19. Verificar se há registros de auditoria para atividades importantes, como criação, edição e exclusão de usuários e cargos
-20. Verificar se os dados sensíveis, como senhas, são armazenados de forma segura, utilizando técnicas adequadas de criptografia e proteção
+**    Funcionalidade pendente, será testada somente em produção**
+
+20. Verificar se há registros de auditoria para atividades importantes, como criação, edição e exclusão de usuários e cargos
+**    Funcionalidade de auditoria pendente, será implementada na próxima sprint**
+21. Verificar se os dados sensíveis, como senhas, são armazenados de forma segura, utilizando técnicas adequadas de criptografia e proteção
 
 
- 
-# Evidências de Testes de Software
-
-Apresente imagens e/ou vídeos que comprovam que um determinado teste foi executado, e o resultado esperado foi obtido. Normalmente são screenshots de telas, ou vídeos do software em funcionamento.
