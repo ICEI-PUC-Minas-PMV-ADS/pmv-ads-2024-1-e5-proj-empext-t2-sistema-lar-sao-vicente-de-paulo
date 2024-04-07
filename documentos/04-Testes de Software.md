@@ -13,6 +13,12 @@ Funcionalidades desenvolvidas:
 ## Filtros nas duas listagens
 
 1. Verificar se a tela de login está responsiva
+
+![teste1](img/Testes%20-%20Sprint%201/1.%20Tela%20de%20login%20responsiva%20-%20login%20no%20sistema/1.%20Laptop%20dimension.png)
+![teste1](img/Testes%20-%20Sprint%201/1.%20Tela%20de%20login%20responsiva%20-%20login%20no%20sistema/1.%20Tablet%20Dimension.png)
+![teste1](img/Testes%20-%20Sprint%201/1.%20Tela%20de%20login%20responsiva%20-%20login%20no%20sistema/1.2%20Tablet%20Login.png)
+
+
 2. Verificar se é possível logar no sistema
 3. Verificar se é possível cadastrar um usuário
 4. Verificar se é possível editar um usuário
