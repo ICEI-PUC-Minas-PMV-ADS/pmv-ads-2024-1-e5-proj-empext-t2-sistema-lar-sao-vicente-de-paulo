@@ -74,40 +74,49 @@ Funcionalidades desenvolvidas:
 
 11. Verificar se é possível reativar um usuário inativado
 
-    ![teste11](img/teste11-usuarioInativo.png)
-    ![teste11](img/teste11-usuarioAtivo.png)
-
+![teste11](img/Testes%20-%20Sprint%201/11.%20Validar%20usu%C3%A1rio%20inativo/teste11-usuarioAtivo.png)
+![teste11](img/Testes%20-%20Sprint%201/11.%20Validar%20usu%C3%A1rio%20inativo/teste11-usuarioInativo.png)
+    
 12. Verificar se é possível criar usuários idênticos
+     
+![teste12](img/Testes%20-%20Sprint%201/12.%20Validar%20criacao%20usu%C3%A1rios%20identicos/teste12.png)
 
-    ![teste13](img/teste12.png)
 
 13. Verificar se é possível utilizar o mesmo CPF para usuários diferentes
 
-    ![teste14](img/teste13-cpfrepetido.png)
-    ![teste14](img/teste13.1-cpfrepetido.png)
-
+![teste13](img/Testes%20-%20Sprint%201/13.%20%20Valirdar%20mesmo%20CPF%20para%20usu%C3%A1rios%20diferentes/teste13-cpfrepetido.png)
+![teste13](img/Testes%20-%20Sprint%201/13.%20%20Valirdar%20mesmo%20CPF%20para%20usu%C3%A1rios%20diferentes/teste13.1-cpfrepetido.png)
+    
 14. Verificar se é possível utilizar o mesmo e-mail para usuários diferentes
 
-    ![teste14](img/teste14-emailrepetido.png)
-
+![teste14](img/Testes%20-%20Sprint%201/14.%20Validar%20mesmo%20e-mail%20para%20usuarios%20diferentes/teste14-emailrepetido.png)
+    
 15. Verificar se há limites de caracteres adequados em campos de entrada, como nome de usuário, senha, e-mail
 
-    ![teste15](img/teste15-quantcaracteres.png)
+![teste15](img/Testes%20-%20Sprint%201/15.%20Limite%20de%20caracteres/teste15-quantcaracteres.png)
 
-16. Verificar se há validação de formato para campos como e-mail
+16. Verificar se há validação de formato para campos como e-mail 
 
-    ![teste16](img/teste16.1-erroValidacaoemail.png)
+![teste16](img/Testes%20-%20Sprint%201/16.%20Validar%20formato%20do%20e-mail/teste16-validacaoemail.png)
+![teste16](img/Testes%20-%20Sprint%201/16.%20Validar%20formato%20do%20e-mail/teste16.1-erroValidacaoemail.png)
+      
+17. Verificar se há mensagens de erro claras e informativas para casos de entrada inválida ou operações mal sucedidas
 
-17. Verificar se há mensagens de erro claras e informativas para casos de entrada inválida ou operações malsucedidas
-
-    ![teste17](img/teste17-mensagemSucesso.png)
-    ![teste17](img/teste17-mensagemDeletar.png)
+![teste17](img/Testes%20-%20Sprint%201/17.%20Validar%20entrada%20inv%C3%A1lida/teste17-camposObrigatorios.png)
+![teste17](img/Testes%20-%20Sprint%201/17.%20Validar%20entrada%20inv%C3%A1lida/teste17-mensagemDeletar.png)
+![teste17](img/Testes%20-%20Sprint%201/17.%20Validar%20entrada%20inv%C3%A1lida/teste17-mensagemSucesso.png)
 
 18. Verificar se a sessão do usuário expira após um período de inatividade
-
+    
     **Funcionalidade pendente, será testada somente em produção**
 
 19. Verificar se há registros de auditoria para atividades importantes, como criação, edição e exclusão de usuários e cargos
+    
+    **Funcionalidade de auditoria pendente, será implementada na próxima sprint**
+    
+20. Verificar se os dados sensíveis, como senhas, são armazenados de forma segura, utilizando técnicas adequadas de criptografia e proteção
+    
+![teste20](img/Testes%20-%20Sprint%201/20.%20Validar%20criptografia/Teste20.jpeg)
 
     **Funcionalidade de auditoria pendente, será implementada na próxima sprint**
 
