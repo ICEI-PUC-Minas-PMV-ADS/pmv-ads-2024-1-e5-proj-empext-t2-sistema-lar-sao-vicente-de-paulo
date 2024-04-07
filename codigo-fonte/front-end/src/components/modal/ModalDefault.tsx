@@ -28,6 +28,7 @@ interface IModalDefault {
   user_created_item?: string;
   created_item?: Date;
   updated_item?: Date;
+  customAlert?: ReactNode;
 }
 
 export const ModalDefault = ({
@@ -47,6 +48,7 @@ export const ModalDefault = ({
   okDisable,
   onClose,
   situation,
+  customAlert,
   user_created_item,
   created_item,
   updated_item,
@@ -143,6 +145,7 @@ export const ModalDefault = ({
                     showIcon
                   />
                 )}
+                {customAlert && customAlert}
               </div>
               <div className="flex gap-2 justify-end">
                 <Button onClick={handleCancel} htmlType="button" size="large">

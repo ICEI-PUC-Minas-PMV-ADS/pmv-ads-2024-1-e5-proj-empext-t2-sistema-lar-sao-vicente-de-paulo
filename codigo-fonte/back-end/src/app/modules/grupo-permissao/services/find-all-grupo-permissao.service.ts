@@ -10,6 +10,13 @@ export class FindAllGrupoPermissaoService {
 	async execute(
 		query: Prisma.GrupoPermissaoFindManyArgs,
 	): Promise<{ count: number; grupoPermissoes: GrupoPermissao[] }> {
+		query = {
+			...query,
+			include: {
+				permissao: { orderBy: { nome: 'asc' } },
+			},
+		};
+
 		const [grupoPermissoes, count] = await this.prisma.$transaction([
 			this.prisma.grupoPermissao.findMany(query),
 			this.prisma.grupoPermissao.count({ where: query.where }),

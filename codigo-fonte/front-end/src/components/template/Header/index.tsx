@@ -157,7 +157,7 @@ export const Header = () => {
             )}
           >
             <Space>
-              <div className="flex h-full items-center gap-3 justify-end hover:bg-azul2/30 min-w-[170px] rounded-full p-[8px]">
+              <div className="flex h-full items-center gap-3 justify-end hover:bg-azul2/30 min-w-[170px] pl-[30px] rounded-full p-[8px]">
                 <div className="flex flex-col text-right">
                   <strong className="text-white text-sm font-semibold">
                     {usuario.nome}
