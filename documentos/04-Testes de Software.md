@@ -24,8 +24,8 @@ Funcionalidades desenvolvidas:
 10. Verificar se é possível inativar um usuário
 11. Verificar se é possível reativar um usuário inativado
 
-    ![teste11](documentos/img/teste11-usuarioInativo.png)
-    ![teste11](documentos/img/teste11-usuarioAtivo.png)
+    ![teste11](img/teste11-usuarioInativo.png)
+    ![teste11](img/teste11-usuarioAtivo.png)
 
 13. Verificar se é possível criar usuários idênticos
 14. Verificar se é possível utilizar o mesmo CPF para usuários diferentes
@@ -42,6 +42,6 @@ Funcionalidades desenvolvidas:
     
     **Funcionalidade de auditoria pendente, será implementada na próxima sprint**
 22. Verificar se os dados sensíveis, como senhas, são armazenados de forma segura, utilizando técnicas adequadas de criptografia e proteção
-  ![teste20](documentos/img/Teste20.jpeg)
+  ![teste20](img/Teste20.jpeg)
 
 
