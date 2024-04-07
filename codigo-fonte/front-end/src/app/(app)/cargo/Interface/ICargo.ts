@@ -1,4 +1,4 @@
-import { IOperationCargoPermissao } from "./ICargoPermissao";
+import { ICargoPermissao, IOperationCargoPermissao } from "./ICargoPermissao";
 
 export interface ICargo {
   id: bigint;
@@ -6,9 +6,12 @@ export interface ICargo {
   nome: string;
   criado_em: Date;
   atualizado_em: Date;
+  cargo_permissao?: ICargoPermissao[];
+  _count?: { usuario: number };
 }
 
 export interface IOperationCargo {
+  uid?: string;
   nome: string;
   permissoes: IOperationCargoPermissao[];
 }

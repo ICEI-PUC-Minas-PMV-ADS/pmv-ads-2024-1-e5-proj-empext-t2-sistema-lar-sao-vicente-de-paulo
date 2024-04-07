@@ -73,7 +73,7 @@ export const AtualizarUsuarioModal = ({
         </Tooltip>
       }
       titleModal={"Editando usuário"}
-      okText="Atualizar"
+      okText="Salvar"
       onSubmit={handleSubmit(updateUsuario)}
       isFetching={isUpdatingUsuario}
       width="700px"

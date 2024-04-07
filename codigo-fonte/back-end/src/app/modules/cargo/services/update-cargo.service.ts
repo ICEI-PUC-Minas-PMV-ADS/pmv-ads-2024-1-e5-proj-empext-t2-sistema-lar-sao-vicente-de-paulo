@@ -11,8 +11,19 @@ export class UpdateCargoService {
 			where: {
 				uid,
 			},
-			data,
+			data: { nome: data.nome },
 		});
+
+		console.log(data.permissoes);
+
+		await this.prisma.$transaction(
+			data.permissoes.map((permissao) =>
+				this.prisma.cargoPermissao.update({
+					where: { uid: permissao.uid },
+					data: { ativo: permissao.ativo },
+				}),
+			),
+		);
 
 		return;
 	}

@@ -6,6 +6,12 @@ export class DeleteCargoService {
 	constructor(private prisma: PrismaService) {}
 
 	async execute(uid: string): Promise<void> {
+		await this.prisma.cargoPermissao.deleteMany({
+			where: {
+				cargo: { uid },
+			},
+		});
+
 		await this.prisma.cargo.delete({
 			where: {
 				uid,

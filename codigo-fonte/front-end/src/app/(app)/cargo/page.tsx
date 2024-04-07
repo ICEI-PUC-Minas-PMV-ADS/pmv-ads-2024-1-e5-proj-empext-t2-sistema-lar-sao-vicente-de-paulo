@@ -9,7 +9,7 @@ import { Filter } from "@/interface/IQuery";
 import { ColumnsType } from "antd/es/table";
 import { TableDefault } from "@/components/table/TableDefault";
 import { ICargo } from "./Interface/ICargo";
-import { CriarCargoModal } from "./components";
+import { AtualizarCargoModal, CriarCargoModal } from "./components";
 
 export default function Cargo() {
   const [pageLimit, setPageLimit] = useState<number>(10);
@@ -46,11 +46,22 @@ export default function Cargo() {
       key: "nome",
     },
     {
+      title: "Vínculo com usuário",
+      key: "vinculo_usuario",
+      render(_: any, record: ICargo) {
+        if (record._count?.usuario === 1) {
+          return record._count?.usuario + " vínculo";
+        } else {
+          return record._count?.usuario + " vínculos";
+        }
+      },
+    },
+    {
       key: "atualizar_cargo",
       render(_: any, record: ICargo) {
         return (
           <div className="flex justify-end">
-            {/*  <AtualizarUsuarioModal item={record} refetchList={refetch} /> */}
+            <AtualizarCargoModal item={record} refetchList={refetch} />
           </div>
         );
       },

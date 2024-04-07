@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Put } from '@nestjs/common';
+import { Body, Controller, Param, Patch } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UpdateCargoService } from '../services/update-cargo.service';
 import { UpdateCargoDto } from '../dtos/update-cargo-dto';
@@ -12,7 +12,7 @@ import { RoleCargo } from '@/common/enums/roles';
 export class UpdateCargoController {
 	constructor(private updateCargo: UpdateCargoService) {}
 
-	@Put(':uid')
+	@Patch(':uid')
 	@Roles(RoleCargo.UPDATE)
 	@ApiResponseError()
 	async handle(

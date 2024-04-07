@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsString } from 'class-validator';
-import { CreateCargoPermissaoDto } from '../../cargo-permissao/dtos/create-cargo-permissao-dto';
+import { CargoPermissao } from '../../cargo-permissao/entities/modelo-cargo-permissao.entity';
 
 export class CreateCargoDto {
 	@ApiProperty()
@@ -9,5 +9,5 @@ export class CreateCargoDto {
 
 	@ApiProperty()
 	@IsArray()
-	permissoes: Partial<CreateCargoPermissaoDto[]>;
+	permissoes: Partial<CargoPermissao[]>;
 }
