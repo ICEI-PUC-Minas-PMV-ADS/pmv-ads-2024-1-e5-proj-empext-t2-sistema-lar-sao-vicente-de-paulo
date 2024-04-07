@@ -45,7 +45,6 @@ Funcionalidades desenvolvidas:
 19. Verificar se há validação de formato para campos como e-mail 
 
     ![teste16](img/teste16.1-erroValidacaoemail.png)
-    ![teste16](img/teste16.1-validacaoemail.png)
       
 20. Verificar se há mensagens de erro claras e informativas para casos de entrada inválida ou operações malsucedidas
 
@@ -61,6 +60,6 @@ Funcionalidades desenvolvidas:
     **Funcionalidade de auditoria pendente, será implementada na próxima sprint**
     
 23. Verificar se os dados sensíveis, como senhas, são armazenados de forma segura, utilizando técnicas adequadas de criptografia e proteção
-  ![teste20](img/Teste20.jpeg)
+    ![teste20](img/Teste20.jpeg)
 
 
