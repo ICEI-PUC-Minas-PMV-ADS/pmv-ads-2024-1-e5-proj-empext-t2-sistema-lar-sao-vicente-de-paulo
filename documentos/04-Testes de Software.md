@@ -20,6 +20,12 @@ Enumere quais cenários de testes foram selecionados para teste. Neste tópico o
 12. Verificar se é possível criar usuários idênticos
 13. Verificar se é possível utilizar o mesmo CPF para usuários diferentes
 14. Verificar se é possível utilizar o mesmo e-mail para usuários diferentes
+15. Verificar se há limites de caracteres adequados em campos de entrada, como nome de usuário, senha, e-mail
+16. Verificar se há validação de formato para campos como e-mail e CPF
+17. Verificar se há mensagens de erro claras e informativas para casos de entrada inválida ou operações malsucedidas
+18. Verificar se a sessão do usuário expira após um período de inatividade
+19. Verificar se há registros de auditoria para atividades importantes, como criação, edição e exclusão de usuários e cargos
+20. Verificar se os dados sensíveis, como senhas, são armazenados de forma segura, utilizando técnicas adequadas de criptografia e proteção
 
 
  
