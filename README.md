@@ -23,7 +23,9 @@ Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo de
 
 ## Instruções de utilização
 
-Assim que a primeira versão do sistema estiver disponível, deverá complementar com as instruções de utilização. Descreva como instalar eventuais dependências e como executar a aplicação.
+Documentação da API: https://pmv-ads-2024-1-e5-proj-empext-t2-sistema.onrender.com/api-doc
+
+Aplicação Web: https://sistema-lar-sao-vicente-de-paulo-frontend.onrender.com/login
 
 # Documentação
 
