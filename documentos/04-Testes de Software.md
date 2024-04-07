@@ -121,5 +121,5 @@ Funcionalidade pendente, será testada na próxima na próxima sprint.
 20. Verificar se os dados sensíveis, como senhas, são armazenados de forma segura, utilizando técnicas adequadas de criptografia e proteção
     
 ![teste20](img/Testes%20-%20Sprint%201/20.%20Validar%20criptografia/Teste20.jpeg)
-![teste20](img/Testes%20-%20Sprint%201/20.%20Validar%20criptografia/Teste%2020.jpeg)
+
 
