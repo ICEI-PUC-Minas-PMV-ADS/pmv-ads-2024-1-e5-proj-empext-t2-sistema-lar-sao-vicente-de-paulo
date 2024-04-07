@@ -29,7 +29,7 @@ Funcionalidades desenvolvidas:
 
 13. Verificar se é possível criar usuários idênticos
     
-    ![teste13](img/teste12.png.png)
+    ![teste13](img/teste12.png) 
 15. Verificar se é possível utilizar o mesmo CPF para usuários diferentes
 
     documentos/img/teste13-cpfrepetido.png
