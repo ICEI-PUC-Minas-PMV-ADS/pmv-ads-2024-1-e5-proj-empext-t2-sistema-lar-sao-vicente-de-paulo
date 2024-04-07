@@ -32,22 +32,22 @@ Funcionalidades desenvolvidas:
     ![teste13](img/teste12.png) 
 15. Verificar se é possível utilizar o mesmo CPF para usuários diferentes
 
-    documentos/img/teste13-cpfrepetido.png
-    documentos/img/teste13-cpfrepetido.png
+    ![teste14](teste13-cpfrepetido.png)
+    ![teste14](teste13.1-cpfrepetido.png)
     
-16. Verificar se é possível utilizar o mesmo e-mail para usuários diferentes
+17. Verificar se é possível utilizar o mesmo e-mail para usuários diferentes
 
     ![teste14](teste14-emailrepetido.png)
     
-17. Verificar se há limites de caracteres adequados em campos de entrada, como nome de usuário, senha, e-mail
+18. Verificar se há limites de caracteres adequados em campos de entrada, como nome de usuário, senha, e-mail
 
     ![teste15](img/teste15-quantcaracteres.png)
-18. Verificar se há validação de formato para campos como e-mail 
+19. Verificar se há validação de formato para campos como e-mail 
 
     ![teste16](img/teste16.1-erroValidacaoemail.png)
     ![teste16](img/teste16.1-validacaoemail.png)
       
-19. Verificar se há mensagens de erro claras e informativas para casos de entrada inválida ou operações malsucedidas
+20. Verificar se há mensagens de erro claras e informativas para casos de entrada inválida ou operações malsucedidas
 
     ![teste17](img/teste17-mensagemSucesso.png)
     ![teste17](img/teste17-mensagemDeletar.png)
