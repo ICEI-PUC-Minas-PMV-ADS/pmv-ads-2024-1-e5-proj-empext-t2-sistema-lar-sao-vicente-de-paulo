@@ -28,20 +28,39 @@ Funcionalidades desenvolvidas:
     ![teste11](img/teste11-usuarioAtivo.png)
 
 13. Verificar se é possível criar usuários idênticos
-14. Verificar se é possível utilizar o mesmo CPF para usuários diferentes
-15. Verificar se é possível utilizar o mesmo e-mail para usuários diferentes
-16. Verificar se há limites de caracteres adequados em campos de entrada, como nome de usuário, senha, e-mail
-17. Verificar se há validação de formato para campos como e-mail e CPF
-18. Verificar se há mensagens de erro claras e informativas para casos de entrada inválida ou operações malsucedidas
+    
+    ![teste13](img/teste12.png.png)
+15. Verificar se é possível utilizar o mesmo CPF para usuários diferentes
 
-19. Verificar se a sessão do usuário expira após um período de inatividade
+    documentos/img/teste13-cpfrepetido.png
+    documentos/img/teste13-cpfrepetido.png
+    
+16. Verificar se é possível utilizar o mesmo e-mail para usuários diferentes
+
+    ![teste14](teste14-emailrepetido.png)
+    
+17. Verificar se há limites de caracteres adequados em campos de entrada, como nome de usuário, senha, e-mail
+
+    ![teste15](img/teste15-quantcaracteres.png)
+18. Verificar se há validação de formato para campos como e-mail 
+
+    ![teste16](img/teste16.1-erroValidacaoemail.png)
+    ![teste16](img/teste16.1-validacaoemail.png)
+      
+19. Verificar se há mensagens de erro claras e informativas para casos de entrada inválida ou operações malsucedidas
+
+    ![teste17](img/teste17-mensagemSucesso.png)
+    ![teste17](img/teste17-mensagemDeletar.png)
+
+21. Verificar se a sessão do usuário expira após um período de inatividade
     
     **Funcionalidade pendente, será testada somente em produção**
 
-20. Verificar se há registros de auditoria para atividades importantes, como criação, edição e exclusão de usuários e cargos
+22. Verificar se há registros de auditoria para atividades importantes, como criação, edição e exclusão de usuários e cargos
     
     **Funcionalidade de auditoria pendente, será implementada na próxima sprint**
-22. Verificar se os dados sensíveis, como senhas, são armazenados de forma segura, utilizando técnicas adequadas de criptografia e proteção
+    
+23. Verificar se os dados sensíveis, como senhas, são armazenados de forma segura, utilizando técnicas adequadas de criptografia e proteção
   ![teste20](img/Teste20.jpeg)
 
 
