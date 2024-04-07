@@ -1,23 +1,21 @@
 # Planos de Testes de Software
 
-Apresente os cenários de testes utilizados na realização dos testes da sua aplicação. Escolha cenários de testes que demonstrem os requisitos sendo satisfeitos.
-
-Enumere quais cenários de testes foram selecionados para teste. Neste tópico o grupo deve detalhar quais funcionalidades avaliadas, o grupo de usuários que foi escolhido para participar do teste e as ferramentas utilizadas.
+Para garantir a qualidade das funcionalidades implementadas, foram utilizados cenários de teste que abordaram a autenticação de usuário, autorização de acesso, entre outros testes descritos na documentação abaixo. Os resultados desses testes foram evidenciados através de imagens, proporcionando uma visão clara do desempenho e da conformidade com os requisitos. Além disso, foram realizados testes unitários no back-end utilizando o Supertest, uma ferramenta que permitiu testar as rotas e funcionalidades do servidor de forma automatizada e rigorosa, contribuindo para a robustez e estabilidade do sistema.
 
 # Sprint 1
 
 Funcionalidades desenvolvidas:
-## Login
-## Listagem/Criação/Edição e Inativação de Usuários
-## Listagem/Criação/Edição e exclusão de Cargos
-## Filtros nas duas listagens
+
+- Autenticação e Autorização de usuários
+- Listagem, criação, edição e inativação de usuários
+- Listagem, criação, edição e exclusão de Cargos
+- Filtros para as listagens
 
 1. Verificar se a tela de login está responsiva
 
 ![teste1](img/Testes%20-%20Sprint%201/1.%20Tela%20de%20login%20responsiva%20-%20login%20no%20sistema/1.%20Laptop%20dimension.png)
 ![teste1](img/Testes%20-%20Sprint%201/1.%20Tela%20de%20login%20responsiva%20-%20login%20no%20sistema/1.%20Tablet%20Dimension.png)
 ![teste1](img/Testes%20-%20Sprint%201/1.%20Tela%20de%20login%20responsiva%20-%20login%20no%20sistema/1.2%20Tablet%20Login.png)
-
 
 2. Verificar se é possível logar no sistema
 
@@ -41,7 +39,7 @@ Funcionalidades desenvolvidas:
 
 5. Verificar critérios mínimos para criação de senha
 
-Funcionalidade pendente, será testada na próxima na próxima sprint.
+**Funcionalidade pendente, será testada na próxima na próxima sprint.**
 
 6. Verificar se é possível criar um cargo
 
@@ -62,10 +60,9 @@ Funcionalidade pendente, será testada na próxima na próxima sprint.
 ![teste8](img/Testes%20-%20Sprint%201/8.%20Deletar%20um%20cargo/1.%20Deletar%20Cargo%20-%20Tela%20inicial.png)
 ![teste8](img/Testes%20-%20Sprint%201/8.%20Deletar%20um%20cargo/2.%20Deletar%20Cargo%20-%20Confimacao.png)
 
-
 9. Verificar se é possível deletar um usuário
 
-Funcionalidade pendente, será testada na próxima na próxima sprint.
+**Funcionalidade pendente, será testada na próxima na próxima sprint.**
 
 ![teste9](img/Testes%20-%20Sprint%201/9.%20Deletar%20um%20Usu%C3%A1rio/9.%20Deletar%20um%20Usu%C3%A1rio%20-%20Confirmacao%20da%20NAO%20delecao.png)
 
@@ -80,30 +77,28 @@ Funcionalidade pendente, será testada na próxima na próxima sprint.
 ![teste11](img/Testes%20-%20Sprint%201/11.%20Validar%20usu%C3%A1rio%20inativo/teste11-usuarioAtivo.png)
 ![teste11](img/Testes%20-%20Sprint%201/11.%20Validar%20usu%C3%A1rio%20inativo/teste11-usuarioInativo.png)
 
-    
 12. Verificar se é possível criar usuários idênticos
-     
-![teste12](img/Testes%20-%20Sprint%201/12.%20Validar%20criacao%20usu%C3%A1rios%20identicos/teste12.png)
 
+![teste12](img/Testes%20-%20Sprint%201/12.%20Validar%20criacao%20usu%C3%A1rios%20identicos/teste12.png)
 
 13. Verificar se é possível utilizar o mesmo CPF para usuários diferentes
 
 ![teste13](img/Testes%20-%20Sprint%201/13.%20%20Valirdar%20mesmo%20CPF%20para%20usu%C3%A1rios%20diferentes/teste13-cpfrepetido.png)
 ![teste13](img/Testes%20-%20Sprint%201/13.%20%20Valirdar%20mesmo%20CPF%20para%20usu%C3%A1rios%20diferentes/teste13.1-cpfrepetido.png)
-    
+
 14. Verificar se é possível utilizar o mesmo e-mail para usuários diferentes
 
 ![teste14](img/Testes%20-%20Sprint%201/14.%20Validar%20mesmo%20e-mail%20para%20usuarios%20diferentes/teste14-emailrepetido.png)
-    
+
 15. Verificar se há limites de caracteres adequados em campos de entrada, como nome de usuário, senha, e-mail
 
 ![teste15](img/Testes%20-%20Sprint%201/15.%20Limite%20de%20caracteres/teste15-quantcaracteres.png)
 
-16. Verificar se há validação de formato para campos como e-mail 
+16. Verificar se há validação de formato para campos como e-mail
 
 ![teste16](img/Testes%20-%20Sprint%201/16.%20Validar%20formato%20do%20e-mail/teste16-validacaoemail.png)
 ![teste16](img/Testes%20-%20Sprint%201/16.%20Validar%20formato%20do%20e-mail/teste16.1-erroValidacaoemail.png)
-      
+
 17. Verificar se há mensagens de erro claras e informativas para casos de entrada inválida ou operações mal sucedidas
 
 ![teste17](img/Testes%20-%20Sprint%201/17.%20Validar%20entrada%20inv%C3%A1lida/teste17-camposObrigatorios.png)
@@ -111,15 +106,15 @@ Funcionalidade pendente, será testada na próxima na próxima sprint.
 ![teste17](img/Testes%20-%20Sprint%201/17.%20Validar%20entrada%20inv%C3%A1lida/teste17-mensagemSucesso.png)
 
 18. Verificar se a sessão do usuário expira após um período de inatividade
-    
+
     **Funcionalidade pendente, será testada somente em produção**
 
 19. Verificar se há registros de auditoria para atividades importantes, como criação, edição e exclusão de usuários e cargos
-    
+
     **Funcionalidade de auditoria pendente, será implementada na próxima sprint**
-    
+
 20. Verificar se os dados sensíveis, como senhas, são armazenados de forma segura, utilizando técnicas adequadas de criptografia e proteção
-    
+
 ![teste20](img/Testes%20-%20Sprint%201/20.%20Validar%20criptografia/Teste20.jpeg)
 
-
+    **Funcionalidade de auditoria pendente, será implementada na próxima sprint**

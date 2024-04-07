@@ -1,6 +1,23 @@
-
 # Projeto de Interface
 
-<span style="color:red">Pré-requisitos: <a href="2-Especificação do Projeto.md"> Documentação de Especificação</a></span>
+Nesta seção são apresentadas as telas desenvolvidas pelo grupo para cada uma das funcionalidades do sistema.
 
-Visão geral da interação do usuário com as funcionalidades que fazem parte do sistema sociotécnico (protótipo de telas).
+### Tela de Login
+
+![image](img/Templates/layout-login.png)
+
+### Cabeçalho e Rodapé
+
+![image](img/Templates/layout-cabecalho-rodape.png)
+
+### Tela de Usuários
+
+![image](img/Templates/layout-usuarios.png)
+
+![image](img/Templates/layout-usuarios-criar-atualizar.png)
+
+### Tela de Cargos
+
+![image](img/Templates/layout-cargos.png)
+
+![image](img/Templates/layout-cargos-criar-atualizar.png)
