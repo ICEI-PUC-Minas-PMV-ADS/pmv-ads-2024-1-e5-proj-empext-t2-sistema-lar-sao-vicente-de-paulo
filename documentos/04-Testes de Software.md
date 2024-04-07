@@ -37,7 +37,7 @@ Funcionalidades desenvolvidas:
     
 17. Verificar se é possível utilizar o mesmo e-mail para usuários diferentes
 
-    ![teste14](teste14-emailrepetido.png)
+    ![teste14](img/teste14-emailrepetido.png)
     
 18. Verificar se há limites de caracteres adequados em campos de entrada, como nome de usuário, senha, e-mail
 
