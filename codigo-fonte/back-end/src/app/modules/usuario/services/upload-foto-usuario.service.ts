@@ -16,6 +16,7 @@ export class UploadFotoUsuarioService {
 			const blobUrl = await this.blobService.uploadBlob(
 				data.foto.buffer,
 				data.foto.originalname,
+				data.foto.mimetype,
 			);
 
 			await this.prisma.usuario.update({

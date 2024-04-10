@@ -1,5 +1,6 @@
 import {
 	Controller,
+	Param,
 	ParseUUIDPipe,
 	Post,
 	Query,
@@ -27,7 +28,7 @@ import { FilesValidationPipe } from '@/core/pipes/files-validation.pipe';
 export class UploadFotoUsuarioController {
 	constructor(private uploadFotoUsuario: UploadFotoUsuarioService) {}
 
-	@Post('upload-foto')
+	@Post(':uid/upload-foto')
 	@ApiOperation({ summary: 'Fazer upload da foto do usuário' })
 	@ApiConsumes('multipart/form-data')
 	@ApiBody({ type: UploadFotoUsuarioDto })
@@ -35,7 +36,7 @@ export class UploadFotoUsuarioController {
 	@ApiResponseError()
 	@UseInterceptors(FileFieldsInterceptor([{ name: 'foto' }]))
 	async handle(
-		@Query('uid_usuario', ParseUUIDPipe) uid_usuario: string,
+		@Param('uid', ParseUUIDPipe) uid: string,
 		@UploadedFiles(
 			new FilesValidationPipe([
 				{
@@ -49,7 +50,7 @@ export class UploadFotoUsuarioController {
 			foto?: Express.Multer.File;
 		},
 	): Promise<void> {
-		await this.uploadFotoUsuario.execute(uid_usuario, files);
+		await this.uploadFotoUsuario.execute(uid, files);
 
 		return;
 	}

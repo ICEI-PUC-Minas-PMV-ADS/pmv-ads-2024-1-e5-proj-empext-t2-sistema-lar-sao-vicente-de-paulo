@@ -2,13 +2,14 @@ import { azureConfig } from '@/config/blob-storage';
 import {
 	BlobServiceClient,
 	StorageSharedKeyCredential,
+	ContainerClient,
 } from '@azure/storage-blob';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AzureBlobService {
 	private blobServiceClient: BlobServiceClient;
-	private containerClient;
+	private containerClient: ContainerClient;
 
 	constructor() {
 		const sharedKeyCredential = new StorageSharedKeyCredential(
@@ -26,9 +27,15 @@ export class AzureBlobService {
 		);
 	}
 
-	async uploadBlob(fileBuffer: Buffer, blobName: string): Promise<string> {
+	async uploadBlob(
+		fileBuffer: Buffer,
+		blobName: string,
+		blobMimeType: string,
+	): Promise<string> {
 		const blobClient = this.containerClient.getBlockBlobClient(blobName);
-		await blobClient.upload(fileBuffer, fileBuffer.length);
+		await blobClient.upload(fileBuffer, fileBuffer.length, {
+			blobHTTPHeaders: { blobContentType: blobMimeType },
+		});
 		return blobClient.url;
 	}
 
