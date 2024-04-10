@@ -13,6 +13,9 @@ import { PrismaUsuarioRepository } from '@/app/modules/usuario/repositories/pris
 import { CryptoModule } from '@/core/providers/crypto/crypto.module';
 import { QueryBuilderModule } from '@/core/providers/query-builder/query-builder.module';
 import { DatabaseModule } from '@/core/providers/database/database.module';
+import { UploadModule } from '@/core/providers/upload/upload.module';
+import { UploadFotoUsuarioController } from './controllers/upload-foto-usuario.controller';
+import { UploadFotoUsuarioService } from './services/upload-foto-usuario.service';
 
 @Module({
 	providers: [
@@ -21,6 +24,7 @@ import { DatabaseModule } from '@/core/providers/database/database.module';
 		FindUidUsuarioService,
 		UpdateUsuarioService,
 		DeleteUsuarioService,
+		UploadFotoUsuarioService,
 		PrismaUsuarioRepository,
 	],
 	controllers: [
@@ -29,7 +33,8 @@ import { DatabaseModule } from '@/core/providers/database/database.module';
 		FindUidUsuarioController,
 		UpdateUsuarioController,
 		DeleteUsuarioController,
+		UploadFotoUsuarioController,
 	],
-	imports: [DatabaseModule, CryptoModule, QueryBuilderModule],
+	imports: [DatabaseModule, CryptoModule, QueryBuilderModule, UploadModule],
 })
 export class UsuarioModule {}
