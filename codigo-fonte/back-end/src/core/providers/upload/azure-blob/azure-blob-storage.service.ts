@@ -1,7 +1,6 @@
 import { azureConfig } from '@/config/blob-storage';
 import {
 	BlobServiceClient,
-	BlobUploadCommonResponse,
 	StorageSharedKeyCredential,
 } from '@azure/storage-blob';
 import { Injectable } from '@nestjs/common';
@@ -13,7 +12,7 @@ export class AzureBlobService {
 
 	constructor() {
 		const sharedKeyCredential = new StorageSharedKeyCredential(
-			azureConfig.accountName, // Se necessário, adicione o nome da conta
+			azureConfig.accountName,
 			azureConfig.accountKey,
 		);
 

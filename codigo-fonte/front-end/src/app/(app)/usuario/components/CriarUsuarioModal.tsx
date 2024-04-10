@@ -22,20 +22,40 @@ export const CriarUsuarioModal = ({
 }) => {
   const [open, setOpen] = useState(false);
 
-  const { handleSubmit, control, reset } = useForm<IOperationUsuario>();
+  const { handleSubmit, control, reset, getValues, setValue } =
+    useForm<IOperationUsuario>();
 
-  const { mutate: createUsuario, isFetching } = useMutation<IOperationUsuario>(
-    "/usuarios",
-    {
+  const { mutate: createUsuario, isFetching } = useMutation<
+    IOperationUsuario,
+    { uid: string }
+  >("/usuarios", {
+    method: "post",
+    messageSucess: "Usuário cadastrado com sucesso!",
+    onSuccess: ({ data }) => {
+      setValue("uid", data.uid);
+      if (getValues("foto")) {
+        uploadFotoUsuario();
+      } else {
+        reset();
+        refetchList();
+        setOpen(false);
+      }
+    },
+  });
+
+  const { mutate: uploadFotoUsuario, isFetching: isFetchingUpdateFotoUsuario } =
+    useMutation<void>("/usuarios/upload-foto", {
       method: "post",
       messageSucess: "Usuário cadastrado com sucesso!",
+      enable: !!getValues("uid"),
+      params: { uid_usuario: getValues("uid") },
+      headers: { "content-type": "multipart/form-data" },
       onSuccess: () => {
         reset();
         refetchList();
         setOpen(false);
       },
-    }
-  );
+    });
 
   const { data: cargos } = useFetch<
     { id: number; uid: string; nome: string }[]
@@ -52,7 +72,7 @@ export const CriarUsuarioModal = ({
       titleModal={"Adicionando usuário"}
       okText="Cadastrar"
       onSubmit={handleSubmit(createUsuario)}
-      isFetching={isFetching}
+      isFetching={isFetching || isFetchingUpdateFotoUsuario}
       width="700px"
       setOpenModal={setOpen}
       openModal={open}

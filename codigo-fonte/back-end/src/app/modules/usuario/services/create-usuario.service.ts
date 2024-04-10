@@ -31,8 +31,6 @@ export class CreateUsuarioService {
 			senha: hash,
 		});
 
-		return {
-			usuario,
-		};
+		return { usuario };
 	}
 }
