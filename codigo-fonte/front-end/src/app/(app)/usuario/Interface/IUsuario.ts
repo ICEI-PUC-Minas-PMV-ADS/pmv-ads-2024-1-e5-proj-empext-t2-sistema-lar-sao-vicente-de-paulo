@@ -16,7 +16,6 @@ export interface IUsuario {
 }
 
 export interface IOperationUsuario {
-  uid?: string;
   foto?: string;
   id_cargo: bigint;
   nome: string;
