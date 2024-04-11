@@ -14,28 +14,53 @@ import {
 } from "@/components/input";
 import { isCPF } from "@/utils/validator/isCPF";
 import { ModalDefault } from "@/components/modal/ModalDefault";
+import { Select, UploadFile } from "antd";
+import { api } from "@/utils/service/api";
+import { authToken } from "@/config/authToken";
+import { useCookies } from "react-cookie";
 
 export const CriarUsuarioModal = ({
   refetchList,
 }: {
   refetchList: () => void;
 }) => {
+  const [cookies] = useCookies([authToken.nome]);
   const [open, setOpen] = useState(false);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const { handleSubmit, control, reset } = useForm<IOperationUsuario>();
 
-  const { mutate: createUsuario, isFetching } = useMutation<IOperationUsuario>(
-    "/usuarios",
-    {
-      method: "post",
-      messageSucess: "Usuário cadastrado com sucesso!",
-      onSuccess: () => {
+  const { mutate: createUsuario, isFetching } = useMutation<
+    IOperationUsuario,
+    { uid: string }
+  >("/usuarios", {
+    method: "post",
+    messageSucess: "Usuário cadastrado com sucesso!",
+    resNotInData: true,
+    onSuccess: async (data) => {
+      const formData = new FormData();
+
+      if (fileList.length > 0 && fileList[0] && fileList[0].originFileObj) {
+        await formData.append("foto", fileList[0]?.originFileObj);
+        await api
+          .post("/usuarios/" + data.data.uid + "/upload-foto", formData, {
+            headers: {
+              Authorization: "Bearer " + cookies[authToken.nome],
+              "content-type": "multipart/form-data",
+            },
+          })
+          .then(() => {
+            reset();
+            refetchList();
+            setOpen(false);
+          });
+      } else {
         reset();
         refetchList();
         setOpen(false);
-      },
-    }
-  );
+      }
+    },
+  });
 
   const { data: cargos } = useFetch<
     { id: number; uid: string; nome: string }[]
@@ -63,7 +88,9 @@ export const CriarUsuarioModal = ({
             <Controller
               name="foto"
               control={control}
-              render={() => <UploudAvatar />}
+              render={() => (
+                <UploudAvatar setFileList={setFileList} fileList={fileList} />
+              )}
             />
           </div>
           <Controller
@@ -122,9 +149,9 @@ export const CriarUsuarioModal = ({
                 placeholder="Selecionar"
               >
                 {cargos?.map((cargo) => (
-                  <option key={cargo.uid} value={cargo.id}>
+                  <Select.Option key={cargo.uid} value={cargo.id}>
                     {cargo.nome}
-                  </option>
+                  </Select.Option>
                 ))}
               </InputSelect>
             )}

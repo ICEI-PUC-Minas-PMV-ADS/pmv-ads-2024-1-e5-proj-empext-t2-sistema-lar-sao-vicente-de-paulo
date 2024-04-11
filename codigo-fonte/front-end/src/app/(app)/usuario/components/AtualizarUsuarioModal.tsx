@@ -9,7 +9,10 @@ import { invertCPF, regexCPF } from "@/utils/regex/regexCPF";
 import { InputForm, InputSelect, UploudAvatar } from "@/components/input";
 import { isCPF } from "@/utils/validator/isCPF";
 import { ModalDefault } from "@/components/modal/ModalDefault";
-import { Tooltip } from "antd";
+import { Tooltip, UploadFile } from "antd";
+import { api } from "@/utils/service/api";
+import { useCookies } from "react-cookie";
+import { authToken } from "@/config/authToken";
 
 export const AtualizarUsuarioModal = ({
   item,
@@ -18,14 +21,17 @@ export const AtualizarUsuarioModal = ({
   item: IUsuario;
   refetchList: () => void;
 }) => {
+  const [cookies] = useCookies([authToken.nome]);
   const [open, setOpen] = useState(false);
+  const [fileList, setFileList] = useState<UploadFile[]>([
+    { url: item.foto, uid: item.uid, name: item.nome },
+  ]);
 
   const { handleSubmit, control, reset } = useForm<Partial<IOperationUsuario>>({
     defaultValues: {
       nome: item.nome,
       email: item.email,
       cpf_cnh: item.cpf_cnh,
-      foto: item.foto,
       id_cargo: item.id_cargo,
     },
   });
@@ -35,9 +41,26 @@ export const AtualizarUsuarioModal = ({
   >("/usuarios/" + item.uid, {
     method: "patch",
     messageSucess: "Usuário atualizado com sucesso!",
-    onSuccess: () => {
-      refetchList();
-      setOpen(false);
+    onSuccess: async () => {
+      const formData = new FormData();
+
+      if (fileList.length > 0 && fileList[0] && fileList[0].originFileObj) {
+        await formData.append("foto", fileList[0]?.originFileObj);
+        await api
+          .post("/usuarios/" + item.uid + "/upload-foto", formData, {
+            headers: {
+              Authorization: "Bearer " + cookies[authToken.nome],
+              "content-type": "multipart/form-data",
+            },
+          })
+          .then(() => {
+            refetchList();
+            setOpen(false);
+          });
+      } else {
+        refetchList();
+        setOpen(false);
+      }
     },
   });
 
@@ -103,7 +126,9 @@ export const AtualizarUsuarioModal = ({
             <Controller
               name="foto"
               control={control}
-              render={() => <UploudAvatar />}
+              render={() => (
+                <UploudAvatar fileList={fileList} setFileList={setFileList} />
+              )}
             />
           </div>
           <Controller

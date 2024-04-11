@@ -1,13 +1,18 @@
 import { CameraOutlined } from "@ant-design/icons";
 import { GetProp, Upload, UploadFile, UploadProps, Image } from "antd";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
-export const UploudAvatar = () => {
+export const UploudAvatar = ({
+  fileList,
+  setFileList,
+}: {
+  fileList: UploadFile<any>[];
+  setFileList: Dispatch<SetStateAction<UploadFile<any>[]>>;
+}) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const getBase64 = (file: FileType): Promise<string> =>
     new Promise((resolve, reject) => {
@@ -39,7 +44,6 @@ export const UploudAvatar = () => {
   return (
     <>
       <Upload
-        action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
         listType="picture-circle"
         fileList={fileList}
         onPreview={handlePreview}

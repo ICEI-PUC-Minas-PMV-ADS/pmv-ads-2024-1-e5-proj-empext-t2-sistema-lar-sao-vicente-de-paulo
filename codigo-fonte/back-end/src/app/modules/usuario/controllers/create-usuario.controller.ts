@@ -20,9 +20,9 @@ export class CreateUsuarioController {
 	})
 	@Roles(RoleUsuario.CREATE)
 	@ApiResponseError()
-	async handle(@Body() data: CreateUsuarioDto): Promise<void> {
-		await this.createUsuario.execute(data);
+	async handle(@Body() data: CreateUsuarioDto): Promise<{ uid: string }> {
+		const created = await this.createUsuario.execute(data);
 
-		return;
+		return { uid: created.usuario.uid };
 	}
 }
