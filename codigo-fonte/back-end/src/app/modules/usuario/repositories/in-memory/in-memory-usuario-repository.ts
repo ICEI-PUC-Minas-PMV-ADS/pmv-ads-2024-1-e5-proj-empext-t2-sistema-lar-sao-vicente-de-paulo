@@ -73,11 +73,12 @@ export class InMemoryUsuarioRepository implements usuarioRepository {
 	async findById(id: bigint) {
 		return this.items.find((usuario) => usuario.id === id) || null;
 	}
-	async alreadyExists(email: string, cpf_cnh: string) {
+	async alreadyExistsUserEmail(email: string) {
+		return this.items.find((usuario) => usuario.email === email) || null;
+	}
+	async alreadyExistsUserCPF(cpf_cnh: string) {
 		return (
-			(this.items.find((usuario) => usuario.email === email) &&
-				this.items.find((usuario) => usuario.cpf_cnh === cpf_cnh)) ||
-			null
+			this.items.find((usuario) => usuario.cpf_cnh === cpf_cnh) || null
 		);
 	}
 }
