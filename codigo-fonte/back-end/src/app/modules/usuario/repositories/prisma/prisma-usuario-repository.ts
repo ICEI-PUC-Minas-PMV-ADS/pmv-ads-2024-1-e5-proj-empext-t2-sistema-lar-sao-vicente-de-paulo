@@ -13,10 +13,19 @@ export class PrismaUsuarioRepository implements usuarioRepository {
 		return usuario;
 	}
 
-	async alreadyExists(email: string, cpf_cnh: string) {
+	async alreadyExistsUserEmail(email: string) {
 		const usuario = await prisma.usuario.findFirst({
 			where: {
-				OR: [{ email }, { cpf_cnh }],
+				email,
+			},
+		});
+		return usuario;
+	}
+
+	async alreadyExistsUserCPF(cpf_cnh: string) {
+		const usuario = await prisma.usuario.findFirst({
+			where: {
+				cpf_cnh,
 			},
 		});
 		return usuario;

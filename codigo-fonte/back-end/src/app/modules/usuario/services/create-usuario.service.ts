@@ -19,12 +19,17 @@ export class CreateUsuarioService {
 	async execute(data: CreateUsuarioDto): Promise<RegisterUseCaseResponse> {
 		const hash = await this.bcrypt.generateHash(data.senha);
 
-		const usuarioExist = await this.usuarioRepository.alreadyExists(
-			data.email,
-			data.cpf_cnh,
-		);
+		const usuarioExistEmail =
+			await this.usuarioRepository.alreadyExistsUserEmail(data.email);
 
-		if (usuarioExist) throw new AppError('Usuário já cadastrado');
+		if (usuarioExistEmail)
+			throw new AppError('Usuário já cadastrado com mesmo E-mail');
+
+		const usuarioExistCPF =
+			await this.usuarioRepository.alreadyExistsUserCPF(data.cpf_cnh);
+
+		if (usuarioExistCPF)
+			throw new AppError('Usuário já cadastrado com mesmo CPF');
 
 		const usuario = await this.usuarioRepository.create({
 			...data,
