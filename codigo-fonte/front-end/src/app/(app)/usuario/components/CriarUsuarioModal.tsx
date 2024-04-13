@@ -18,6 +18,9 @@ import { Select, UploadFile } from "antd";
 import { api } from "@/utils/service/api";
 import { authToken } from "@/config/authToken";
 import { useCookies } from "react-cookie";
+import { isNome } from "@/utils/validator/isName";
+import { withoutNumber } from "@/utils/validator/withoutNumber";
+import { isEmail } from "@/utils/validator/isEmail";
 
 export const CriarUsuarioModal = ({
   refetchList,
@@ -97,7 +100,14 @@ export const CriarUsuarioModal = ({
             name="nome"
             control={control}
             defaultValue=""
-            rules={{ required: "Insira o nome do usuário" }}
+            rules={{
+              required: "Insira o nome do usuário",
+              validate: (value) => {
+                if (isNome(value)) return "Preencher o nome completo";
+                if (withoutNumber(value)) return "Nome não pode conter números";
+                return true;
+              },
+            }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
                 label="Nome"
@@ -161,7 +171,13 @@ export const CriarUsuarioModal = ({
           <Controller
             name="email"
             control={control}
-            rules={{ required: "Insira o e-mail do usuário" }}
+            rules={{
+              required: "Insira o e-mail do usuário",
+              validate: (value) => {
+                if (!isEmail(value)) return "Formato inválido do E-mail";
+                return true;
+              },
+            }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
                 label="E-mail"
