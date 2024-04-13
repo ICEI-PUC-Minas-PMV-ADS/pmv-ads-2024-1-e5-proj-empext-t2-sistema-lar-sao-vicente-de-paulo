@@ -97,6 +97,7 @@ export const AtualizarUsuarioModal = ({
   >("/cargos", ["cargos_lista"], {
     enable: open,
     params: queryBuilder({
+      filter: [{ path: "situacao", value: "ATIVO" }],
       page_limit: 999999,
     }),
   });

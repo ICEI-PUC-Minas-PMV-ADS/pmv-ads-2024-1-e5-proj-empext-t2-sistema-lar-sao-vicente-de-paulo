@@ -25,8 +25,8 @@ model Usuario {
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  id_cargo BigInt @db.BigInt
-  cargo    Cargo? @relation(fields: [id_cargo], references: [id])
+  id_cargo BigInt? @db.BigInt
+  cargo    Cargo?  @relation(fields: [id_cargo], references: [id])
 
   idosos              Idoso[]
   prontuarios         Prontuario[]

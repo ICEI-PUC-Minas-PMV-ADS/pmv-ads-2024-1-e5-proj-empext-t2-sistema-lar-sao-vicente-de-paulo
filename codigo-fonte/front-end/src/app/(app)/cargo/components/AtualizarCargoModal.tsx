@@ -45,17 +45,6 @@ export const AtualizarCargoModal = ({
     },
   });
 
-  const { mutate: deleteCargo } = useMutation<void>("/cargos/" + uid, {
-    method: "delete",
-    body: undefined,
-    params: undefined,
-    messageSucess: "Cargo deletado com sucesso!",
-    onSuccess: () => {
-      refetchList();
-      setOpen(false);
-    },
-  });
-
   const { data: grupoPermissoes } = useFetch<IGrupoPermissao[]>(
     "/grupo-permissoes",
     ["grupo-permissoes"],
@@ -89,9 +78,11 @@ export const AtualizarCargoModal = ({
       openModal={open}
       listOptions={[
         {
-          label: "Deletar",
+          label: cargo?.situacao === "ATIVO" ? "Inativar" : "Reativar",
           onClick: () => {
-            deleteCargo();
+            updateCargo({
+              situacao: cargo?.situacao === "ATIVO" ? "INATIVO" : "ATIVO",
+            });
           },
         },
       ]}
@@ -108,6 +99,7 @@ export const AtualizarCargoModal = ({
           showIcon
         />
       }
+      situation={cargo?.situacao}
       created_item={cargo?.criado_em}
       updated_item={cargo?.atualizado_em}
     >
