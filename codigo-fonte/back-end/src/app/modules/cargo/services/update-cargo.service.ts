@@ -14,8 +14,6 @@ export class UpdateCargoService {
 			data: { nome: data.nome },
 		});
 
-		console.log(data.permissoes);
-
 		await this.prisma.$transaction(
 			data.permissoes.map((permissao) =>
 				this.prisma.cargoPermissao.update({

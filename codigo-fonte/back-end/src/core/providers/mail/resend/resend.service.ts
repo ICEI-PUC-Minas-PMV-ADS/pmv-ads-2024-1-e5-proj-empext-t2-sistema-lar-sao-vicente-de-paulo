@@ -1,4 +1,8 @@
 import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
+import { Injectable } from '@nestjs/common';
+import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
+import { AppError } from '@utils/app-error';
 
 interface IMailMenssageDto {
 	to: string;
@@ -9,21 +13,39 @@ interface ISendText extends IMailMenssageDto {
 	text: string;
 }
 
+@Injectable()
 export class ResendService {
+	private transporter: nodemailer.Transporter;
+
+	constructor() {
+		const config = {
+			host: 'smtp.resend.com',
+			secure: true,
+			port: 465,
+			auth: {
+				user: 'resend',
+				pass: process.env.RESEND_EMAIL_SPTM_KEY,
+			},
+		};
+		this.transporter = nodemailer.createTransport(config);
+	}
+
 	async sendText({ subject, text, to }: ISendText) {
-		const resend = new Resend('re_YL6arK3W_FvfU259gHdGrvceS8WWPwMWS');
+		try {
+			await this.transporter.sendMail({
+				from: 'Sistema de Acompanhamento de Idosos <onboarding@resend.dev>',
+				to: to,
+				subject: subject,
+				text: text,
+			});
 
-		const { data, error } = await resend.emails.send({
-			from: 'Sistema de Acompanhamento de Idosos <onboarding@resend.dev>',
-			to: to,
-			subject: subject,
-			html: text,
-		});
-
-		if (error) {
-			return console.error({ error });
+			return;
+		} catch (error) {
+			throw new AppError(
+				'Erro ao enviar o e-mail, tente novamente ou acione um técnico',
+				400,
+				error,
+			);
 		}
-
-		console.log({ data });
 	}
 }
