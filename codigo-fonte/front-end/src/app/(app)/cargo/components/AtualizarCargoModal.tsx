@@ -13,25 +13,30 @@ import { IPermissao } from "../Interface/IPermissao";
 import { IOperationCargoPermissao } from "../Interface/ICargoPermissao";
 
 export const AtualizarCargoModal = ({
-  item,
+  uid,
   refetchList,
 }: {
-  item: ICargo;
+  uid: string;
   refetchList: () => void;
 }) => {
   const [open, setOpen] = useState(false);
+  const { handleSubmit, control, setValue } = useForm<IOperationCargo>();
 
-  const { handleSubmit, control, reset, formState, setValue } =
-    useForm<IOperationCargo>({
-      defaultValues: {
-        nome: item.nome,
-        permissoes: item.cargo_permissao,
-      },
-    });
+  const { data: cargo } = useFetch<ICargo>("/cargos/" + uid, [uid], {
+    enable: open,
+    onSuccess: (data) => {
+      const cargo = data.data;
+
+      if (cargo && cargo.cargo_permissao) {
+        setValue("nome", cargo.nome);
+        setValue("permissoes", cargo.cargo_permissao);
+      }
+    },
+  });
 
   const { mutate: updateCargo, isFetching } = useMutation<
     Partial<IOperationCargo>
-  >("/cargos/" + item.uid, {
+  >("/cargos/" + uid, {
     method: "patch",
     messageSucess: "Cargo atualizado com sucesso!",
     onSuccess: () => {
@@ -40,7 +45,7 @@ export const AtualizarCargoModal = ({
     },
   });
 
-  const { mutate: deleteCargo } = useMutation<void>("/cargos/" + item.uid, {
+  const { mutate: deleteCargo } = useMutation<void>("/cargos/" + uid, {
     method: "delete",
     body: undefined,
     params: undefined,
@@ -54,7 +59,9 @@ export const AtualizarCargoModal = ({
   const { data: grupoPermissoes } = useFetch<IGrupoPermissao[]>(
     "/grupo-permissoes",
     ["grupo-permissoes"],
+
     {
+      enable: open,
       params: queryBuilder({
         page_limit: 9999,
       }),
@@ -91,8 +98,8 @@ export const AtualizarCargoModal = ({
       customAlert={
         <Alert
           message={
-            item._count?.usuario +
-            (item._count?.usuario === 1
+            cargo?._count?.usuario +
+            (cargo?._count?.usuario === 1
               ? " usuário vinculado"
               : " usuários vinculados")
           }
@@ -101,8 +108,8 @@ export const AtualizarCargoModal = ({
           showIcon
         />
       }
-      created_item={item.criado_em}
-      updated_item={item.atualizado_em}
+      created_item={cargo?.criado_em}
+      updated_item={cargo?.atualizado_em}
     >
       <form className="w-full flex flex-col gap-[15px]">
         <Controller

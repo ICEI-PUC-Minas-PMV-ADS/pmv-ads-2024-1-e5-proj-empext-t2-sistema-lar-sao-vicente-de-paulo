@@ -61,7 +61,7 @@ export default function Cargo() {
       render(_: any, record: ICargo) {
         return (
           <div className="flex justify-end">
-            <AtualizarCargoModal item={record} refetchList={refetch} />
+            <AtualizarCargoModal uid={record.uid} refetchList={refetch} />
           </div>
         );
       },
