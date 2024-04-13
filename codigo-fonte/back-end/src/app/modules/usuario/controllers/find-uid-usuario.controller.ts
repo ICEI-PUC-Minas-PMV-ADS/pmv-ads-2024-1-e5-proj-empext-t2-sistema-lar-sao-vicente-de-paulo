@@ -23,7 +23,6 @@ export class FindUidUsuarioController {
 	@ApiOperation({ summary: 'Busca um usuário pelo UID' })
 	@ApiParam({ name: 'uid', description: 'UID do usuário', type: String })
 	@ApiFindResponse(Usuario)
-	@Roles(RoleUsuario.FIND)
 	@ApiResponseError()
 	async handle(
 		@Param('uid') uid: string,

@@ -17,7 +17,7 @@ describe('Criar Usuario Caso de Uso', () => {
 	});
 
 	it('deveria poder se cadastrar', async () => {
-		const { usuario } = await sut.execute({
+		const usuario = await sut.execute({
 			nome: 'John Doe',
 			cpf_cnh: '11111111111',
 			email: 'johndoe@example.com',
@@ -29,7 +29,7 @@ describe('Criar Usuario Caso de Uso', () => {
 	});
 
 	it('deve usuário no momento do registro ter uma hash senha', async () => {
-		const { usuario } = await sut.execute({
+		const usuario = await sut.execute({
 			nome: 'John Doe',
 			cpf_cnh: '11111111111',
 			email: 'johndoe@example.com',

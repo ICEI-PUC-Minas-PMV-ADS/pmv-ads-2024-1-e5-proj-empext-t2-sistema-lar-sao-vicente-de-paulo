@@ -39,9 +39,10 @@ export const CriarUsuarioModal = ({
   >("/usuarios", {
     method: "post",
     messageSucess: "Usuário cadastrado com sucesso!",
-    resNotInData: true,
     onSuccess: async (data) => {
       const formData = new FormData();
+
+      console.log(data.data);
 
       if (fileList.length > 0 && fileList[0] && fileList[0].originFileObj) {
         await formData.append("foto", fileList[0]?.originFileObj);

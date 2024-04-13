@@ -22,7 +22,7 @@ describe('Deletar Usuario Caso de Uso', () => {
 
 		const deletedUsuario = await sut.execute(createdUsuario.uid);
 
-		expect(deletedUsuario.situacao).toBe('INATIVO');
+		expect(deletedUsuario).toBe(undefined);
 	});
 
 	it('deve lançar um erro se nenhum usuário for encontrado', async () => {

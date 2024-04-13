@@ -109,6 +109,7 @@ model Cargo {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   nome          String   @db.VarChar(255)
+  situacao      Situacao @default(ATIVO)
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
