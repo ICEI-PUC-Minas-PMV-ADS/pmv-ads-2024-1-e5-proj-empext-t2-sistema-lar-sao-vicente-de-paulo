@@ -1,7 +1,5 @@
-import { Resend } from 'resend';
-import nodemailer from 'nodemailer';
+import * as nodemailer from 'nodemailer';
 import { Injectable } from '@nestjs/common';
-import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { AppError } from '@utils/app-error';
 
 interface IMailMenssageDto {
