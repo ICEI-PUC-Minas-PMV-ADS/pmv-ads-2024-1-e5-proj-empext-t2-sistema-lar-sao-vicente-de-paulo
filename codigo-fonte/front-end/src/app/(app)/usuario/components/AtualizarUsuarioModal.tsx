@@ -1,6 +1,6 @@
 import { useMutation } from "@/utils/hooks/useMutation";
 import { EditOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { IOperationUsuario, IUsuario } from "../Interface/IUsuario";
 import { useFetch } from "@/utils/hooks/useFetch";
@@ -9,36 +9,53 @@ import { invertCPF, regexCPF } from "@/utils/regex/regexCPF";
 import { InputForm, InputSelect, UploudAvatar } from "@/components/input";
 import { isCPF } from "@/utils/validator/isCPF";
 import { ModalDefault } from "@/components/modal/ModalDefault";
-import { Tooltip, UploadFile } from "antd";
+import { Select, Tooltip, UploadFile } from "antd";
 import { api } from "@/utils/service/api";
 import { useCookies } from "react-cookie";
 import { authToken } from "@/config/authToken";
+import { isNome } from "@/utils/validator/isName";
+import { withoutNumber } from "@/utils/validator/withoutNumber";
+import { isEmail } from "@/utils/validator/isEmail";
 
 export const AtualizarUsuarioModal = ({
-  item,
+  uid,
   refetchList,
 }: {
-  item: IUsuario;
+  uid: string;
   refetchList: () => void;
 }) => {
   const [cookies] = useCookies([authToken.nome]);
   const [open, setOpen] = useState(false);
-  const [fileList, setFileList] = useState<UploadFile[]>([
-    { url: item.foto, uid: item.uid, name: item.nome },
-  ]);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const { handleSubmit, control, reset } = useForm<Partial<IOperationUsuario>>({
-    defaultValues: {
-      nome: item.nome,
-      email: item.email,
-      cpf_cnh: item.cpf_cnh,
-      id_cargo: item.id_cargo,
+  const { handleSubmit, control, reset, setValue, getValues } =
+    useForm<Partial<IOperationUsuario>>();
+
+  const { data: usuario } = useFetch<IUsuario>("/usuarios/" + uid, [uid], {
+    enable: open,
+    onSuccess: (data) => {
+      const usuario = data.data;
+
+      if (usuario) {
+        setFileList([
+          {
+            url: usuario.foto,
+            uid: usuario.uid,
+            name: usuario.nome,
+          },
+        ]);
+
+        setValue("nome", usuario.nome);
+        setValue("id_cargo", usuario.id_cargo);
+        setValue("email", usuario.email);
+        setValue("cpf_cnh", usuario.cpf_cnh);
+      }
     },
   });
 
   const { mutate: updateUsuario, isFetching: isUpdatingUsuario } = useMutation<
     Partial<IOperationUsuario>
-  >("/usuarios/" + item.uid, {
+  >("/usuarios/" + uid, {
     method: "patch",
     messageSucess: "Usuário atualizado com sucesso!",
     onSuccess: async () => {
@@ -47,7 +64,7 @@ export const AtualizarUsuarioModal = ({
       if (fileList.length > 0 && fileList[0] && fileList[0].originFileObj) {
         await formData.append("foto", fileList[0]?.originFileObj);
         await api
-          .post("/usuarios/" + item.uid + "/upload-foto", formData, {
+          .post("/usuarios/" + uid + "/upload-foto", formData, {
             headers: {
               Authorization: "Bearer " + cookies[authToken.nome],
               "content-type": "multipart/form-data",
@@ -78,6 +95,7 @@ export const AtualizarUsuarioModal = ({
   const { data: cargos } = useFetch<
     { id: number; uid: string; nome: string }[]
   >("/cargos", ["cargos_lista"], {
+    enable: open,
     params: queryBuilder({
       page_limit: 999999,
     }),
@@ -102,23 +120,22 @@ export const AtualizarUsuarioModal = ({
       width="700px"
       setOpenModal={setOpen}
       openModal={open}
-      onClose={() => reset()}
       listOptions={[
         {
           label: "Redefinir senha",
-          onClick: () => redefirSenha({ email: item.email }),
+          onClick: () => redefirSenha({ email: getValues("email") || "" }),
         },
         {
-          label: item.situacao === "ATIVO" ? "Inativar" : "Reativar",
+          label: usuario?.situacao === "ATIVO" ? "Inativar" : "Reativar",
           onClick: () =>
             updateUsuario({
-              situacao: item.situacao === "ATIVO" ? "INATIVO" : "ATIVO",
+              situacao: usuario?.situacao === "ATIVO" ? "INATIVO" : "ATIVO",
             }),
         },
       ]}
-      situation={item.situacao}
-      created_item={item.criado_em}
-      updated_item={item.atualizado_em}
+      situation={usuario?.situacao}
+      created_item={usuario?.criado_em}
+      updated_item={usuario?.atualizado_em}
     >
       <form className="w-full flex flex-col gap-[15px]">
         <div className="flex items-center gap-[15px]">
@@ -135,7 +152,15 @@ export const AtualizarUsuarioModal = ({
             name="nome"
             control={control}
             defaultValue=""
-            rules={{ required: "Insira o nome do usuário" }}
+            rules={{
+              required: "Insira o nome do usuário",
+              validate: (value) => {
+                if (value && isNome(value)) return "Preencher o nome completo";
+                if (value && withoutNumber(value))
+                  return "Nome não pode conter números";
+                return true;
+              },
+            }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
                 label="Nome"
@@ -152,7 +177,6 @@ export const AtualizarUsuarioModal = ({
           <Controller
             name="cpf_cnh"
             control={control}
-            defaultValue=""
             rules={{
               required: "Insira o CPF do usuário",
               validate: (value) => {
@@ -185,12 +209,12 @@ export const AtualizarUsuarioModal = ({
                 error={error?.message}
                 required
                 placeholder="Selecionar"
-                value={item.id_cargo}
+                value={value}
               >
                 {cargos?.map((cargo) => (
-                  <option key={cargo.uid} value={cargo.id}>
+                  <Select.Option key={cargo.uid} value={cargo.id}>
                     {cargo.nome}
-                  </option>
+                  </Select.Option>
                 ))}
               </InputSelect>
             )}
@@ -200,7 +224,13 @@ export const AtualizarUsuarioModal = ({
         <Controller
           name="email"
           control={control}
-          rules={{ required: "Insira o e-mail do usuário" }}
+          rules={{
+            required: "Insira o e-mail do usuário",
+            validate: (value) => {
+              if (value && !isEmail(value)) return "Formato inválido do E-mail";
+              return true;
+            },
+          }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
               label="E-mail"

@@ -37,6 +37,7 @@ export const CriarCargoModal = ({
     "/grupo-permissoes",
     ["grupo-permissoes"],
     {
+      enable: open,
       params: queryBuilder({
         page_limit: 9999,
       }),

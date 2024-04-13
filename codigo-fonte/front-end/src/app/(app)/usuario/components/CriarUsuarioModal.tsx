@@ -68,6 +68,7 @@ export const CriarUsuarioModal = ({
   const { data: cargos } = useFetch<
     { id: number; uid: string; nome: string }[]
   >("/cargos", ["cargos_lista"], {
+    enable: open,
     params: queryBuilder({
       page_limit: 999999,
     }),
@@ -124,7 +125,6 @@ export const CriarUsuarioModal = ({
           <Controller
             name="cpf_cnh"
             control={control}
-            defaultValue=""
             rules={{
               required: "Insira o CPF do usuário",
               validate: (value) => {
@@ -140,7 +140,7 @@ export const CriarUsuarioModal = ({
                 onChange={(e) => {
                   onChange(invertCPF(e.target.value));
                 }}
-                value={regexCPF(value)}
+                value={value && regexCPF(value)}
                 placeholder="000.000.000-00"
               />
             )}
@@ -157,6 +157,7 @@ export const CriarUsuarioModal = ({
                 error={error?.message}
                 required
                 placeholder="Selecionar"
+                value={value}
               >
                 {cargos?.map((cargo) => (
                   <Select.Option key={cargo.uid} value={cargo.id}>

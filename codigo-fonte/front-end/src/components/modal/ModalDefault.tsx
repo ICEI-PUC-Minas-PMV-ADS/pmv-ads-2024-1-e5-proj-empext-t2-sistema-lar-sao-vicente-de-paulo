@@ -1,7 +1,7 @@
 import { MoreOutlined } from "@ant-design/icons";
 import { Alert, Button, Dropdown, Modal } from "antd";
 import dayjs from "dayjs";
-import { Dispatch, ReactNode, SetStateAction, useState } from "react";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 
 interface IModalDefault {
   children: ReactNode;
@@ -77,7 +77,7 @@ export const ModalDefault = ({
       )}
 
       <Modal
-        destroyOnClose={false}
+        destroyOnClose
         keyboard
         title={titleModal}
         afterOpenChange={onClose}

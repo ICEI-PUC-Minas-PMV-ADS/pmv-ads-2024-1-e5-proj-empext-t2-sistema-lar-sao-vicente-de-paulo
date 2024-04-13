@@ -11,6 +11,7 @@ interface IInputSelect {
   required: boolean;
   children: ReactNode;
   tooltip?: string;
+  defaultValue?: any;
 }
 
 export const InputSelect = ({
@@ -22,6 +23,7 @@ export const InputSelect = ({
   value,
   children,
   tooltip,
+  defaultValue,
 }: IInputSelect) => {
   return (
     <div className="flex flex-col gap-1 w-full">
@@ -50,6 +52,7 @@ export const InputSelect = ({
         size="large"
         aria-required
         placeholder={placeholder}
+        defaultValue={defaultValue}
       >
         {children}
       </Select>

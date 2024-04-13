@@ -6,7 +6,7 @@ export interface ICargo {
   nome: string;
   criado_em: Date;
   atualizado_em: Date;
-  cargo_permissao?: ICargoPermissao[];
+  cargo_permissao?: IOperationCargoPermissao[];
   _count?: { usuario: number };
 }
 
