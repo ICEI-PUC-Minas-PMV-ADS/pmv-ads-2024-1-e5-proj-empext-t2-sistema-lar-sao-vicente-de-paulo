@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Redis } from 'ioredis';
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
 import { AuthRedefinirSenhaDto } from '../dtos/redefinir-senha.dto';
-import { AwsSesService } from '@/core/providers/mail/aws-ses.service';
+import { AwsSesService } from '@/core/providers/mail/resend.service';
 import { AppError } from '@utils/app-error';
 
 import * as crypto from 'crypto';

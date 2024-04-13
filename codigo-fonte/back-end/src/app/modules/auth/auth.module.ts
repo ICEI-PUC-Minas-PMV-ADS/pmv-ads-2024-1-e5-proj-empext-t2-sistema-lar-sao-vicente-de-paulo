@@ -5,7 +5,7 @@ import { AuthRecoverService } from './services/recover.service';
 import { AuthRecoverController } from './controllers/recover.controller';
 import { AuthLogoutService } from './services/logout.service';
 import { AuthLogoutController } from './controllers/logout.controller';
-import { AwsSesService } from '@/core/providers/mail/aws-ses.service';
+import { AwsSesService } from '@/core/providers/mail/resend.service';
 import { AuthRedefinirSenhaService } from './services/redefinir-senha.service';
 import { AuthRedefinirSenhaController } from './controllers/redefinir-senha.controller';
 import { AuthUpdateSenhaService } from './services/update-senha.service';
