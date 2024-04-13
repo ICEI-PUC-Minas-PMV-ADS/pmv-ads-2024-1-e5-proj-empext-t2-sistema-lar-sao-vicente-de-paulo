@@ -10,6 +10,7 @@ interface IInputForm {
   onChange: ChangeEventHandler<HTMLInputElement> | undefined;
   required: boolean;
   tooltip?: string;
+  defaultValue?: any;
 }
 
 export const InputForm = ({
@@ -20,6 +21,7 @@ export const InputForm = ({
   onChange,
   value,
   tooltip,
+  defaultValue,
 }: IInputForm) => {
   return (
     <div className="flex flex-col gap-1 w-full">
@@ -47,6 +49,7 @@ export const InputForm = ({
         size="large"
         onChange={onChange}
         value={value}
+        defaultValue={defaultValue}
       />
       {error && (
         <div className="flex gap-2 items-center text-red-600 text-xs">

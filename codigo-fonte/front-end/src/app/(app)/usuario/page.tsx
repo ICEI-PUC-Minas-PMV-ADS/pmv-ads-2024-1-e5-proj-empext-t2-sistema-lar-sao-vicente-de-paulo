@@ -71,7 +71,7 @@ export default function Usuario() {
       render(_: any, record: IUsuario) {
         return (
           <div className="flex justify-end">
-            <AtualizarUsuarioModal item={record} refetchList={refetch} />
+            <AtualizarUsuarioModal uid={record.uid} refetchList={refetch} />
           </div>
         );
       },

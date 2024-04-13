@@ -26,6 +26,7 @@ export const UploudAvatar = ({
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj as FileType);
     }
+    console.log(file.status);
 
     setPreviewImage(file.url || (file.preview as string));
     setPreviewOpen(true);
@@ -69,8 +70,3 @@ export const UploudAvatar = ({
     </>
   );
 };
-function getBase64(
-  arg0: FileType
-): string | PromiseLike<string | undefined> | undefined {
-  throw new Error("Function not implemented.");
-}
