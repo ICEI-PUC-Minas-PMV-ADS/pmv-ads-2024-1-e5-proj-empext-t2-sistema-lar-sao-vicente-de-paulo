@@ -5,7 +5,6 @@ import { AuthRecoverService } from './services/recover.service';
 import { AuthRecoverController } from './controllers/recover.controller';
 import { AuthLogoutService } from './services/logout.service';
 import { AuthLogoutController } from './controllers/logout.controller';
-import { AwsSesService } from '@/core/providers/mail/resend.service';
 import { AuthRedefinirSenhaService } from './services/redefinir-senha.service';
 import { AuthRedefinirSenhaController } from './controllers/redefinir-senha.controller';
 import { AuthUpdateSenhaService } from './services/update-senha.service';
@@ -15,10 +14,10 @@ import { AuthDefinirSenhaService } from './services/definir-senha.service';
 import { DatabaseModule } from '@/core/providers/database/database.module';
 import { CryptoModule } from '@/core/providers/crypto/crypto.module';
 import { QueryBuilderModule } from '@/core/providers/query-builder/query-builder.module';
+import { MailModule } from '@/core/providers/mail/mail.module';
 
 @Module({
 	providers: [
-		AwsSesService,
 		AuthLoginService,
 		AuthRecoverService,
 		AuthLogoutService,
@@ -34,6 +33,6 @@ import { QueryBuilderModule } from '@/core/providers/query-builder/query-builder
 		AuthUpdateSenhaController,
 		AuthDefinirSenhaController,
 	],
-	imports: [DatabaseModule, CryptoModule, QueryBuilderModule],
+	imports: [DatabaseModule, CryptoModule, QueryBuilderModule, MailModule],
 })
 export class AuthModule {}
