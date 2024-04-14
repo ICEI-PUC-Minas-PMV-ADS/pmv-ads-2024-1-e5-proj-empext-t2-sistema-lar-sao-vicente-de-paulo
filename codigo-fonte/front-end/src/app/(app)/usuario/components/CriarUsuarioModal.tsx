@@ -1,6 +1,11 @@
 import { useMutation } from "@/utils/hooks/useMutation";
-import { UserAddOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import {
+  AlertOutlined,
+  CheckCircleOutlined,
+  ExclamationCircleOutlined,
+  UserAddOutlined,
+} from "@ant-design/icons";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { IOperationUsuario } from "../Interface/IUsuario";
 import { useFetch } from "@/utils/hooks/useFetch";
@@ -21,6 +26,7 @@ import { useCookies } from "react-cookie";
 import { isNome } from "@/utils/validator/isName";
 import { withoutNumber } from "@/utils/validator/withoutNumber";
 import { isEmail } from "@/utils/validator/isEmail";
+import { CheckPassword } from "@/components/CheckPassword";
 
 export const CriarUsuarioModal = ({
   refetchList,
@@ -29,9 +35,10 @@ export const CriarUsuarioModal = ({
 }) => {
   const [cookies] = useCookies([authToken.nome]);
   const [open, setOpen] = useState(false);
+  const [checkSenha, setCheckSenha] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const { handleSubmit, control, reset } = useForm<IOperationUsuario>();
+  const { handleSubmit, control, reset, watch } = useForm<IOperationUsuario>();
 
   const { mutate: createUsuario, isFetching } = useMutation<
     IOperationUsuario,
@@ -41,8 +48,6 @@ export const CriarUsuarioModal = ({
     messageSucess: "Usuário cadastrado com sucesso!",
     onSuccess: async (data) => {
       const formData = new FormData();
-
-      console.log(data.data);
 
       if (fileList.length > 0 && fileList[0] && fileList[0].originFileObj) {
         await formData.append("foto", fileList[0]?.originFileObj);
@@ -84,7 +89,7 @@ export const CriarUsuarioModal = ({
       okText="Cadastrar"
       onSubmit={handleSubmit(createUsuario)}
       isFetching={isFetching}
-      width="700px"
+      width="550px"
       setOpenModal={setOpen}
       openModal={open}
     >
@@ -170,44 +175,51 @@ export const CriarUsuarioModal = ({
             )}
           />
         </div>
-        <div className="flex justify-between gap-4">
-          <Controller
-            name="email"
-            control={control}
-            rules={{
-              required: "Insira o e-mail do usuário",
-              validate: (value) => {
-                if (!isEmail(value)) return "Formato inválido do E-mail";
-                return true;
-              },
-            }}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <InputForm
-                label="E-mail"
-                required
-                error={error?.message}
-                onChange={onChange}
-                value={value}
-                placeholder="maria@mail.com"
-              />
-            )}
-          />
-          <Controller
-            name="senha"
-            control={control}
-            rules={{ required: "Insira a senha do usuário" }}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <InputPassword
-                label="Senha"
-                required
-                placeholder="********"
-                error={error?.message}
-                onChange={onChange}
-                value={value}
-              />
-            )}
-          />
-        </div>
+
+        <Controller
+          name="email"
+          control={control}
+          rules={{
+            required: "Insira o e-mail do usuário",
+            validate: (value) => {
+              if (!isEmail(value)) return "Formato inválido do E-mail";
+              return true;
+            },
+          }}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <InputForm
+              label="E-mail"
+              required
+              error={error?.message}
+              onChange={onChange}
+              value={value}
+              placeholder="maria@mail.com"
+            />
+          )}
+        />
+        <Controller
+          name="senha"
+          control={control}
+          rules={{
+            required: "Insira a senha do usuário",
+            validate: (value) => {
+              if (!checkSenha)
+                return "Critérios mínimos da senha não foram atendidos";
+              return true;
+            },
+          }}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <InputPassword
+              label="Senha"
+              required
+              placeholder="********"
+              error={error?.message}
+              onChange={onChange}
+              value={value}
+            />
+          )}
+        />
+        <CheckPassword password={watch("senha")} check={setCheckSenha} />
       </form>
     </ModalDefault>
   );
