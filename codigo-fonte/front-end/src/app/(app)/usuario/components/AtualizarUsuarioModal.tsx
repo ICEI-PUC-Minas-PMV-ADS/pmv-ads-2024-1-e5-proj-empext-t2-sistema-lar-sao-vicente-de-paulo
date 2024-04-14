@@ -1,6 +1,13 @@
 import { useMutation } from "@/utils/hooks/useMutation";
-import { EditOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  EditOutlined,
+  ExclamationCircleOutlined,
+  LockOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { IOperationUsuario, IUsuario } from "../Interface/IUsuario";
 import { useFetch } from "@/utils/hooks/useFetch";
@@ -28,7 +35,7 @@ export const AtualizarUsuarioModal = ({
   const [open, setOpen] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const { handleSubmit, control, reset, setValue, getValues } =
+  const { handleSubmit, control, setValue } =
     useForm<Partial<IOperationUsuario>>();
 
   const { data: usuario } = useFetch<IUsuario>("/usuarios/" + uid, [uid], {
@@ -36,7 +43,7 @@ export const AtualizarUsuarioModal = ({
     onSuccess: (data) => {
       const usuario = data.data;
 
-      if (usuario) {
+      if (usuario.foto) {
         setFileList([
           {
             url: usuario.foto,
@@ -97,6 +104,7 @@ export const AtualizarUsuarioModal = ({
   >("/cargos", ["cargos_lista"], {
     enable: open,
     params: queryBuilder({
+      filter: [{ path: "situacao", value: "ATIVO" }],
       page_limit: 999999,
     }),
   });
@@ -122,15 +130,56 @@ export const AtualizarUsuarioModal = ({
       openModal={open}
       listOptions={[
         {
+          popconfirm: true,
+          popconfirmOkText: "Enviar",
+          popconfirmType: "primary",
+          popconfirmTitle: "Redefinição da senha",
+          popconfirmDescrition:
+            "O usuário irá receber um e-mail com instruções para atualizar sua senha.",
+          popconfirmIcon: (
+            <ExclamationCircleOutlined
+              style={{
+                color: "blue",
+              }}
+            />
+          ),
+          icon: <LockOutlined />,
           label: "Redefinir senha",
-          onClick: () => redefirSenha({ email: getValues("email") || "" }),
+
+          onClick: () => {
+            if (usuario?.email) {
+              redefirSenha({ email: usuario.email });
+            }
+          },
         },
         {
+          popconfirm: true,
+          popconfirmType: usuario?.situacao === "ATIVO" ? "danger" : "primary",
+          popconfirmTitle:
+            (usuario?.situacao === "ATIVO" ? "Inativar" : "Reativar") +
+            " Usuário",
+          popconfirmDescrition:
+            usuario?.situacao === "ATIVO"
+              ? "Ao inativar o usuário, ele não terá acesso ao sistema. Você tem certeza?"
+              : "Ao reativar o usuário, ele terá acesso ao sistema. Você tem certeza?",
+          popconfirmIcon: (
+            <QuestionCircleOutlined
+              style={{
+                color: usuario?.situacao === "ATIVO" ? "red" : "blue",
+              }}
+            />
+          ),
           label: usuario?.situacao === "ATIVO" ? "Inativar" : "Reativar",
           onClick: () =>
             updateUsuario({
               situacao: usuario?.situacao === "ATIVO" ? "INATIVO" : "ATIVO",
             }),
+          icon:
+            usuario?.situacao === "ATIVO" ? (
+              <CloseCircleOutlined />
+            ) : (
+              <CheckCircleOutlined />
+            ),
         },
       ]}
       situation={usuario?.situacao}

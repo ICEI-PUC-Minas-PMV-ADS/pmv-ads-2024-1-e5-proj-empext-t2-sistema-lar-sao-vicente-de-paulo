@@ -166,8 +166,14 @@ export const Header = () => {
                     {usuario.cargo.nome}
                   </span>
                 </div>
-                <div className="w-[38px] h-[38px] bg-azul2 rounded-full flex justify-center items-center  text-black/90">
-                  <UserOutlined className="text-[21px]" />
+
+                <div
+                  style={{
+                    backgroundImage: usuario.foto && `url(${usuario.foto})`,
+                  }}
+                  className="w-[38px] h-[38px] bg-azul2 rounded-full bg-cover flex justify-center items-center text-black/90"
+                >
+                  {!usuario.foto && <UserOutlined className="text-[21px]" />}
                 </div>
               </div>
             </Space>
