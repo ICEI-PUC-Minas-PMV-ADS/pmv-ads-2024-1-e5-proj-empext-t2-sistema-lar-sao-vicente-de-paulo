@@ -1,5 +1,11 @@
 import { useMutation } from "@/utils/hooks/useMutation";
-import { EditOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  EditOutlined,
+  LockOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { IOperationUsuario, IUsuario } from "../Interface/IUsuario";
@@ -123,15 +129,38 @@ export const AtualizarUsuarioModal = ({
       openModal={open}
       listOptions={[
         {
+          icon: <LockOutlined />,
           label: "Redefinir senha",
           onClick: () => redefirSenha({ email: getValues("email") || "" }),
         },
         {
+          popconfirm: true,
+          popconfirmType: usuario?.situacao === "ATIVO" ? "danger" : "primary",
+          popconfirmTitle:
+            (usuario?.situacao === "ATIVO" ? "Inativar" : "Reativar") +
+            " Usuário",
+          popconfirmDescrition:
+            usuario?.situacao === "ATIVO"
+              ? "Ao inativar o usuário, ele não terá acesso ao sistema. Você tem certeza?"
+              : "Ao reativar o usuário, ele terá acesso ao sistema. Você tem certeza?",
+          popconfirmIcon: (
+            <QuestionCircleOutlined
+              style={{
+                color: usuario?.situacao === "ATIVO" ? "red" : "blue",
+              }}
+            />
+          ),
           label: usuario?.situacao === "ATIVO" ? "Inativar" : "Reativar",
           onClick: () =>
             updateUsuario({
               situacao: usuario?.situacao === "ATIVO" ? "INATIVO" : "ATIVO",
             }),
+          icon:
+            usuario?.situacao === "ATIVO" ? (
+              <CloseCircleOutlined />
+            ) : (
+              <CheckCircleOutlined />
+            ),
         },
       ]}
       situation={usuario?.situacao}

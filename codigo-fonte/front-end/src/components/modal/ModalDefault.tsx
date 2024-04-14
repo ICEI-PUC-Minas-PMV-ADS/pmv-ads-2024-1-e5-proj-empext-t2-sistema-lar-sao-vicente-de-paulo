@@ -1,5 +1,6 @@
-import { MoreOutlined } from "@ant-design/icons";
-import { Alert, Button, Dropdown, Modal } from "antd";
+import { MoreOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { Alert, Button, Dropdown, Modal, Popconfirm } from "antd";
+import { LegacyButtonType } from "antd/es/button/button";
 import dayjs from "dayjs";
 import { Dispatch, ReactNode, SetStateAction } from "react";
 
@@ -22,6 +23,11 @@ interface IModalDefault {
     icon?: ReactNode;
     onClick?: () => void;
     customOption?: ReactNode;
+    popconfirm?: boolean;
+    popconfirmTitle?: string;
+    popconfirmDescrition?: string;
+    popconfirmIcon?: ReactNode;
+    popconfirmType?: LegacyButtonType | undefined;
   }[];
   onClose?: () => void;
   situation?: "ATIVO" | "INATIVO";
@@ -115,12 +121,58 @@ export const ModalDefault = ({
               <div className="flex gap-2">
                 {listOptions && (
                   <Dropdown
+                    trigger={["click"]}
                     className="flex px-[10px] justify-center items-center border border-black/20 rounded-md cursor-pointer hover:border-primaria text-black hover:text-primaria"
                     dropdownRender={(m) => (
                       <div className="flex flex-col w-full gap-[8px] bg-white shadow-lg rounded-lg p-[10px]">
                         {listOptions.map((option) =>
                           option.customOption ? (
                             option.customOption
+                          ) : option.popconfirm ? (
+                            <>
+                              <Popconfirm
+                                overlayStyle={{ maxWidth: 350 }}
+                                placement="rightBottom"
+                                title={
+                                  option.popconfirmTitle
+                                    ? option.popconfirmTitle
+                                    : "Deletar"
+                                }
+                                description={
+                                  option.popconfirmDescrition
+                                    ? option.popconfirmDescrition
+                                    : "Você tem certeza que deseja deletar?"
+                                }
+                                onConfirm={option.onClick}
+                                okType={
+                                  option.popconfirmType
+                                    ? option.popconfirmType
+                                    : "danger"
+                                }
+                                okText="Confirmar"
+                                cancelText="Cancelar"
+                                okButtonProps={{
+                                  loading: isFetching,
+                                }}
+                                icon={
+                                  option.popconfirmIcon ? (
+                                    option.popconfirmIcon
+                                  ) : (
+                                    <QuestionCircleOutlined
+                                      style={{ color: "red" }}
+                                    />
+                                  )
+                                }
+                              >
+                                <button
+                                  key={option.label}
+                                  className="appearance-none items-center flex gap-2 text-left py-[10px] px-[15px] rounded-lg hover:bg-primaria transition-all text-black font-semibold hover:text-white hover:cursor-pointer"
+                                >
+                                  {option.icon}
+                                  {option.label}
+                                </button>
+                              </Popconfirm>
+                            </>
                           ) : (
                             <button
                               key={option.label}
