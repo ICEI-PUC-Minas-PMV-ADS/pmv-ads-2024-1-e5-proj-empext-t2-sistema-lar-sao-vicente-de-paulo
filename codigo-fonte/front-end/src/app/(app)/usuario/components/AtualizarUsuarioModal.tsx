@@ -3,6 +3,7 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   EditOutlined,
+  ExclamationCircleOutlined,
   LockOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
@@ -129,9 +130,27 @@ export const AtualizarUsuarioModal = ({
       openModal={open}
       listOptions={[
         {
+          popconfirm: true,
+          popconfirmOkText: "Enviar",
+          popconfirmType: "primary",
+          popconfirmTitle: "Redefinição da senha",
+          popconfirmDescrition:
+            "O usuário irá receber um e-mail com instruções para atualizar sua senha.",
+          popconfirmIcon: (
+            <ExclamationCircleOutlined
+              style={{
+                color: "blue",
+              }}
+            />
+          ),
           icon: <LockOutlined />,
           label: "Redefinir senha",
-          onClick: () => redefirSenha({ email: getValues("email") || "" }),
+
+          onClick: () => {
+            if (usuario?.email) {
+              redefirSenha({ email: usuario.email });
+            }
+          },
         },
         {
           popconfirm: true,

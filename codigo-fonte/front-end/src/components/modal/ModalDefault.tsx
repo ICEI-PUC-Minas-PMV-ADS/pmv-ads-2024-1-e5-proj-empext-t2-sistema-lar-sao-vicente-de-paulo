@@ -24,6 +24,8 @@ interface IModalDefault {
     onClick?: () => void;
     customOption?: ReactNode;
     popconfirm?: boolean;
+    popconfirmOkText?: string;
+    popconfirmOkCancel?: string;
     popconfirmTitle?: string;
     popconfirmDescrition?: string;
     popconfirmIcon?: ReactNode;
@@ -149,8 +151,16 @@ export const ModalDefault = ({
                                     ? option.popconfirmType
                                     : "danger"
                                 }
-                                okText="Confirmar"
-                                cancelText="Cancelar"
+                                okText={
+                                  option.popconfirmOkText
+                                    ? option.popconfirmOkText
+                                    : "Confirmar"
+                                }
+                                cancelText={
+                                  option.popconfirmOkCancel
+                                    ? option.popconfirmOkCancel
+                                    : "Cancelar"
+                                }
                                 okButtonProps={{
                                   loading: isFetching,
                                 }}
