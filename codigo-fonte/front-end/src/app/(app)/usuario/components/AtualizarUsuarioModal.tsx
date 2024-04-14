@@ -7,7 +7,7 @@ import {
   LockOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { IOperationUsuario, IUsuario } from "../Interface/IUsuario";
 import { useFetch } from "@/utils/hooks/useFetch";
@@ -35,7 +35,7 @@ export const AtualizarUsuarioModal = ({
   const [open, setOpen] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const { handleSubmit, control, reset, setValue, getValues } =
+  const { handleSubmit, control, setValue } =
     useForm<Partial<IOperationUsuario>>();
 
   const { data: usuario } = useFetch<IUsuario>("/usuarios/" + uid, [uid], {
@@ -43,7 +43,7 @@ export const AtualizarUsuarioModal = ({
     onSuccess: (data) => {
       const usuario = data.data;
 
-      if (usuario) {
+      if (usuario.foto) {
         setFileList([
           {
             url: usuario.foto,

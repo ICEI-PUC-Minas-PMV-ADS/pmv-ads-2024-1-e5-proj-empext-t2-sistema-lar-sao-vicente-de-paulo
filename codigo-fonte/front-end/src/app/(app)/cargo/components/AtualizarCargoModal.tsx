@@ -1,5 +1,12 @@
 import { useMutation } from "@/utils/hooks/useMutation";
-import { EditOutlined, TeamOutlined, WarningOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  EditOutlined,
+  QuestionCircleOutlined,
+  TeamOutlined,
+  WarningOutlined,
+} from "@ant-design/icons";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { InputForm } from "@/components/input";
@@ -78,12 +85,34 @@ export const AtualizarCargoModal = ({
       openModal={open}
       listOptions={[
         {
+          popconfirm: true,
+          popconfirmType: cargo?.situacao === "ATIVO" ? "danger" : "primary",
+          popconfirmTitle:
+            (cargo?.situacao === "ATIVO" ? "Inativar" : "Reativar") +
+            " Usuário",
+          popconfirmDescrition:
+            cargo?.situacao === "ATIVO"
+              ? "Ao inativar o cargo, os usuários que possuem esse cargo perderão o vínculo. Você tem certeza?"
+              : "Ao reativar o cargo, você poderá usa-lo no cadastro dos usuários.",
+          popconfirmIcon: (
+            <QuestionCircleOutlined
+              style={{
+                color: cargo?.situacao === "ATIVO" ? "red" : "blue",
+              }}
+            />
+          ),
           label: cargo?.situacao === "ATIVO" ? "Inativar" : "Reativar",
           onClick: () => {
             updateCargo({
               situacao: cargo?.situacao === "ATIVO" ? "INATIVO" : "ATIVO",
             });
           },
+          icon:
+            cargo?.situacao === "ATIVO" ? (
+              <CloseCircleOutlined />
+            ) : (
+              <CheckCircleOutlined />
+            ),
         },
       ]}
       customAlert={
