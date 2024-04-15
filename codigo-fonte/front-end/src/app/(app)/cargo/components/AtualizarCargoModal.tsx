@@ -1,5 +1,12 @@
 import { useMutation } from "@/utils/hooks/useMutation";
-import { EditOutlined, TeamOutlined, WarningOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  EditOutlined,
+  QuestionCircleOutlined,
+  TeamOutlined,
+  WarningOutlined,
+} from "@ant-design/icons";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { InputForm } from "@/components/input";
@@ -13,38 +20,32 @@ import { IPermissao } from "../Interface/IPermissao";
 import { IOperationCargoPermissao } from "../Interface/ICargoPermissao";
 
 export const AtualizarCargoModal = ({
-  item,
+  uid,
   refetchList,
 }: {
-  item: ICargo;
+  uid: string;
   refetchList: () => void;
 }) => {
   const [open, setOpen] = useState(false);
+  const { handleSubmit, control, setValue } = useForm<IOperationCargo>();
 
-  const { handleSubmit, control, reset, formState, setValue } =
-    useForm<IOperationCargo>({
-      defaultValues: {
-        nome: item.nome,
-        permissoes: item.cargo_permissao,
-      },
-    });
+  const { data: cargo } = useFetch<ICargo>("/cargos/" + uid, [uid], {
+    enable: open,
+    onSuccess: (data) => {
+      const cargo = data.data;
 
-  const { mutate: updateCargo, isFetching } = useMutation<
-    Partial<IOperationCargo>
-  >("/cargos/" + item.uid, {
-    method: "patch",
-    messageSucess: "Cargo atualizado com sucesso!",
-    onSuccess: () => {
-      refetchList();
-      setOpen(false);
+      if (cargo && cargo.cargo_permissao) {
+        setValue("nome", cargo.nome);
+        setValue("permissoes", cargo.cargo_permissao);
+      }
     },
   });
 
-  const { mutate: deleteCargo } = useMutation<void>("/cargos/" + item.uid, {
-    method: "delete",
-    body: undefined,
-    params: undefined,
-    messageSucess: "Cargo deletado com sucesso!",
+  const { mutate: updateCargo, isFetching } = useMutation<
+    Partial<IOperationCargo>
+  >("/cargos/" + uid, {
+    method: "patch",
+    messageSucess: "Cargo atualizado com sucesso!",
     onSuccess: () => {
       refetchList();
       setOpen(false);
@@ -54,7 +55,9 @@ export const AtualizarCargoModal = ({
   const { data: grupoPermissoes } = useFetch<IGrupoPermissao[]>(
     "/grupo-permissoes",
     ["grupo-permissoes"],
+
     {
+      enable: open,
       params: queryBuilder({
         page_limit: 9999,
       }),
@@ -82,17 +85,41 @@ export const AtualizarCargoModal = ({
       openModal={open}
       listOptions={[
         {
-          label: "Deletar",
+          popconfirm: true,
+          popconfirmType: cargo?.situacao === "ATIVO" ? "danger" : "primary",
+          popconfirmTitle:
+            (cargo?.situacao === "ATIVO" ? "Inativar" : "Reativar") +
+            " Usuário",
+          popconfirmDescrition:
+            cargo?.situacao === "ATIVO"
+              ? "Ao inativar o cargo, os usuários que possuem esse cargo perderão o vínculo. Você tem certeza?"
+              : "Ao reativar o cargo, você poderá usa-lo no cadastro dos usuários.",
+          popconfirmIcon: (
+            <QuestionCircleOutlined
+              style={{
+                color: cargo?.situacao === "ATIVO" ? "red" : "blue",
+              }}
+            />
+          ),
+          label: cargo?.situacao === "ATIVO" ? "Inativar" : "Reativar",
           onClick: () => {
-            deleteCargo();
+            updateCargo({
+              situacao: cargo?.situacao === "ATIVO" ? "INATIVO" : "ATIVO",
+            });
           },
+          icon:
+            cargo?.situacao === "ATIVO" ? (
+              <CloseCircleOutlined />
+            ) : (
+              <CheckCircleOutlined />
+            ),
         },
       ]}
       customAlert={
         <Alert
           message={
-            item._count?.usuario +
-            (item._count?.usuario === 1
+            cargo?._count?.usuario +
+            (cargo?._count?.usuario === 1
               ? " usuário vinculado"
               : " usuários vinculados")
           }
@@ -101,8 +128,9 @@ export const AtualizarCargoModal = ({
           showIcon
         />
       }
-      created_item={item.criado_em}
-      updated_item={item.atualizado_em}
+      situation={cargo?.situacao}
+      created_item={cargo?.criado_em}
+      updated_item={cargo?.atualizado_em}
     >
       <form className="w-full flex flex-col gap-[15px]">
         <Controller

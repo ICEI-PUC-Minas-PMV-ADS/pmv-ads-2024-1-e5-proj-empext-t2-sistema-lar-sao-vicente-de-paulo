@@ -5,9 +5,6 @@ import { PrismaUsuarioRepository } from '@/app/modules/usuario/repositories/pris
 import { BcryptService } from '@/core/providers/crypto/bcrypt/bcrypt.service';
 import { Usuario } from '../entities/usuario.entity';
 
-interface RegisterUseCaseResponse {
-	usuario: Usuario;
-}
 
 @Injectable()
 export class CreateUsuarioService {
@@ -16,23 +13,26 @@ export class CreateUsuarioService {
 		private bcrypt: BcryptService,
 	) {}
 
-	async execute(data: CreateUsuarioDto): Promise<RegisterUseCaseResponse> {
+	async execute(data: CreateUsuarioDto): Promise<Usuario> {
 		const hash = await this.bcrypt.generateHash(data.senha);
 
-		const usuarioExist = await this.usuarioRepository.alreadyExists(
-			data.email,
-			data.cpf_cnh,
-		);
+		const usuarioExistEmail =
+			await this.usuarioRepository.alreadyExistsUserEmail(data.email);
 
-		if (usuarioExist) throw new AppError('Usuário já cadastrado');
+		if (usuarioExistEmail)
+			throw new AppError('Usuário já cadastrado com mesmo E-mail');
+
+		const usuarioExistCPF =
+			await this.usuarioRepository.alreadyExistsUserCPF(data.cpf_cnh);
+
+		if (usuarioExistCPF)
+			throw new AppError('Usuário já cadastrado com mesmo CPF');
 
 		const usuario = await this.usuarioRepository.create({
 			...data,
 			senha: hash,
 		});
 
-		return {
-			usuario,
-		};
+		return usuario;
 	}
 }

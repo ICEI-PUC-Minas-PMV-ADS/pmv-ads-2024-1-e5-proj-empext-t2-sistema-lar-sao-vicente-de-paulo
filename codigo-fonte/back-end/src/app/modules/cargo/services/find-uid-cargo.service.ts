@@ -11,6 +11,12 @@ export class FindUidCargoService {
 			where: {
 				uid,
 			},
+			include: {
+				cargo_permissao: {
+					select: { uid: true, ativo: true, id_permissao: true },
+				},
+				_count: { select: { usuario: true } },
+			},
 		});
 
 		return modeloPermissao;

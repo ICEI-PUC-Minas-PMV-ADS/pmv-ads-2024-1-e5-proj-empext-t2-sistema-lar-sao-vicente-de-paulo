@@ -1,6 +1,11 @@
-import { useMutation } from "@/utils/hooks/useMutation";
-import { UserAddOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { IErrorState, useMutation } from "@/utils/hooks/useMutation";
+import {
+  AlertOutlined,
+  CheckCircleOutlined,
+  ExclamationCircleOutlined,
+  UserAddOutlined,
+} from "@ant-design/icons";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { IOperationUsuario } from "../Interface/IUsuario";
 import { useFetch } from "@/utils/hooks/useFetch";
@@ -14,33 +19,86 @@ import {
 } from "@/components/input";
 import { isCPF } from "@/utils/validator/isCPF";
 import { ModalDefault } from "@/components/modal/ModalDefault";
+import { Select, UploadFile, notification } from "antd";
+import { api } from "@/utils/service/api";
+import { authToken } from "@/config/authToken";
+import { useCookies } from "react-cookie";
+import { isNome } from "@/utils/validator/isName";
+import { withoutNumber } from "@/utils/validator/withoutNumber";
+import { isEmail } from "@/utils/validator/isEmail";
+import { CheckPassword } from "@/components/CheckPassword";
+import { AxiosError } from "axios";
 
 export const CriarUsuarioModal = ({
   refetchList,
 }: {
   refetchList: () => void;
 }) => {
+  const [cookies] = useCookies([authToken.nome]);
   const [open, setOpen] = useState(false);
+  const [checkSenha, setCheckSenha] = useState(false);
+  const [isFetchingFoto, setIsFetchingFoto] = useState(false);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const { handleSubmit, control, reset } = useForm<IOperationUsuario>();
+  const { handleSubmit, control, reset, watch } = useForm<IOperationUsuario>();
 
-  const { mutate: createUsuario, isFetching } = useMutation<IOperationUsuario>(
-    "/usuarios",
-    {
-      method: "post",
-      messageSucess: "Usuário cadastrado com sucesso!",
-      onSuccess: () => {
+  const { mutate: createUsuario, isFetching: isFetchingData } = useMutation<
+    IOperationUsuario,
+    { uid: string }
+  >("/usuarios", {
+    method: "post",
+    messageSucess: null,
+    onSuccess: async (data) => {
+      const formData = new FormData();
+
+      if (fileList.length > 0 && fileList[0] && fileList[0].originFileObj) {
+        setIsFetchingFoto(true);
+        await formData.append("foto", fileList[0]?.originFileObj);
+        await api
+          .post("/usuarios/" + data.data.uid + "/upload-foto", formData, {
+            headers: {
+              Authorization: "Bearer " + cookies[authToken.nome],
+              "content-type": "multipart/form-data",
+            },
+          })
+          .then(() => {
+            notification.open({
+              message: "Operação realizada",
+              description: "Usuário cadastrado com sucesso!",
+              type: "success",
+            });
+            setIsFetchingFoto(false);
+            reset();
+            refetchList();
+            setOpen(false);
+          })
+          .catch((err: AxiosError<{ error: IErrorState }>) => {
+            notification.open({
+              message: "Ocorreu um erro",
+              description: err.response?.data?.error.message,
+              type: "error",
+            });
+            setIsFetchingFoto(false);
+          });
+      } else {
+        notification.open({
+          message: "Operação realizada",
+          description: "Usuário cadastrado com sucesso!",
+          type: "success",
+        });
         reset();
         refetchList();
         setOpen(false);
-      },
-    }
-  );
+      }
+    },
+  });
 
   const { data: cargos } = useFetch<
     { id: number; uid: string; nome: string }[]
   >("/cargos", ["cargos_lista"], {
+    enable: open,
     params: queryBuilder({
+      filter: [{ path: "situacao", value: "ATIVO" }],
       page_limit: 999999,
     }),
   });
@@ -52,8 +110,8 @@ export const CriarUsuarioModal = ({
       titleModal={"Adicionando usuário"}
       okText="Cadastrar"
       onSubmit={handleSubmit(createUsuario)}
-      isFetching={isFetching}
-      width="700px"
+      isFetching={isFetchingData || isFetchingFoto}
+      width="550px"
       setOpenModal={setOpen}
       openModal={open}
     >
@@ -63,14 +121,23 @@ export const CriarUsuarioModal = ({
             <Controller
               name="foto"
               control={control}
-              render={() => <UploudAvatar />}
+              render={() => (
+                <UploudAvatar setFileList={setFileList} fileList={fileList} />
+              )}
             />
           </div>
           <Controller
             name="nome"
             control={control}
             defaultValue=""
-            rules={{ required: "Insira o nome do usuário" }}
+            rules={{
+              required: "Insira o nome do usuário",
+              validate: (value) => {
+                if (isNome(value)) return "Preencher o nome completo";
+                if (withoutNumber(value)) return "Nome não pode conter números";
+                return true;
+              },
+            }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
                 label="Nome"
@@ -87,7 +154,6 @@ export const CriarUsuarioModal = ({
           <Controller
             name="cpf_cnh"
             control={control}
-            defaultValue=""
             rules={{
               required: "Insira o CPF do usuário",
               validate: (value) => {
@@ -103,7 +169,7 @@ export const CriarUsuarioModal = ({
                 onChange={(e) => {
                   onChange(invertCPF(e.target.value));
                 }}
-                value={regexCPF(value)}
+                value={value && regexCPF(value)}
                 placeholder="000.000.000-00"
               />
             )}
@@ -120,48 +186,62 @@ export const CriarUsuarioModal = ({
                 error={error?.message}
                 required
                 placeholder="Selecionar"
+                value={value}
               >
                 {cargos?.map((cargo) => (
-                  <option key={cargo.uid} value={cargo.id}>
+                  <Select.Option key={cargo.uid} value={cargo.id}>
                     {cargo.nome}
-                  </option>
+                  </Select.Option>
                 ))}
               </InputSelect>
             )}
           />
         </div>
-        <div className="flex justify-between gap-4">
-          <Controller
-            name="email"
-            control={control}
-            rules={{ required: "Insira o e-mail do usuário" }}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <InputForm
-                label="E-mail"
-                required
-                error={error?.message}
-                onChange={onChange}
-                value={value}
-                placeholder="maria@mail.com"
-              />
-            )}
-          />
-          <Controller
-            name="senha"
-            control={control}
-            rules={{ required: "Insira a senha do usuário" }}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <InputPassword
-                label="Senha"
-                required
-                placeholder="********"
-                error={error?.message}
-                onChange={onChange}
-                value={value}
-              />
-            )}
-          />
-        </div>
+
+        <Controller
+          name="email"
+          control={control}
+          rules={{
+            required: "Insira o e-mail do usuário",
+            validate: (value) => {
+              if (!isEmail(value)) return "Formato inválido do E-mail";
+              return true;
+            },
+          }}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <InputForm
+              label="E-mail"
+              required
+              error={error?.message}
+              onChange={onChange}
+              value={value}
+              placeholder="maria@mail.com"
+            />
+          )}
+        />
+        <Controller
+          name="senha"
+          control={control}
+          rules={{
+            required: "Insira a senha do usuário",
+            validate: (value) => {
+              if (!checkSenha)
+                return "Critérios mínimos da senha não foram atendidos";
+              return true;
+            },
+          }}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <InputPassword
+              label="Senha"
+              required
+              placeholder="********"
+              error={error?.message}
+              onChange={onChange}
+              value={value}
+            />
+          )}
+        />
+        <CheckPassword password={watch("senha")} check={setCheckSenha} />
       </form>
     </ModalDefault>
   );

@@ -55,9 +55,9 @@ export class InMemoryUsuarioRepository implements usuarioRepository {
 		};
 		return this.items[usuarioIndex];
 	}
-	async save(data: Usuario) {
+	async delete(uid: string) {
 		const usuarioIndex = this.items.findIndex(
-			(usuario) => usuario.uid === data.uid,
+			(usuario) => usuario.uid === uid,
 		);
 		if (usuarioIndex === -1) {
 			throw new AppError('Nenhum usuário encontrado');
@@ -73,11 +73,12 @@ export class InMemoryUsuarioRepository implements usuarioRepository {
 	async findById(id: bigint) {
 		return this.items.find((usuario) => usuario.id === id) || null;
 	}
-	async alreadyExists(email: string, cpf_cnh: string) {
+	async alreadyExistsUserEmail(email: string) {
+		return this.items.find((usuario) => usuario.email === email) || null;
+	}
+	async alreadyExistsUserCPF(cpf_cnh: string) {
 		return (
-			(this.items.find((usuario) => usuario.email === email) &&
-				this.items.find((usuario) => usuario.cpf_cnh === cpf_cnh)) ||
-			null
+			this.items.find((usuario) => usuario.cpf_cnh === cpf_cnh) || null
 		);
 	}
 }

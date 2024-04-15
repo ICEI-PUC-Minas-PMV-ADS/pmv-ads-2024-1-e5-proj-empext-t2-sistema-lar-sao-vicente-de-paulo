@@ -7,23 +7,29 @@ export class UpdateCargoService {
 	constructor(private prisma: PrismaService) {}
 
 	async execute(uid: string, data: UpdateCargoDto): Promise<void> {
-		await this.prisma.cargo.update({
+		const cargo = await this.prisma.cargo.update({
 			where: {
 				uid,
 			},
-			data: { nome: data.nome },
+			data: data,
 		});
 
-		console.log(data.permissoes);
+		if (data.permissoes)
+			await this.prisma.$transaction(
+				data.permissoes.map((permissao) =>
+					this.prisma.cargoPermissao.update({
+						where: { uid: permissao.uid },
+						data: { ativo: permissao.ativo },
+					}),
+				),
+			);
 
-		await this.prisma.$transaction(
-			data.permissoes.map((permissao) =>
-				this.prisma.cargoPermissao.update({
-					where: { uid: permissao.uid },
-					data: { ativo: permissao.ativo },
-				}),
-			),
-		);
+		if (data.situacao === 'INATIVO') {
+			await this.prisma.usuario.updateMany({
+				where: { id_cargo: cargo.id },
+				data: { id_cargo: null },
+			});
+		}
 
 		return;
 	}

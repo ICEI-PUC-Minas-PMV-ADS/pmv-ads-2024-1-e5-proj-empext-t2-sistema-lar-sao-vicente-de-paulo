@@ -29,7 +29,7 @@ export class Usuario implements UsuarioModel {
 	senha: string;
 
 	@ApiProperty({
-		enum: ['ATIVO', 'INATIVO', 'PENDENTE'],
+		enum: ['ATIVO', 'INATIVO'],
 		description: 'A situação do usuário',
 	})
 	situacao: $Enums.Situacao;

@@ -5,6 +5,7 @@ import { CreateUsuarioDto } from '../dtos/create-usuario.dto';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { Roles } from '@/common/decorators/roles.decorator';
 import { RoleUsuario } from '@/common/enums/roles';
+import { AppResponse } from '@utils/app-response';
 
 @ApiTags('usuarios')
 @Controller('usuarios')
@@ -20,9 +21,11 @@ export class CreateUsuarioController {
 	})
 	@Roles(RoleUsuario.CREATE)
 	@ApiResponseError()
-	async handle(@Body() data: CreateUsuarioDto): Promise<void> {
-		await this.createUsuario.execute(data);
+	async handle(
+		@Body() data: CreateUsuarioDto,
+	): Promise<AppResponse<{ uid: string }>> {
+		const usuario = await this.createUsuario.execute(data);
 
-		return;
+		return new AppResponse({ uid: usuario.uid });
 	}
 }
