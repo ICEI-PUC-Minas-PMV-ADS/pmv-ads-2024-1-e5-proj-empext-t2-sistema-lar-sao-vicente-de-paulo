@@ -8,6 +8,7 @@ import * as crypto from 'crypto';
 import { PrismaService } from '@/core/providers/database/prisma.service';
 import { BcryptService } from '@/core/providers/crypto/bcrypt/bcrypt.service';
 import { ResendService } from '@/core/providers/mail/resend/resend.service';
+import { emailRedefinirSenha } from '@/common/templates/email/emailRedefinirSenha';
 
 interface IContentCodigo {
 	id_usuario: bigint;
@@ -45,9 +46,9 @@ export class AuthRedefinirSenhaService {
 				60 * 30, // 30 minutos
 			);
 
-			await this.mail.sendText({
+			await this.mail.sendHtml({
 				subject: 'Redefinição de senha',
-				text: 'Segue o código de recuperação da senha: ' + newCodigo,
+				html: emailRedefinirSenha(newCodigo),
 				to: usuario.email,
 			});
 
