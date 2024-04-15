@@ -151,7 +151,8 @@ export const AtualizarCargoModal = ({
         />
         <div className="flex flex-col gap-1">
           <label>
-            Permissões<span className="text-red-600 pl-1">*</span>
+            Selecione as permissões que o cargo terá dentro do sistema:
+            <span className="text-red-600 pl-1">*</span>
           </label>
 
           <Controller
