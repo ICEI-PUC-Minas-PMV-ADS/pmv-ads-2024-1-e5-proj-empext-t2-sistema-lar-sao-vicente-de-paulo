@@ -1,4 +1,4 @@
-import { useMutation } from "@/utils/hooks/useMutation";
+import { IErrorState, useMutation } from "@/utils/hooks/useMutation";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -16,13 +16,14 @@ import { invertCPF, regexCPF } from "@/utils/regex/regexCPF";
 import { InputForm, InputSelect, UploudAvatar } from "@/components/input";
 import { isCPF } from "@/utils/validator/isCPF";
 import { ModalDefault } from "@/components/modal/ModalDefault";
-import { Select, Tooltip, UploadFile } from "antd";
+import { Select, Tooltip, UploadFile, notification } from "antd";
 import { api } from "@/utils/service/api";
 import { useCookies } from "react-cookie";
 import { authToken } from "@/config/authToken";
 import { isNome } from "@/utils/validator/isName";
 import { withoutNumber } from "@/utils/validator/withoutNumber";
 import { isEmail } from "@/utils/validator/isEmail";
+import { AxiosError } from "axios";
 
 export const AtualizarUsuarioModal = ({
   uid,
@@ -33,6 +34,7 @@ export const AtualizarUsuarioModal = ({
 }) => {
   const [cookies] = useCookies([authToken.nome]);
   const [open, setOpen] = useState(false);
+  const [isFetchingFoto, setIsFetchingFoto] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const { handleSubmit, control, setValue } =
@@ -64,11 +66,11 @@ export const AtualizarUsuarioModal = ({
     Partial<IOperationUsuario>
   >("/usuarios/" + uid, {
     method: "patch",
-    messageSucess: "Usuário atualizado com sucesso!",
     onSuccess: async () => {
       const formData = new FormData();
 
       if (fileList.length > 0 && fileList[0] && fileList[0].originFileObj) {
+        setIsFetchingFoto(true);
         await formData.append("foto", fileList[0]?.originFileObj);
         await api
           .post("/usuarios/" + uid + "/upload-foto", formData, {
@@ -78,10 +80,29 @@ export const AtualizarUsuarioModal = ({
             },
           })
           .then(() => {
+            notification.open({
+              message: "Operação realizada",
+              description: "Usuário atualizado com sucesso!",
+              type: "success",
+            });
+            setIsFetchingFoto(false);
             refetchList();
             setOpen(false);
+          })
+          .catch((err: AxiosError<{ error: IErrorState }>) => {
+            notification.open({
+              message: "Ocorreu um erro",
+              description: err.response?.data?.error.message,
+              type: "error",
+            });
+            setIsFetchingFoto(false);
           });
       } else {
+        notification.open({
+          message: "Operação realizada",
+          description: "Usuário atualizado com sucesso!",
+          type: "success",
+        });
         refetchList();
         setOpen(false);
       }

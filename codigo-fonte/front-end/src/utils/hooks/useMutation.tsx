@@ -7,7 +7,7 @@ import { useAppDispatch } from "./useRedux";
 import { setLoading } from "@/redux/slices/app.slice";
 import { notification } from "antd";
 
-interface IErrorState {
+export interface IErrorState {
   detail: string[];
   message: string;
   path: string;

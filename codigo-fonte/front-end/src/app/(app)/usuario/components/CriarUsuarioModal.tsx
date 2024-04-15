@@ -1,4 +1,4 @@
-import { useMutation } from "@/utils/hooks/useMutation";
+import { IErrorState, useMutation } from "@/utils/hooks/useMutation";
 import {
   AlertOutlined,
   CheckCircleOutlined,
@@ -19,7 +19,7 @@ import {
 } from "@/components/input";
 import { isCPF } from "@/utils/validator/isCPF";
 import { ModalDefault } from "@/components/modal/ModalDefault";
-import { Select, UploadFile } from "antd";
+import { Select, UploadFile, notification } from "antd";
 import { api } from "@/utils/service/api";
 import { authToken } from "@/config/authToken";
 import { useCookies } from "react-cookie";
@@ -27,6 +27,7 @@ import { isNome } from "@/utils/validator/isName";
 import { withoutNumber } from "@/utils/validator/withoutNumber";
 import { isEmail } from "@/utils/validator/isEmail";
 import { CheckPassword } from "@/components/CheckPassword";
+import { AxiosError } from "axios";
 
 export const CriarUsuarioModal = ({
   refetchList,
@@ -36,20 +37,22 @@ export const CriarUsuarioModal = ({
   const [cookies] = useCookies([authToken.nome]);
   const [open, setOpen] = useState(false);
   const [checkSenha, setCheckSenha] = useState(false);
+  const [isFetchingFoto, setIsFetchingFoto] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const { handleSubmit, control, reset, watch } = useForm<IOperationUsuario>();
 
-  const { mutate: createUsuario, isFetching } = useMutation<
+  const { mutate: createUsuario, isFetching: isFetchingData } = useMutation<
     IOperationUsuario,
     { uid: string }
   >("/usuarios", {
     method: "post",
-    messageSucess: "Usuário cadastrado com sucesso!",
+    messageSucess: null,
     onSuccess: async (data) => {
       const formData = new FormData();
 
       if (fileList.length > 0 && fileList[0] && fileList[0].originFileObj) {
+        setIsFetchingFoto(true);
         await formData.append("foto", fileList[0]?.originFileObj);
         await api
           .post("/usuarios/" + data.data.uid + "/upload-foto", formData, {
@@ -59,11 +62,30 @@ export const CriarUsuarioModal = ({
             },
           })
           .then(() => {
+            notification.open({
+              message: "Operação realizada",
+              description: "Usuário cadastrado com sucesso!",
+              type: "success",
+            });
+            setIsFetchingFoto(false);
             reset();
             refetchList();
             setOpen(false);
+          })
+          .catch((err: AxiosError<{ error: IErrorState }>) => {
+            notification.open({
+              message: "Ocorreu um erro",
+              description: err.response?.data?.error.message,
+              type: "error",
+            });
+            setIsFetchingFoto(false);
           });
       } else {
+        notification.open({
+          message: "Operação realizada",
+          description: "Usuário cadastrado com sucesso!",
+          type: "success",
+        });
         reset();
         refetchList();
         setOpen(false);
@@ -88,7 +110,7 @@ export const CriarUsuarioModal = ({
       titleModal={"Adicionando usuário"}
       okText="Cadastrar"
       onSubmit={handleSubmit(createUsuario)}
-      isFetching={isFetching}
+      isFetching={isFetchingData || isFetchingFoto}
       width="550px"
       setOpenModal={setOpen}
       openModal={open}
