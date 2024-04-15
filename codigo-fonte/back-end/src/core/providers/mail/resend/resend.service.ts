@@ -11,6 +11,10 @@ interface ISendText extends IMailMenssageDto {
 	text: string;
 }
 
+interface ISendHtml extends IMailMenssageDto {
+	html: string;
+}
+
 @Injectable()
 export class ResendService {
 	private transporter: nodemailer.Transporter;
@@ -35,6 +39,25 @@ export class ResendService {
 				to: to,
 				subject: subject,
 				text: text,
+			});
+
+			return;
+		} catch (error) {
+			throw new AppError(
+				'Erro ao enviar o e-mail, tente novamente ou acione um técnico',
+				400,
+				error,
+			);
+		}
+	}
+
+	async sendHtml({ subject, html, to }: ISendHtml) {
+		try {
+			await this.transporter.sendMail({
+				from: 'Sistema de Acompanhamento de Idosos <onboarding@resend.dev>',
+				to: to,
+				subject: subject,
+				html: html,
 			});
 
 			return;

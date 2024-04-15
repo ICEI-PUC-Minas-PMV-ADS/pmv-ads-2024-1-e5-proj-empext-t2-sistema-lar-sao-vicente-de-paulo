@@ -44,15 +44,16 @@ export const AtualizarUsuarioModal = ({
     enable: open,
     onSuccess: (data) => {
       const usuario = data.data;
-
-      if (usuario.foto) {
-        setFileList([
-          {
-            url: usuario.foto,
-            uid: usuario.uid,
-            name: usuario.nome,
-          },
-        ]);
+      if (usuario) {
+        if (usuario.foto) {
+          setFileList([
+            {
+              url: usuario.foto,
+              uid: usuario.uid,
+              name: usuario.nome,
+            },
+          ]);
+        }
 
         setValue("nome", usuario.nome);
         setValue("id_cargo", usuario.id_cargo);
@@ -145,7 +146,7 @@ export const AtualizarUsuarioModal = ({
       titleModal={"Editando usuário"}
       okText="Salvar"
       onSubmit={handleSubmit(updateUsuario)}
-      isFetching={isUpdatingUsuario}
+      isFetching={isUpdatingUsuario || isFetchingFoto}
       width="550px"
       setOpenModal={setOpen}
       openModal={open}
