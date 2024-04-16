@@ -180,65 +180,85 @@ model Prontuario {
   @@map("prontuario")
 }
 
-model RelatorioPia {
+model ModeloRelatorioPia {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nome          String   @db.VarChar(255)
+  versao        Int      @db.Integer()
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  id_idoso BigInt @db.BigInt
-  idoso    Idoso  @relation(fields: [id_idoso], references: [id])
+  perguntas  ModeloRelatorioPiaPergunta[]
+  relatorios RelatorioPia[]
 
-  id_usuario BigInt  @db.BigInt
-  usuario    Usuario @relation(fields: [id_usuario], references: [id])
-
-  id_modelo_relatorio_pia BigInt             @map("modelo_relatorio_pia_id") @db.BigInt
-  modelo_relatorio_pia    ModeloRelatorioPia @relation(fields: [id_modelo_relatorio_pia], references: [id])
-
-  pergunta_relatorio PerguntaRelatorio[]
-
-  @@map("relatorio_pia")
+  @@map("modelo_relatorio_pia")
 }
 
-model PerguntaRelatorio {
+model ModeloRelatorioPiaPergunta {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   pergunta      String   @db.VarChar(255)
-  sim_nao       Boolean  @db.Boolean
-  observacao    String?  @db.Text
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  id_relatorio_pia BigInt       @db.BigInt
-  relatorio_pia    RelatorioPia @relation(fields: [id_relatorio_pia], references: [id])
+  id_modelo BigInt             @db.BigInt
+  modelo    ModeloRelatorioPia @relation(fields: [id_modelo], references: [id])
 
-  @@map("pergunta_relatorio")
+  relatorios RelatorioPiaPergunta[]
+
+  @@map("modelo_relatorio_pia_pergunta")
 }
 
-model ModeloRelatorioPia {
+model RelatorioPia {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   nome          String   @db.VarChar(255)
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  relatorio_pia RelatorioPia[]
-  pergunta      Pergunta[]
+  id_modelo BigInt             @db.BigInt
+  modelo    ModeloRelatorioPia @relation(fields: [id_modelo], references: [id])
 
-  @@map("modelo_relatorio_pia")
+  id_usuario BigInt  @db.BigInt
+  usuario    Usuario @relation(fields: [id_usuario], references: [id])
+
+  id_idoso BigInt @db.BigInt
+  idoso    Idoso  @relation(fields: [id_idoso], references: [id])
+
+  pergunta RelatorioPiaPergunta[]
+
+  @@map("relatorio_pia")
 }
 
-model Pergunta {
+model RelatorioPiaPergunta {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  pergunta      String   @db.VarChar(255)
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  id_modelo_relatorio_pia BigInt             @db.BigInt
-  modelo_relatorio_pia    ModeloRelatorioPia @relation(fields: [id_modelo_relatorio_pia], references: [id])
+  id_pergunta BigInt                     @db.BigInt
+  pergunta    ModeloRelatorioPiaPergunta @relation(fields: [id_pergunta], references: [id])
 
-  @@map("pergunta")
+  id_relatorio BigInt       @db.BigInt
+  relatorio    RelatorioPia @relation(fields: [id_relatorio], references: [id])
+
+  respostas RelatorioPiaResposta?
+
+  @@map("relatorio_pia_pergunta")
+}
+
+model RelatorioPiaResposta {
+  id            BigInt   @id @default(autoincrement()) @db.BigInt
+  uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  resposta      Boolean  @db.Boolean
+  descricao     String?  @db.VarChar(500)
+  criado_em     DateTime @default(now()) @db.Timestamp
+  atualizado_em DateTime @updatedAt @db.Timestamp
+
+  id_pergunta BigInt               @unique @db.BigInt
+  Pergunta    RelatorioPiaPergunta @relation(fields: [id_pergunta], references: [id])
+
+  @@map("relatorio_pia_resposta")
 }
 
 model FichaNutricional {
