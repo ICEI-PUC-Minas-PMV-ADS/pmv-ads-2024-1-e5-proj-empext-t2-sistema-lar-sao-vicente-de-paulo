@@ -1,12 +1,22 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator';
 
 export class AuthDefinirSenhaDto {
-    @ApiProperty()
-    @IsString()
-    codigo?: string;
+	@ApiProperty()
+	@IsString()
+	uid: string;
 
-    @ApiProperty()
-    @IsString()
-    senha?: string;
+	@ApiPropertyOptional()
+	@IsOptional()
+	@IsString()
+	@ValidateIf((etapa) => etapa.senha)
+	@IsNotEmpty()
+	codigo?: string;
+
+	@ApiPropertyOptional()
+	@IsOptional()
+	@IsString()
+	@ValidateIf((etapa) => etapa.codigo)
+	@IsNotEmpty()
+	senha?: string;
 }

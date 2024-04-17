@@ -127,7 +127,10 @@ export default function RedefinirSenha() {
                   onChange={onChange}
                   value={value}
                 />
-                <CheckPassword password={value || ""} check={setCheckSenha} />
+                <CheckPassword
+                  password={value || ""}
+                  check={(v) => setCheckSenha(v)}
+                />
               </div>
             )}
           />
