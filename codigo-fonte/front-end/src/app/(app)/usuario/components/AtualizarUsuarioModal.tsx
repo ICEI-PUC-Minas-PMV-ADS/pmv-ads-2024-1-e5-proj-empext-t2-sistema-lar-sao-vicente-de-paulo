@@ -68,6 +68,7 @@ export const AtualizarUsuarioModal = ({
     Partial<IOperationUsuario>
   >("/usuarios/" + uid, {
     method: "patch",
+    messageSucess: null,
     onSuccess: async () => {
       const formData = new FormData();
 

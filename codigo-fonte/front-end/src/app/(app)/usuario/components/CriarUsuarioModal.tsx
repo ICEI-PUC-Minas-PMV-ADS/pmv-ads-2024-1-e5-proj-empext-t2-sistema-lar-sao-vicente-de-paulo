@@ -96,14 +96,12 @@ export const CriarUsuarioModal = ({
     },
   });
 
-  const { mutate: mutateDefinirSenha } = useMutation<IDefinirSenha>(
-    "/auth/definir-senha",
-    {
+  const { mutate: mutateDefinirSenha, isFetching: isFetchingDefinirSenha } =
+    useMutation<IDefinirSenha>("/auth/definir-senha", {
       method: "post",
       messageSucess:
         "E-mail enviado para usuário caso ele deseje alterar a senha!",
-    }
-  );
+    });
 
   const { data: cargos } = useFetch<
     { id: number; uid: string; nome: string }[]
@@ -122,7 +120,7 @@ export const CriarUsuarioModal = ({
       titleModal={"Adicionando usuário"}
       okText="Cadastrar"
       onSubmit={handleSubmit(createUsuario)}
-      isFetching={isFetchingData || isFetchingFoto}
+      isFetching={isFetchingData || isFetchingFoto || isFetchingDefinirSenha}
       width="550px"
       setOpenModal={setOpen}
       openModal={open}
@@ -243,17 +241,19 @@ export const CriarUsuarioModal = ({
             },
           }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
-            <InputPassword
-              label="Senha"
-              required
-              placeholder="********"
-              error={error?.message}
-              onChange={onChange}
-              value={value}
-            />
+            <>
+              <InputPassword
+                label="Senha"
+                required
+                placeholder="********"
+                error={error?.message}
+                onChange={onChange}
+                value={value}
+              />
+              <CheckPassword password={value} check={(v) => setCheckSenha(v)} />
+            </>
           )}
         />
-        <CheckPassword password={watch("senha")} check={setCheckSenha} />
       </form>
     </ModalDefault>
   );
