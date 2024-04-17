@@ -6,13 +6,13 @@ import { IAuthUser } from '@/common/decorators/auth.decorator';
 
 @Injectable()
 export class AuthRecoverService {
-    constructor(@InjectRedis() private readonly redis: Redis) {}
+	constructor(@InjectRedis() private readonly redis: Redis) {}
 
-    async execute(token: string) {
-        const tokenRedis = await this.redis.get(token);
+	async execute(token: string) {
+		const tokenRedis = await this.redis.get(token);
 
-        if (!tokenRedis) throw new AppError('Token não encontrado', 401);
+		if (!tokenRedis) throw new AppError('Token não encontrado', 401);
 
-        return JSON.parse(tokenRedis) as IAuthUser;
-    }
+		return JSON.parse(tokenRedis) as IAuthUser;
+	}
 }

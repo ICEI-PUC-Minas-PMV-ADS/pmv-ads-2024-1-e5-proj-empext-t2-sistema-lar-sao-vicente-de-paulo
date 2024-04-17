@@ -2,14 +2,14 @@ import {
   CheckCircleOutlined,
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
-import { Dispatch, SetStateAction } from "react";
+import { useEffect } from "react";
 
 export const CheckPassword = ({
   password,
   check,
 }: {
   password: string;
-  check: Dispatch<SetStateAction<boolean>>;
+  check: (value: boolean) => void;
 }) => {
   let incluiMinimoCaractere = false;
   let incluiMinusculoMaiusculo = false;
@@ -40,16 +40,27 @@ export const CheckPassword = ({
     incluiCaractereEspecial = false;
   }
 
-  if (
-    incluiMinimoCaractere &&
-    incluiMinusculoMaiusculo &&
-    incluiNumero &&
-    incluiCaractereEspecial
-  ) {
-    check(true);
-  } else {
-    check(false);
-  }
+  useEffect(
+    () => {
+      if (
+        incluiMinimoCaractere &&
+        incluiMinusculoMaiusculo &&
+        incluiNumero &&
+        incluiCaractereEspecial
+      ) {
+        check(true);
+      } else {
+        check(false);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      incluiMinimoCaractere,
+      incluiMinusculoMaiusculo,
+      incluiNumero,
+      incluiCaractereEspecial,
+    ]
+  );
 
   return (
     <ul className="text-[12px]">
