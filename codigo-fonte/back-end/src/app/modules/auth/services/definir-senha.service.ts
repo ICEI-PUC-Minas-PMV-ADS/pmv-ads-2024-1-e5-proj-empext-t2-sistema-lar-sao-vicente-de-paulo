@@ -6,8 +6,8 @@ import { AppError } from '@utils/app-error';
 import { BcryptService } from '@/core/providers/crypto/bcrypt/bcrypt.service';
 import { PrismaService } from '@/core/providers/database/prisma.service';
 import * as crypto from 'crypto';
-import { ResendService } from '@/core/providers/mail/resend/resend.service';
 import { emailDefinirSenha } from '@/common/templates/email/emailDefinirSenha';
+import { UmblerService } from '@/core/providers/mail/umbler/umbler.service';
 
 interface IContentCodigo {
 	id_usuario: bigint;
@@ -19,7 +19,7 @@ export class AuthDefinirSenhaService {
 		@InjectRedis() private readonly redis: Redis,
 		private prisma: PrismaService,
 		private bcrypt: BcryptService,
-		private mail: ResendService,
+		private mail: UmblerService,
 	) {}
 
 	async execute({ uid, codigo, senha }: AuthDefinirSenhaDto) {
