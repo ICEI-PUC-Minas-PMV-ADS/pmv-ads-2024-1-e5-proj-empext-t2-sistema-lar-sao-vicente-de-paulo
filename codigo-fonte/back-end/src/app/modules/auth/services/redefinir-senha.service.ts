@@ -3,7 +3,6 @@ import { Redis } from 'ioredis';
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
 import { AuthRedefinirSenhaDto } from '../dtos/redefinir-senha.dto';
 import { AppError } from '@utils/app-error';
-
 import * as crypto from 'crypto';
 import { PrismaService } from '@/core/providers/database/prisma.service';
 import { BcryptService } from '@/core/providers/crypto/bcrypt/bcrypt.service';
@@ -47,8 +46,9 @@ export class AuthRedefinirSenhaService {
 			);
 
 			await this.mail.sendHtml({
-				subject: 'Redefinição de senha',
-				html: emailRedefinirSenha(newCodigo),
+				subject:
+					'Redefinição de senha | Sistema de Acompanhamento de Idosos',
+				html: emailRedefinirSenha(usuario.nome, newCodigo),
 				to: usuario.email,
 			});
 

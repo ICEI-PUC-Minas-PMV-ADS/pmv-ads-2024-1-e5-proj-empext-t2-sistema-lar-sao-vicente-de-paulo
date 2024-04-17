@@ -28,6 +28,7 @@ import { withoutNumber } from "@/utils/validator/withoutNumber";
 import { isEmail } from "@/utils/validator/isEmail";
 import { CheckPassword } from "@/components/CheckPassword";
 import { AxiosError } from "axios";
+import { IDefinirSenha } from "@/app/(auth)/definir-senha/Interface/IDefinirSenha";
 
 export const CriarUsuarioModal = ({
   refetchList,
@@ -67,6 +68,7 @@ export const CriarUsuarioModal = ({
               description: "Usuário cadastrado com sucesso!",
               type: "success",
             });
+            mutateDefinirSenha({ uid: data.data.uid });
             setIsFetchingFoto(false);
             reset();
             refetchList();
@@ -86,12 +88,22 @@ export const CriarUsuarioModal = ({
           description: "Usuário cadastrado com sucesso!",
           type: "success",
         });
+        mutateDefinirSenha({ uid: data.data.uid });
         reset();
         refetchList();
         setOpen(false);
       }
     },
   });
+
+  const { mutate: mutateDefinirSenha } = useMutation<IDefinirSenha>(
+    "/auth/definir-senha",
+    {
+      method: "post",
+      messageSucess:
+        "E-mail enviado para usuário caso ele deseje alterar a senha!",
+    }
+  );
 
   const { data: cargos } = useFetch<
     { id: number; uid: string; nome: string }[]

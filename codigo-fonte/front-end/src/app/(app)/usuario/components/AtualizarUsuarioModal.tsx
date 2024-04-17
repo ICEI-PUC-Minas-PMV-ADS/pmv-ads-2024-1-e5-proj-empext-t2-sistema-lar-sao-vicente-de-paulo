@@ -24,6 +24,7 @@ import { isNome } from "@/utils/validator/isName";
 import { withoutNumber } from "@/utils/validator/withoutNumber";
 import { isEmail } from "@/utils/validator/isEmail";
 import { AxiosError } from "axios";
+import { IDefinirSenha } from "@/app/(auth)/definir-senha/Interface/IDefinirSenha";
 
 export const AtualizarUsuarioModal = ({
   uid,
@@ -110,8 +111,8 @@ export const AtualizarUsuarioModal = ({
     },
   });
 
-  const { mutate: redefirSenha } = useMutation<{ email: string }>(
-    "/auth/redefinir-senha",
+  const { mutate: mutateDefinirSenha } = useMutation<IDefinirSenha>(
+    "/auth/definir-senha",
     {
       method: "post",
       messageSucess: "E-mail de redefinição de senha enviado para o usuário!",
@@ -170,7 +171,7 @@ export const AtualizarUsuarioModal = ({
 
           onClick: () => {
             if (usuario?.email) {
-              redefirSenha({ email: usuario.email });
+              mutateDefinirSenha({ uid: usuario.uid });
             }
           },
         },
