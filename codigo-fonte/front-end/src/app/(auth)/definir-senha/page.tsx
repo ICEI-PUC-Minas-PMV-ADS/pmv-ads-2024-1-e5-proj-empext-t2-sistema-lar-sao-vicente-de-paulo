@@ -2,14 +2,24 @@
 
 import { InputPassword } from "@/components/input";
 import { useMutation } from "@/utils/hooks/useMutation";
-import { Button } from "antd";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Button, Spin } from "antd";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { IDefinirSenha } from "./Interface/IDefinirSenha";
 import { CheckPassword } from "@/components/CheckPassword";
 
 export default function DefinirSenha() {
+  return (
+    <Suspense
+      fallback={<Spin style={{ zIndex: 9999 }} spinning={true} fullscreen />}
+    >
+      <FormDefinirSenha />
+    </Suspense>
+  );
+}
+
+function FormDefinirSenha() {
   const router = useRouter();
   const query = useSearchParams();
 
