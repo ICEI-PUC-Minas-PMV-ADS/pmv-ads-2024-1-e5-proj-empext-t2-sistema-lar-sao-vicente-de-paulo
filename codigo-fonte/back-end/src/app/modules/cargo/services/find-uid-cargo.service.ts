@@ -1,24 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Cargo } from '../entities/cargo.entity';
-import { PrismaService } from '@/core/providers/database/prisma.service';
+import { PrismaCargoRepository } from '../repositories/prisma/prisma-cargo-repository';
 
 @Injectable()
 export class FindUidCargoService {
-	constructor(private prisma: PrismaService) {}
+	constructor(private cargoRepository: PrismaCargoRepository) {}
 
 	async execute(uid: string): Promise<Cargo | null> {
-		const modeloPermissao = await this.prisma.cargo.findFirst({
-			where: {
-				uid,
-			},
-			include: {
-				cargo_permissao: {
-					select: { uid: true, ativo: true, id_permissao: true },
-				},
-				_count: { select: { usuario: true } },
-			},
-		});
-
+		const modeloPermissao = await this.cargoRepository.findByUid(uid);
 		return modeloPermissao;
 	}
 }
