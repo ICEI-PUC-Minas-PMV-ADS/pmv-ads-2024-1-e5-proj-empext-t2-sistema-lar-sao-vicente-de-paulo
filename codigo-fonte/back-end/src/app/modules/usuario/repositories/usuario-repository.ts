@@ -9,5 +9,5 @@ export interface usuarioRepository {
 	alreadyExistsUserEmail(email: string): Promise<Usuario | null>;
 	alreadyExistsUserCPF(cpf_cnh: string): Promise<Usuario | null>;
 	update(uid: string, data: UpdateUsuarioDto): Promise<Usuario>;
-	save(usuario: Usuario): Promise<Usuario>;
+	delete(uid: string): Promise<Usuario>;
 }

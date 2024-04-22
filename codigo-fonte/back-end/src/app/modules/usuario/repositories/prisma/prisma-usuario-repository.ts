@@ -69,12 +69,11 @@ export class PrismaUsuarioRepository implements usuarioRepository {
 		return usuario;
 	}
 
-	async save(data: Usuario) {
-		const usuario = await prisma.usuario.update({
+	async delete(uid: string) {
+		const usuario = await prisma.usuario.delete({
 			where: {
-				uid: data.uid,
+				uid: uid,
 			},
-			data,
 		});
 
 		return usuario;

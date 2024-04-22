@@ -55,9 +55,9 @@ export class InMemoryUsuarioRepository implements usuarioRepository {
 		};
 		return this.items[usuarioIndex];
 	}
-	async save(data: Usuario) {
+	async delete(uid: string) {
 		const usuarioIndex = this.items.findIndex(
-			(usuario) => usuario.uid === data.uid,
+			(usuario) => usuario.uid === uid,
 		);
 		if (usuarioIndex === -1) {
 			throw new AppError('Nenhum usuário encontrado');

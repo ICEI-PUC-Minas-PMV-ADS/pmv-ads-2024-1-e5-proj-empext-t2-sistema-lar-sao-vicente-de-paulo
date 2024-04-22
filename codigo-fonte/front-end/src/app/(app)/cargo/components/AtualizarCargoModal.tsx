@@ -1,5 +1,12 @@
 import { useMutation } from "@/utils/hooks/useMutation";
-import { EditOutlined, TeamOutlined, WarningOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  EditOutlined,
+  QuestionCircleOutlined,
+  TeamOutlined,
+  WarningOutlined,
+} from "@ant-design/icons";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { InputForm } from "@/components/input";
@@ -45,17 +52,6 @@ export const AtualizarCargoModal = ({
     },
   });
 
-  const { mutate: deleteCargo } = useMutation<void>("/cargos/" + uid, {
-    method: "delete",
-    body: undefined,
-    params: undefined,
-    messageSucess: "Cargo deletado com sucesso!",
-    onSuccess: () => {
-      refetchList();
-      setOpen(false);
-    },
-  });
-
   const { data: grupoPermissoes } = useFetch<IGrupoPermissao[]>(
     "/grupo-permissoes",
     ["grupo-permissoes"],
@@ -89,10 +85,34 @@ export const AtualizarCargoModal = ({
       openModal={open}
       listOptions={[
         {
-          label: "Deletar",
+          popconfirm: true,
+          popconfirmType: cargo?.situacao === "ATIVO" ? "danger" : "primary",
+          popconfirmTitle:
+            (cargo?.situacao === "ATIVO" ? "Inativar" : "Reativar") +
+            " Usuário",
+          popconfirmDescrition:
+            cargo?.situacao === "ATIVO"
+              ? "Ao inativar o cargo, os usuários que possuem esse cargo perderão o vínculo. Você tem certeza?"
+              : "Ao reativar o cargo, você poderá usa-lo no cadastro dos usuários.",
+          popconfirmIcon: (
+            <QuestionCircleOutlined
+              style={{
+                color: cargo?.situacao === "ATIVO" ? "red" : "blue",
+              }}
+            />
+          ),
+          label: cargo?.situacao === "ATIVO" ? "Inativar" : "Reativar",
           onClick: () => {
-            deleteCargo();
+            updateCargo({
+              situacao: cargo?.situacao === "ATIVO" ? "INATIVO" : "ATIVO",
+            });
           },
+          icon:
+            cargo?.situacao === "ATIVO" ? (
+              <CloseCircleOutlined />
+            ) : (
+              <CheckCircleOutlined />
+            ),
         },
       ]}
       customAlert={
@@ -108,6 +128,7 @@ export const AtualizarCargoModal = ({
           showIcon
         />
       }
+      situation={cargo?.situacao}
       created_item={cargo?.criado_em}
       updated_item={cargo?.atualizado_em}
     >
@@ -130,7 +151,8 @@ export const AtualizarCargoModal = ({
         />
         <div className="flex flex-col gap-1">
           <label>
-            Permissões<span className="text-red-600 pl-1">*</span>
+            Selecione as permissões que o cargo terá dentro do sistema:
+            <span className="text-red-600 pl-1">*</span>
           </label>
 
           <Controller

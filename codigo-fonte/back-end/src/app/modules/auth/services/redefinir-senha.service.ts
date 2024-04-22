@@ -3,11 +3,11 @@ import { Redis } from 'ioredis';
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
 import { AuthRedefinirSenhaDto } from '../dtos/redefinir-senha.dto';
 import { AppError } from '@utils/app-error';
-
 import * as crypto from 'crypto';
 import { PrismaService } from '@/core/providers/database/prisma.service';
 import { BcryptService } from '@/core/providers/crypto/bcrypt/bcrypt.service';
-import { ResendService } from '@/core/providers/mail/resend/resend.service';
+import { emailRedefinirSenha } from '@/common/templates/email/emailRedefinirSenha';
+import { UmblerService } from '@/core/providers/mail/umbler/umbler.service';
 
 interface IContentCodigo {
 	id_usuario: bigint;
@@ -19,7 +19,7 @@ export class AuthRedefinirSenhaService {
 	constructor(
 		@InjectRedis() private readonly redis: Redis,
 		private prisma: PrismaService,
-		private mail: ResendService,
+		private mail: UmblerService,
 		private bcrypt: BcryptService,
 	) {}
 
@@ -45,9 +45,10 @@ export class AuthRedefinirSenhaService {
 				60 * 30, // 30 minutos
 			);
 
-			await this.mail.sendText({
-				subject: 'Redefinição de senha',
-				text: 'Segue o código de recuperação da senha: ' + newCodigo,
+			await this.mail.sendHtml({
+				subject:
+					'Redefinição de senha | Sistema de Acompanhamento de Idosos',
+				html: emailRedefinirSenha(usuario.nome, newCodigo),
 				to: usuario.email,
 			});
 

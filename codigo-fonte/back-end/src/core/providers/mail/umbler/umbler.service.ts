@@ -16,17 +16,17 @@ interface ISendHtml extends IMailMenssageDto {
 }
 
 @Injectable()
-export class ResendService {
+export class UmblerService {
 	private transporter: nodemailer.Transporter;
 
 	constructor() {
 		const config = {
-			host: 'smtp.resend.com',
-			secure: true,
-			port: 465,
+			host: 'smtp.umbler.com',
+			secure: false,
+			port: 587,
 			auth: {
-				user: 'resend',
-				pass: process.env.RESEND_EMAIL_SPTM_KEY,
+				user: 'contato@sailarsaovicente.site',
+				pass: process.env.UMBLER_EMAIL_SPTM_KEY,
 			},
 		};
 		this.transporter = nodemailer.createTransport(config);
@@ -35,7 +35,7 @@ export class ResendService {
 	async sendText({ subject, text, to }: ISendText) {
 		try {
 			await this.transporter.sendMail({
-				from: 'Sistema de Acompanhamento de Idosos <onboarding@resend.dev>',
+				from: 'Sistema de Acompanhamento de Idosos <contato@sailarsaovicente.site>',
 				to: to,
 				subject: subject,
 				text: text,
@@ -54,7 +54,7 @@ export class ResendService {
 	async sendHtml({ subject, html, to }: ISendHtml) {
 		try {
 			await this.transporter.sendMail({
-				from: 'Sistema de Acompanhamento de Idosos <onboarding@resend.dev>',
+				from: 'Sistema de Acompanhamento de Idosos <contato@sailarsaovicente.site>',
 				to: to,
 				subject: subject,
 				html: html,

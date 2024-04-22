@@ -1,6 +1,13 @@
-import { useMutation } from "@/utils/hooks/useMutation";
-import { EditOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { IErrorState, useMutation } from "@/utils/hooks/useMutation";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  EditOutlined,
+  ExclamationCircleOutlined,
+  LockOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { IOperationUsuario, IUsuario } from "../Interface/IUsuario";
 import { useFetch } from "@/utils/hooks/useFetch";
@@ -9,13 +16,15 @@ import { invertCPF, regexCPF } from "@/utils/regex/regexCPF";
 import { InputForm, InputSelect, UploudAvatar } from "@/components/input";
 import { isCPF } from "@/utils/validator/isCPF";
 import { ModalDefault } from "@/components/modal/ModalDefault";
-import { Select, Tooltip, UploadFile } from "antd";
+import { Select, Tooltip, UploadFile, notification } from "antd";
 import { api } from "@/utils/service/api";
 import { useCookies } from "react-cookie";
 import { authToken } from "@/config/authToken";
 import { isNome } from "@/utils/validator/isName";
 import { withoutNumber } from "@/utils/validator/withoutNumber";
 import { isEmail } from "@/utils/validator/isEmail";
+import { AxiosError } from "axios";
+import { IDefinirSenha } from "@/app/(auth)/definir-senha/Interface/IDefinirSenha";
 
 export const AtualizarUsuarioModal = ({
   uid,
@@ -26,24 +35,26 @@ export const AtualizarUsuarioModal = ({
 }) => {
   const [cookies] = useCookies([authToken.nome]);
   const [open, setOpen] = useState(false);
+  const [isFetchingFoto, setIsFetchingFoto] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const { handleSubmit, control, reset, setValue, getValues } =
+  const { handleSubmit, control, setValue } =
     useForm<Partial<IOperationUsuario>>();
 
   const { data: usuario } = useFetch<IUsuario>("/usuarios/" + uid, [uid], {
     enable: open,
     onSuccess: (data) => {
       const usuario = data.data;
-
       if (usuario) {
-        setFileList([
-          {
-            url: usuario.foto,
-            uid: usuario.uid,
-            name: usuario.nome,
-          },
-        ]);
+        if (usuario.foto) {
+          setFileList([
+            {
+              url: usuario.foto,
+              uid: usuario.uid,
+              name: usuario.nome,
+            },
+          ]);
+        }
 
         setValue("nome", usuario.nome);
         setValue("id_cargo", usuario.id_cargo);
@@ -57,11 +68,12 @@ export const AtualizarUsuarioModal = ({
     Partial<IOperationUsuario>
   >("/usuarios/" + uid, {
     method: "patch",
-    messageSucess: "Usuário atualizado com sucesso!",
+    messageSucess: null,
     onSuccess: async () => {
       const formData = new FormData();
 
       if (fileList.length > 0 && fileList[0] && fileList[0].originFileObj) {
+        setIsFetchingFoto(true);
         await formData.append("foto", fileList[0]?.originFileObj);
         await api
           .post("/usuarios/" + uid + "/upload-foto", formData, {
@@ -71,18 +83,37 @@ export const AtualizarUsuarioModal = ({
             },
           })
           .then(() => {
+            notification.open({
+              message: "Operação realizada",
+              description: "Usuário atualizado com sucesso!",
+              type: "success",
+            });
+            setIsFetchingFoto(false);
             refetchList();
             setOpen(false);
+          })
+          .catch((err: AxiosError<{ error: IErrorState }>) => {
+            notification.open({
+              message: "Ocorreu um erro",
+              description: err.response?.data?.error.message,
+              type: "error",
+            });
+            setIsFetchingFoto(false);
           });
       } else {
+        notification.open({
+          message: "Operação realizada",
+          description: "Usuário atualizado com sucesso!",
+          type: "success",
+        });
         refetchList();
         setOpen(false);
       }
     },
   });
 
-  const { mutate: redefirSenha } = useMutation<{ email: string }>(
-    "/auth/redefinir-senha",
+  const { mutate: mutateDefinirSenha } = useMutation<IDefinirSenha>(
+    "/auth/definir-senha",
     {
       method: "post",
       messageSucess: "E-mail de redefinição de senha enviado para o usuário!",
@@ -97,6 +128,7 @@ export const AtualizarUsuarioModal = ({
   >("/cargos", ["cargos_lista"], {
     enable: open,
     params: queryBuilder({
+      filter: [{ path: "situacao", value: "ATIVO" }],
       page_limit: 999999,
     }),
   });
@@ -116,21 +148,62 @@ export const AtualizarUsuarioModal = ({
       titleModal={"Editando usuário"}
       okText="Salvar"
       onSubmit={handleSubmit(updateUsuario)}
-      isFetching={isUpdatingUsuario}
-      width="700px"
+      isFetching={isUpdatingUsuario || isFetchingFoto}
+      width="550px"
       setOpenModal={setOpen}
       openModal={open}
       listOptions={[
         {
+          popconfirm: true,
+          popconfirmOkText: "Enviar",
+          popconfirmType: "primary",
+          popconfirmTitle: "Redefinição da senha",
+          popconfirmDescrition:
+            "O usuário irá receber um e-mail com instruções para atualizar sua senha.",
+          popconfirmIcon: (
+            <ExclamationCircleOutlined
+              style={{
+                color: "blue",
+              }}
+            />
+          ),
+          icon: <LockOutlined />,
           label: "Redefinir senha",
-          onClick: () => redefirSenha({ email: getValues("email") || "" }),
+
+          onClick: () => {
+            if (usuario?.email) {
+              mutateDefinirSenha({ uid: usuario.uid });
+            }
+          },
         },
         {
+          popconfirm: true,
+          popconfirmType: usuario?.situacao === "ATIVO" ? "danger" : "primary",
+          popconfirmTitle:
+            (usuario?.situacao === "ATIVO" ? "Inativar" : "Reativar") +
+            " Usuário",
+          popconfirmDescrition:
+            usuario?.situacao === "ATIVO"
+              ? "Ao inativar o usuário, ele não terá acesso ao sistema. Você tem certeza?"
+              : "Ao reativar o usuário, ele terá acesso ao sistema. Você tem certeza?",
+          popconfirmIcon: (
+            <QuestionCircleOutlined
+              style={{
+                color: usuario?.situacao === "ATIVO" ? "red" : "blue",
+              }}
+            />
+          ),
           label: usuario?.situacao === "ATIVO" ? "Inativar" : "Reativar",
           onClick: () =>
             updateUsuario({
               situacao: usuario?.situacao === "ATIVO" ? "INATIVO" : "ATIVO",
             }),
+          icon:
+            usuario?.situacao === "ATIVO" ? (
+              <CloseCircleOutlined />
+            ) : (
+              <CheckCircleOutlined />
+            ),
         },
       ]}
       situation={usuario?.situacao}

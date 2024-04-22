@@ -5,9 +5,6 @@ import { PrismaUsuarioRepository } from '@/app/modules/usuario/repositories/pris
 import { BcryptService } from '@/core/providers/crypto/bcrypt/bcrypt.service';
 import { Usuario } from '../entities/usuario.entity';
 
-interface RegisterUseCaseResponse {
-	usuario: Usuario;
-}
 
 @Injectable()
 export class CreateUsuarioService {
@@ -16,7 +13,7 @@ export class CreateUsuarioService {
 		private bcrypt: BcryptService,
 	) {}
 
-	async execute(data: CreateUsuarioDto): Promise<RegisterUseCaseResponse> {
+	async execute(data: CreateUsuarioDto): Promise<Usuario> {
 		const hash = await this.bcrypt.generateHash(data.senha);
 
 		const usuarioExistEmail =
@@ -36,6 +33,6 @@ export class CreateUsuarioService {
 			senha: hash,
 		});
 
-		return { usuario };
+		return usuario;
 	}
 }
