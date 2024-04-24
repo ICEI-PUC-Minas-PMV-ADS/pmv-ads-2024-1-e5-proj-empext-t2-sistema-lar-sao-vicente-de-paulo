@@ -274,8 +274,9 @@ model RelatorioPiaPergunta {
 model RelatorioPiaResposta {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  resposta      Boolean  @db.Boolean
+  value      String  @db.VarChar(255)
   descricao     String?  @db.VarChar(500)
+  type          typesReposta
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
