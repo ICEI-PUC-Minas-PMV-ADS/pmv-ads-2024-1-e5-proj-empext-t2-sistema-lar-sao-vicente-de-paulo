@@ -7,10 +7,17 @@ import { ModalDefault } from "@/components/modal/ModalDefault";
 import { Button } from "antd";
 import { IAlterarSenha } from "../Interface/IAlterarSenha";
 import { CheckPassword } from "@/components/CheckPassword";
+import { useAppDispatch } from "@/utils/hooks/useRedux";
+import { useCookies } from "react-cookie";
+import { authToken } from "@/config/authToken";
+import { setAuthToken, setAuthUsuario } from "@/redux/slices/auth.slice";
 
 export const AlterarSenhaModal = () => {
   const [open, setOpen] = useState(false);
   const [checkSenha, setCheckSenha] = useState(false);
+
+  const [cookie, setCookie, removeCookie] = useCookies([authToken.nome]);
+  const dispatch = useAppDispatch();
 
   const { handleSubmit, control, reset } = useForm<IAlterarSenha>();
 
@@ -18,7 +25,25 @@ export const AlterarSenhaModal = () => {
     useMutation<IAlterarSenha>("/auth/update-senha", {
       method: "post",
       messageSucess: "Senha alterada com sucesso!",
+      onSuccess: () => {
+        mutateDeslogar({ token: cookie[authToken.nome] });
+        setOpen(false);
+        reset();
+      },
     });
+
+  const { mutate: mutateDeslogar } = useMutation<{ token: string }>(
+    "/auth/logout",
+    {
+      method: "post",
+      messageSucess: null,
+      onSuccess: () => {
+        dispatch(setAuthToken(null as any));
+        dispatch(setAuthUsuario(null as any));
+        removeCookie(authToken.nome);
+      },
+    }
+  );
 
   return (
     <ModalDefault

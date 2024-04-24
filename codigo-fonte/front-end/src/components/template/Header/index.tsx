@@ -88,7 +88,7 @@ export const headerMenus = [
 export const Header = () => {
   const usuarioAuth = useAppSelector((r) => r.auth.usuario);
 
-  const { data: usuario } = useFetch<IUsuario>(
+  const { data: usuario, refetch } = useFetch<IUsuario>(
     "/usuarios/" + usuarioAuth.uid,
     [usuarioAuth.uid],
     {
@@ -156,7 +156,7 @@ export const Header = () => {
             placement="top"
             dropdownRender={(m) => (
               <div className="flex flex-col w-full min-w-[150px] gap-[8px] bg-white shadow-lg rounded-lg p-[10px]">
-                {usuario && <Perfil usuario={usuario} />}
+                {usuario && <Perfil usuario={usuario} refetch={refetch} />}
 
                 <button
                   onClick={() =>
@@ -198,7 +198,13 @@ export const Header = () => {
   );
 };
 
-const Perfil = ({ usuario }: { usuario: IUsuario }) => {
+const Perfil = ({
+  usuario,
+  refetch,
+}: {
+  usuario: IUsuario;
+  refetch: () => void;
+}) => {
   const [openPerfil, setOpenPerfil] = useState(false);
   const showModalDefault = () => {
     setOpenPerfil(true);
@@ -231,7 +237,7 @@ const Perfil = ({ usuario }: { usuario: IUsuario }) => {
             <AlterarSenhaModal />
             <AtualizarUsuarioLogadoModal
               uid={usuario.uid}
-              refetchUser={() => {}}
+              refetchUser={refetch}
             />
           </div>
         }

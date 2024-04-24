@@ -199,6 +199,7 @@ export const AtualizarUsuarioLogadoModal = ({
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
               label="E-mail"
+              type="email"
               required
               error={error?.message}
               onChange={onChange}
