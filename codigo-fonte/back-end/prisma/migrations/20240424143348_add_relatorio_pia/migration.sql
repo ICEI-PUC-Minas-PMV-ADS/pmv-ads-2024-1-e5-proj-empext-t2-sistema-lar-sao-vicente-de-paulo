@@ -77,8 +77,9 @@ CREATE TABLE "relatorio_pia_pergunta" (
 CREATE TABLE "relatorio_pia_resposta" (
     "id" BIGSERIAL NOT NULL,
     "uid" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "resposta" BOOLEAN NOT NULL,
+    "value" VARCHAR(255) NOT NULL,
     "descricao" VARCHAR(500),
+    "type" "typesReposta" NOT NULL,
     "criado_em" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "atualizado_em" TIMESTAMP NOT NULL,
     "id_pergunta" BIGINT NOT NULL,
