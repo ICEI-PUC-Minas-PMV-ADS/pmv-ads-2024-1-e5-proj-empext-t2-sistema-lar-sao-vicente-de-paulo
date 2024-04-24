@@ -53,6 +53,7 @@ export class PrismaUsuarioRepository implements usuarioRepository {
 			where: {
 				uid,
 			},
+			include: { cargo: { select: { nome: true } } },
 		});
 
 		return usuario;

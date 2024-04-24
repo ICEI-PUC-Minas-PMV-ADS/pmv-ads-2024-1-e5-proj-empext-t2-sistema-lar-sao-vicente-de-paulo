@@ -75,6 +75,7 @@ export const ModalDefault = ({
         customButtonOpenModal
       ) : (
         <Button
+          htmlType="button"
           type="primary"
           onClick={showModalDefault}
           size="large"
@@ -175,6 +176,7 @@ export const ModalDefault = ({
                                 }
                               >
                                 <button
+                                  type="button"
                                   key={option.label}
                                   className="appearance-none items-center flex gap-2 text-left py-[10px] px-[15px] rounded-lg hover:bg-primaria transition-all text-black font-semibold hover:text-white hover:cursor-pointer"
                                 >
@@ -185,6 +187,7 @@ export const ModalDefault = ({
                             </>
                           ) : (
                             <button
+                              type="button"
                               key={option.label}
                               className="appearance-none items-center flex gap-2 text-left py-[10px] px-[15px] rounded-lg hover:bg-primaria transition-all text-black font-semibold hover:text-white hover:cursor-pointer"
                               onClick={option.onClick}

@@ -47,6 +47,7 @@ export const InputPassword = ({
         size="large"
         onChange={onChange}
         value={value}
+        autoComplete={"current-password"}
       />
       {error && (
         <div className="flex gap-2 items-center text-red-600 text-xs">
