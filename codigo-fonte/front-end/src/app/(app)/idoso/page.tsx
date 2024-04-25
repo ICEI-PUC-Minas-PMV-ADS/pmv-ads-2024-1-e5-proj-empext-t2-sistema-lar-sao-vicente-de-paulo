@@ -35,7 +35,7 @@ export default function Idoso() {
     });
 
   const { data, totalCount, refetch } = useFetch<IIdoso[]>(
-    "/usuarios",
+    "/idosos",
     [pesquisa, situacao, pageLimit, currentPage],
     {
       params: queryBuilder({

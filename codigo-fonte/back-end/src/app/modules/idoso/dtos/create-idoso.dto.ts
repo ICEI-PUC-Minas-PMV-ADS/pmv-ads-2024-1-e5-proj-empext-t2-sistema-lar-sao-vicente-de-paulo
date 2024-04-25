@@ -6,6 +6,7 @@ import {
 	IsDateString,
 	Matches,
 	MaxLength,
+	IsOptional,
 } from 'class-validator';
 
 export class CreateIdosoDto {
@@ -15,6 +16,7 @@ export class CreateIdosoDto {
 
 	@ApiPropertyOptional({ description: 'Foto do usuário' })
 	@IsString()
+	@IsOptional()
 	foto?: string;
 
 	@ApiProperty({ description: 'Nome completo do idoso' })
@@ -22,6 +24,11 @@ export class CreateIdosoDto {
 	@IsString()
 	@MaxLength(255)
 	nome_completo: string;
+
+	@ApiPropertyOptional({ description: 'Apelido do idoso' })
+	@IsOptional()
+	@IsString()
+	apelido?: string;
 
 	@ApiProperty({ description: 'Data de nascimento do idoso' })
 	@IsNotEmpty()
@@ -40,11 +47,15 @@ export class CreateIdosoDto {
 	@Matches(/^[A-Z]{2}$/, { message: 'Informe uma sigla de estado válida' })
 	estado: string;
 
-	@ApiProperty({ description: 'País do idoso' })
+	@ApiProperty({ description: 'Gênero do idoso' })
 	@IsNotEmpty()
 	@IsString()
-	@MaxLength(100)
-	pais: string;
+	genero: string;
+
+	@ApiProperty({ description: 'Cidade do idoso' })
+	@IsNotEmpty()
+	@IsString()
+	cidade: string;
 
 	@ApiProperty({ description: 'Estado civil do idoso' })
 	@IsNotEmpty()
@@ -81,81 +92,82 @@ export class CreateIdosoDto {
 	@IsDateString()
 	data_ingresso: Date;
 
-	@ApiProperty({ description: 'CPF do idoso' })
-	@IsNotEmpty()
+	@ApiPropertyOptional({ description: 'CPF do idoso' })
+	@IsOptional()
 	@IsString()
 	@IsCPF()
-	cpf: string;
+	cpf?: string;
 
-	@ApiProperty({ description: 'CNH do idoso' })
-	@IsNotEmpty()
+	@ApiPropertyOptional({ description: 'CNH do idoso' })
+	@IsOptional()
 	@IsString()
 	@MaxLength(8)
-	cnh: string;
+	cnh?: string;
 
-	@ApiProperty({ description: 'RG do idoso' })
-	@IsNotEmpty()
+	@ApiPropertyOptional({ description: 'Cartão do SUS do idoso' })
+	@IsOptional()
+	@IsString()
+	cartao_sus?: string;
+
+	@ApiPropertyOptional({ description: 'RG do idoso' })
+	@IsOptional()
 	@IsString()
 	@MaxLength(10)
-	rg: string;
+	rg?: string;
 
-	@ApiProperty({ description: 'Órgão expedidor do RG do idoso' })
-	@IsNotEmpty()
+	@ApiPropertyOptional({ description: 'Órgão expedidor do RG do idoso' })
+	@IsOptional()
 	@IsString()
 	@MaxLength(255)
-	rg_orgao_expedidor: string;
+	rg_orgao_expedidor?: string;
 
-	@ApiProperty({ description: 'Título de eleitor do idoso' })
-	@IsNotEmpty()
+	@ApiPropertyOptional({ description: 'Título de eleitor do idoso' })
+	@IsOptional()
 	@IsString()
 	@MaxLength(12)
-	titulo_eleitor: string;
+	titulo_eleitor?: string;
 
-	@ApiProperty({ description: 'Seção do título de eleitor do idoso' })
-	@IsNotEmpty()
+	@ApiPropertyOptional({ description: 'Seção do título de eleitor do idoso' })
+	@IsOptional()
 	@IsString()
 	@MaxLength(4)
-	titulo_eleitor_secao: string;
+	titulo_eleitor_secao?: string;
 
-	@ApiProperty({ description: 'Zona do título de eleitor do idoso' })
-	@IsNotEmpty()
+	@ApiPropertyOptional({ description: 'Zona do título de eleitor do idoso' })
+	@IsOptional()
 	@IsString()
 	@MaxLength(3)
-	titulo_eleitor_zona: string;
+	titulo_eleitor_zona?: string;
 
-	@ApiProperty({ description: 'Certidão de nascimento do idoso' })
-	@IsNotEmpty()
-	@IsString()
-	@MaxLength(30)
-	certidao_nascimento: string;
-
-	@ApiProperty({ description: 'Folha da certidão de nascimento do idoso' })
-	@IsNotEmpty()
+	@ApiPropertyOptional({
+		description: 'Folha da certidão de nascimento do idoso',
+	})
+	@IsOptional()
 	@IsString()
 	@MaxLength(20)
-	certidao_nascimento_folha: string;
+	certidao_nascimento_folha?: string;
 
-	@ApiProperty({ description: 'Livro da certidão de nascimento do idoso' })
-	@IsNotEmpty()
+	@ApiPropertyOptional({
+		description: 'Livro da certidão de nascimento do idoso',
+	})
+	@IsOptional()
 	@IsString()
 	@MaxLength(20)
-	certidao_nascimento_livro: string;
+	certidao_nascimento_livro?: string;
 
-	@ApiProperty({ description: 'Certidão de casamento do idoso' })
-	@IsNotEmpty()
-	@IsString()
-	@MaxLength(30)
-	certidao_casamento: string;
-
-	@ApiProperty({ description: 'Folha da certidão de casamento do idoso' })
-	@IsNotEmpty()
+	@ApiPropertyOptional({
+		description: 'Folha da certidão de casamento do idoso',
+	})
+	@IsOptional()
 	@IsString()
 	@MaxLength(20)
-	certidao_casamento_folha: string;
+	certidao_casamento_folha?: string;
 
-	@ApiProperty({ description: 'Livro da certidão de casamento do idoso' })
-	@IsNotEmpty()
+	@ApiPropertyOptional({
+		description: 'Livro da certidão de casamento do idoso',
+	})
+	@IsOptional()
 	@IsString()
 	@MaxLength(20)
-	certidao_casamento_livro: string;
+	certidao_casamento_livro?: string;
 }
