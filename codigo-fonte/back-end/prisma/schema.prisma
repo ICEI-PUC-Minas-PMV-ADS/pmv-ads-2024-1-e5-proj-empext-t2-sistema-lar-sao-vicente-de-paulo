@@ -190,7 +190,7 @@ model ModeloRelatorioPia {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   nome          String   @db.VarChar(255)
-  versao        Int      @db.Integer()
+  versao        Int      @default(1) @db.Integer()
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 

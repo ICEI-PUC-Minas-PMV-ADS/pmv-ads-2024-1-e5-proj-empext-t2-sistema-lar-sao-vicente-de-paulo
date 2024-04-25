@@ -2,8 +2,18 @@ import { prisma } from "@/core/providers/database/prisma.service";
 import { modeloRelatorioPiaRepository } from "../modelo-relatorio-pia.repository";
 import { ModeloRelatorioPia } from "@prisma/client";
 import { UpdateModeloRelatorioPiaDto } from "../../dtos/update-modelo-relatorio-pia.dto";
+import { CreateModeloRelatorioPiaDto } from "../../dtos/create-modelo-relatorio-pia.dto";
 
 export class PrismaModeloRelatorioPiaRepository implements modeloRelatorioPiaRepository{
+    async findByNome(nome: string) {
+        const modeloRelatorioPia = await prisma.modeloRelatorioPia.findFirst({
+            where: {
+                nome,
+            },
+        });
+        return modeloRelatorioPia;
+    }
+
     async versioningUpdate(uid: string) {
         const modeloRelatorioPia = await prisma.modeloRelatorioPia.findUnique({
             where: { uid },
@@ -21,7 +31,7 @@ export class PrismaModeloRelatorioPiaRepository implements modeloRelatorioPiaRep
           });
     }
 
-    async create(data) {
+    async create(data: CreateModeloRelatorioPiaDto) {
         const modeloRelatorioPia = await prisma.modeloRelatorioPia.create({
             data,
         });

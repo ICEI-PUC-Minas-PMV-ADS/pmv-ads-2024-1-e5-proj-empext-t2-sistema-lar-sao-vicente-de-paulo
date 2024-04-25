@@ -4,7 +4,6 @@
   - You are about to drop the column `modelo_relatorio_pia_id` on the `relatorio_pia` table. All the data in the column will be lost.
   - You are about to drop the `pergunta` table. If the table is not empty, all the data it contains will be lost.
   - You are about to drop the `pergunta_relatorio` table. If the table is not empty, all the data it contains will be lost.
-  - Added the required column `versao` to the `modelo_relatorio_pia` table without a default value. This is not possible if the table is not empty.
   - Added the required column `id_modelo_relatorio_pia` to the `relatorio_pia` table without a default value. This is not possible if the table is not empty.
   - Added the required column `nome` to the `relatorio_pia` table without a default value. This is not possible if the table is not empty.
 
@@ -22,7 +21,7 @@ ALTER TABLE "pergunta_relatorio" DROP CONSTRAINT "pergunta_relatorio_id_relatori
 ALTER TABLE "relatorio_pia" DROP CONSTRAINT "relatorio_pia_modelo_relatorio_pia_id_fkey";
 
 -- AlterTable
-ALTER TABLE "modelo_relatorio_pia" ADD COLUMN     "versao" INTEGER NOT NULL;
+ALTER TABLE "modelo_relatorio_pia" ADD COLUMN     "versao" INTEGER NOT NULL DEFAULT 1;
 
 -- AlterTable
 ALTER TABLE "relatorio_pia" DROP COLUMN "modelo_relatorio_pia_id",

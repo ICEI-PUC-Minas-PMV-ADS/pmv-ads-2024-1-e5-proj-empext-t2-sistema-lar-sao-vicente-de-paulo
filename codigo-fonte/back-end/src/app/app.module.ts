@@ -15,7 +15,6 @@ import { APP_GUARD } from '@nestjs/core';
 import { RedisGuard } from '@/core/guards/auth.guard';
 import { RolesGuard } from '@/core/guards/role.guard';
 import { RelatorioPiaModule } from './modules/relatorio-pia/relatorio-pia.module';
-
 @Module({
 	imports: [
 		DatabaseModule,
