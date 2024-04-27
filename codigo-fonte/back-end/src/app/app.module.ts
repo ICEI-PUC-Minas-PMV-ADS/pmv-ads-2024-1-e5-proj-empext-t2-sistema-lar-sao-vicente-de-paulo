@@ -14,6 +14,7 @@ import { PermissaoModule } from './modules/permissao/permissao.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RedisGuard } from '@/core/guards/auth.guard';
 import { RolesGuard } from '@/core/guards/role.guard';
+import { ResponsavelIdosoModule } from './modules/responsavel-idoso/responsavel-idoso.module';
 
 @Module({
 	imports: [
@@ -40,6 +41,7 @@ import { RolesGuard } from '@/core/guards/role.guard';
 		CargoPermissaoModule,
 		GrupoPermissaoModule,
 		PermissaoModule,
+		ResponsavelIdosoModule,
 	],
 	providers: [
 		{
