@@ -56,7 +56,7 @@ model Idoso {
   nome_mae                  String   @db.VarChar(255)
   data_ingresso             DateTime @db.Date()
   cpf                       String?  @unique @db.VarChar(11)
-  cnh                       String?  @unique @db.VarChar(8)
+  cnh                       String?  @unique @db.VarChar(9)
   rg                        String?  @unique @db.VarChar(10)
   rg_orgao_expedidor        String?  @db.VarChar(20)
   cartao_sus                String?  @db.VarChar(20)
@@ -75,12 +75,12 @@ model Idoso {
   id_usuario BigInt  @db.BigInt
   usuario    Usuario @relation(fields: [id_usuario], references: [id])
 
-  responsaveis_idoso  ResponsavelIdoso[]
-  prontuarios         Prontuario[]
-  relatorios_pia      RelatorioPia[]
-  fichas_nutricionais FichaNutricional[]
-  perroca             Perroca[]
-  escala_braden       EscalaBraden[]
+  responsavel_idoso ResponsavelIdoso[]
+  prontuario        Prontuario[]
+  relatorio_pia     RelatorioPia[]
+  ficha_nutricional FichaNutricional[]
+  perroca           Perroca[]
+  escala_braden     EscalaBraden[]
 
   @@map("idoso")
 }

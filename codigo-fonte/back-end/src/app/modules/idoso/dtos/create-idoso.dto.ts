@@ -95,13 +95,12 @@ export class CreateIdosoDto {
 	@ApiPropertyOptional({ description: 'CPF do idoso' })
 	@IsOptional()
 	@IsString()
-	@IsCPF()
 	cpf?: string;
 
 	@ApiPropertyOptional({ description: 'CNH do idoso' })
 	@IsOptional()
 	@IsString()
-	@MaxLength(8)
+	@MaxLength(9)
 	cnh?: string;
 
 	@ApiPropertyOptional({ description: 'Cartão do SUS do idoso' })

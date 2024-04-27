@@ -4,10 +4,10 @@ import { DeleteIdosoDto } from '@/app/modules/idoso/dtos/delete-idoso.dto';
 import { UpdateIdosoDto } from '@/app/modules/idoso/dtos/update-idoso.dto';
 import { randomUUID } from 'crypto';
 interface IdosoComArrays extends Idoso {
-	responsaveis_idoso: any[];
-	prontuarios: any[];
-	relatorios_pia: any[];
-	fichas_nutricionais: any[];
+	responsavel_idoso: any[];
+	prontuario: any[];
+	relatorio_pia: any[];
+	ficha_nutricional: any[];
 	perroca: any[];
 	escala_braden: any[];
 }
@@ -50,10 +50,10 @@ export class InMemoryIdosoRepository implements idosoRepository {
 			motivo_inativacao: data.motivo_inativacao,
 			criado_em: new Date(),
 			atualizado_em: new Date(),
-			responsaveis_idoso: [],
-			prontuarios: [],
-			relatorios_pia: [],
-			fichas_nutricionais: [],
+			responsavel_idoso: [],
+			prontuario: [],
+			relatorio_pia: [],
+			ficha_nutricional: [],
 			perroca: [],
 			escala_braden: [],
 		};

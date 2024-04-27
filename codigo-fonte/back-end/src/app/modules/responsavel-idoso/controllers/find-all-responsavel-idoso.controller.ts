@@ -10,8 +10,8 @@ import { RoleIdoso } from '@/common/enums/roles';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { AppResponse } from '@utils/app-response';
 
-@ApiTags('idosos/responsaveis')
-@Controller('idosos/responsaveis')
+@ApiTags('idosos')
+@Controller('responsaveis')
 @ApiBearerAuth()
 export class FindAllResponsavelIdosoController {
 	constructor(
@@ -20,19 +20,19 @@ export class FindAllResponsavelIdosoController {
 	) {}
 
 	@Get()
-	@ApiOperation({ summary: 'Retorna uma lista de todos os responsável' })
-	@ApiPaginatedResponse(ResponsavelIdoso)
-	@ApiQueryBuilder()
+	@ApiOperation({ summary: 'Retorna uma lista de todos os responsáveis' })
 	@Roles(RoleIdoso.FIND)
+	@ApiQueryBuilder()
+	@ApiPaginatedResponse(ResponsavelIdoso)
 	@ApiResponseError()
 	async handle(): Promise<AppResponse<ResponsavelIdoso[]>> {
 		const { page_limit, page_number, ...query } =
 			await this.queryBuilder.query();
 
-		const { responsaveisIdoso, count } =
+		const { responsavelIdoso, count } =
 			await this.findAllResponsavelIdoso.execute(query);
 
-		return new AppResponse(responsaveisIdoso, {
+		return new AppResponse(responsavelIdoso, {
 			page_limit,
 			page_number,
 			total_count: count,

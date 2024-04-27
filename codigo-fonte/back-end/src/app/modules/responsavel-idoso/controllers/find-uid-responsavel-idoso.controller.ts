@@ -13,8 +13,8 @@ import { RoleIdoso } from '@/common/enums/roles';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { AppResponse } from '@utils/app-response';
 
-@ApiTags('idosos/responsaveis')
-@Controller('idosos/responsaveis')
+@ApiTags('idosos')
+@Controller('responsaveis')
 @ApiBearerAuth()
 export class FindUidResponsavelIdosoController {
 	constructor(
@@ -35,8 +35,8 @@ export class FindUidResponsavelIdosoController {
 	async handle(
 		@Param('uid') uid: string,
 	): Promise<AppResponse<ResponsavelIdoso | null>> {
-		const idoso = await this.findUidResponsavelIdoso.execute(uid);
+		const responsavel = await this.findUidResponsavelIdoso.execute(uid);
 
-		return new AppResponse(idoso);
+		return new AppResponse(responsavel);
 	}
 }

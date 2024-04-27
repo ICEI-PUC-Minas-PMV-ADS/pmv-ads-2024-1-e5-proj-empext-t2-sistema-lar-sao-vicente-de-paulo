@@ -9,12 +9,12 @@ export class FindAllResponsavelIdosoService {
 
 	async execute(
 		query: Prisma.ResponsavelIdosoFindManyArgs,
-	): Promise<{ count: number; responsaveisIdoso: ResponsavelIdoso[] }> {
-		const [responsaveisIdoso, count] = await this.prisma.$transaction([
+	): Promise<{ count: number; responsavelIdoso: ResponsavelIdoso[] }> {
+		const [responsavelIdoso, count] = await this.prisma.$transaction([
 			this.prisma.responsavelIdoso.findMany(query),
 			this.prisma.responsavelIdoso.count({ where: query.where }),
 		]);
 
-		return { count, responsaveisIdoso };
+		return { count, responsavelIdoso };
 	}
 }

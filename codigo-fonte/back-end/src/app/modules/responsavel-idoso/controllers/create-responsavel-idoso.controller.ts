@@ -6,8 +6,8 @@ import { Roles } from '@/common/decorators/roles.decorator';
 import { RoleIdoso } from '@/common/enums/roles';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 
-@ApiTags('idosos/responsaveis')
-@Controller('idosos/responsaveis')
+@ApiTags('idosos')
+@Controller('responsaveis')
 @ApiBearerAuth()
 export class CreateResponsavelIdosoController {
 	constructor(

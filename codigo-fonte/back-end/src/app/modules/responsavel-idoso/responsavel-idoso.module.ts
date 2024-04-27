@@ -9,6 +9,8 @@ import { UpdateResponsavelIdosoService } from './services/update-responsavel-ido
 import { UpdateResponsavelIdosoController } from './controllers/update-responsavel-idoso.controller';
 import { DeleteResponsavelIdosoService } from './services/delete-responsavel-idoso.service';
 import { DeleteResponsavelIdosoController } from './controllers/delete-responsavel-idoso.controller';
+import { DatabaseModule } from '@/core/providers/database/database.module';
+import { QueryBuilderModule } from '@/core/providers/query-builder/query-builder.module';
 
 @Module({
 	providers: [
@@ -25,5 +27,6 @@ import { DeleteResponsavelIdosoController } from './controllers/delete-responsav
 		UpdateResponsavelIdosoController,
 		DeleteResponsavelIdosoController,
 	],
+	imports: [DatabaseModule, QueryBuilderModule],
 })
 export class ResponsavelIdosoModule {}
