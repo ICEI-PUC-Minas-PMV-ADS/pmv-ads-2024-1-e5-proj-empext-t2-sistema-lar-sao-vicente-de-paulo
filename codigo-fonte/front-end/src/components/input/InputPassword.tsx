@@ -1,12 +1,13 @@
 import { QuestionCircleOutlined, WarningOutlined } from "@ant-design/icons";
 import { Input, Tooltip } from "antd";
+import { valueType } from "antd/es/statistic/utils";
 import { ChangeEventHandler } from "react";
 
 interface IInputPassword {
   label?: string;
   placeholder?: string;
   error?: string;
-  value?: string;
+  value?: valueType;
   onChange: ChangeEventHandler<HTMLInputElement> | undefined;
   required: boolean;
   tooltip?: string;

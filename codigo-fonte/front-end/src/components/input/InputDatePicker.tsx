@@ -1,26 +1,19 @@
 import { QuestionCircleOutlined, WarningOutlined } from "@ant-design/icons";
-import { Input, Tooltip } from "antd";
-import { valueType } from "antd/es/statistic/utils";
-import {
-  ChangeEventHandler,
-  HTMLInputAutoCompleteAttribute,
-  HTMLInputTypeAttribute,
-} from "react";
+import { DatePicker, Input, Tooltip } from "antd";
+import { ChangeEvent, ChangeEventHandler } from "react";
 
-interface IInputForm {
+interface IInputDatePicker {
   label?: string;
   placeholder?: string;
   error?: string;
-  value?: valueType;
+  value?: any;
   onChange: ChangeEventHandler<HTMLInputElement> | undefined;
   required?: boolean;
   tooltip?: string;
   defaultValue?: any;
-  type?: HTMLInputTypeAttribute;
-  autoComplete?: HTMLInputAutoCompleteAttribute;
 }
 
-export const InputForm = ({
+export const InputDatePicker = ({
   label,
   placeholder,
   error,
@@ -29,9 +22,7 @@ export const InputForm = ({
   value,
   tooltip,
   defaultValue,
-  type,
-  autoComplete,
-}: IInputForm) => {
+}: IInputDatePicker) => {
   return (
     <div className="flex flex-col gap-1 w-full">
       {label && (
@@ -51,7 +42,7 @@ export const InputForm = ({
           {required && <span className="text-red-600 pl-1">*</span>}
         </label>
       )}
-      <Input
+      <DatePicker
         id={label}
         status={error && "error"}
         placeholder={placeholder}
@@ -59,8 +50,7 @@ export const InputForm = ({
         onChange={onChange}
         value={value}
         defaultValue={defaultValue}
-        type={type}
-        autoComplete={autoComplete}
+        format="DD/MM/YYYY"
       />
       {error && (
         <div className="flex gap-2 items-center text-red-600 text-xs">

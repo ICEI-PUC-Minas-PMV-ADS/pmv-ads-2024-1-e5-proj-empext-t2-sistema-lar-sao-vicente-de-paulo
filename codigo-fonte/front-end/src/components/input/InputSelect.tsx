@@ -1,6 +1,6 @@
 import { QuestionCircleOutlined, WarningOutlined } from "@ant-design/icons";
 import { Select, Tooltip } from "antd";
-import { ChangeEventHandler, ReactNode } from "react";
+import { ChangeEvent, ChangeEventHandler, ReactNode } from "react";
 
 interface IInputSelect {
   label?: string;

@@ -10,6 +10,7 @@ import { Filter } from "@/interface/IQuery";
 import { ColumnsType } from "antd/es/table";
 import { TableDefault } from "@/components/table/TableDefault";
 import { IIdoso } from "./Interface/IIdoso";
+import { CriarIdosoModal } from "./components";
 
 export default function Idoso() {
   const [pageLimit, setPageLimit] = useState<number>(10);
@@ -68,7 +69,7 @@ export default function Idoso() {
   return (
     <div className="flex flex-col gap-[15px] mt-8">
       <div className="flex gap-5">
-        {/* <CriarUsuarioModal refetchList={refetch} /> */}
+        <CriarIdosoModal refetchList={refetch} />
         <Input
           placeholder="Buscar"
           size="large"
