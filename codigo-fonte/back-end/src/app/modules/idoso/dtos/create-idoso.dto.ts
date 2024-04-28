@@ -28,6 +28,7 @@ export class CreateIdosoDto {
 	@ApiPropertyOptional({ description: 'Apelido do idoso' })
 	@IsOptional()
 	@IsString()
+	@MaxLength(255)
 	apelido?: string;
 
 	@ApiProperty({ description: 'Data de nascimento do idoso' })
@@ -38,41 +39,44 @@ export class CreateIdosoDto {
 	@ApiProperty({ description: 'Naturalidade do idoso' })
 	@IsNotEmpty()
 	@IsString()
-	@MaxLength(100)
+	@MaxLength(255)
 	naturalidade: string;
 
 	@ApiProperty({ description: 'Estado do idoso' })
 	@IsNotEmpty()
 	@IsString()
 	@Matches(/^[A-Z]{2}$/, { message: 'Informe uma sigla de estado válida' })
+	@MaxLength(2)
 	estado: string;
 
 	@ApiProperty({ description: 'Gênero do idoso' })
 	@IsNotEmpty()
 	@IsString()
+	@MaxLength(255)
 	genero: string;
 
 	@ApiProperty({ description: 'Cidade do idoso' })
 	@IsNotEmpty()
 	@IsString()
+	@MaxLength(255)
 	cidade: string;
 
 	@ApiProperty({ description: 'Estado civil do idoso' })
 	@IsNotEmpty()
 	@IsString()
-	@MaxLength(20)
+	@MaxLength(255)
 	estado_civil: string;
 
 	@ApiProperty({ description: 'Religião do idoso' })
 	@IsNotEmpty()
 	@IsString()
-	@MaxLength(50)
+	@MaxLength(255)
 	religiao: string;
 
 	@ApiProperty({ description: 'Escolaridade do idoso' })
 	@IsNotEmpty()
 	@IsString()
-	@MaxLength(50)
+	@MaxLength(255)
 	escolaridade: string;
 
 	@ApiProperty({ description: 'Nome do pai do idoso' })
@@ -95,6 +99,7 @@ export class CreateIdosoDto {
 	@ApiPropertyOptional({ description: 'CPF do idoso' })
 	@IsOptional()
 	@IsString()
+	@MaxLength(11)
 	cpf?: string;
 
 	@ApiPropertyOptional({ description: 'CNH do idoso' })
@@ -111,7 +116,7 @@ export class CreateIdosoDto {
 	@ApiPropertyOptional({ description: 'RG do idoso' })
 	@IsOptional()
 	@IsString()
-	@MaxLength(10)
+	@MaxLength(255)
 	rg?: string;
 
 	@ApiPropertyOptional({ description: 'Órgão expedidor do RG do idoso' })
@@ -143,7 +148,7 @@ export class CreateIdosoDto {
 	})
 	@IsOptional()
 	@IsString()
-	@MaxLength(20)
+	@MaxLength(255)
 	certidao_nascimento_folha?: string;
 
 	@ApiPropertyOptional({
@@ -151,7 +156,7 @@ export class CreateIdosoDto {
 	})
 	@IsOptional()
 	@IsString()
-	@MaxLength(20)
+	@MaxLength(255)
 	certidao_nascimento_livro?: string;
 
 	@ApiPropertyOptional({
@@ -159,7 +164,7 @@ export class CreateIdosoDto {
 	})
 	@IsOptional()
 	@IsString()
-	@MaxLength(20)
+	@MaxLength(255)
 	certidao_casamento_folha?: string;
 
 	@ApiPropertyOptional({
@@ -167,6 +172,6 @@ export class CreateIdosoDto {
 	})
 	@IsOptional()
 	@IsString()
-	@MaxLength(20)
+	@MaxLength(255)
 	certidao_casamento_livro?: string;
 }

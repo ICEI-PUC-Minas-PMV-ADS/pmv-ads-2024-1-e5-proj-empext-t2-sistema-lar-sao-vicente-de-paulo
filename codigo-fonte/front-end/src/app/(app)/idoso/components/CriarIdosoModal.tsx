@@ -9,6 +9,10 @@ import { withoutNumber } from "@/utils/validator/withoutNumber";
 import { IOperationIdoso } from "../Interface/IIdoso";
 import { InputDatePicker } from "@/components/input/InputDatePicker";
 import dayjs from "dayjs";
+import { isCPF } from "@/utils/validator/isCPF";
+import { isCNH } from "@/utils/validator/isCNH";
+import { invertCPF, regexCPF } from "@/utils/regex/regexCPF";
+import { isCNS } from "@/utils/validator/isCNS";
 
 export const CriarIdosoModal = ({
   refetchList,
@@ -351,7 +355,263 @@ export const CriarIdosoModal = ({
             {
               key: "2",
               label: "Documentos",
-              children: "Content of Tab Pane 2",
+              children: (
+                <div className="w-full flex flex-col gap-[15px]">
+                  <div className="flex justify-between gap-4">
+                    <Controller
+                      name="cpf"
+                      control={control}
+                      defaultValue=""
+                      rules={{
+                        validate: (value) => {
+                          if (value && isCPF(value))
+                            return "Formato inválido do CPF";
+                          return true;
+                        },
+                      }}
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <InputForm
+                          label="CPF"
+                          error={error?.message}
+                          onChange={(e) => {
+                            onChange(invertCPF(e.target.value));
+                          }}
+                          value={value && regexCPF(value)}
+                          placeholder="000.000.000-00"
+                        />
+                      )}
+                    />
+                    <Controller
+                      name="cnh"
+                      control={control}
+                      defaultValue=""
+                      rules={{
+                        validate: (value) => {
+                          if (value && isCNH(value))
+                            return "Formato inválido do CNH";
+                          return true;
+                        },
+                      }}
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <InputForm
+                          label="CNH"
+                          error={error?.message}
+                          onChange={onChange}
+                          value={value}
+                          placeholder="00000000000"
+                          maxLength={9}
+                        />
+                      )}
+                    />
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <Controller
+                      name="rg"
+                      control={control}
+                      defaultValue=""
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <InputForm
+                          label="RG"
+                          error={error?.message}
+                          onChange={onChange}
+                          value={value}
+                          placeholder="MG-00.000.000"
+                          maxLength={20}
+                        />
+                      )}
+                    />
+                    <Controller
+                      name="rg_orgao_expedidor"
+                      control={control}
+                      defaultValue=""
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <InputForm
+                          label="Órgão Expedidor"
+                          error={error?.message}
+                          onChange={onChange}
+                          value={value}
+                          placeholder="SSP MG"
+                          maxLength={20}
+                        />
+                      )}
+                    />
+                    <Controller
+                      name="cartao_sus"
+                      control={control}
+                      defaultValue=""
+                      rules={{
+                        validate: (value) => {
+                          if (value && isCNS(value))
+                            return "Formato inválido do Cartão do SUS";
+                          return true;
+                        },
+                      }}
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <InputForm
+                          label="Cartão do SUS"
+                          error={error?.message}
+                          onChange={onChange}
+                          value={value}
+                          placeholder="000000000000000"
+                          maxLength={15}
+                        />
+                      )}
+                    />
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <Controller
+                      name="titulo_eleitor"
+                      control={control}
+                      defaultValue=""
+                      rules={{
+                        validate: (value) => {
+                          if (value && isTituloEleitor(value))
+                            return "Formato inválido do Título do Eleitor";
+                          return true;
+                        },
+                      }}
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <InputForm
+                          label="Título de Eleitor"
+                          error={error?.message}
+                          onChange={onChange}
+                          value={value}
+                          placeholder="000000000000"
+                          maxLength={12}
+                        />
+                      )}
+                    />
+                    <Controller
+                      name="titulo_eleitor_zona"
+                      control={control}
+                      defaultValue=""
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <InputForm
+                          label="Zona"
+                          error={error?.message}
+                          onChange={onChange}
+                          value={value}
+                          placeholder="000"
+                          maxLength={3}
+                        />
+                      )}
+                    />
+                    <Controller
+                      name="titulo_eleitor_secao"
+                      control={control}
+                      defaultValue=""
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <InputForm
+                          label="Seção"
+                          error={error?.message}
+                          onChange={onChange}
+                          value={value}
+                          placeholder="0000"
+                          maxLength={4}
+                        />
+                      )}
+                    />
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <Controller
+                      name="certidao_nascimento_livro"
+                      control={control}
+                      defaultValue=""
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <InputForm
+                          label="C. Nascimento / Livro"
+                          error={error?.message}
+                          onChange={onChange}
+                          value={value}
+                          placeholder="00000"
+                          maxLength={5}
+                        />
+                      )}
+                    />
+                    <Controller
+                      name="certidao_nascimento_folha"
+                      control={control}
+                      defaultValue=""
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <InputForm
+                          label="C. Nascimento / Folha"
+                          error={error?.message}
+                          onChange={onChange}
+                          value={value}
+                          placeholder="000"
+                          maxLength={3}
+                        />
+                      )}
+                    />
+                    <Controller
+                      name="certidao_casamento_livro"
+                      control={control}
+                      defaultValue=""
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <InputForm
+                          label="C. Casamento / Livro"
+                          error={error?.message}
+                          onChange={onChange}
+                          value={value}
+                          placeholder="00000"
+                          maxLength={5}
+                        />
+                      )}
+                    />
+                    <Controller
+                      name="certidao_casamento_folha"
+                      control={control}
+                      defaultValue=""
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <InputForm
+                          label="C. Casamento / Folha"
+                          error={error?.message}
+                          onChange={onChange}
+                          value={value}
+                          placeholder="000"
+                          maxLength={3}
+                        />
+                      )}
+                    />
+                  </div>
+                </div>
+              ),
             },
             {
               key: "3",

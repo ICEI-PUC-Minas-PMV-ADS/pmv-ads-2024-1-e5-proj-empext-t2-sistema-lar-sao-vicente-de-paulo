@@ -18,6 +18,7 @@ interface IInputForm {
   defaultValue?: any;
   type?: HTMLInputTypeAttribute;
   autoComplete?: HTMLInputAutoCompleteAttribute;
+  maxLength?: number;
 }
 
 export const InputForm = ({
@@ -31,6 +32,7 @@ export const InputForm = ({
   defaultValue,
   type,
   autoComplete,
+  maxLength,
 }: IInputForm) => {
   return (
     <div className="flex flex-col gap-1 w-full">
@@ -61,6 +63,7 @@ export const InputForm = ({
         defaultValue={defaultValue}
         type={type}
         autoComplete={autoComplete}
+        maxLength={maxLength || 100}
       />
       {error && (
         <div className="flex gap-2 items-center text-red-600 text-xs">
