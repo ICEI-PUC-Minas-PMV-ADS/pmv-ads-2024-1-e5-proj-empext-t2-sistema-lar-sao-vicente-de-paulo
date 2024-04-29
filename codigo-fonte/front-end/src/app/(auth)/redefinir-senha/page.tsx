@@ -74,11 +74,13 @@ export default function RedefinirSenha() {
                 Nos informe o e-mail usado no cadastro:
               </p>
               <InputForm
+                placeholder="E-mail"
+                type="email"
+                autoComplete="email"
                 required
                 error={error?.message}
                 onChange={onChange}
                 value={value}
-                placeholder="E-mail"
               />
             </div>
           )}
@@ -127,7 +129,10 @@ export default function RedefinirSenha() {
                   onChange={onChange}
                   value={value}
                 />
-                <CheckPassword password={value || ""} check={setCheckSenha} />
+                <CheckPassword
+                  password={value || ""}
+                  check={(v) => setCheckSenha(v)}
+                />
               </div>
             )}
           />

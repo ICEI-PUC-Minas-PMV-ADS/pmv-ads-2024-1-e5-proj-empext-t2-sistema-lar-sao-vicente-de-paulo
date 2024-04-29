@@ -48,11 +48,13 @@ export default function Login() {
         rules={{ required: "Preencha o campo de e-mail" }}
         render={({ field: { onChange, value }, fieldState: { error } }) => (
           <InputForm
+            placeholder="E-mail"
+            type="email"
             required
             error={error?.message}
             onChange={onChange}
             value={value}
-            placeholder="E-mail"
+            autoComplete="email"
           />
         )}
       />
