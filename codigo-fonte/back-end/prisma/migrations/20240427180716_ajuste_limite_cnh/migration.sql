@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "idoso" ALTER COLUMN "cnh" SET DATA TYPE VARCHAR(9);
