@@ -5,9 +5,9 @@ import { Dispatch, SetStateAction } from "react";
 interface ITableDefault {
   dataSource: any[] | undefined;
   columns: ColumnsType<any>;
-  totalCount: number | null;
-  setPageLimit: Dispatch<SetStateAction<number>>;
-  setCurrentPage: Dispatch<SetStateAction<number>>;
+  totalCount?: number | null;
+  setPageLimit?: Dispatch<SetStateAction<number>>;
+  setCurrentPage?: Dispatch<SetStateAction<number>>;
 }
 
 export const TableDefault = ({
@@ -27,8 +27,8 @@ export const TableDefault = ({
         total: totalCount || 0,
         showTotal: (total) => `Total de ${total} items`,
         onChange: (page, pageSize) => {
-          setPageLimit(pageSize);
-          setCurrentPage(page);
+          setPageLimit && setPageLimit(pageSize);
+          setCurrentPage && setCurrentPage(page);
         },
         showSizeChanger: true,
         pageSizeOptions: [10, 20, 30, 50, 100],

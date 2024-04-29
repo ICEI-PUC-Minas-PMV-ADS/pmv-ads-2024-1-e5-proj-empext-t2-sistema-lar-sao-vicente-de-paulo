@@ -37,7 +37,6 @@ export interface IIdoso {
 }
 
 export interface IOperationIdoso {
-  id_usuario: bigint;
   foto?: string;
   nome_completo: string;
   apelido?: string;

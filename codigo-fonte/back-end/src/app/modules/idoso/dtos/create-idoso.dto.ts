@@ -10,10 +10,6 @@ import {
 } from 'class-validator';
 
 export class CreateIdosoDto {
-	@ApiProperty({ description: 'ID do usuário associado ao idoso' })
-	@IsNotEmpty()
-	id_usuario: bigint;
-
 	@ApiPropertyOptional({ description: 'Foto do usuário' })
 	@IsString()
 	@IsOptional()
@@ -105,7 +101,7 @@ export class CreateIdosoDto {
 	@ApiPropertyOptional({ description: 'CNH do idoso' })
 	@IsOptional()
 	@IsString()
-	@MaxLength(9)
+	@MaxLength(11)
 	cnh?: string;
 
 	@ApiPropertyOptional({ description: 'Cartão do SUS do idoso' })

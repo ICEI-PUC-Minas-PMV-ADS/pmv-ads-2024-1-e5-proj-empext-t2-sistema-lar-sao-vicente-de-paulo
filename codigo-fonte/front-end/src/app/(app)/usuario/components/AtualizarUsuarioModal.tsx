@@ -89,6 +89,7 @@ export const AtualizarUsuarioModal = ({
               type: "success",
             });
             setIsFetchingFoto(false);
+            setFileList([]);
             refetchList();
             setOpen(false);
           })

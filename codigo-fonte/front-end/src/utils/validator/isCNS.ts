@@ -7,7 +7,6 @@ export function isCNS(cns: string) {
   var resultado = new String();
   var tamCNS = cns.length;
   if (tamCNS != 15) {
-    alert("Numero de CNS invalido");
     return false;
   }
   pis = cns.substring(0, 11);

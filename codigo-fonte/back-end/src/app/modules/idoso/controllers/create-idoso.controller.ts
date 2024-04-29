@@ -5,6 +5,8 @@ import { ApiTags, ApiOperation, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { RoleIdoso } from '@/common/enums/roles';
 import { Roles } from '@/common/decorators/roles.decorator';
+import { AuthUser, IAuthUser } from '@/common/decorators/auth.decorator';
+import { AppResponse } from '@utils/app-response';
 
 @ApiTags('idosos')
 @Controller('idosos')
@@ -20,7 +22,12 @@ export class CreateIdosoController {
 	})
 	@Roles(RoleIdoso.CREATE)
 	@ApiResponseError()
-	async handle(@Body() data: CreateIdosoDto): Promise<void> {
-		await this.createIdoso.execute(data);
+	async handle(
+		@AuthUser() user: IAuthUser,
+		@Body() data: CreateIdosoDto,
+	): Promise<AppResponse<{ uid: string }>> {
+		const idoso = await this.createIdoso.execute(data, user.usuario.id);
+
+		return new AppResponse({ uid: idoso.uid });
 	}
 }

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { InputForm, InputSelect, UploudAvatar } from "@/components/input";
 import { ModalDefault } from "@/components/modal/ModalDefault";
-import { DatePicker, Select, Tabs, TabsProps, UploadFile } from "antd";
+import { Select, Tabs, UploadFile, notification } from "antd";
 import { isNome } from "@/utils/validator/isName";
 import { withoutNumber } from "@/utils/validator/withoutNumber";
 import { IOperationIdoso } from "../Interface/IIdoso";
@@ -13,26 +13,105 @@ import { isCPF } from "@/utils/validator/isCPF";
 import { isCNH } from "@/utils/validator/isCNH";
 import { invertCPF, regexCPF } from "@/utils/regex/regexCPF";
 import { isCNS } from "@/utils/validator/isCNS";
+import { TableDefault } from "@/components/table/TableDefault";
+import { IResponsavelIdoso } from "../Interface/IResponsavelIdoso";
+import { ColumnsType } from "antd/es/table";
+import { CriarResponsavelIdosoModal } from "./CriarResponsavelIdosoModal";
+import { useFetch } from "@/utils/hooks/useFetch";
+import { IEstado } from "@/interface/IEstado";
+import { ICidade } from "@/interface/ICidade";
+import axios, { AxiosError } from "axios";
+import { useCookies } from "react-cookie";
+import { authToken } from "@/config/authToken";
+import { IErrorState, useMutation } from "@/utils/hooks/useMutation";
+import { api } from "@/utils/service/api";
+import { isTituloEleitor } from "@/utils/validator/isTituloEleitor";
 
 export const CriarIdosoModal = ({
   refetchList,
 }: {
   refetchList: () => void;
 }) => {
+  const [cookies] = useCookies([authToken.nome]);
   const [open, setOpen] = useState(false);
+  const [isFetchingFoto, setIsFetchingFoto] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [cidades, setCidades] = useState<ICidade[]>([]);
 
-  const { handleSubmit, control, reset, watch } = useForm<IOperationIdoso>();
+  const { handleSubmit, control, reset } = useForm<IOperationIdoso>();
+
+  const { mutate: createIdoso, isFetching: isFetchingData } = useMutation<
+    IOperationIdoso,
+    { uid: string }
+  >("/idosos", {
+    method: "post",
+    messageSucess: null,
+    onSuccess: async (data) => {
+      const formData = new FormData();
+
+      if (fileList.length > 0 && fileList[0] && fileList[0].originFileObj) {
+        setIsFetchingFoto(true);
+        await formData.append("foto", fileList[0]?.originFileObj);
+        await api
+          .post("/idosos/" + data.data.uid + "/upload-foto", formData, {
+            headers: {
+              Authorization: "Bearer " + cookies[authToken.nome],
+              "content-type": "multipart/form-data",
+            },
+          })
+          .then(() => {
+            notification.open({
+              message: "Operação realizada",
+              description: "Idoso cadastrado com sucesso!",
+              type: "success",
+            });
+            setIsFetchingFoto(false);
+            setFileList([]);
+            reset();
+            refetchList();
+            setOpen(false);
+          })
+          .catch((err: AxiosError<{ error: IErrorState }>) => {
+            notification.open({
+              message: "Ocorreu um erro",
+              description: err.response?.data?.error.message,
+              type: "error",
+            });
+            setIsFetchingFoto(false);
+          });
+      } else {
+        notification.open({
+          message: "Operação realizada",
+          description: "Idoso cadastrado com sucesso!",
+          type: "success",
+        });
+        reset();
+        refetchList();
+        setOpen(false);
+      }
+    },
+  });
+
+  const { data: estados } = useFetch<IEstado[]>(
+    "https://brasilapi.com.br/api/ibge/uf/v1",
+    ["estados_brasil"],
+    {
+      method: "get",
+      enable: open,
+      messageError: null,
+      resNotInData: true,
+    }
+  );
 
   return (
     <ModalDefault
-      nameButtonOpenModal={"Cadastrar"}
+      nameButtonOpenModal={"Cadastrar Idoso"}
       iconButtonOpenModal={<UserAddOutlined />}
       titleModal={"Adicionando idoso"}
       okText="Cadastrar"
-      onSubmit={() => {}}
-      isFetching={false}
-      width="750px"
+      onSubmit={handleSubmit(createIdoso)}
+      isFetching={isFetchingData || isFetchingFoto}
+      width="800px"
       setOpenModal={setOpen}
       openModal={open}
     >
@@ -94,7 +173,7 @@ export const CriarIdosoModal = ({
               label: "Identificação",
               children: (
                 <div className="w-full flex flex-col gap-[15px]">
-                  <div className="flex justify-between gap-4">
+                  <div className="flex gap-4">
                     <Controller
                       name="nome_mae"
                       control={control}
@@ -150,7 +229,7 @@ export const CriarIdosoModal = ({
                       )}
                     />
                   </div>
-                  <div className="flex justify-between gap-4">
+                  <div className="grid grid-cols-3 gap-4">
                     <Controller
                       name="naturalidade"
                       control={control}
@@ -184,13 +263,27 @@ export const CriarIdosoModal = ({
                       }) => (
                         <InputSelect
                           label="Estado"
-                          onChange={onChange}
+                          onChange={(value) => {
+                            onChange(value);
+                            axios
+                              .get(
+                                `https://brasilapi.com.br/api/ibge/municipios/v1/${value}?providers=dados-abertos-br,gov,wikipedia`
+                              )
+                              .then((data) => {
+                                setCidades(data.data);
+                              });
+                          }}
                           error={error?.message}
                           required
                           placeholder="Selecionar"
                           value={value}
+                          showSearch
                         >
-                          <Select.Option>Vazio</Select.Option>
+                          {estados?.map((estado) => (
+                            <Select.Option key={estado.id} value={estado.sigla}>
+                              {estado.sigla}
+                            </Select.Option>
+                          ))}
                         </InputSelect>
                       )}
                     />
@@ -211,35 +304,21 @@ export const CriarIdosoModal = ({
                           required
                           placeholder="Selecionar"
                           value={value}
+                          showSearch
                         >
-                          <Select.Option>Vazio</Select.Option>
+                          {cidades?.map((cidade) => (
+                            <Select.Option
+                              key={cidade.codigo_ibge}
+                              value={cidade.nome}
+                            >
+                              {cidade.nome}
+                            </Select.Option>
+                          ))}
                         </InputSelect>
                       )}
                     />
                   </div>
-                  <div className="flex justify-between gap-4">
-                    <Controller
-                      name="genero"
-                      control={control}
-                      rules={{
-                        required: "Insira o gênero",
-                      }}
-                      render={({
-                        field: { onChange, value },
-                        fieldState: { error },
-                      }) => (
-                        <InputSelect
-                          label="Gênero"
-                          onChange={onChange}
-                          error={error?.message}
-                          required
-                          placeholder="Selecionar"
-                          value={value}
-                        >
-                          <Select.Option>Vazio</Select.Option>
-                        </InputSelect>
-                      )}
-                    />
+                  <div className="grid grid-cols-2 gap-4">
                     <Controller
                       name="estado_civil"
                       control={control}
@@ -258,7 +337,24 @@ export const CriarIdosoModal = ({
                           placeholder="Selecionar"
                           value={value}
                         >
-                          <Select.Option>Vazio</Select.Option>
+                          <Select.Option value={"Solteiro(a)"}>
+                            Solteiro(a)
+                          </Select.Option>
+                          <Select.Option value={"Casado(a)"}>
+                            Casado(a)
+                          </Select.Option>
+                          <Select.Option value={"Viúvo(a)"}>
+                            Viúvo(a)
+                          </Select.Option>
+                          <Select.Option value={"Divorciado(a)"}>
+                            Divorciado(a)
+                          </Select.Option>
+                          <Select.Option value={"Separado(a) judicialmente"}>
+                            Separado(a) judicialmente
+                          </Select.Option>
+                          <Select.Option value={"União estável"}>
+                            União estável
+                          </Select.Option>
                         </InputSelect>
                       )}
                     />
@@ -280,12 +376,34 @@ export const CriarIdosoModal = ({
                           placeholder="Selecionar"
                           value={value}
                         >
-                          <Select.Option>Vazio</Select.Option>
+                          <Select.Option value={"Analfabeto"}>
+                            Analfabeto
+                          </Select.Option>
+                          <Select.Option
+                            value={"Ensino Fundamental Incompleto"}
+                          >
+                            Ensino Fundamental Incompleto
+                          </Select.Option>
+                          <Select.Option value={"Ensino Fundamental Completo"}>
+                            Ensino Fundamental Completo
+                          </Select.Option>
+                          <Select.Option value={"Ensino Médio Incompleto"}>
+                            Ensino Médio Incompleto
+                          </Select.Option>
+                          <Select.Option value={"Ensino Médio Completo"}>
+                            Ensino Médio Completo
+                          </Select.Option>
+                          <Select.Option value={"Ensino Superior Incompleto"}>
+                            Ensino Superior Incompleto
+                          </Select.Option>
+                          <Select.Option value={"Ensino Superior Completo"}>
+                            Ensino Superior Completo
+                          </Select.Option>
                         </InputSelect>
                       )}
                     />
                   </div>
-                  <div className="flex justify-between gap-4">
+                  <div className="grid grid-cols-4 gap-4">
                     <Controller
                       name="religiao"
                       control={control}
@@ -305,6 +423,33 @@ export const CriarIdosoModal = ({
                           value={value}
                           placeholder="Católico(a)"
                         />
+                      )}
+                    />
+                    <Controller
+                      name="genero"
+                      control={control}
+                      rules={{
+                        required: "Insira o gênero",
+                      }}
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <InputSelect
+                          label="Gênero Biológico"
+                          onChange={onChange}
+                          error={error?.message}
+                          required
+                          placeholder="Selecionar"
+                          value={value}
+                        >
+                          <Select.Option value={"Masculino"}>
+                            Masculino
+                          </Select.Option>
+                          <Select.Option value={"Feminino"}>
+                            Feminino
+                          </Select.Option>
+                        </InputSelect>
                       )}
                     />
                     <Controller
@@ -330,6 +475,7 @@ export const CriarIdosoModal = ({
                     <Controller
                       name="data_ingresso"
                       control={control}
+                      defaultValue={new Date()}
                       rules={{
                         required: "Selecione a data que ingressou",
                       }}
@@ -343,7 +489,6 @@ export const CriarIdosoModal = ({
                           error={error?.message}
                           onChange={onChange}
                           value={value && dayjs(value)}
-                          defaultValue={dayjs(new Date())}
                           placeholder="Selecionar data"
                         />
                       )}
@@ -357,14 +502,14 @@ export const CriarIdosoModal = ({
               label: "Documentos",
               children: (
                 <div className="w-full flex flex-col gap-[15px]">
-                  <div className="flex justify-between gap-4">
+                  <div className="flex gap-4">
                     <Controller
                       name="cpf"
                       control={control}
                       defaultValue=""
                       rules={{
                         validate: (value) => {
-                          if (value && isCPF(value))
+                          if (value && !isCPF(value))
                             return "Formato inválido do CPF";
                           return true;
                         },
@@ -390,7 +535,7 @@ export const CriarIdosoModal = ({
                       defaultValue=""
                       rules={{
                         validate: (value) => {
-                          if (value && isCNH(value))
+                          if (value && !isCNH(value))
                             return "Formato inválido do CNH";
                           return true;
                         },
@@ -405,12 +550,12 @@ export const CriarIdosoModal = ({
                           onChange={onChange}
                           value={value}
                           placeholder="00000000000"
-                          maxLength={9}
+                          maxLength={11}
                         />
                       )}
                     />
                   </div>
-                  <div className="flex justify-between gap-4">
+                  <div className="flex gap-4">
                     <Controller
                       name="rg"
                       control={control}
@@ -453,7 +598,7 @@ export const CriarIdosoModal = ({
                       defaultValue=""
                       rules={{
                         validate: (value) => {
-                          if (value && isCNS(value))
+                          if (value && !isCNS(value))
                             return "Formato inválido do Cartão do SUS";
                           return true;
                         },
@@ -473,18 +618,11 @@ export const CriarIdosoModal = ({
                       )}
                     />
                   </div>
-                  <div className="flex justify-between gap-4">
+                  <div className="flex gap-4">
                     <Controller
                       name="titulo_eleitor"
                       control={control}
                       defaultValue=""
-                      rules={{
-                        validate: (value) => {
-                          if (value && isTituloEleitor(value))
-                            return "Formato inválido do Título do Eleitor";
-                          return true;
-                        },
-                      }}
                       render={({
                         field: { onChange, value },
                         fieldState: { error },
@@ -536,7 +674,7 @@ export const CriarIdosoModal = ({
                       )}
                     />
                   </div>
-                  <div className="flex justify-between gap-4">
+                  <div className="flex gap-4">
                     <Controller
                       name="certidao_nascimento_livro"
                       control={control}
@@ -616,11 +754,63 @@ export const CriarIdosoModal = ({
             {
               key: "3",
               label: "Responsáveis",
-              children: "Content of Tab Pane 3",
+              children: (
+                <div className="w-full flex flex-col gap-[15px]">
+                  <Responsaveis />
+                </div>
+              ),
             },
           ]}
         />
       </form>
     </ModalDefault>
+  );
+};
+
+const Responsaveis = () => {
+  const [open, setOpen] = useState(false);
+
+  const [data, setData] = useState<IResponsavelIdoso[]>([]);
+  const columns: ColumnsType<IResponsavelIdoso> = [
+    {
+      title: "Nome",
+      dataIndex: "nome_completo",
+      key: "nome_completo",
+    },
+    {
+      title: "Parentesco",
+      dataIndex: "parentesco",
+      key: "parentesco",
+    },
+    {
+      title: "Contatos",
+      key: "telefones",
+      render(_: any, record: IResponsavelIdoso) {
+        return (
+          <div className="flex flex-col">
+            <p>{record.telefone_1}</p>
+            <p>{record?.telefone_2}</p>
+          </div>
+        );
+      },
+    },
+    {
+      key: "atualizar_responsavel_idoso",
+      render(_: any, record: IResponsavelIdoso) {
+        return (
+          <div className="flex justify-end">
+            {/* <AtualizarCargoModal uid={record.uid} refetchList={refetch} /> */}
+          </div>
+        );
+      },
+    },
+  ];
+  return (
+    <>
+      <div>
+        <CriarResponsavelIdosoModal refetchList={() => {}} />
+      </div>
+      <TableDefault dataSource={data} columns={columns} />
+    </>
   );
 };

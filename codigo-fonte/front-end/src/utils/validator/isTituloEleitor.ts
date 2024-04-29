@@ -1,4 +1,4 @@
-function isTituloEleitor(titulo: string) {
+export function isTituloEleitor(titulo: string) {
   // Remover caracteres não numéricos
   titulo = titulo.replace(/\D/g, "");
 

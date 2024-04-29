@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CreateIdosoDto } from '../dtos/create-idoso.dto';
 import { PrismaUsuarioRepository } from '@/app/modules/usuario/repositories/prisma/prisma-usuario-repository';
 import { AppError } from '@utils/app-error';
-import { Idoso } from '../entities/idoso.entity';
 import { PrismaIdosoRepository } from '../repositories/prisma/prisma-idoso-repository';
 
 @Injectable()
@@ -12,24 +11,50 @@ export class CreateIdosoService {
 		private usuarioRepository: PrismaUsuarioRepository,
 	) {}
 
-	async execute(data: CreateIdosoDto): Promise<Idoso> {
-		const usuario = await this.usuarioRepository.findById(data.id_usuario);
+	async execute(
+		data: CreateIdosoDto,
+		id_usuario: bigint,
+	): Promise<{ uid: string }> {
+		const usuario = await this.usuarioRepository.findById(id_usuario);
 
 		if (!usuario) {
 			throw new AppError('Usuário não encontrado');
 		}
 
-		const idosoWithSameCpf = await this.idosoRepository.findByCpf(data.cpf);
+		if (data.cpf) {
+			const idosoWithSameCpf = await this.idosoRepository.findByCpf(
+				data.cpf,
+			);
 
-		if (idosoWithSameCpf) {
-			throw new AppError('Idoso já cadastrado');
+			if (idosoWithSameCpf) {
+				throw new AppError('Idoso já cadastrado com o mesmo CPF');
+			}
+		}
+
+		if (data.cnh) {
+			const idosoWithSameCnh = await this.idosoRepository.findByCnh(
+				data.cnh,
+			);
+
+			if (idosoWithSameCnh) {
+				throw new AppError('Idoso já cadastrado com o mesmo CNH');
+			}
+		}
+		if (data.rg) {
+			const idosoWithSameRg = await this.idosoRepository.findByRg(
+				data.rg,
+			);
+
+			if (idosoWithSameRg) {
+				throw new AppError('Idoso já cadastrado com o mesmo RG');
+			}
 		}
 
 		const idoso = await this.idosoRepository.create({
 			...data,
-			id_usuario: data.id_usuario,
+			id_usuario: id_usuario,
 		});
 
-		return idoso;
+		return { uid: idoso.uid };
 	}
 }

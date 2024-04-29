@@ -14,9 +14,29 @@ export class PrismaIdosoRepository implements idosoRepository {
 	}
 
 	async findByCpf(cpf: string) {
-		const idoso = await prisma.idoso.findUnique({
+		const idoso = await prisma.idoso.findFirst({
 			where: {
 				cpf,
+			},
+		});
+
+		return idoso;
+	}
+
+	async findByCnh(cnh: string) {
+		const idoso = await prisma.idoso.findFirst({
+			where: {
+				cnh,
+			},
+		});
+
+		return idoso;
+	}
+
+	async findByRg(rg: string) {
+		const idoso = await prisma.idoso.findFirst({
+			where: {
+				rg,
 			},
 		});
 

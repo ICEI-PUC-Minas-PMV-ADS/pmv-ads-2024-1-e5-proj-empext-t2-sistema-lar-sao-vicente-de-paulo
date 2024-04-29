@@ -46,7 +46,7 @@ export const CriarCargoModal = ({
 
   return (
     <ModalDefault
-      nameButtonOpenModal={"Cadastrar"}
+      nameButtonOpenModal={"Cadastrar Cargo"}
       iconButtonOpenModal={<SolutionOutlined />}
       titleModal={"Adicionando cargo"}
       okText="Cadastrar"
