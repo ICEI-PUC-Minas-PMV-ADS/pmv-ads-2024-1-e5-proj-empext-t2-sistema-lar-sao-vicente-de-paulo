@@ -11,7 +11,7 @@ interface IInputForm {
   label?: string;
   placeholder?: string;
   error?: string;
-  value?: valueType;
+  value?: any;
   onChange: ChangeEventHandler<HTMLInputElement> | undefined;
   required?: boolean;
   tooltip?: string;

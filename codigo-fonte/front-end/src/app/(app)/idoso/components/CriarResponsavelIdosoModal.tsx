@@ -10,16 +10,38 @@ import { regexTel } from "@/utils/regex/regexTel";
 import { regexCEP } from "@/utils/regex/regexCEP";
 import { isCEP } from "@/utils/validator/isCEP";
 import { Select } from "antd";
+import axios from "axios";
+import { useFetch } from "@/utils/hooks/useFetch";
+import { IEstado } from "@/interface/IEstado";
+import { ICidade } from "@/interface/ICidade";
 
 export const CriarResponsavelIdosoModal = ({
-  refetchList,
+  setResponsaveis,
 }: {
-  refetchList: () => void;
+  setResponsaveis: (value: IOperationResponsavelIdoso) => void;
 }) => {
   const [open, setOpen] = useState(false);
+  const [cidades, setCidades] = useState<ICidade[]>([]);
 
-  const { handleSubmit, control, reset, watch } =
+  const { handleSubmit, control, reset } =
     useForm<IOperationResponsavelIdoso>();
+
+  const { data: estados } = useFetch<IEstado[]>(
+    "https://brasilapi.com.br/api/ibge/uf/v1",
+    ["estados_brasil"],
+    {
+      method: "get",
+      enable: open,
+      messageError: null,
+      resNotInData: true,
+    }
+  );
+
+  const adicionarResponsavel = async (data: IOperationResponsavelIdoso) => {
+    await setResponsaveis(data);
+    await reset();
+    await setOpen(false);
+  };
 
   return (
     <ModalDefault
@@ -27,7 +49,7 @@ export const CriarResponsavelIdosoModal = ({
       iconButtonOpenModal={<UserAddOutlined />}
       titleModal={"Adicionando responsável"}
       okText="Adicionar"
-      onSubmit={() => {}}
+      onSubmit={handleSubmit(adicionarResponsavel)}
       isFetching={false}
       width="750px"
       setOpenModal={setOpen}
@@ -173,7 +195,7 @@ export const CriarResponsavelIdosoModal = ({
         </div>
         <div className="flex items-center gap-[15px]">
           <Controller
-            name="cep"
+            name="bairro"
             control={control}
             defaultValue=""
             rules={{
@@ -181,11 +203,11 @@ export const CriarResponsavelIdosoModal = ({
             }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
-                label="CEP"
+                label="Bairro"
                 required
                 error={error?.message}
                 onChange={onChange}
-                value={regexCEP(value)}
+                value={value}
                 placeholder="Bairro Jardim"
               />
             )}
@@ -199,13 +221,27 @@ export const CriarResponsavelIdosoModal = ({
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputSelect
                 label="Estado"
-                onChange={onChange}
+                onChange={(value) => {
+                  onChange(value);
+                  axios
+                    .get(
+                      `https://brasilapi.com.br/api/ibge/municipios/v1/${value}?providers=dados-abertos-br,gov,wikipedia`
+                    )
+                    .then((data) => {
+                      setCidades(data.data);
+                    });
+                }}
                 error={error?.message}
                 required
                 placeholder="Selecionar"
                 value={value}
+                showSearch
               >
-                <Select.Option>Vazio</Select.Option>
+                {estados?.map((estado) => (
+                  <Select.Option key={estado.id} value={estado.sigla}>
+                    {estado.sigla}
+                  </Select.Option>
+                ))}
               </InputSelect>
             )}
           />
@@ -223,8 +259,13 @@ export const CriarResponsavelIdosoModal = ({
                 required
                 placeholder="Selecionar"
                 value={value}
+                showSearch
               >
-                <Select.Option>Vazio</Select.Option>
+                {cidades?.map((cidade) => (
+                  <Select.Option key={cidade.codigo_ibge} value={cidade.nome}>
+                    {cidade.nome}
+                  </Select.Option>
+                ))}
               </InputSelect>
             )}
           />

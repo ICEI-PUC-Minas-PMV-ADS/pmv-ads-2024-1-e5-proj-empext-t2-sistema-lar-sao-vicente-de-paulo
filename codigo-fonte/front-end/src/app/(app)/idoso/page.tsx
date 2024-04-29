@@ -91,6 +91,7 @@ export default function Idoso() {
       <TableDefault
         dataSource={data}
         columns={columns}
+        pagination
         totalCount={totalCount}
         setPageLimit={setPageLimit}
         setCurrentPage={setCurrentPage}

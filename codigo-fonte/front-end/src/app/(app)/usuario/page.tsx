@@ -103,6 +103,7 @@ export default function Usuario() {
       <TableDefault
         dataSource={data}
         columns={columns}
+        pagination
         totalCount={totalCount}
         setPageLimit={setPageLimit}
         setCurrentPage={setCurrentPage}

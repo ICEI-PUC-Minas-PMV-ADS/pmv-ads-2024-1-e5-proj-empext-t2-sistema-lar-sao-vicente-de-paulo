@@ -14,7 +14,10 @@ import { isCNH } from "@/utils/validator/isCNH";
 import { invertCPF, regexCPF } from "@/utils/regex/regexCPF";
 import { isCNS } from "@/utils/validator/isCNS";
 import { TableDefault } from "@/components/table/TableDefault";
-import { IResponsavelIdoso } from "../Interface/IResponsavelIdoso";
+import {
+  IOperationResponsavelIdoso,
+  IResponsavelIdoso,
+} from "../Interface/IResponsavelIdoso";
 import { ColumnsType } from "antd/es/table";
 import { CriarResponsavelIdosoModal } from "./CriarResponsavelIdosoModal";
 import { useFetch } from "@/utils/hooks/useFetch";
@@ -25,7 +28,6 @@ import { useCookies } from "react-cookie";
 import { authToken } from "@/config/authToken";
 import { IErrorState, useMutation } from "@/utils/hooks/useMutation";
 import { api } from "@/utils/service/api";
-import { isTituloEleitor } from "@/utils/validator/isTituloEleitor";
 
 export const CriarIdosoModal = ({
   refetchList,
@@ -768,10 +770,8 @@ export const CriarIdosoModal = ({
 };
 
 const Responsaveis = () => {
-  const [open, setOpen] = useState(false);
-
-  const [data, setData] = useState<IResponsavelIdoso[]>([]);
-  const columns: ColumnsType<IResponsavelIdoso> = [
+  const [data, setData] = useState<IOperationResponsavelIdoso[]>([]);
+  const columns: ColumnsType<IOperationResponsavelIdoso> = [
     {
       title: "Nome",
       dataIndex: "nome_completo",
@@ -785,7 +785,7 @@ const Responsaveis = () => {
     {
       title: "Contatos",
       key: "telefones",
-      render(_: any, record: IResponsavelIdoso) {
+      render(_: any, record: IOperationResponsavelIdoso) {
         return (
           <div className="flex flex-col">
             <p>{record.telefone_1}</p>
@@ -796,7 +796,7 @@ const Responsaveis = () => {
     },
     {
       key: "atualizar_responsavel_idoso",
-      render(_: any, record: IResponsavelIdoso) {
+      render(_: any, record: IOperationResponsavelIdoso) {
         return (
           <div className="flex justify-end">
             {/* <AtualizarCargoModal uid={record.uid} refetchList={refetch} /> */}
@@ -808,7 +808,9 @@ const Responsaveis = () => {
   return (
     <>
       <div>
-        <CriarResponsavelIdosoModal refetchList={() => {}} />
+        <CriarResponsavelIdosoModal
+          setResponsaveis={(value) => setData((old) => [...old, value])}
+        />
       </div>
       <TableDefault dataSource={data} columns={columns} />
     </>
