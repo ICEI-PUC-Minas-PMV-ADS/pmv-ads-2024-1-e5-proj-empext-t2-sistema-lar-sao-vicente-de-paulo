@@ -1,6 +1,10 @@
 import { QuestionCircleOutlined, WarningOutlined } from "@ant-design/icons";
 import { Input, Tooltip } from "antd";
-import { ChangeEventHandler } from "react";
+import {
+  ChangeEventHandler,
+  HTMLInputAutoCompleteAttribute,
+  HTMLInputTypeAttribute,
+} from "react";
 
 interface IInputForm {
   label?: string;
@@ -11,6 +15,8 @@ interface IInputForm {
   required: boolean;
   tooltip?: string;
   defaultValue?: any;
+  type?: HTMLInputTypeAttribute;
+  autoComplete?: HTMLInputAutoCompleteAttribute;
 }
 
 export const InputForm = ({
@@ -22,6 +28,8 @@ export const InputForm = ({
   value,
   tooltip,
   defaultValue,
+  type,
+  autoComplete,
 }: IInputForm) => {
   return (
     <div className="flex flex-col gap-1 w-full">
@@ -50,6 +58,8 @@ export const InputForm = ({
         onChange={onChange}
         value={value}
         defaultValue={defaultValue}
+        type={type}
+        autoComplete={autoComplete}
       />
       {error && (
         <div className="flex gap-2 items-center text-red-600 text-xs">

@@ -28,6 +28,7 @@ import { withoutNumber } from "@/utils/validator/withoutNumber";
 import { isEmail } from "@/utils/validator/isEmail";
 import { CheckPassword } from "@/components/CheckPassword";
 import { AxiosError } from "axios";
+import { IDefinirSenha } from "@/app/(auth)/definir-senha/Interface/IDefinirSenha";
 
 export const CriarUsuarioModal = ({
   refetchList,
@@ -67,6 +68,7 @@ export const CriarUsuarioModal = ({
               description: "Usuário cadastrado com sucesso!",
               type: "success",
             });
+            mutateDefinirSenha({ uid: data.data.uid });
             setIsFetchingFoto(false);
             reset();
             refetchList();
@@ -86,12 +88,20 @@ export const CriarUsuarioModal = ({
           description: "Usuário cadastrado com sucesso!",
           type: "success",
         });
+        mutateDefinirSenha({ uid: data.data.uid });
         reset();
         refetchList();
         setOpen(false);
       }
     },
   });
+
+  const { mutate: mutateDefinirSenha, isFetching: isFetchingDefinirSenha } =
+    useMutation<IDefinirSenha>("/auth/definir-senha", {
+      method: "post",
+      messageSucess:
+        "E-mail enviado para usuário caso ele deseje alterar a senha!",
+    });
 
   const { data: cargos } = useFetch<
     { id: number; uid: string; nome: string }[]
@@ -110,7 +120,7 @@ export const CriarUsuarioModal = ({
       titleModal={"Adicionando usuário"}
       okText="Cadastrar"
       onSubmit={handleSubmit(createUsuario)}
-      isFetching={isFetchingData || isFetchingFoto}
+      isFetching={isFetchingData || isFetchingFoto || isFetchingDefinirSenha}
       width="550px"
       setOpenModal={setOpen}
       openModal={open}
@@ -211,6 +221,7 @@ export const CriarUsuarioModal = ({
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
               label="E-mail"
+              type="email"
               required
               error={error?.message}
               onChange={onChange}
@@ -231,17 +242,19 @@ export const CriarUsuarioModal = ({
             },
           }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
-            <InputPassword
-              label="Senha"
-              required
-              placeholder="********"
-              error={error?.message}
-              onChange={onChange}
-              value={value}
-            />
+            <>
+              <InputPassword
+                label="Senha"
+                required
+                placeholder="********"
+                error={error?.message}
+                onChange={onChange}
+                value={value}
+              />
+              <CheckPassword password={value} check={(v) => setCheckSenha(v)} />
+            </>
           )}
         />
-        <CheckPassword password={watch("senha")} check={setCheckSenha} />
       </form>
     </ModalDefault>
   );
