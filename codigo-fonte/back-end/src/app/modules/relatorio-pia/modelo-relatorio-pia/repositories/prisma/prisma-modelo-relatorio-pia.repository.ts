@@ -43,6 +43,10 @@ export class PrismaModeloRelatorioPiaRepository implements modeloRelatorioPiaRep
             where: {
                 uid,
             },
+            include: {
+                modelo_relatorio_pia_pergunta: true,
+                relatorio_pia: true,
+            },
         });
         return modeloRelatorioPia;
     }

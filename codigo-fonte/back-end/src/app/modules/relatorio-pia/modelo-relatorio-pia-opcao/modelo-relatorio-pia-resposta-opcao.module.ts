@@ -10,17 +10,21 @@ import { DeleteModeloRelatorioPiaOpcaoService } from "./services/delete-modelo-r
 import { FindUidModeloRelatorioPiaOpcaoService } from "./services/find-uid-modelo-relatorio-pia-opcao.service";
 import { UpdateModeloRelatorioPiaOpcaoService } from "./services/update-modelo-relatorio-pia-opcao.service";
 import { DeleteModeloRelatorioPiaOpcaoController } from "./controllers/delete-modelo-relatorio-pia-opcao.controller";
+import { FindAllModeloRelatorioPiaOpcaoService } from "./services/find-all-modelo-relatorio-pia-opcao.service";
+import { FindAllModeloRelatorioPiaOpcaoController } from "./controllers/find-all-modelo-relatorio-pia-opcao.controller";
 
 @Module({
     providers: [
         CreateModeloRelatorioPiaOpcaoService,
         DeleteModeloRelatorioPiaOpcaoService,
+        FindAllModeloRelatorioPiaOpcaoService,
         FindUidModeloRelatorioPiaOpcaoService,
         UpdateModeloRelatorioPiaOpcaoService,
         PrismaModeloRelatorioPiaOpcaoRepository,
     ],
     controllers: [
         CreateModeloRelatorioPiaOpcaoController,
+        FindAllModeloRelatorioPiaOpcaoController,
         FindUidModeloRelatorioPiaOpcaoController,
         UpdateModeloRelatorioPiaOpcaoController,
         DeleteModeloRelatorioPiaOpcaoController,

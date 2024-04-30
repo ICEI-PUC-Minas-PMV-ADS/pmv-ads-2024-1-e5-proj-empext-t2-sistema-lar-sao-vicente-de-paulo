@@ -16,6 +16,10 @@ export class PrismaModeloRelatorioPiaRespostaRepository implements modeloRelator
         const modeloRelatorioPiaResposta = await prisma.modeloRelatorioPiaResposta.findUnique({
             where: {
                 uid
+            },
+            include: {
+                modelo_relatorio_pia_pergunta: true,
+                modelo_relatorio_pia_resposta_opcao: true,
             }
         });
 

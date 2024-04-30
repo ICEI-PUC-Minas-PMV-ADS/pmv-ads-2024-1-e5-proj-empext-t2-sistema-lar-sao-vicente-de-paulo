@@ -11,7 +11,7 @@ export class UpdateModeloRelatorioPiaOpcaoController {
     constructor(private updateModeloRelatorioPiaOpcao: UpdateModeloRelatorioPiaOpcaoService) {}
     
     @Patch(':uid')
-    @ApiOperation({ summary: 'Atualiza um modelo de resposta pelo UID' })
+    @ApiOperation({ summary: 'Atualiza um modelo de opção de resposta pelo UID' })
     @ApiBody({ type: UpdateModeloRelatorioPiaOpcaoDto,
         description: 'Dados do modelo de opção de resposta a ser atualizado',
     })
