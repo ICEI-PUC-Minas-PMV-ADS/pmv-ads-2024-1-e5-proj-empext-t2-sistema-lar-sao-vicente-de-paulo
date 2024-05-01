@@ -1,18 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Permissao } from '../entities/permissao.entity';
-import { PrismaService } from '@/core/providers/database/prisma.service';
+import { PrismaPermissaoRepository } from '../repositories/prisma/prima-permissao-repository';
 
 @Injectable()
 export class FindUidPermissaoService {
-	constructor(private prisma: PrismaService) {}
+	constructor(private permissaoRepository: PrismaPermissaoRepository) {}
 
 	async execute(uid: string): Promise<Permissao | null> {
-		const permissao = await this.prisma.permissao.findFirst({
-			where: {
-				uid,
-			},
-		});
-
+		const permissao = await this.permissaoRepository.findByUid(uid);
 		return permissao;
 	}
 }
