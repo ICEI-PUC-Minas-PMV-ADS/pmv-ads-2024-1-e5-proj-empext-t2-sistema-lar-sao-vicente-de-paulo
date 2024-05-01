@@ -1,35 +1,61 @@
-import { UserAddOutlined } from "@ant-design/icons";
+import { EditOutlined, UserAddOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { InputForm, InputSelect } from "@/components/input";
 import { ModalDefault } from "@/components/modal/ModalDefault";
 import { isNome } from "@/utils/validator/isName";
 import { withoutNumber } from "@/utils/validator/withoutNumber";
-import { IOperationResponsavelIdoso } from "../Interface/IResponsavelIdoso";
+import {
+  IOperationResponsavelIdoso,
+  IResponsavelIdoso,
+} from "../Interface/IResponsavelIdoso";
 import { regexTel } from "@/utils/regex/regexTel";
 import { regexCEP } from "@/utils/regex/regexCEP";
 import { isCEP } from "@/utils/validator/isCEP";
-import { Select } from "antd";
+import { Select, Tooltip } from "antd";
 import axios from "axios";
 import { useFetch } from "@/utils/hooks/useFetch";
 import { IEstado } from "@/interface/IEstado";
 import { ICidade } from "@/interface/ICidade";
 import { useMutation } from "@/utils/hooks/useMutation";
 
-export const CriarResponsavelIdosoModal = ({
+export const AtualizarResponsavelIdosoModal = ({
   setResponsaveis,
+  responsavel,
+  uid,
   refetch,
-  idIdoso,
 }: {
   setResponsaveis?: (value: IOperationResponsavelIdoso) => void;
+  responsavel?: IOperationResponsavelIdoso;
+  uid?: string;
   refetch?: () => void;
-  idIdoso?: bigint;
 }) => {
   const [open, setOpen] = useState(false);
   const [cidades, setCidades] = useState<ICidade[]>([]);
 
-  const { handleSubmit, control, reset } =
-    useForm<IOperationResponsavelIdoso>();
+  const { handleSubmit, control, setValue } =
+    useForm<IOperationResponsavelIdoso>({
+      defaultValues: responsavel,
+    });
+
+  useFetch<IResponsavelIdoso>("/responsaveis/" + uid, [uid], {
+    enable: open && !!uid,
+    onSuccess: (data) => {
+      const responsavel = data.data;
+      if (responsavel) {
+        setValue("bairro", responsavel.bairro);
+        setValue("cep", responsavel.cep);
+        setValue("cidade", responsavel.cidade);
+        setValue("endereco_numero", responsavel.endereco_numero);
+        setValue("estado", responsavel.estado);
+        setValue("logradouro", responsavel.logradouro);
+        setValue("nome_completo", responsavel.nome_completo);
+        setValue("parentesco", responsavel.parentesco);
+        setValue("telefone_1", responsavel.telefone_1);
+        setValue("telefone_2", responsavel.telefone_2);
+      }
+    },
+  });
 
   const { data: estados } = useFetch<IEstado[]>(
     "https://brasilapi.com.br/api/ibge/uf/v1",
@@ -44,30 +70,37 @@ export const CriarResponsavelIdosoModal = ({
 
   const adicionarResponsavel = async (data: IOperationResponsavelIdoso) => {
     if (setResponsaveis) await setResponsaveis(data);
-    if (refetch && idIdoso)
-      await createResponsavel({
-        responsaveis: [{ ...data, id_idoso: idIdoso }],
-      });
-    await reset();
+    if (refetch && uid) await updateResponsavel(data);
     await setOpen(false);
   };
 
-  const { mutate: createResponsavel } = useMutation<{
-    responsaveis: IOperationResponsavelIdoso[];
-  }>("/responsaveis", {
-    method: "post",
-    messageSucess: "Responsável cadastrado com sucesso!",
-    onSuccess: () => {
-      refetch && refetch();
-    },
-  });
+  const { mutate: updateResponsavel } = useMutation<Partial<IResponsavelIdoso>>(
+    "/responsaveis/" + uid,
+    {
+      method: "patch",
+      messageSucess: "Responsável atualizado com sucesso!",
+      onSuccess: () => {
+        refetch && refetch();
+      },
+    }
+  );
 
   return (
     <ModalDefault
-      nameButtonOpenModal={"Cadastrar Responsável"}
+      customButtonOpenModal={
+        <Tooltip title={"Editar"}>
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            className="text-black/30 hover:text-primaria h-full w-[50px] flex justify-center items-center"
+          >
+            <EditOutlined className={"text-[18px]"} />
+          </button>
+        </Tooltip>
+      }
       iconButtonOpenModal={<UserAddOutlined />}
-      titleModal={"Adicionando responsável"}
-      okText="Adicionar"
+      titleModal={"Atualizando responsável"}
+      okText="Salvar"
       onSubmit={handleSubmit(adicionarResponsavel)}
       isFetching={false}
       width="750px"
@@ -79,7 +112,6 @@ export const CriarResponsavelIdosoModal = ({
           <Controller
             name="nome_completo"
             control={control}
-            defaultValue=""
             rules={{
               required: "Insira o nome do responsável",
               validate: (value) => {
@@ -102,7 +134,6 @@ export const CriarResponsavelIdosoModal = ({
           <Controller
             name="parentesco"
             control={control}
-            defaultValue=""
             rules={{
               required: "Insira o parentesco",
             }}
@@ -122,7 +153,6 @@ export const CriarResponsavelIdosoModal = ({
           <Controller
             name="telefone_1"
             control={control}
-            defaultValue=""
             rules={{
               required: "Insira um número de telefone",
             }}
@@ -132,7 +162,7 @@ export const CriarResponsavelIdosoModal = ({
                 required
                 error={error?.message}
                 onChange={(e) => onChange(regexTel(e.target.value))}
-                value={regexTel(value)}
+                value={value && regexTel(value)}
                 placeholder="(35) 99999-9999"
               />
             )}
@@ -140,7 +170,6 @@ export const CriarResponsavelIdosoModal = ({
           <Controller
             name="telefone_2"
             control={control}
-            defaultValue=""
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
                 label="2° Telefone"
@@ -156,7 +185,6 @@ export const CriarResponsavelIdosoModal = ({
           <Controller
             name="cep"
             control={control}
-            defaultValue=""
             rules={{
               required: "Insira o CEP",
               validate: (value) => {
@@ -170,7 +198,7 @@ export const CriarResponsavelIdosoModal = ({
                 required
                 error={error?.message}
                 onChange={(e) => onChange(regexCEP(e.target.value))}
-                value={regexCEP(value)}
+                value={value && regexCEP(value)}
                 placeholder="00000-000"
               />
             )}
@@ -178,7 +206,6 @@ export const CriarResponsavelIdosoModal = ({
           <Controller
             name="logradouro"
             control={control}
-            defaultValue=""
             rules={{
               required: "Insira o logradouro",
             }}
@@ -196,7 +223,6 @@ export const CriarResponsavelIdosoModal = ({
           <Controller
             name="endereco_numero"
             control={control}
-            defaultValue=""
             rules={{
               required: "Insira o número residencial",
             }}
@@ -216,7 +242,6 @@ export const CriarResponsavelIdosoModal = ({
           <Controller
             name="bairro"
             control={control}
-            defaultValue=""
             rules={{
               required: "Insira o Bairro",
             }}

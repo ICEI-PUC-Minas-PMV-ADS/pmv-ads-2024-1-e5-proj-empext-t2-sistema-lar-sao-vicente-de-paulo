@@ -10,6 +10,14 @@ export class FindAllIdososService {
 	async execute(
 		query: Prisma.IdosoFindManyArgs,
 	): Promise<{ count: number; idosos: Idoso[] }> {
+		query = {
+			...query,
+			include: {
+				responsavel_idoso: true,
+				_count: { select: { responsavel_idoso: true } },
+			},
+		};
+
 		const [idosos, count] = await this.prisma.$transaction([
 			this.prisma.idoso.findMany(query),
 			this.prisma.idoso.count({

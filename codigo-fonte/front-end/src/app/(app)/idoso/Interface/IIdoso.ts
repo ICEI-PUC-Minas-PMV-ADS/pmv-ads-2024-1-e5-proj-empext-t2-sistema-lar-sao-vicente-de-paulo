@@ -1,4 +1,8 @@
 import { Situacao } from "@/interface/ISituacao";
+import {
+  IOperationResponsavelIdoso,
+  IResponsavelIdoso,
+} from "./IResponsavelIdoso";
 
 export interface IIdoso {
   id: bigint;
@@ -30,10 +34,12 @@ export interface IIdoso {
   certidao_nascimento_livro?: string;
   certidao_casamento_folha?: string;
   certidao_casamento_livro?: string;
-  situacao: Situacao;
+  situacao: "INATIVO" | "ATIVO";
   motivo_inativacao?: string;
   criado_em: Date;
   atualizado_em: Date;
+  responsavel_idoso?: IResponsavelIdoso[];
+  _count?: { responsavel_idoso: number };
 }
 
 export interface IOperationIdoso {
@@ -63,5 +69,5 @@ export interface IOperationIdoso {
   certidao_nascimento_livro?: string;
   certidao_casamento_folha?: string;
   certidao_casamento_livro?: string;
-  situacao: Situacao;
+  situacao: "INATIVO" | "ATIVO";
 }

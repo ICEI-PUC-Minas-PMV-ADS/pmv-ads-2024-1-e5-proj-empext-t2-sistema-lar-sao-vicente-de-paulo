@@ -18,11 +18,14 @@ export class CreateResponsavelIdosoController {
 	@ApiOperation({ summary: 'Cadastrar o responsável do idoso' })
 	@ApiBody({
 		type: CreateResponsavelIdosoDto,
+		isArray: true,
 		description: 'Dados do responsável do idoso a ser criado',
 	})
 	@Roles(RoleIdoso.CREATE)
 	@ApiResponseError()
-	async handle(@Body() data: CreateResponsavelIdosoDto): Promise<void> {
-		await this.createResponsavelIdoso.execute(data);
+	async handle(
+		@Body() data: { responsaveis: CreateResponsavelIdosoDto[] },
+	): Promise<void> {
+		await this.createResponsavelIdoso.execute(data.responsaveis);
 	}
 }

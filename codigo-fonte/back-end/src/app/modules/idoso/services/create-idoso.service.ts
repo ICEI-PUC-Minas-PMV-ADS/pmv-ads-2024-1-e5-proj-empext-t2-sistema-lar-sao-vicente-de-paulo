@@ -14,7 +14,7 @@ export class CreateIdosoService {
 	async execute(
 		data: CreateIdosoDto,
 		id_usuario: bigint,
-	): Promise<{ uid: string }> {
+	): Promise<{ uid: string; id: bigint }> {
 		const usuario = await this.usuarioRepository.findById(id_usuario);
 
 		if (!usuario) {
@@ -55,6 +55,6 @@ export class CreateIdosoService {
 			id_usuario: id_usuario,
 		});
 
-		return { uid: idoso.uid };
+		return { uid: idoso.uid, id: idoso.id };
 	}
 }

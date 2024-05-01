@@ -11,6 +11,8 @@ import { ColumnsType } from "antd/es/table";
 import { TableDefault } from "@/components/table/TableDefault";
 import { IIdoso } from "./Interface/IIdoso";
 import { CriarIdosoModal } from "./components";
+import dayjs from "dayjs";
+import { AtualizarIdosoModal } from "./components/AtualizarIdosoModal";
 
 export default function Idoso() {
   const [pageLimit, setPageLimit] = useState<number>(10);
@@ -55,11 +57,53 @@ export default function Idoso() {
       key: "nome_completo",
     },
     {
+      title: "Apelido",
+      dataIndex: "apelido",
+      key: "apelido",
+    },
+    {
+      title: "Responsáveis",
+      key: "responsaveis",
+      render(_: any, record: IIdoso) {
+        return (
+          <div>
+            <p>{record._count?.responsavel_idoso} Responsáveis</p>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Data de Nascimento",
+      key: "data_nascimento",
+      render(_: any, record: IIdoso) {
+        return (
+          <div>
+            <p>{dayjs(record.data_nascimento).format("DD/MM/YYYY")}</p>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Data da Ingressão",
+      key: "data_ingresso",
+      render(_: any, record: IIdoso) {
+        return (
+          <div>
+            <p>{dayjs(record.data_ingresso).format("DD/MM/YYYY")}</p>
+          </div>
+        );
+      },
+    },
+    {
       key: "atualizar_idoso",
       render(_: any, record: IIdoso) {
         return (
           <div className="flex justify-end">
-            {/*  <AtualizarUsuarioModal uid={record.uid} refetchList={refetch} /> */}
+            <AtualizarIdosoModal
+              id={record.id}
+              uid={record.uid}
+              refetchList={refetch}
+            />
           </div>
         );
       },

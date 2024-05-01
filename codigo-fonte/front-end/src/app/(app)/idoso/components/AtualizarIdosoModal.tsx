@@ -1,7 +1,9 @@
 import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
   DeleteFilled,
+  EditOutlined,
   QuestionCircleOutlined,
-  UserAddOutlined,
 } from "@ant-design/icons";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -17,7 +19,7 @@ import {
 } from "antd";
 import { isNome } from "@/utils/validator/isName";
 import { withoutNumber } from "@/utils/validator/withoutNumber";
-import { IOperationIdoso } from "../Interface/IIdoso";
+import { IIdoso, IOperationIdoso } from "../Interface/IIdoso";
 import { InputDatePicker } from "@/components/input/InputDatePicker";
 import dayjs from "dayjs";
 import { isCPF } from "@/utils/validator/isCPF";
@@ -40,10 +42,15 @@ import { authToken } from "@/config/authToken";
 import { IErrorState, useMutation } from "@/utils/hooks/useMutation";
 import { api } from "@/utils/service/api";
 import { AtualizarResponsavelIdosoModal } from "./AtualizarResponsavelIdosoModal";
+import { queryBuilder } from "@/utils/functions/query-builder";
 
-export const CriarIdosoModal = ({
+export const AtualizarIdosoModal = ({
+  id,
+  uid,
   refetchList,
 }: {
+  id: bigint;
+  uid: string;
   refetchList: () => void;
 }) => {
   const [cookies] = useCookies([authToken.nome]);
@@ -55,69 +62,94 @@ export const CriarIdosoModal = ({
     IOperationResponsavelIdoso[]
   >([]);
 
-  const { handleSubmit, control, reset } = useForm<IOperationIdoso>();
+  const { handleSubmit, control, reset, setValue } = useForm<IOperationIdoso>();
 
-  const { mutate: createIdoso, isFetching: isFetchingCreateIdoso } =
-    useMutation<IOperationIdoso, { uid: string; id: bigint }>("/idosos", {
-      method: "post",
-      messageSucess: null,
-      onSuccess: async (data) => {
-        const formData = new FormData();
-
-        try {
-          if (responsaveis.length > 0) {
-            await api.post(
-              "/responsaveis",
-              {
-                responsaveis: responsaveis.map((responsavel) => ({
-                  ...responsavel,
-                  id_idoso: data.data.id,
-                })),
-              },
-              {
-                headers: {
-                  Authorization: "Bearer " + cookies[authToken.nome],
-                },
-              }
-            );
-          }
-
-          if (fileList.length > 0 && fileList[0] && fileList[0].originFileObj) {
-            setIsFetchingFoto(true);
-            await formData.append("foto", fileList[0]?.originFileObj);
-            await api.post(
-              "/idosos/" + data.data.uid + "/upload-foto",
-              formData,
-              {
-                headers: {
-                  Authorization: "Bearer " + cookies[authToken.nome],
-                  "content-type": "multipart/form-data",
-                },
-              }
-            );
-          }
-
-          await notification.open({
-            message: "Operação realizada",
-            description: "Idoso cadastrado com sucesso!",
-            type: "success",
-          });
-          await reset();
-          await setResponsaveis([]);
-          await refetchList();
-          await setOpen(false);
-        } catch (err) {
-          const error = err as AxiosError<{ error: IErrorState }>;
-
-          notification.open({
-            message: "Ocorreu um erro",
-            description: error.response?.data?.error.message,
-            type: "error",
-          });
-          setIsFetchingFoto(false);
+  const { data: idoso } = useFetch<IIdoso>("/idosos/" + uid, [uid], {
+    enable: open,
+    onSuccess: (data) => {
+      const idoso = data.data;
+      if (idoso) {
+        if (idoso.foto) {
+          setFileList([
+            {
+              url: idoso.foto,
+              uid: idoso.uid,
+              name: idoso.nome_completo,
+            },
+          ]);
         }
-      },
-    });
+
+        setValue("apelido", idoso.apelido);
+        setValue("cartao_sus", idoso.cartao_sus);
+        setValue("certidao_casamento_folha", idoso.certidao_casamento_folha);
+        setValue("certidao_casamento_livro", idoso.certidao_casamento_livro);
+        setValue("certidao_nascimento_folha", idoso.certidao_nascimento_folha);
+        setValue("certidao_nascimento_livro", idoso.certidao_nascimento_livro);
+        setValue("cidade", idoso.cidade);
+        setValue("cnh", idoso.cnh);
+        setValue("cpf", idoso.cpf);
+        setValue("data_ingresso", idoso.data_ingresso);
+        setValue("data_nascimento", idoso.data_nascimento);
+        setValue("escolaridade", idoso.escolaridade);
+        setValue("estado", idoso.estado);
+        setValue("estado_civil", idoso.estado_civil);
+        setValue("genero", idoso.genero);
+        setValue("naturalidade", idoso.naturalidade);
+        setValue("nome_completo", idoso.nome_completo);
+        setValue("nome_mae", idoso.nome_mae);
+        setValue("nome_pai", idoso.nome_pai);
+        setValue("religiao", idoso.religiao);
+        setValue("rg", idoso.rg);
+        setValue("rg_orgao_expedidor", idoso.rg_orgao_expedidor);
+        setValue("situacao", idoso.situacao);
+        setValue("titulo_eleitor", idoso.titulo_eleitor);
+        setValue("titulo_eleitor_secao", idoso.titulo_eleitor_secao);
+        setValue("titulo_eleitor_zona", idoso.titulo_eleitor_zona);
+      }
+    },
+  });
+
+  const { mutate: updateIdoso, isFetching: isUpdatingIdoso } = useMutation<
+    Partial<IIdoso>,
+    { uid: string; id: bigint }
+  >("/idosos/" + uid, {
+    method: "patch",
+    messageSucess: null,
+    onSuccess: async () => {
+      const formData = new FormData();
+
+      try {
+        if (fileList.length > 0 && fileList[0] && fileList[0].originFileObj) {
+          setIsFetchingFoto(true);
+          await formData.append("foto", fileList[0]?.originFileObj);
+          await api.post("/idosos/" + uid + "/upload-foto", formData, {
+            headers: {
+              Authorization: "Bearer " + cookies[authToken.nome],
+              "content-type": "multipart/form-data",
+            },
+          });
+        }
+
+        await notification.open({
+          message: "Operação realizada",
+          description: "Idoso atualizado com sucesso!",
+          type: "success",
+        });
+        await reset();
+        await refetchList();
+        await setOpen(false);
+      } catch (err) {
+        const error = err as AxiosError<{ error: IErrorState }>;
+
+        notification.open({
+          message: "Ocorreu um erro",
+          description: error.response?.data?.error.message,
+          type: "error",
+        });
+        setIsFetchingFoto(false);
+      }
+    },
+  });
 
   const { data: estados } = useFetch<IEstado[]>(
     "https://brasilapi.com.br/api/ibge/uf/v1",
@@ -132,15 +164,58 @@ export const CriarIdosoModal = ({
 
   return (
     <ModalDefault
-      nameButtonOpenModal={"Cadastrar Idoso"}
-      iconButtonOpenModal={<UserAddOutlined />}
-      titleModal={"Adicionando idoso"}
-      okText="Cadastrar"
-      onSubmit={handleSubmit(createIdoso)}
-      isFetching={isFetchingCreateIdoso || isFetchingFoto}
+      customButtonOpenModal={
+        <Tooltip title={"Editar"}>
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            className="text-black/30 hover:text-primaria h-full w-[50px] flex justify-center items-center"
+          >
+            <EditOutlined className={"text-[18px]"} />
+          </button>
+        </Tooltip>
+      }
+      titleModal={"Editando idoso"}
+      okText="Salvar"
+      onSubmit={handleSubmit(updateIdoso)}
+      isFetching={isUpdatingIdoso || isFetchingFoto}
       width="800px"
       setOpenModal={setOpen}
       openModal={open}
+      listOptions={[
+        {
+          popconfirm: true,
+          popconfirmType: idoso?.situacao === "ATIVO" ? "danger" : "primary",
+          popconfirmTitle:
+            (idoso?.situacao === "ATIVO" ? "Inativar" : "Reativar") +
+            " Usuário",
+          popconfirmDescrition:
+            idoso?.situacao === "ATIVO"
+              ? "Você tem certeza que deseja inativar o idoso?"
+              : "Você tem certeza que deseja reativar o idoso?",
+          popconfirmIcon: (
+            <QuestionCircleOutlined
+              style={{
+                color: idoso?.situacao === "ATIVO" ? "red" : "blue",
+              }}
+            />
+          ),
+          label: idoso?.situacao === "ATIVO" ? "Inativar" : "Reativar",
+          onClick: () =>
+            updateIdoso({
+              situacao: idoso?.situacao === "ATIVO" ? "INATIVO" : "ATIVO",
+            }),
+          icon:
+            idoso?.situacao === "ATIVO" ? (
+              <CloseCircleOutlined />
+            ) : (
+              <CheckCircleOutlined />
+            ),
+        },
+      ]}
+      situation={idoso?.situacao}
+      created_item={idoso?.criado_em}
+      updated_item={idoso?.atualizado_em}
     >
       <form className="w-full flex flex-col gap-[15px]">
         <div className="flex items-center gap-[15px]">
@@ -783,7 +858,7 @@ export const CriarIdosoModal = ({
               label: "Responsáveis",
               children: (
                 <div className="w-full flex flex-col gap-[15px]">
-                  <Responsaveis data={responsaveis} setData={setResponsaveis} />
+                  <Responsaveis idIdoso={id} />
                 </div>
               ),
             },
@@ -794,14 +869,9 @@ export const CriarIdosoModal = ({
   );
 };
 
-const Responsaveis = ({
-  data,
-  setData,
-}: {
-  data: IOperationResponsavelIdoso[];
-  setData: Dispatch<SetStateAction<IOperationResponsavelIdoso[]>>;
-}) => {
-  const columns: ColumnsType<IOperationResponsavelIdoso> = [
+const Responsaveis = ({ idIdoso }: { idIdoso: bigint }) => {
+  const [cookies] = useCookies([authToken.nome]);
+  const columns: ColumnsType<IResponsavelIdoso> = [
     {
       title: "Nome",
       dataIndex: "nome_completo",
@@ -815,7 +885,7 @@ const Responsaveis = ({
     {
       title: "Contatos",
       key: "telefones",
-      render(_: any, record: IOperationResponsavelIdoso) {
+      render(_: any, record: IResponsavelIdoso) {
         return (
           <div className="flex flex-col">
             <p>{record.telefone_1}</p>
@@ -827,21 +897,12 @@ const Responsaveis = ({
     {
       key: "atualizar_responsavel_idoso",
       width: 50,
-      render(_: any, record: IOperationResponsavelIdoso, index) {
+      render(_: any, record: IResponsavelIdoso) {
         return (
           <div className="flex justify-end w-full">
             <AtualizarResponsavelIdosoModal
-              responsavel={record}
-              setResponsaveis={(value) => {
-                setData(
-                  data.map((v, i) => {
-                    if (i === index) {
-                      return { ...value };
-                    }
-                    return v;
-                  })
-                );
-              }}
+              uid={record.uid}
+              refetch={refetch}
             />
           </div>
         );
@@ -850,7 +911,7 @@ const Responsaveis = ({
     {
       key: "deletar_responsavel_idoso",
       width: 50,
-      render(_: any, _record, index) {
+      render(_: any, record: IResponsavelIdoso) {
         return (
           <div className="flex justify-end w-full">
             <Popconfirm
@@ -858,7 +919,23 @@ const Responsaveis = ({
               placement="rightBottom"
               title={"Excluir"}
               description={"Você tem certeza que deseja excluir?"}
-              onConfirm={() => setData(data.filter((e, i) => i !== index))}
+              onConfirm={() =>
+                api
+                  .delete("/responsaveis/" + record.uid, {
+                    headers: {
+                      Authorization: "Bearer " + cookies[authToken.nome],
+                    },
+                  })
+                  .then(() => {
+                    notification.open({
+                      message: "Operação realizada",
+                      description: "Responsável excluído com sucesso!",
+                      type: "success",
+                    });
+
+                    refetch();
+                  })
+              }
               okType={"danger"}
               okText={"Confirmar"}
               cancelText={"Cancelar"}
@@ -878,12 +955,23 @@ const Responsaveis = ({
       },
     },
   ];
+
+  const { data, refetch } = useFetch<IResponsavelIdoso[]>(
+    "/responsaveis",
+    ["responsaveis", idIdoso],
+    {
+      params: queryBuilder({
+        page_limit: 99999,
+        filter: [{ path: "id_idoso", operator: "equals", value: idIdoso }],
+        sort: [{ field: "criado_em", criteria: "desc" }],
+      }),
+    }
+  );
+
   return (
     <>
       <div>
-        <CriarResponsavelIdosoModal
-          setResponsaveis={(value) => setData([...data, value])}
-        />
+        <CriarResponsavelIdosoModal refetch={refetch} />
       </div>
       <TableDefault dataSource={data} columns={columns} />
     </>

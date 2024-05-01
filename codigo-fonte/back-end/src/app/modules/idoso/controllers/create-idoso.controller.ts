@@ -25,9 +25,9 @@ export class CreateIdosoController {
 	async handle(
 		@AuthUser() user: IAuthUser,
 		@Body() data: CreateIdosoDto,
-	): Promise<AppResponse<{ uid: string }>> {
+	): Promise<AppResponse<{ uid: string; id: bigint }>> {
 		const idoso = await this.createIdoso.execute(data, user.usuario.id);
 
-		return new AppResponse({ uid: idoso.uid });
+		return new AppResponse({ uid: idoso.uid, id: idoso.id });
 	}
 }

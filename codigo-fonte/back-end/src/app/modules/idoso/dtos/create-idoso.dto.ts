@@ -1,5 +1,6 @@
 import { IsCPF } from '@/common/decorators/is-cpf.decorator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { $Enums } from '@prisma/client';
 import {
 	IsNotEmpty,
 	IsString,
@@ -170,4 +171,9 @@ export class CreateIdosoDto {
 	@IsString()
 	@MaxLength(255)
 	certidao_casamento_livro?: string;
+
+	@ApiPropertyOptional({ description: 'Situação do usuário' })
+	@IsString()
+	@IsOptional()
+	situacao?: $Enums.Situacao;
 }

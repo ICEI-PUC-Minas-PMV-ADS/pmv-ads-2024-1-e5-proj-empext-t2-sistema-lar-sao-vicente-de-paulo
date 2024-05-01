@@ -6,8 +6,8 @@ import { CreateResponsavelIdosoDto } from '../dtos/create-responsavel-idoso.dto'
 export class CreateResponsavelIdosoService {
 	constructor(private prisma: PrismaService) {}
 
-	async execute(data: CreateResponsavelIdosoDto): Promise<void> {
-		await this.prisma.responsavelIdoso.create({
+	async execute(data: CreateResponsavelIdosoDto[]): Promise<void> {
+		await this.prisma.responsavelIdoso.createMany({
 			data,
 		});
 
