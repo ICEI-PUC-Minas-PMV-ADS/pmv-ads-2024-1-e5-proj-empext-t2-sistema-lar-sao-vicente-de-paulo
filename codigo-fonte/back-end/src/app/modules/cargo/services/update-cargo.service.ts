@@ -7,7 +7,7 @@ import { PrismaCargoRepository } from '../repositories/prisma/prisma-cargo-repos
 export class UpdateCargoService {
 	constructor(
 		private prisma: PrismaService,
-		private cargoRepository: PrismaCargoRepository
+		private cargoRepository: PrismaCargoRepository,
 	) {}
 
 	async execute(uid: string, data: UpdateCargoDto): Promise<void> {
@@ -24,6 +24,8 @@ export class UpdateCargoService {
 			);
 
 		if (data.situacao === 'INATIVO') {
+			const cargo = await this.cargoRepository.findByUid(uid);
+
 			await this.prisma.usuario.updateMany({
 				where: { id_cargo: cargo.id },
 				data: { id_cargo: null },
