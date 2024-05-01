@@ -49,43 +49,44 @@ model Idoso {
   uid                       String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   foto                      String?  @db.Text
   nome_completo             String   @db.VarChar(255)
+  apelido                   String?  @db.VarChar(255)
+  genero                    String?  @db.VarChar(255)
   data_nascimento           DateTime @db.Date()
-  naturalidade              String   @db.VarChar(100)
+  naturalidade              String   @db.VarChar(255)
   estado                    String   @db.VarChar(2)
-  pais                      String   @db.VarChar(100)
-  estado_civil              String   @db.VarChar(20)
-  religiao                  String   @db.VarChar(50)
-  escolaridade              String   @db.VarChar(50)
+  cidade                    String   @db.VarChar(255)
+  estado_civil              String   @db.VarChar(255)
+  religiao                  String   @db.VarChar(255)
+  escolaridade              String   @db.VarChar(255)
   nome_pai                  String   @db.VarChar(255)
   nome_mae                  String   @db.VarChar(255)
   data_ingresso             DateTime @db.Date()
-  cpf                       String?  @unique @db.VarChar(11)
-  cnh                       String?  @unique @db.VarChar(8)
-  rg                        String?  @unique @db.VarChar(10)
+  cpf                       String?  @db.VarChar(11)
+  cnh                       String?  @db.VarChar(11)
+  rg                        String?  @db.VarChar(255)
   rg_orgao_expedidor        String?  @db.VarChar(255)
+  cartao_sus                String?  @db.VarChar(255)
   titulo_eleitor            String?  @db.VarChar(12)
   titulo_eleitor_secao      String?  @db.VarChar(4)
   titulo_eleitor_zona       String?  @db.VarChar(3)
-  certidao_nascimento       String?  @db.VarChar(30)
-  certidao_nascimento_folha String?  @db.VarChar(20)
-  certidao_nascimento_livro String?  @db.VarChar(20)
-  certidao_casamento        String?  @db.VarChar(30)
-  certidao_casamento_folha  String?  @db.VarChar(20)
-  certidao_casamento_livro  String?  @db.VarChar(20)
+  certidao_nascimento_folha String?  @db.VarChar(255)
+  certidao_nascimento_livro String?  @db.VarChar(255)
+  certidao_casamento_folha  String?  @db.VarChar(255)
+  certidao_casamento_livro  String?  @db.VarChar(255)
   situacao                  Situacao @default(ATIVO)
-  motivo_inativacao         String?  @db.VarChar(100)
+  motivo_inativacao         String?  @db.VarChar()
   criado_em                 DateTime @default(now()) @db.Timestamp()
   atualizado_em             DateTime @updatedAt @db.Timestamp()
 
   id_usuario BigInt  @db.BigInt
   usuario    Usuario @relation(fields: [id_usuario], references: [id])
 
-  responsaveis_idoso  ResponsavelIdoso[]
-  prontuarios         Prontuario[]
-  relatorios_pia      RelatorioPia[]
-  fichas_nutricionais FichaNutricional[]
-  perroca             Perroca[]
-  escala_braden       EscalaBraden[]
+  responsavel_idoso ResponsavelIdoso[]
+  prontuario        Prontuario[]
+  relatorio_pia     RelatorioPia[]
+  ficha_nutricional FichaNutricional[]
+  perroca           Perroca[]
+  escala_braden     EscalaBraden[]
 
   @@map("idoso")
 }
@@ -95,11 +96,12 @@ model ResponsavelIdoso {
   uid             String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   parentesco      String   @db.VarChar(50)
   nome_completo   String   @db.VarChar(255)
-  endereco        String   @db.VarChar(100)
+  logradouro      String   @db.VarChar(100)
   endereco_numero String   @db.VarChar(20)
   bairro          String   @db.VarChar(50)
   cep             String   @db.VarChar(50)
   estado          String   @db.VarChar(2)
+  cidade          String   @db.VarChar(50)
   telefone_1      String   @db.VarChar(20)
   telefone_2      String?  @db.VarChar(20)
   criado_em       DateTime @default(now()) @db.Timestamp()

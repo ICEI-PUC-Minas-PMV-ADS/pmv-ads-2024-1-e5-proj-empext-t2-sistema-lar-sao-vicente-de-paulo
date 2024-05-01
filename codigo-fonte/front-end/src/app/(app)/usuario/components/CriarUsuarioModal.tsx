@@ -70,6 +70,7 @@ export const CriarUsuarioModal = ({
             });
             mutateDefinirSenha({ uid: data.data.uid });
             setIsFetchingFoto(false);
+            setFileList([]);
             reset();
             refetchList();
             setOpen(false);
@@ -115,7 +116,7 @@ export const CriarUsuarioModal = ({
 
   return (
     <ModalDefault
-      nameButtonOpenModal={"Cadastrar"}
+      nameButtonOpenModal={"Cadastrar Usuário"}
       iconButtonOpenModal={<UserAddOutlined />}
       titleModal={"Adicionando usuário"}
       okText="Cadastrar"

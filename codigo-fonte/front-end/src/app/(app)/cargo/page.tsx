@@ -102,6 +102,7 @@ export default function Cargo() {
       <TableDefault
         dataSource={data}
         columns={columns}
+        pagination
         totalCount={totalCount}
         setPageLimit={setPageLimit}
         setCurrentPage={setCurrentPage}

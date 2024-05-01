@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { $Enums, Usuario as UsuarioModel } from '@prisma/client';
 
 export class Usuario implements UsuarioModel {
@@ -8,7 +8,7 @@ export class Usuario implements UsuarioModel {
 	@ApiProperty({ description: 'O UID do usuário' })
 	uid: string;
 
-	@ApiProperty({ description: 'A foto do usuário' })
+	@ApiPropertyOptional({ description: 'A foto do usuário' })
 	foto: string | null;
 
 	@ApiProperty({

@@ -5,9 +5,10 @@ import { Dispatch, SetStateAction } from "react";
 interface ITableDefault {
   dataSource: any[] | undefined;
   columns: ColumnsType<any>;
-  totalCount: number | null;
-  setPageLimit: Dispatch<SetStateAction<number>>;
-  setCurrentPage: Dispatch<SetStateAction<number>>;
+  totalCount?: number | null;
+  setPageLimit?: Dispatch<SetStateAction<number>>;
+  setCurrentPage?: Dispatch<SetStateAction<number>>;
+  pagination?: boolean;
 }
 
 export const TableDefault = ({
@@ -16,6 +17,7 @@ export const TableDefault = ({
   totalCount,
   setPageLimit,
   setCurrentPage,
+  pagination,
 }: ITableDefault) => {
   return (
     <Table
@@ -23,17 +25,21 @@ export const TableDefault = ({
       columns={columns}
       rowKey={(dataSource) => dataSource.uid}
       size="middle"
-      pagination={{
-        total: totalCount || 0,
-        showTotal: (total) => `Total de ${total} items`,
-        onChange: (page, pageSize) => {
-          setPageLimit(pageSize);
-          setCurrentPage(page);
-        },
-        showSizeChanger: true,
-        pageSizeOptions: [10, 20, 30, 50, 100],
-        size: "default",
-      }}
+      pagination={
+        pagination
+          ? {
+              total: totalCount || 0,
+              showTotal: (total) => `Total de ${total} items`,
+              onChange: (page, pageSize) => {
+                setPageLimit && setPageLimit(pageSize);
+                setCurrentPage && setCurrentPage(page);
+              },
+              showSizeChanger: true,
+              pageSizeOptions: [10, 20, 30, 50, 100],
+              size: "default",
+            }
+          : false
+      }
     />
   );
 };

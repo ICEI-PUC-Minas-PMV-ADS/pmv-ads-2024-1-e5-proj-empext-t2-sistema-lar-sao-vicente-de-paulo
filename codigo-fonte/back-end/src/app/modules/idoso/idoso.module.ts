@@ -14,6 +14,9 @@ import { DatabaseModule } from '@/core/providers/database/database.module';
 import { QueryBuilderModule } from '@/core/providers/query-builder/query-builder.module';
 import { QueryBuilderService } from '@/core/providers/query-builder/query-builder.service';
 import { PrismaIdosoRepository } from './repositories/prisma/prisma-idoso-repository';
+import { UploadModule } from '@/core/providers/upload/upload.module';
+import { UploadFotoIdosoController } from './controllers/upload-foto-idoso.controller';
+import { UploadFotoIdosoService } from './services/upload-foto-idoso.service';
 
 @Module({
 	providers: [
@@ -22,6 +25,7 @@ import { PrismaIdosoRepository } from './repositories/prisma/prisma-idoso-reposi
 		FindUidIdosoService,
 		UpdateIdosoService,
 		DeleteIdosoService,
+		UploadFotoIdosoService,
 		PrismaIdosoRepository,
 		PrismaUsuarioRepository,
 		QueryBuilderService,
@@ -32,7 +36,8 @@ import { PrismaIdosoRepository } from './repositories/prisma/prisma-idoso-reposi
 		FindUidIdosoController,
 		UpdateIdosoController,
 		DeleteIdosoController,
+		UploadFotoIdosoController,
 	],
-	imports: [DatabaseModule, QueryBuilderModule],
+	imports: [DatabaseModule, QueryBuilderModule, UploadModule],
 })
 export class IdosoModule {}

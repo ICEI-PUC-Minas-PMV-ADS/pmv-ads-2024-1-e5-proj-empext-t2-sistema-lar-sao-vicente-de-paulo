@@ -3,7 +3,6 @@ import {
 	Param,
 	ParseUUIDPipe,
 	Post,
-	Query,
 	UploadedFiles,
 	UseInterceptors,
 } from '@nestjs/common';
