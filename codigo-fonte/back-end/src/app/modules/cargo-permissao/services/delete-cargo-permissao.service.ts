@@ -1,17 +1,12 @@
-import { PrismaService } from '@/core/providers/database/prisma.service';
 import { Injectable } from '@nestjs/common';
+import { PrismaCargoPermissaoRepository } from '../repositories/prisma/prisma-cargo-permissao-repository';
 
 @Injectable()
 export class DeleteCargoPermissaoService {
-	constructor(private prisma: PrismaService) {}
+	constructor(private cargoPermissaoRepository: PrismaCargoPermissaoRepository) {}
 
 	async execute(uid: string): Promise<void> {
-		await this.prisma.cargoPermissao.delete({
-			where: {
-				uid,
-			},
-		});
-
+		await this.cargoPermissaoRepository.delete(uid);
 		return;
 	}
 }

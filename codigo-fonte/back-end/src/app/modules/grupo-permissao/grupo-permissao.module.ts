@@ -5,9 +5,13 @@ import { FindAllGrupoPermissaoService } from './services/find-all-grupo-permissa
 import { FindAllGrupoPermissaoController } from './controllers/find-all-grupo-permissao.controller';
 import { DatabaseModule } from '@/core/providers/database/database.module';
 import { QueryBuilderModule } from '@/core/providers/query-builder/query-builder.module';
+import { PrismaGrupoPermissaoRepository } from './repositories/prisma/prisma-grupo-permissao-repository';
 
 @Module({
-	providers: [FindAllGrupoPermissaoService, FindUidGrupoPermissaoService],
+	providers: [
+		FindAllGrupoPermissaoService,
+		FindUidGrupoPermissaoService,
+		PrismaGrupoPermissaoRepository],
 	controllers: [
 		FindAllGrupoPermissaoController,
 		FindUidGrupoPermissaoController,
