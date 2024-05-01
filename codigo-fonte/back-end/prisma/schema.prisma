@@ -13,6 +13,12 @@ enum Situacao {
   PENDENTE
 }
 
+enum tiposReposta {
+  TEXT
+  RADIO
+  CHECKBOX
+}
+
 model Usuario {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -43,43 +49,44 @@ model Idoso {
   uid                       String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   foto                      String?  @db.Text
   nome_completo             String   @db.VarChar(255)
+  apelido                   String?  @db.VarChar(255)
+  genero                    String?  @db.VarChar(255)
   data_nascimento           DateTime @db.Date()
-  naturalidade              String   @db.VarChar(100)
+  naturalidade              String   @db.VarChar(255)
   estado                    String   @db.VarChar(2)
-  pais                      String   @db.VarChar(100)
-  estado_civil              String   @db.VarChar(20)
-  religiao                  String   @db.VarChar(50)
-  escolaridade              String   @db.VarChar(50)
+  cidade                    String   @db.VarChar(255)
+  estado_civil              String   @db.VarChar(255)
+  religiao                  String   @db.VarChar(255)
+  escolaridade              String   @db.VarChar(255)
   nome_pai                  String   @db.VarChar(255)
   nome_mae                  String   @db.VarChar(255)
   data_ingresso             DateTime @db.Date()
-  cpf                       String?  @unique @db.VarChar(11)
-  cnh                       String?  @unique @db.VarChar(8)
-  rg                        String?  @unique @db.VarChar(10)
+  cpf                       String?  @db.VarChar(11)
+  cnh                       String?  @db.VarChar(11)
+  rg                        String?  @db.VarChar(255)
   rg_orgao_expedidor        String?  @db.VarChar(255)
+  cartao_sus                String?  @db.VarChar(255)
   titulo_eleitor            String?  @db.VarChar(12)
   titulo_eleitor_secao      String?  @db.VarChar(4)
   titulo_eleitor_zona       String?  @db.VarChar(3)
-  certidao_nascimento       String?  @db.VarChar(30)
-  certidao_nascimento_folha String?  @db.VarChar(20)
-  certidao_nascimento_livro String?  @db.VarChar(20)
-  certidao_casamento        String?  @db.VarChar(30)
-  certidao_casamento_folha  String?  @db.VarChar(20)
-  certidao_casamento_livro  String?  @db.VarChar(20)
+  certidao_nascimento_folha String?  @db.VarChar(255)
+  certidao_nascimento_livro String?  @db.VarChar(255)
+  certidao_casamento_folha  String?  @db.VarChar(255)
+  certidao_casamento_livro  String?  @db.VarChar(255)
   situacao                  Situacao @default(ATIVO)
-  motivo_inativacao         String?  @db.VarChar(100)
+  motivo_inativacao         String?  @db.VarChar()
   criado_em                 DateTime @default(now()) @db.Timestamp()
   atualizado_em             DateTime @updatedAt @db.Timestamp()
 
   id_usuario BigInt  @db.BigInt
   usuario    Usuario @relation(fields: [id_usuario], references: [id])
 
-  responsaveis_idoso  ResponsavelIdoso[]
-  prontuarios         Prontuario[]
-  relatorios_pia      RelatorioPia[]
-  fichas_nutricionais FichaNutricional[]
-  perroca             Perroca[]
-  escala_braden       EscalaBraden[]
+  responsavel_idoso ResponsavelIdoso[]
+  prontuario        Prontuario[]
+  relatorio_pia     RelatorioPia[]
+  ficha_nutricional FichaNutricional[]
+  perroca           Perroca[]
+  escala_braden     EscalaBraden[]
 
   @@map("idoso")
 }
@@ -89,11 +96,12 @@ model ResponsavelIdoso {
   uid             String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   parentesco      String   @db.VarChar(50)
   nome_completo   String   @db.VarChar(255)
-  endereco        String   @db.VarChar(100)
+  logradouro      String   @db.VarChar(100)
   endereco_numero String   @db.VarChar(20)
   bairro          String   @db.VarChar(50)
   cep             String   @db.VarChar(50)
   estado          String   @db.VarChar(2)
+  cidade          String   @db.VarChar(50)
   telefone_1      String   @db.VarChar(20)
   telefone_2      String?  @db.VarChar(20)
   criado_em       DateTime @default(now()) @db.Timestamp()
@@ -180,55 +188,21 @@ model Prontuario {
   @@map("prontuario")
 }
 
-model RelatorioPia {
-  id            BigInt   @id @default(autoincrement()) @db.BigInt
-  uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  criado_em     DateTime @default(now()) @db.Timestamp
-  atualizado_em DateTime @updatedAt @db.Timestamp
-
-  id_idoso BigInt @db.BigInt
-  idoso    Idoso  @relation(fields: [id_idoso], references: [id])
-
-  id_usuario BigInt  @db.BigInt
-  usuario    Usuario @relation(fields: [id_usuario], references: [id])
-
-  id_modelo_relatorio_pia BigInt             @map("modelo_relatorio_pia_id") @db.BigInt
-  modelo_relatorio_pia    ModeloRelatorioPia @relation(fields: [id_modelo_relatorio_pia], references: [id])
-
-  pergunta_relatorio PerguntaRelatorio[]
-
-  @@map("relatorio_pia")
-}
-
-model PerguntaRelatorio {
-  id            BigInt   @id @default(autoincrement()) @db.BigInt
-  uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  pergunta      String   @db.VarChar(255)
-  sim_nao       Boolean  @db.Boolean
-  observacao    String?  @db.Text
-  criado_em     DateTime @default(now()) @db.Timestamp
-  atualizado_em DateTime @updatedAt @db.Timestamp
-
-  id_relatorio_pia BigInt       @db.BigInt
-  relatorio_pia    RelatorioPia @relation(fields: [id_relatorio_pia], references: [id])
-
-  @@map("pergunta_relatorio")
-}
-
 model ModeloRelatorioPia {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   nome          String   @db.VarChar(255)
+  versao        Int      @default(1) @db.Integer()
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  relatorio_pia RelatorioPia[]
-  pergunta      Pergunta[]
+  modelo_relatorio_pia_pergunta ModeloRelatorioPiaPergunta[]
+  relatorio_pia                 RelatorioPia[]
 
   @@map("modelo_relatorio_pia")
 }
 
-model Pergunta {
+model ModeloRelatorioPiaPergunta {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   pergunta      String   @db.VarChar(255)
@@ -238,7 +212,116 @@ model Pergunta {
   id_modelo_relatorio_pia BigInt             @db.BigInt
   modelo_relatorio_pia    ModeloRelatorioPia @relation(fields: [id_modelo_relatorio_pia], references: [id])
 
-  @@map("pergunta")
+  modelo_relatorio_pia_resposta ModeloRelatorioPiaResposta[]
+
+  @@map("modelo_relatorio_pia_pergunta")
+}
+
+model ModeloRelatorioPiaResposta {
+  id            BigInt       @id @default(autoincrement()) @db.BigInt
+  uid           String       @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  titulo        String       @db.VarChar(255)
+  tipo          tiposReposta
+  criado_em     DateTime     @default(now()) @db.Timestamp
+  atualizado_em DateTime     @updatedAt @db.Timestamp
+
+  id_modelo_relatorio_pia_pergunta BigInt                     @db.BigInt
+  modelo_relatorio_pia_pergunta    ModeloRelatorioPiaPergunta @relation(fields: [id_modelo_relatorio_pia_pergunta], references: [id])
+
+  modelo_relatorio_pia_resposta_opcao ModeloRelatorioPiaRespostaOpcao[]
+
+  @@map("modelo_relatorio_pia_resposta")
+}
+
+model ModeloRelatorioPiaRespostaOpcao {
+  uid           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  opcao         String   @db.VarChar(255)
+  criado_em     DateTime @default(now()) @db.Timestamp
+  atualizado_em DateTime @updatedAt @db.Timestamp
+
+  id_modelo_relatorio_pia_resposta BigInt                     @db.BigInt
+  modelo_relatorio_pia_resposta    ModeloRelatorioPiaResposta @relation(fields: [id_modelo_relatorio_pia_resposta], references: [id])
+
+  @@map("modelo_relatorio_pia_resposta_opcao")
+}
+
+model RelatorioPia {
+  id            BigInt   @id @default(autoincrement()) @db.BigInt
+  uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nome          String   @db.VarChar(255)
+  criado_em     DateTime @default(now()) @db.Timestamp
+  atualizado_em DateTime @updatedAt @db.Timestamp
+
+  id_modelo_relatorio_pia BigInt             @db.BigInt
+  modelo_relatorio_pia    ModeloRelatorioPia @relation(fields: [id_modelo_relatorio_pia], references: [id])
+
+  id_usuario BigInt  @db.BigInt
+  usuario    Usuario @relation(fields: [id_usuario], references: [id])
+
+  id_idoso BigInt @db.BigInt
+  idoso    Idoso  @relation(fields: [id_idoso], references: [id])
+
+  relatorio_pia_pergunta RelatorioPiaPergunta[]
+
+  @@map("relatorio_pia")
+}
+
+model RelatorioPiaPergunta {
+  id            BigInt   @id @default(autoincrement()) @db.BigInt
+  uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  pergunta      String   @db.VarChar(255)
+  criado_em     DateTime @default(now()) @db.Timestamp
+  atualizado_em DateTime @updatedAt @db.Timestamp
+
+  id_relatorio_pia BigInt       @db.BigInt
+  relatorio_pia    RelatorioPia @relation(fields: [id_relatorio_pia], references: [id])
+
+  relatorio_pia_resposta RelatorioPiaResposta[]
+
+  @@map("relatorio_pia_pergunta")
+}
+
+model RelatorioPiaResposta {
+  id            BigInt       @id @default(autoincrement()) @db.BigInt
+  uid           String       @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  titulo        String       @db.VarChar(255)
+  tipo          tiposReposta
+  criado_em     DateTime     @default(now()) @db.Timestamp
+  atualizado_em DateTime     @updatedAt @db.Timestamp
+
+  id_relatorio_pia_pergunta BigInt               @unique @db.BigInt
+  relatorio_pia_pergunta    RelatorioPiaPergunta @relation(fields: [id_relatorio_pia_pergunta], references: [id])
+
+  relatorio_pia_resposta_opcao RelatorioPiaRespostaOpcao[]
+
+  @@map("relatorio_pia_resposta")
+}
+
+model RelatorioPiaRespostaOpcao {
+  uid           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  opcao         String   @db.VarChar(255)
+  criado_em     DateTime @default(now()) @db.Timestamp
+  atualizado_em DateTime @updatedAt @db.Timestamp
+
+  id_relatorio_pia_resposta BigInt               @db.BigInt
+  relatorio_pia_resposta    RelatorioPiaResposta @relation(fields: [id_relatorio_pia_resposta], references: [id])
+
+  relatorio_pia_resposta_definida RelatorioPiaRespostaDefinida?
+
+  @@map("relatorio_pia_resposta_opcao")
+}
+
+model RelatorioPiaRespostaDefinida {
+  id            BigInt   @id @default(autoincrement()) @db.BigInt
+  uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  valor         String?  @db.VarChar(255)
+  criado_em     DateTime @default(now()) @db.Timestamp
+  atualizado_em DateTime @updatedAt @db.Timestamp
+
+  uid_relatorio_pia_resposta_opcao String                    @unique @db.Uuid
+  relatorio_pia_resposta_opcao     RelatorioPiaRespostaOpcao @relation(fields: [uid_relatorio_pia_resposta_opcao], references: [uid])
+
+  @@map("relatorio_pia_resposta_definida")
 }
 
 model FichaNutricional {

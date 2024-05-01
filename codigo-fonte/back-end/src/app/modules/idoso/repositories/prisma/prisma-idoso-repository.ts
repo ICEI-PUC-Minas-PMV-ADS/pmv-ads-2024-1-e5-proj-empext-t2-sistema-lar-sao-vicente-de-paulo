@@ -14,9 +14,29 @@ export class PrismaIdosoRepository implements idosoRepository {
 	}
 
 	async findByCpf(cpf: string) {
-		const idoso = await prisma.idoso.findUnique({
+		const idoso = await prisma.idoso.findFirst({
 			where: {
 				cpf,
+			},
+		});
+
+		return idoso;
+	}
+
+	async findByCnh(cnh: string) {
+		const idoso = await prisma.idoso.findFirst({
+			where: {
+				cnh,
+			},
+		});
+
+		return idoso;
+	}
+
+	async findByRg(rg: string) {
+		const idoso = await prisma.idoso.findFirst({
+			where: {
+				rg,
 			},
 		});
 
@@ -29,10 +49,10 @@ export class PrismaIdosoRepository implements idosoRepository {
 				uid,
 			},
 			include: {
-				responsaveis_idoso: true,
-				prontuarios: true,
-				relatorios_pia: true,
-				fichas_nutricionais: true,
+				responsavel_idoso: true,
+				prontuario: true,
+				relatorio_pia: true,
+				ficha_nutricional: true,
 				perroca: true,
 				escala_braden: true,
 			},

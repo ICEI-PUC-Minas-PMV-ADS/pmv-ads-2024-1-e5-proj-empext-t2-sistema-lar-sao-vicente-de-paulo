@@ -1,4 +1,4 @@
-import { ICargoPermissao, IOperationCargoPermissao } from "./ICargoPermissao";
+import { IOperationCargoPermissao } from "./ICargoPermissao";
 
 export interface ICargo {
   id: bigint;

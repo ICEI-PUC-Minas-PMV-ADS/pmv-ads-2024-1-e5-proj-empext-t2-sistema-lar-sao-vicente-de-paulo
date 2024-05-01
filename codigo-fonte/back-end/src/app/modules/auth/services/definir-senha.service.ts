@@ -35,7 +35,7 @@ export class AuthDefinirSenhaService {
 		if (!codigo) {
 			const newCodigo = crypto.randomInt(100000, 1000000).toString();
 			const urlDefinicaoSenha = `${
-				process.env.REDIS_PORT ||
+				process.env.BASE_URL_APP ||
 				'https://sistema-lar-sao-vicente-de-paulo-frontend.onrender.com'
 			}/definir-senha?for=${uid}&code=${newCodigo}`;
 

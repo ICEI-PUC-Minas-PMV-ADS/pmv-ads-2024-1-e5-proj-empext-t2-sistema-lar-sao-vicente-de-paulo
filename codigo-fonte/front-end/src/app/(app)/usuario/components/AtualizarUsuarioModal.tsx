@@ -89,6 +89,7 @@ export const AtualizarUsuarioModal = ({
               type: "success",
             });
             setIsFetchingFoto(false);
+            setFileList([]);
             refetchList();
             setOpen(false);
           })
@@ -138,8 +139,9 @@ export const AtualizarUsuarioModal = ({
       customButtonOpenModal={
         <Tooltip title={"Editar"}>
           <button
+            type="button"
             onClick={() => setOpen(true)}
-            className="text-black/30 hover:text-primaria h-full w-[50px]"
+            className="text-black/30 hover:text-primaria h-full w-[50px] flex justify-center items-center"
           >
             <EditOutlined className={"text-[18px]"} />
           </button>
@@ -307,6 +309,7 @@ export const AtualizarUsuarioModal = ({
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
               label="E-mail"
+              type="email"
               required
               error={error?.message}
               onChange={onChange}

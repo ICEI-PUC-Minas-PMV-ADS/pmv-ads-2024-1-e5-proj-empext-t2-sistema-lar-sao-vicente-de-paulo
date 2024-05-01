@@ -1,6 +1,6 @@
 import { QuestionCircleOutlined, WarningOutlined } from "@ant-design/icons";
 import { Select, Tooltip } from "antd";
-import { ChangeEventHandler, ReactNode } from "react";
+import { ChangeEvent, ChangeEventHandler, ReactNode } from "react";
 
 interface IInputSelect {
   label?: string;
@@ -12,6 +12,7 @@ interface IInputSelect {
   children: ReactNode;
   tooltip?: string;
   defaultValue?: any;
+  showSearch?: boolean;
 }
 
 export const InputSelect = ({
@@ -24,6 +25,7 @@ export const InputSelect = ({
   children,
   tooltip,
   defaultValue,
+  showSearch,
 }: IInputSelect) => {
   return (
     <div className="flex flex-col gap-1 w-full">
@@ -53,6 +55,7 @@ export const InputSelect = ({
         aria-required
         placeholder={placeholder}
         defaultValue={defaultValue}
+        showSearch={showSearch}
       >
         {children}
       </Select>

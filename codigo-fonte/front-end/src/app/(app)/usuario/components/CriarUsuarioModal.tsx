@@ -70,6 +70,7 @@ export const CriarUsuarioModal = ({
             });
             mutateDefinirSenha({ uid: data.data.uid });
             setIsFetchingFoto(false);
+            setFileList([]);
             reset();
             refetchList();
             setOpen(false);
@@ -115,7 +116,7 @@ export const CriarUsuarioModal = ({
 
   return (
     <ModalDefault
-      nameButtonOpenModal={"Cadastrar"}
+      nameButtonOpenModal={"Cadastrar Usuário"}
       iconButtonOpenModal={<UserAddOutlined />}
       titleModal={"Adicionando usuário"}
       okText="Cadastrar"
@@ -221,6 +222,7 @@ export const CriarUsuarioModal = ({
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
               label="E-mail"
+              type="email"
               required
               error={error?.message}
               onChange={onChange}

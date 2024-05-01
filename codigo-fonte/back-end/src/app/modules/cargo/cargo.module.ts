@@ -11,6 +11,8 @@ import { DeleteCargoService } from './services/delete-cargo.service';
 import { FindAllCargoService } from './services/find-all-cargo.service';
 import { FindUidCargoService } from './services/find-uid-cargo.service';
 import { UpdateCargoService } from './services/update-cargo.service';
+import { PrismaCargoRepository } from './repositories/prisma/prisma-cargo-repository';
+import { PrismaCargoPermissaoRepository } from '../cargo-permissao/repositories/prisma/prisma-cargo-permissao-repository';
 
 @Module({
 	providers: [
@@ -19,6 +21,8 @@ import { UpdateCargoService } from './services/update-cargo.service';
 		FindAllCargoService,
 		FindUidCargoService,
 		DeleteCargoService,
+		PrismaCargoRepository,
+		PrismaCargoPermissaoRepository
 	],
 	controllers: [
 		CreateCargoController,

@@ -4,10 +4,10 @@ import { DeleteIdosoDto } from '@/app/modules/idoso/dtos/delete-idoso.dto';
 import { UpdateIdosoDto } from '@/app/modules/idoso/dtos/update-idoso.dto';
 import { randomUUID } from 'crypto';
 interface IdosoComArrays extends Idoso {
-	responsaveis_idoso: any[];
-	prontuarios: any[];
-	relatorios_pia: any[];
-	fichas_nutricionais: any[];
+	responsavel_idoso: any[];
+	prontuario: any[];
+	relatorio_pia: any[];
+	ficha_nutricional: any[];
 	perroca: any[];
 	escala_braden: any[];
 }
@@ -25,7 +25,7 @@ export class InMemoryIdosoRepository implements idosoRepository {
 			data_nascimento: new Date(data.data_nascimento),
 			naturalidade: data.naturalidade,
 			estado: data.estado,
-			pais: data.pais,
+			cidade: data.cidade,
 			estado_civil: data.estado_civil,
 			religiao: data.religiao,
 			escolaridade: data.escolaridade,
@@ -36,23 +36,24 @@ export class InMemoryIdosoRepository implements idosoRepository {
 			cnh: data.cnh,
 			rg: data.rg,
 			rg_orgao_expedidor: data.rg_orgao_expedidor,
+			apelido: data.apelido,
+			genero: data.genero,
+			cartao_sus: data.cartao_sus,
 			titulo_eleitor: data.titulo_eleitor,
 			titulo_eleitor_secao: data.titulo_eleitor_secao,
 			titulo_eleitor_zona: data.titulo_eleitor_zona,
-			certidao_nascimento: data.certidao_nascimento,
 			certidao_nascimento_folha: data.certidao_nascimento_folha,
 			certidao_nascimento_livro: data.certidao_nascimento_livro,
-			certidao_casamento: data.certidao_casamento,
 			certidao_casamento_folha: data.certidao_casamento_folha,
 			certidao_casamento_livro: data.certidao_casamento_livro,
 			situacao: 'ATIVO',
 			motivo_inativacao: data.motivo_inativacao,
 			criado_em: new Date(),
 			atualizado_em: new Date(),
-			responsaveis_idoso: [],
-			prontuarios: [],
-			relatorios_pia: [],
-			fichas_nutricionais: [],
+			responsavel_idoso: [],
+			prontuario: [],
+			relatorio_pia: [],
+			ficha_nutricional: [],
 			perroca: [],
 			escala_braden: [],
 		};

@@ -1,19 +1,13 @@
-import { PrismaService } from '@/core/providers/database/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { UpdateCargoPermissaoDto } from '../dtos/update-cargo-permissao-dto';
+import { PrismaCargoPermissaoRepository } from '../repositories/prisma/prisma-cargo-permissao-repository';
 
 @Injectable()
 export class UpdateCargoPermissaoService {
-	constructor(private prisma: PrismaService) {}
+	constructor(private cargoPermissaoRepository: PrismaCargoPermissaoRepository) {}
 
 	async execute(uid: string, data: UpdateCargoPermissaoDto): Promise<void> {
-		await this.prisma.cargoPermissao.update({
-			where: {
-				uid,
-			},
-			data,
-		});
-
+		await this.cargoPermissaoRepository.update(uid, data);
 		return;
 	}
 }

@@ -1,12 +1,13 @@
 import { QuestionCircleOutlined, WarningOutlined } from "@ant-design/icons";
 import { Input, Tooltip } from "antd";
+import { valueType } from "antd/es/statistic/utils";
 import { ChangeEventHandler } from "react";
 
 interface IInputPassword {
   label?: string;
   placeholder?: string;
   error?: string;
-  value?: string;
+  value?: valueType;
   onChange: ChangeEventHandler<HTMLInputElement> | undefined;
   required: boolean;
   tooltip?: string;
@@ -47,6 +48,7 @@ export const InputPassword = ({
         size="large"
         onChange={onChange}
         value={value}
+        autoComplete={"current-password"}
       />
       {error && (
         <div className="flex gap-2 items-center text-red-600 text-xs">

@@ -1,18 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateCargoDto } from '../dtos/update-cargo-dto';
 import { PrismaService } from '@/core/providers/database/prisma.service';
+import { PrismaCargoRepository } from '../repositories/prisma/prisma-cargo-repository';
 
 @Injectable()
 export class UpdateCargoService {
-	constructor(private prisma: PrismaService) {}
+	constructor(
+		private prisma: PrismaService,
+		private cargoRepository: PrismaCargoRepository,
+	) {}
 
 	async execute(uid: string, data: UpdateCargoDto): Promise<void> {
-		const cargo = await this.prisma.cargo.update({
-			where: {
-				uid,
-			},
-			data: data,
-		});
+		await this.cargoRepository.update(uid, data);
 
 		if (data.permissoes)
 			await this.prisma.$transaction(
@@ -25,6 +24,8 @@ export class UpdateCargoService {
 			);
 
 		if (data.situacao === 'INATIVO') {
+			const cargo = await this.cargoRepository.findByUid(uid);
+
 			await this.prisma.usuario.updateMany({
 				where: { id_cargo: cargo.id },
 				data: { id_cargo: null },

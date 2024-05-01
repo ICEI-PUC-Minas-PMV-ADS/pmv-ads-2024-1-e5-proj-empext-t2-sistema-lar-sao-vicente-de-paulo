@@ -69,8 +69,9 @@ export const AtualizarCargoModal = ({
       customButtonOpenModal={
         <Tooltip title={"Editar"}>
           <button
+            type="button"
             onClick={() => setOpen(true)}
-            className="text-black/30 hover:text-primaria h-full w-[50px]"
+            className="text-black/30 hover:text-primaria h-full w-[50px] flex justify-center items-center"
           >
             <EditOutlined className={"text-[18px]"} />
           </button>
