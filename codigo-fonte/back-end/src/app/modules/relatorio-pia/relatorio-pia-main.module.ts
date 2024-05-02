@@ -6,6 +6,7 @@ import { ModeloRelatorioPiaRespostaOpcaoModule } from './modelo-relatorio-pia-op
 import { RelatorioPiaModule } from './relatorio-pia/relatorio-pia.module';
 import { RelatorioPiaPerguntaModule } from './relatorio-pia-pergunta/relatorio-pia-pergunta.module';
 import { RelatorioPiaRespostaModule } from './relatorio-pia-resposta/relatorio-pia-resposta.module';
+import { RelatorioPiaOpcaoModule } from './relatorio-pia-opcao/relatorio-pia-opcao.module';
 
 @Module({
 	imports: [
@@ -16,6 +17,7 @@ import { RelatorioPiaRespostaModule } from './relatorio-pia-resposta/relatorio-p
 		RelatorioPiaModule,
 		RelatorioPiaPerguntaModule,
 		RelatorioPiaRespostaModule,
+		RelatorioPiaOpcaoModule,
 	],
 })
 export class RelatorioPiaMainModule {}
