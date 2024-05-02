@@ -15,7 +15,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { RedisGuard } from '@/core/guards/auth.guard';
 import { RolesGuard } from '@/core/guards/role.guard';
 import { ResponsavelIdosoModule } from './modules/responsavel-idoso/responsavel-idoso.module';
-import { RelatorioPiaModule } from './modules/relatorio-pia/relatorio-pia.module';
+import { RelatorioPiaMainModule } from './modules/relatorio-pia/relatorio-pia-main.module';
 
 @Module({
 	imports: [
@@ -43,7 +43,7 @@ import { RelatorioPiaModule } from './modules/relatorio-pia/relatorio-pia.module
 		GrupoPermissaoModule,
 		PermissaoModule,
 		ResponsavelIdosoModule,
-		RelatorioPiaModule,
+		RelatorioPiaMainModule,
 	],
 	providers: [
 		{
