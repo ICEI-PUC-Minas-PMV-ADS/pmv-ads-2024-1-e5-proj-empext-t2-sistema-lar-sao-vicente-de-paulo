@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { RelatorioPia as ModeloRelatorioPiaModel } from '@prisma/client';
+import { RelatorioPia as RelatorioPiaModel } from '@prisma/client';
 
-export class RelatorioPia implements ModeloRelatorioPiaModel {
+export class RelatorioPia implements RelatorioPiaModel {
 	@ApiProperty()
 	id: bigint;
 

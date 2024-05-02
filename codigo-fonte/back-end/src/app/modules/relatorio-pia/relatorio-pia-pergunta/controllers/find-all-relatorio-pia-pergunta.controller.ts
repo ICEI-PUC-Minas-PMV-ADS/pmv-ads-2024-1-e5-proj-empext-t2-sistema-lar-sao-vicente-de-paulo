@@ -5,33 +5,33 @@ import { QueryBuilderService } from '@/core/providers/query-builder/query-builde
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { ApiPaginatedResponse } from '@/common/decorators/api-paginated-response.decorator';
 import { ApiQueryBuilder } from '@/common/decorators/api-query-builder.decorator';
-import { FindAllRelatorioPiaService } from '../services/find-all-relatorio-pia.service';
-import { RelatorioPia } from '../entities/relatorio-pia.entity';
+import { FindAllRelatorioPiaPerguntaService } from '../services/find-all-relatorio-pia-pergunta.service';
+import { RelatorioPiaPergunta } from '../entities/relatorio-pia-pergunta.entity';
 
-@ApiTags('relatorio-pia')
-@Controller('relatorio-pia')
+@ApiTags('relatorio-pia-pergunta')
+@Controller('relatorio-pia-pergunta')
 @ApiBearerAuth()
-export class FindAllRelatorioPiaController {
+export class FindAllRelatorioPiaPerguntaController {
 	constructor(
-		private findAllRelatorioPiaService: FindAllRelatorioPiaService,
+		private findAllRelatorioPiaPerguntaService: FindAllRelatorioPiaPerguntaService,
 		private queryBuilder: QueryBuilderService,
 	) {}
 
 	@Get()
 	@ApiOperation({
-		summary: 'Lista todos os relatório PIA com paginação',
+		summary: 'Lista todos os relatório PIA Pergunta com paginação',
 	})
-	@ApiPaginatedResponse(RelatorioPia)
+	@ApiPaginatedResponse(RelatorioPiaPergunta)
 	@ApiQueryBuilder()
 	@ApiResponseError()
-	async handle(): Promise<AppResponse<RelatorioPia[]>> {
+	async handle(): Promise<AppResponse<RelatorioPiaPergunta[]>> {
 		const { page_limit, page_number, ...query } =
 			await this.queryBuilder.query();
 
-		const { RelatoriosPias, count } =
-			await this.findAllRelatorioPiaService.execute(query);
+		const { RelatoriosPiasPerguntas, count } =
+			await this.findAllRelatorioPiaPerguntaService.execute(query);
 
-		return new AppResponse(RelatoriosPias, {
+		return new AppResponse(RelatoriosPiasPerguntas, {
 			page_limit,
 			page_number,
 			total_count: count,
