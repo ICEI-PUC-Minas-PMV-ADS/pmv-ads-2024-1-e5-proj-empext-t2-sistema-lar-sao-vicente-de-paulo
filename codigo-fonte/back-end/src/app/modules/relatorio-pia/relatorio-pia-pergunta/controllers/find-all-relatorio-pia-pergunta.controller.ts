@@ -19,7 +19,7 @@ export class FindAllRelatorioPiaPerguntaController {
 
 	@Get()
 	@ApiOperation({
-		summary: 'Lista todos os relatório PIA Pergunta com paginação',
+		summary: 'Lista todos os Relatório PIA Pergunta com paginação',
 	})
 	@ApiPaginatedResponse(RelatorioPiaPergunta)
 	@ApiQueryBuilder()
@@ -28,10 +28,10 @@ export class FindAllRelatorioPiaPerguntaController {
 		const { page_limit, page_number, ...query } =
 			await this.queryBuilder.query();
 
-		const { RelatoriosPiasPerguntas, count } =
+		const { relatoriosPiasPerguntas, count } =
 			await this.findAllRelatorioPiaPerguntaService.execute(query);
 
-		return new AppResponse(RelatoriosPiasPerguntas, {
+		return new AppResponse(relatoriosPiasPerguntas, {
 			page_limit,
 			page_number,
 			total_count: count,

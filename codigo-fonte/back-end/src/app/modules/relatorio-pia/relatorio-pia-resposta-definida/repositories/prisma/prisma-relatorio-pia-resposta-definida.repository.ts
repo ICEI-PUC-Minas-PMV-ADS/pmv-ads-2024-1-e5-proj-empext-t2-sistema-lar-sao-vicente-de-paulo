@@ -30,6 +30,16 @@ export class PrismaRelatorioPiaRespostaDefinidaRepository
 
 		return relatorioPiaRespostaDefinida;
 	}
+	async findByValor(valor: string): Promise<RelatorioPiaRespostaDefinida> {
+		const relatorioPiaRespostaDefinida =
+			await prisma.relatorioPiaRespostaDefinida.findFirst({
+				where: {
+					valor,
+				},
+			});
+
+		return relatorioPiaRespostaDefinida;
+	}
 	async update(
 		data: UpdateRelatorioPiaRespostaDefinidaDto,
 		from: RelatorioPiaRespostaDefinida,

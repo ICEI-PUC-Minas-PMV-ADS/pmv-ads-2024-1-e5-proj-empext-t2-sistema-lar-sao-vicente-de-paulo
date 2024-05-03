@@ -30,6 +30,26 @@ export class PrismaRelatorioPiaPerguntaRepository
 
 		return relatorioPiaPergunta;
 	}
+	async findById(id: bigint): Promise<RelatorioPiaPergunta> {
+		const relatorioPiaPergunta =
+			await prisma.relatorioPiaPergunta.findUnique({
+				where: {
+					id,
+				},
+			});
+
+		return relatorioPiaPergunta;
+	}
+	async findByPergunta(pergunta: string): Promise<RelatorioPiaPergunta> {
+		const relatorioPiaPergunta =
+			await prisma.relatorioPiaPergunta.findFirst({
+				where: {
+					pergunta,
+				},
+			});
+
+		return relatorioPiaPergunta;
+	}
 	async update(
 		data: UpdateRelatorioPiaPerguntaDto,
 		from: RelatorioPiaPergunta,

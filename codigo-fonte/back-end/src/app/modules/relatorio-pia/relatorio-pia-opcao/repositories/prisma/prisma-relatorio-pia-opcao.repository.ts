@@ -32,6 +32,16 @@ export class PrismaRelatorioPiaOpcaoRepository
 
 		return relatorioPiaOpcao;
 	}
+	async findByOption(opcao: string): Promise<RelatorioPiaRespostaOpcao> {
+		const relatorioPiaOpcao =
+			await prisma.relatorioPiaRespostaOpcao.findFirst({
+				where: {
+					opcao,
+				},
+			});
+
+		return relatorioPiaOpcao;
+	}
 	async update(
 		data: UpdateRelatorioPiaOpcaoDto,
 		from: RelatorioPiaRespostaOpcao,

@@ -14,10 +14,10 @@ export class CreateRelatorioPiaPerguntaController {
 	) {}
 
 	@Post()
-	@ApiOperation({ summary: 'Cria um relatório PIA Pergunta' })
+	@ApiOperation({ summary: 'Cria um Relatório PIA Pergunta' })
 	@ApiBody({
 		type: CreateRelatorioPiaPerguntaDto,
-		description: 'Dados do relatório PIA Pergunta a ser criado',
+		description: 'Dados do Relatório PIA Pergunta a ser criado',
 	})
 	@ApiResponseError()
 	async handle(

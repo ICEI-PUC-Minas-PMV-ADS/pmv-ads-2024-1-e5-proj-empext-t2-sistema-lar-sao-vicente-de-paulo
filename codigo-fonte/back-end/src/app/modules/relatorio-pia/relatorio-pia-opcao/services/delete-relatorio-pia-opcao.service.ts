@@ -17,5 +17,7 @@ export class DeleteRelatorioPiaOpcaoService {
 		}
 
 		await this.relatorioPiaOpcaoRepository.delete(uid);
+
+		return;
 	}
 }

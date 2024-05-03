@@ -5,6 +5,8 @@ import { RelatorioPiaPergunta } from '../entities/relatorio-pia-pergunta.entity'
 export interface relatorioPiaPerguntaRepository {
 	create(data: CreateRelatorioPiaPerguntaDto): Promise<RelatorioPiaPergunta>;
 	findByUid(uid: string): Promise<RelatorioPiaPergunta | null>;
+	findById(id: bigint): Promise<RelatorioPiaPergunta | null>;
+	findByPergunta(pergunta: string): Promise<RelatorioPiaPergunta | null>;
 	update(
 		data: UpdateRelatorioPiaPerguntaDto,
 		from: RelatorioPiaPergunta,

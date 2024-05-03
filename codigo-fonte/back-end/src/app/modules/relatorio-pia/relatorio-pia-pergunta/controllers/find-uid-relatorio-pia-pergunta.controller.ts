@@ -18,19 +18,19 @@ export class FindUidRelatorioPiaPerguntaController {
 	) {}
 
 	@Get(':uid')
-	@ApiOperation({ summary: 'Busca um relatório PIA Pergunta pelo UID' })
+	@ApiOperation({ summary: 'Busca um Relatório PIA Pergunta pelo UID' })
 	@ApiParam({
 		name: 'uid',
-		description: 'UID do relatório PIA Pergunta a ser buscado',
+		description: 'UID do Relatório PIA Pergunta a ser buscado',
 		type: 'string',
 	})
 	@ApiResponseError()
 	async handle(
 		@Param('uid') uid: string,
 	): Promise<RelatorioPiaPergunta | null> {
-		const RelatorioPiaPergunta =
+		const relatorioPiaPergunta =
 			await this.findUidRelatorioPiaPergunta.execute(uid);
 
-		return RelatorioPiaPergunta;
+		return relatorioPiaPergunta;
 	}
 }

@@ -3,6 +3,7 @@ import { CreateRelatorioPiaRespostaDto } from '../../dtos/create-relatorio-pia-r
 import { UpdateRelatorioPiaRespostaDto } from '../../dtos/update-relatorio-pia-resposta.dto';
 import { RelatorioPiaResposta } from '../../entities/relatorio-pia-resposta.entity';
 import { relatorioPiaRespostaRepository } from '../relatorio-pia-resposta.repository';
+import { $Enums } from '@prisma/client';
 
 export class PrismaRelatorioPiaRespostaRepository
 	implements relatorioPiaRespostaRepository
@@ -25,6 +26,36 @@ export class PrismaRelatorioPiaRespostaRepository
 				include: {
 					relatorio_pia_pergunta: true,
 					relatorio_pia_resposta_opcao: true,
+				},
+			});
+
+		return relatorioPiaResposta;
+	}
+	async findById(id: bigint): Promise<RelatorioPiaResposta> {
+		const relatorioPiaResposta =
+			await prisma.relatorioPiaResposta.findUnique({
+				where: {
+					id,
+				},
+			});
+
+		return relatorioPiaResposta;
+	}
+	async findByTitulo(titulo: string): Promise<RelatorioPiaResposta> {
+		const relatorioPiaResposta =
+			await prisma.relatorioPiaResposta.findFirst({
+				where: {
+					titulo,
+				},
+			});
+
+		return relatorioPiaResposta;
+	}
+	async findByTipo(tipo: $Enums.tiposReposta): Promise<RelatorioPiaResposta> {
+		const relatorioPiaResposta =
+			await prisma.relatorioPiaResposta.findFirst({
+				where: {
+					tipo,
 				},
 			});
 

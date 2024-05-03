@@ -9,13 +9,13 @@ export class FindAllRelatorioPiaRespostaService {
 
 	async execute(query?: Prisma.RelatorioPiaRespostaFindManyArgs): Promise<{
 		count: number;
-		RelatoriosPiasRespostas: RelatorioPiaResposta[];
+		relatoriosPiasRespostas: RelatorioPiaResposta[];
 	}> {
 		query = {
 			...query,
 		};
 
-		const [RelatoriosPiasRespostas, count] = await this.prisma.$transaction(
+		const [relatoriosPiasRespostas, count] = await this.prisma.$transaction(
 			[
 				this.prisma.relatorioPiaResposta.findMany(query),
 				this.prisma.relatorioPiaResposta.count({
@@ -26,7 +26,7 @@ export class FindAllRelatorioPiaRespostaService {
 
 		return {
 			count,
-			RelatoriosPiasRespostas,
+			relatoriosPiasRespostas,
 		};
 	}
 }

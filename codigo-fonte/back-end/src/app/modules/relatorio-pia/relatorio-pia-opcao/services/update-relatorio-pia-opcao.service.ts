@@ -21,11 +21,11 @@ export class UpdateRelatorioPiaOpcaoService {
 			throw new AppError('Relatório PIA Opção não encontrado');
 		}
 
-		const RelatorioPiaOpcao = await this.relatorioPiaOpcaoRepository.update(
+		const relatorioPiaOpcao = await this.relatorioPiaOpcaoRepository.update(
 			data,
 			alreadyExists,
 		);
 
-		return RelatorioPiaOpcao;
+		return relatorioPiaOpcao;
 	}
 }

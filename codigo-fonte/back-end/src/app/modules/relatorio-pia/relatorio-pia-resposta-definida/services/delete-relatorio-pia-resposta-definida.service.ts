@@ -19,5 +19,7 @@ export class DeleteRelatorioPiaRespostaDefinidaService {
 		}
 
 		await this.relatorioPiaRespostaDefinidaRepository.delete(uid);
+
+		return;
 	}
 }

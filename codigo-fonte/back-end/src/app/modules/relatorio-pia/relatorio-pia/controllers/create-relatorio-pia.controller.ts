@@ -12,10 +12,10 @@ export class CreateRelatorioPiaController {
 	constructor(private createRelatorioPia: CreateRelatorioPiaService) {}
 
 	@Post()
-	@ApiOperation({ summary: 'Cria um relatório PIA' })
+	@ApiOperation({ summary: 'Cria um Relatório PIA' })
 	@ApiBody({
 		type: CreateRelatorioPiaDto,
-		description: 'Dados do relatório PIA a ser criado',
+		description: 'Dados do Relatório PIA a ser criado',
 	})
 	@ApiResponseError()
 	async handle(@Body() data: CreateRelatorioPiaDto): Promise<RelatorioPia> {

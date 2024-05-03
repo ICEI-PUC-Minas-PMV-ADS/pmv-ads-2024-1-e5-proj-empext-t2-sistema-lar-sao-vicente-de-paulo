@@ -15,14 +15,14 @@ export class UpdateRelatorioPiaService {
 		const alreadyExists = await this.relatorioPiaRepository.findByUid(uid);
 
 		if (!alreadyExists) {
-			throw new AppError('Modelo de relatório PIA não encontrado');
+			throw new AppError('Relatório PIA não encontrado');
 		}
 
-		const RelatorioPia = await this.relatorioPiaRepository.update(
+		const relatorioPia = await this.relatorioPiaRepository.update(
 			data,
 			alreadyExists,
 		);
 
-		return RelatorioPia;
+		return relatorioPia;
 	}
 }

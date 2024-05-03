@@ -11,7 +11,7 @@ export class FindUidRelatorioPiaService {
 		const relatorioPia = await this.relatorioPiaRepository.findByUid(uid);
 
 		if (!relatorioPia) {
-			throw new AppError('Modelo de Relatório PIA não encontrado');
+			throw new AppError('Relatório PIA não encontrado');
 		}
 
 		return relatorioPia;

@@ -23,12 +23,12 @@ export class UpdateRelatorioPiaRespostaDefinidaService {
 			);
 		}
 
-		const RelatorioPiaRespostaDefinida =
+		const relatorioPiaRespostaDefinida =
 			await this.relatorioPiaRespostaDefinidaRepository.update(
 				data,
 				alreadyExists,
 			);
 
-		return RelatorioPiaRespostaDefinida;
+		return relatorioPiaRespostaDefinida;
 	}
 }

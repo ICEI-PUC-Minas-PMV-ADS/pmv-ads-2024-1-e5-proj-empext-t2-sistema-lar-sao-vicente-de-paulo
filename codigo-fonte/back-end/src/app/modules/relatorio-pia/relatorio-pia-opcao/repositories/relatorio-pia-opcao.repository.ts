@@ -7,6 +7,7 @@ export interface relatorioPiaOpcaoRepository {
 		data: CreateRelatorioPiaOpcaoDto,
 	): Promise<RelatorioPiaRespostaOpcao>;
 	findByUid(uid: string): Promise<RelatorioPiaRespostaOpcao | null>;
+	findByOption(opcao: string): Promise<RelatorioPiaRespostaOpcao | null>;
 	update(
 		data: UpdateRelatorioPiaOpcaoDto,
 		from: RelatorioPiaRespostaOpcao,

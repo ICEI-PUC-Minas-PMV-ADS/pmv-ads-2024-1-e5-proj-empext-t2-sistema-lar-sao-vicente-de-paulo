@@ -14,18 +14,18 @@ export class CreateRelatorioPiaRespostaController {
 	) {}
 
 	@Post()
-	@ApiOperation({ summary: 'Cria um relatório PIA Resposta' })
+	@ApiOperation({ summary: 'Cria um Relatório PIA Resposta' })
 	@ApiBody({
 		type: CreateRelatorioPiaRespostaDto,
-		description: 'Dados do relatório PIA Resposta a ser criado',
+		description: 'Dados do Relatório PIA Resposta a ser criado',
 	})
 	@ApiResponseError()
 	async handle(
 		@Body() data: CreateRelatorioPiaRespostaDto,
 	): Promise<RelatorioPiaResposta> {
-		const relatorioPia =
+		const relatorioPiaResposta =
 			await this.createRelatorioPiaResposta.execute(data);
 
-		return relatorioPia;
+		return relatorioPiaResposta;
 	}
 }

@@ -6,7 +6,7 @@ import { DeleteRelatorioPiaPerguntaController } from './controllers/delete-relat
 import { FindAllRelatorioPiaPerguntaController } from './controllers/find-all-relatorio-pia-pergunta.controller';
 import { FindUidRelatorioPiaPerguntaController } from './controllers/find-uid-relatorio-pia-pergunta.controller';
 import { UpdateRelatorioPiaPerguntaController } from './controllers/update-relatorio-pia-pergunta.controller';
-import { PrismaRelatorioPiaPerguntaRepository } from './repositories/prisma/prisma-relatorio-pia-pergunta.repository';
+import { PrismaRelatórioPiaPerguntaRepository } from './repositories/prisma/prisma-relatorio-pia-pergunta.repository';
 import { CreateRelatorioPiaPerguntaService } from './services/create-relatorio-pia-pergunta.service';
 import { DeleteRelatorioPiaPerguntaService } from './services/delete-relatorio-pia-pergunta.service';
 import { FindAllRelatorioPiaPerguntaService } from './services/find-all-relatorio-pia-pergunta.service';
@@ -20,7 +20,7 @@ import { UpdateRelatorioPiaPerguntaService } from './services/update-relatorio-p
 		FindUidRelatorioPiaPerguntaService,
 		UpdateRelatorioPiaPerguntaService,
 		DeleteRelatorioPiaPerguntaService,
-		PrismaRelatorioPiaPerguntaRepository,
+		PrismaRelatórioPiaPerguntaRepository,
 	],
 	controllers: [
 		CreateRelatorioPiaPerguntaController,

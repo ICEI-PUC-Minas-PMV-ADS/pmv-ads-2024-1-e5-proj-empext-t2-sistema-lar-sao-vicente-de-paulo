@@ -17,14 +17,16 @@ export class DeleteRelatorioPiaPerguntaController {
 	) {}
 
 	@Delete(':uid')
-	@ApiOperation({ summary: 'Exclui um relatório PIA Pergunta pelo UID' })
+	@ApiOperation({ summary: 'Exclui um Relatório PIA Pergunta pelo UID' })
 	@ApiParam({
 		name: 'uid',
-		description: 'UID do relatório PIA Pergunta a ser excluído',
+		description: 'UID do Relatório PIA Pergunta a ser excluído',
 		type: 'string',
 	})
 	@ApiResponseError()
 	async handle(@Param('uid') uid: string): Promise<void> {
 		await this.deleteRelatorioPiaPergunta.execute(uid);
+
+		return;
 	}
 }

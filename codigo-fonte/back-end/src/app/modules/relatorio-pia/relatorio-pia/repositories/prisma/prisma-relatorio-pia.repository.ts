@@ -6,14 +6,14 @@ import { relatorioPiaRepository } from '../relatorio-pia.repository';
 
 export class PrismaRelatorioPiaRepository implements relatorioPiaRepository {
 	async create(data: CreateRelatorioPiaDto): Promise<RelatorioPia> {
-		const RelatorioPia = await prisma.relatorioPia.create({
+		const relatorioPia = await prisma.relatorioPia.create({
 			data,
 		});
 
-		return RelatorioPia;
+		return relatorioPia;
 	}
 	async findByUid(uid: string): Promise<RelatorioPia> {
-		const RelatorioPia = await prisma.relatorioPia.findUnique({
+		const relatorioPia = await prisma.relatorioPia.findUnique({
 			where: {
 				uid,
 			},
@@ -25,20 +25,38 @@ export class PrismaRelatorioPiaRepository implements relatorioPiaRepository {
 			},
 		});
 
-		return RelatorioPia;
+		return relatorioPia;
+	}
+	async findById(id: bigint): Promise<RelatorioPia> {
+		const relatorioPia = await prisma.relatorioPia.findUnique({
+			where: {
+				id,
+			},
+		});
+
+		return relatorioPia;
+	}
+	async findByName(nome: string): Promise<RelatorioPia> {
+		const relatorioPia = await prisma.relatorioPia.findFirst({
+			where: {
+				nome,
+			},
+		});
+
+		return relatorioPia;
 	}
 	async update(
 		data: UpdateRelatorioPiaDto,
 		from: RelatorioPia,
 	): Promise<RelatorioPia> {
-		const RelatorioPia = await prisma.relatorioPia.update({
+		const relatorioPia = await prisma.relatorioPia.update({
 			where: {
 				uid: from.uid,
 			},
 			data,
 		});
 
-		return RelatorioPia;
+		return relatorioPia;
 	}
 	async delete(uid: string): Promise<void> {
 		await prisma.relatorioPia.delete({

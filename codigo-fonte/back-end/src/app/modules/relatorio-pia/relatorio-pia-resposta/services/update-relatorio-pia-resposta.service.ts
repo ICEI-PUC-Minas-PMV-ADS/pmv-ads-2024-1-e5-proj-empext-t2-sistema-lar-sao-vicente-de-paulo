@@ -21,12 +21,12 @@ export class UpdateRelatorioPiaRespostaService {
 			throw new AppError('Relatório PIA Resposta não encontrado');
 		}
 
-		const RelatorioPiaResposta =
+		const relatorioPiaResposta =
 			await this.relatorioPiaRespostaRepository.update(
 				data,
 				alreadyExists,
 			);
 
-		return RelatorioPiaResposta;
+		return relatorioPiaResposta;
 	}
 }

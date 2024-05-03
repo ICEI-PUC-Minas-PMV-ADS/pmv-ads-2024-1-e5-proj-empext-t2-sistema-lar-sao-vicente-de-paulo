@@ -18,15 +18,17 @@ export class DeleteRelatorioPiaRespostaDefinidaController {
 
 	@Delete(':uid')
 	@ApiOperation({
-		summary: 'Exclui um relatório PIA Resposta Definida pelo UID',
+		summary: 'Exclui um Relatório PIA Resposta Definida pelo UID',
 	})
 	@ApiParam({
 		name: 'uid',
-		description: 'UID do relatório PIA Resposta Definida a ser excluída',
+		description: 'UID do Relatório PIA Resposta Definida a ser excluída',
 		type: 'string',
 	})
 	@ApiResponseError()
 	async handle(@Param('uid') uid: string): Promise<void> {
 		await this.deleteRelatorioPiaRespostaDefinida.execute(uid);
+
+		return;
 	}
 }

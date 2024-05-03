@@ -11,13 +11,13 @@ export class FindAllRelatorioPiaRespostaDefinidaService {
 		query?: Prisma.RelatorioPiaRespostaDefinidaFindManyArgs,
 	): Promise<{
 		count: number;
-		RelatoriosPiasRespostaDefinidas: RelatorioPiaRespostaDefinida[];
+		relatoriosPiasRespostaDefinidas: RelatorioPiaRespostaDefinida[];
 	}> {
 		query = {
 			...query,
 		};
 
-		const [RelatoriosPiasRespostaDefinidas, count] =
+		const [relatoriosPiasRespostaDefinidas, count] =
 			await this.prisma.$transaction([
 				this.prisma.relatorioPiaRespostaDefinida.findMany(query),
 				this.prisma.relatorioPiaRespostaDefinida.count({
@@ -27,7 +27,7 @@ export class FindAllRelatorioPiaRespostaDefinidaService {
 
 		return {
 			count,
-			RelatoriosPiasRespostaDefinidas,
+			relatoriosPiasRespostaDefinidas,
 		};
 	}
 }

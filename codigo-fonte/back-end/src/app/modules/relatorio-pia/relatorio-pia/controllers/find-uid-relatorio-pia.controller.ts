@@ -16,10 +16,10 @@ export class FindUidRelatorioPiaController {
 	constructor(private findUidRelatorioPia: FindUidRelatorioPiaService) {}
 
 	@Get(':uid')
-	@ApiOperation({ summary: 'Busca um relatório PIA pelo UID' })
+	@ApiOperation({ summary: 'Busca um Relatório PIA pelo UID' })
 	@ApiParam({
 		name: 'uid',
-		description: 'UID do relatório PIA a ser buscado',
+		description: 'UID do Relatório PIA a ser buscado',
 		type: 'string',
 	})
 	@ApiResponseError()

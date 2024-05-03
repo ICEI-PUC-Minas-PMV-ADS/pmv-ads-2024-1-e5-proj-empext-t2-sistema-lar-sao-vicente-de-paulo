@@ -7,6 +7,7 @@ export interface relatorioPiaRespostaDefinidaRepository {
 		data: CreateRelatorioPiaRespostaDefinidaDto,
 	): Promise<RelatorioPiaRespostaDefinida>;
 	findByUid(uid: string): Promise<RelatorioPiaRespostaDefinida | null>;
+	findByValor(valor: string): Promise<RelatorioPiaRespostaDefinida | null>;
 	update(
 		data: UpdateRelatorioPiaRespostaDefinidaDto,
 		from: RelatorioPiaRespostaDefinida,

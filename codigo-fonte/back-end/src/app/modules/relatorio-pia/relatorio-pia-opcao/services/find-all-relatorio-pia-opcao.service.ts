@@ -11,13 +11,13 @@ export class FindAllRelatorioPiaOpcaoService {
 		query?: Prisma.RelatorioPiaRespostaOpcaoFindManyArgs,
 	): Promise<{
 		count: number;
-		RelatoriosPiasOpcaos: RelatorioPiaRespostaOpcao[];
+		relatoriosPiasOpcaos: RelatorioPiaRespostaOpcao[];
 	}> {
 		query = {
 			...query,
 		};
 
-		const [RelatoriosPiasOpcaos, count] = await this.prisma.$transaction([
+		const [relatoriosPiasOpcaos, count] = await this.prisma.$transaction([
 			this.prisma.relatorioPiaRespostaOpcao.findMany(query),
 			this.prisma.relatorioPiaRespostaOpcao.count({
 				where: query.where,
@@ -26,7 +26,7 @@ export class FindAllRelatorioPiaOpcaoService {
 
 		return {
 			count,
-			RelatoriosPiasOpcaos,
+			relatoriosPiasOpcaos,
 		};
 	}
 }
