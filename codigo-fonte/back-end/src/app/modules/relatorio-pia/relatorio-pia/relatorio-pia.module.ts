@@ -12,6 +12,9 @@ import { UpdateRelatorioPiaController } from './controllers/update-relatorio-pia
 import { QueryBuilderModule } from '@/core/providers/query-builder/query-builder.module';
 import { FindAllRelatorioPiaService } from './services/find-all-relatorio-pia.service';
 import { FindAllRelatorioPiaController } from './controllers/find-all-relatorio-pia.controller';
+import { PrismaModeloRelatorioPiaRepository } from '../modelo-relatorio-pia/repositories/prisma/prisma-modelo-relatorio-pia.repository';
+import { PrismaUsuarioRepository } from '../../usuario/repositories/prisma/prisma-usuario-repository';
+import { PrismaIdosoRepository } from '../../idoso/repositories/prisma/prisma-idoso-repository';
 
 @Module({
 	providers: [
@@ -21,6 +24,9 @@ import { FindAllRelatorioPiaController } from './controllers/find-all-relatorio-
 		UpdateRelatorioPiaService,
 		DeleteRelatorioPiaService,
 		PrismaRelatorioPiaRepository,
+		PrismaModeloRelatorioPiaRepository,
+		PrismaUsuarioRepository,
+		PrismaIdosoRepository,
 	],
 	controllers: [
 		CreateRelatorioPiaController,

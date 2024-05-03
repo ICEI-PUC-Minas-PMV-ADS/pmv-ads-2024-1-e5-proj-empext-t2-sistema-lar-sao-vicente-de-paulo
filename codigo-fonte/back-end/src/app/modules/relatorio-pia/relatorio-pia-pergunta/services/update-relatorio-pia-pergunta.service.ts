@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { AppError } from '@utils/app-error';
 import { UpdateRelatorioPiaPerguntaDto } from '../dtos/update-relatorio-pia-pergunta.dto';
 import { RelatorioPiaPergunta } from '../entities/relatorio-pia-pergunta.entity';
-import { PrismaRelatórioPiaPerguntaRepository } from '../repositories/prisma/prisma-relatorio-pia-pergunta.repository';
+import { PrismaRelatorioPiaPerguntaRepository } from '../repositories/prisma/prisma-relatorio-pia-pergunta.repository';
 
 @Injectable()
 export class UpdateRelatorioPiaPerguntaService {
 	constructor(
-		private relatorioPiaPerguntaRepository: PrismaRelatórioPiaPerguntaRepository,
+		private relatorioPiaPerguntaRepository: PrismaRelatorioPiaPerguntaRepository,
 	) {}
 
 	async execute(

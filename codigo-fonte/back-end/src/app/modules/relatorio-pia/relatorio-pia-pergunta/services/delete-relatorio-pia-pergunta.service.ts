@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { AppError } from '@utils/app-error';
-import { PrismaRelatórioPiaPerguntaRepository } from '../repositories/prisma/prisma-relatorio-pia-pergunta.repository';
+import { PrismaRelatorioPiaPerguntaRepository } from '../repositories/prisma/prisma-relatorio-pia-pergunta.repository';
 
 @Injectable()
 export class DeleteRelatorioPiaPerguntaService {
 	constructor(
-		private relatorioPiaPerguntaRepository: PrismaRelatórioPiaPerguntaRepository,
+		private relatorioPiaPerguntaRepository: PrismaRelatorioPiaPerguntaRepository,
 	) {}
 
 	async execute(uid: string): Promise<void> {

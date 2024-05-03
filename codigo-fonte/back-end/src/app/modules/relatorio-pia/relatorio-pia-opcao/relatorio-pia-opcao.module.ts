@@ -12,6 +12,7 @@ import { DeleteRelatorioPiaOpcaoService } from './services/delete-relatorio-pia-
 import { FindAllRelatorioPiaOpcaoService } from './services/find-all-relatorio-pia-opcao.service';
 import { FindUidRelatorioPiaOpcaoService } from './services/find-uid-relatorio-pia-opcao.service';
 import { UpdateRelatorioPiaOpcaoService } from './services/update-relatorio-pia-opcao.service';
+import { PrismaRelatorioPiaRespostaRepository } from '../relatorio-pia-resposta/repositories/prisma/prisma-relatorio-pia-resposta.repository';
 
 @Module({
 	providers: [
@@ -21,6 +22,7 @@ import { UpdateRelatorioPiaOpcaoService } from './services/update-relatorio-pia-
 		UpdateRelatorioPiaOpcaoService,
 		DeleteRelatorioPiaOpcaoService,
 		PrismaRelatorioPiaOpcaoRepository,
+		PrismaRelatorioPiaRespostaRepository,
 	],
 	controllers: [
 		CreateRelatorioPiaOpcaoController,
