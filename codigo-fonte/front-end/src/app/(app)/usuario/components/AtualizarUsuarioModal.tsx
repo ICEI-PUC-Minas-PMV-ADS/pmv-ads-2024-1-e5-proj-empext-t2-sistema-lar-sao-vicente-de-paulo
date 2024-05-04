@@ -21,7 +21,7 @@ import { api } from "@/utils/service/api";
 import { useCookies } from "react-cookie";
 import { authToken } from "@/config/authToken";
 import { isNome } from "@/utils/validator/isName";
-import { withoutNumber } from "@/utils/validator/withoutNumber";
+import { isText } from "@/utils/validator/isText";
 import { isEmail } from "@/utils/validator/isEmail";
 import { AxiosError } from "axios";
 import { IDefinirSenha } from "@/app/(auth)/definir-senha/Interface/IDefinirSenha";
@@ -231,8 +231,8 @@ export const AtualizarUsuarioModal = ({
               required: "Insira o nome do usuário",
               validate: (value) => {
                 if (value && isNome(value)) return "Preencher o nome completo";
-                if (value && withoutNumber(value))
-                  return "Nome não pode conter números";
+                if (value && isText(value))
+                  return "Nome não pode conter números nem caractéres especiais";
                 return true;
               },
             }}
