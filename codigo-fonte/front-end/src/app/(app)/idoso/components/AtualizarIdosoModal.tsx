@@ -972,7 +972,7 @@ const Responsaveis = ({ idIdoso }: { idIdoso: bigint }) => {
   return (
     <>
       <div>
-        <CriarResponsavelIdosoModal refetch={refetch} />
+        <CriarResponsavelIdosoModal refetch={refetch} idIdoso={idIdoso} />
       </div>
       <TableDefault dataSource={data} columns={columns} />
     </>
