@@ -89,8 +89,7 @@ export const AtualizarCargoModal = ({
           popconfirm: true,
           popconfirmType: cargo?.situacao === "ATIVO" ? "danger" : "primary",
           popconfirmTitle:
-            (cargo?.situacao === "ATIVO" ? "Inativar" : "Reativar") +
-            " Usuário",
+            (cargo?.situacao === "ATIVO" ? "Inativar" : "Reativar") + " Cargo",
           popconfirmDescrition:
             cargo?.situacao === "ATIVO"
               ? "Ao inativar o cargo, os usuários que possuem esse cargo perderão o vínculo. Você tem certeza?"

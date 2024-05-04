@@ -4,7 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { InputForm, InputSelect } from "@/components/input";
 import { ModalDefault } from "@/components/modal/ModalDefault";
 import { isNome } from "@/utils/validator/isName";
-import { withoutNumber } from "@/utils/validator/withoutNumber";
+import { isText } from "@/utils/validator/isText";
 import {
   IOperationResponsavelIdoso,
   IResponsavelIdoso,
@@ -116,7 +116,8 @@ export const AtualizarResponsavelIdosoModal = ({
               required: "Insira o nome do responsável",
               validate: (value) => {
                 if (isNome(value)) return "Preencher o nome completo";
-                if (withoutNumber(value)) return "Nome não pode conter números";
+                if (isText(value))
+                  return "Nome não pode conter números nem caractéres especiais";
                 return true;
               },
             }}
