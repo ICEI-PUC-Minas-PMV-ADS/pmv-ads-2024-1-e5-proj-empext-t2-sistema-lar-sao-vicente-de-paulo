@@ -24,7 +24,7 @@ import { api } from "@/utils/service/api";
 import { authToken } from "@/config/authToken";
 import { useCookies } from "react-cookie";
 import { isNome } from "@/utils/validator/isName";
-import { withoutNumber } from "@/utils/validator/withoutNumber";
+import { isText } from "@/utils/validator/isText";
 import { isEmail } from "@/utils/validator/isEmail";
 import { CheckPassword } from "@/components/CheckPassword";
 import { AxiosError } from "axios";
@@ -145,7 +145,8 @@ export const CriarUsuarioModal = ({
               required: "Insira o nome do usuário",
               validate: (value) => {
                 if (isNome(value)) return "Preencher o nome completo";
-                if (withoutNumber(value)) return "Nome não pode conter números";
+                if (isText(value))
+                  return "Nome não pode conter números nem caractéres especiais";
                 return true;
               },
             }}

@@ -16,7 +16,7 @@ import {
   notification,
 } from "antd";
 import { isNome } from "@/utils/validator/isName";
-import { withoutNumber } from "@/utils/validator/withoutNumber";
+import { isText } from "@/utils/validator/isText";
 import { IOperationIdoso } from "../Interface/IIdoso";
 import { InputDatePicker } from "@/components/input/InputDatePicker";
 import dayjs from "dayjs";
@@ -162,7 +162,8 @@ export const CriarIdosoModal = ({
               required: "Insira o nome do idoso",
               validate: (value) => {
                 if (isNome(value)) return "Preencher o nome completo";
-                if (withoutNumber(value)) return "Nome não pode conter números";
+                if (isText(value))
+                  return "Nome não pode conter números nem caractéres especiais";
                 return true;
               },
             }}
@@ -209,8 +210,8 @@ export const CriarIdosoModal = ({
                         required: "Insira o nome da mãe",
                         validate: (value) => {
                           if (isNome(value)) return "Preencher o nome completo";
-                          if (withoutNumber(value))
-                            return "Nome não pode conter números";
+                          if (isText(value))
+                            return "Nome não pode conter números nem caractéres especiais";
                           return true;
                         },
                       }}
@@ -236,8 +237,8 @@ export const CriarIdosoModal = ({
                         required: "Insira o nome do pai",
                         validate: (value) => {
                           if (isNome(value)) return "Preencher o nome completo";
-                          if (withoutNumber(value))
-                            return "Nome não pode conter números";
+                          if (isText(value))
+                            return "Nome não pode conter números nem caractéres especiais";
                           return true;
                         },
                       }}
