@@ -24,7 +24,7 @@ export default function Idoso() {
 
   if (pesquisa !== "")
     filtros.push({
-      path: "nome",
+      path: "nome_completo",
       operator: "contains",
       value: pesquisa,
       insensitive: true,

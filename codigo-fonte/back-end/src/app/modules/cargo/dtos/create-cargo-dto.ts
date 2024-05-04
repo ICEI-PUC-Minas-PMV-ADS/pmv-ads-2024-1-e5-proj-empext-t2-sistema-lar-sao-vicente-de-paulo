@@ -12,7 +12,7 @@ export class CreateCargoDto {
 	@IsArray()
 	permissoes: Partial<CargoPermissao[]>;
 
-	@ApiPropertyOptional({ description: 'Situação do usuário' })
+	@ApiPropertyOptional({ description: 'Situação do cargo' })
 	@IsString()
 	@IsOptional()
 	situacao?: $Enums.Situacao;
