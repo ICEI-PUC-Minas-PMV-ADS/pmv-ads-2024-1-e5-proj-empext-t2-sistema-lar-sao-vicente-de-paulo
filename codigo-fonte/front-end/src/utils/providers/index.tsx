@@ -7,6 +7,7 @@ import { ReduxProvider } from "./ReduxProvider";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider } from "antd";
 import { LoadingGlobal } from "./LoadingApp";
+import ptBR from "antd/locale/pt_BR";
 
 export const Providers = ({ children }: { children: ReactNode }) => {
   const queryClient = new QueryClient();
@@ -17,6 +18,7 @@ export const Providers = ({ children }: { children: ReactNode }) => {
         <QueryClientProvider client={queryClient}>
           <AntdRegistry>
             <ConfigProvider
+              locale={ptBR}
               theme={{
                 components: {
                   Form: { itemMarginBottom: 15 },
