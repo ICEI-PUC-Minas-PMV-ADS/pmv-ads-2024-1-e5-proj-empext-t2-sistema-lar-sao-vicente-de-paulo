@@ -187,8 +187,7 @@ export const AtualizarIdosoModal = ({
           popconfirm: true,
           popconfirmType: idoso?.situacao === "ATIVO" ? "danger" : "primary",
           popconfirmTitle:
-            (idoso?.situacao === "ATIVO" ? "Inativar" : "Reativar") +
-            " Usuário",
+            (idoso?.situacao === "ATIVO" ? "Inativar" : "Reativar") + " Idoso",
           popconfirmDescrition:
             idoso?.situacao === "ATIVO"
               ? "Você tem certeza que deseja inativar o idoso?"
