@@ -116,6 +116,7 @@ export const CriarUsuarioModal = ({
 
   return (
     <ModalDefault
+      showFooter
       nameButtonOpenModal={"Cadastrar Usuário"}
       iconButtonOpenModal={<UserAddOutlined />}
       titleModal={"Adicionando usuário"}

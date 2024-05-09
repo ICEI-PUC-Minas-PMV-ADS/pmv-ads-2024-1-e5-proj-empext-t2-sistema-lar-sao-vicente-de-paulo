@@ -13,6 +13,7 @@ import { IIdoso } from "./Interface/IIdoso";
 import { CriarIdosoModal } from "./components";
 import dayjs from "dayjs";
 import { AtualizarIdosoModal } from "./components/AtualizarIdosoModal";
+import { VisualizarResponsaveis } from "./components/VisualizarResponsaveisModal";
 
 export default function Idoso() {
   const [pageLimit, setPageLimit] = useState<number>(10);
@@ -66,7 +67,11 @@ export default function Idoso() {
       key: "responsaveis",
       render(_: any, record: IIdoso) {
         return (
-          <div>
+          <div className="flex gap-[8px] items-center">
+            <VisualizarResponsaveis
+              idIdoso={record.id}
+              nomeIdoso={record.nome_completo}
+            />
             <p>{record._count?.responsavel_idoso} Responsáveis</p>
           </div>
         );
