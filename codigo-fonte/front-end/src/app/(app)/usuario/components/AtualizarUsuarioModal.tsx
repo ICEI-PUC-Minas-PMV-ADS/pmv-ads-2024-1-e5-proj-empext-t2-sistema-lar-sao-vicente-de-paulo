@@ -136,6 +136,7 @@ export const AtualizarUsuarioModal = ({
 
   return (
     <ModalDefault
+      showFooter
       customButtonOpenModal={
         <Tooltip title={"Editar"}>
           <button

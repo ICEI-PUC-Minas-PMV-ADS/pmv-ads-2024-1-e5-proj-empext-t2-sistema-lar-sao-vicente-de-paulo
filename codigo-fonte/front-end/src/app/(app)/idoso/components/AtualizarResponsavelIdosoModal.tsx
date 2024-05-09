@@ -87,6 +87,7 @@ export const AtualizarResponsavelIdosoModal = ({
 
   return (
     <ModalDefault
+      showFooter
       customButtonOpenModal={
         <Tooltip title={"Editar"}>
           <button

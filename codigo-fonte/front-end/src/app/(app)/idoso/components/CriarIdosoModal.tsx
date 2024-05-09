@@ -132,6 +132,7 @@ export const CriarIdosoModal = ({
 
   return (
     <ModalDefault
+      showFooter
       nameButtonOpenModal={"Cadastrar Idoso"}
       iconButtonOpenModal={<UserAddOutlined />}
       titleModal={"Adicionando idoso"}

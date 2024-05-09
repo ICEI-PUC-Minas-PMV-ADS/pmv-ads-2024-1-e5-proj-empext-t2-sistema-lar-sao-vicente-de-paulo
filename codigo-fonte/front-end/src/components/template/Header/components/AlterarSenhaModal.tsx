@@ -47,6 +47,7 @@ export const AlterarSenhaModal = () => {
 
   return (
     <ModalDefault
+      showFooter
       customButtonOpenModal={
         <Button
           htmlType="button"

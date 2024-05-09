@@ -66,6 +66,7 @@ export const AtualizarCargoModal = ({
 
   return (
     <ModalDefault
+      showFooter
       customButtonOpenModal={
         <Tooltip title={"Editar"}>
           <button
