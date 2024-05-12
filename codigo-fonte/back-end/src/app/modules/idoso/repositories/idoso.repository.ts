@@ -6,6 +6,7 @@ export interface idosoRepository {
 	create(data: Prisma.IdosoUncheckedCreateInput): Promise<Idoso>;
 	findByCpf(cpf: string): Promise<Idoso | null>;
 	findByUid(uid: string): Promise<Idoso | null>;
+	findById(id: bigint): Promise<Idoso | null>;
 	update(data: UpdateIdosoDto, from: Idoso): Promise<Idoso>;
 	delete(data: DeleteIdosoDto, from: Idoso): Promise<Idoso>;
 }
