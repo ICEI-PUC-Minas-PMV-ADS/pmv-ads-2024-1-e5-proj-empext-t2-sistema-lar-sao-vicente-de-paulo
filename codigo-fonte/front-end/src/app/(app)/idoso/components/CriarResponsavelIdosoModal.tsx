@@ -64,6 +64,7 @@ export const CriarResponsavelIdosoModal = ({
 
   return (
     <ModalDefault
+      showFooter
       nameButtonOpenModal={"Cadastrar Responsável"}
       iconButtonOpenModal={<UserAddOutlined />}
       titleModal={"Adicionando responsável"}

@@ -21,3 +21,9 @@ Nesta seção são apresentadas as telas desenvolvidas pelo grupo para cada uma 
 ![image](img/Templates/layout-cargos.png)
 
 ![image](img/Templates/layout-cargos-criar-atualizar.png)
+
+### Tela de Idosos
+
+![image](img/Templates/layout-idosos.png)
+
+![image](img/Templates/layout-idosos-criar-atualizar.png)

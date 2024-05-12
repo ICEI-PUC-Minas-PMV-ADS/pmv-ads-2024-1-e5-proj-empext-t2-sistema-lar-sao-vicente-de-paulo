@@ -29,7 +29,7 @@ export const TableDefault = ({
         pagination
           ? {
               total: totalCount || 0,
-              showTotal: (total) => `Total de ${total} items`,
+              showTotal: (total) => `Total de ${total} itens`,
               onChange: (page, pageSize) => {
                 setPageLimit && setPageLimit(pageSize);
                 setCurrentPage && setCurrentPage(page);

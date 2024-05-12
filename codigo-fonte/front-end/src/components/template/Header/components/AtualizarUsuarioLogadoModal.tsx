@@ -108,6 +108,7 @@ export const AtualizarUsuarioLogadoModal = ({
 
   return (
     <ModalDefault
+      showFooter
       customButtonOpenModal={
         <Button
           htmlType={"button"}

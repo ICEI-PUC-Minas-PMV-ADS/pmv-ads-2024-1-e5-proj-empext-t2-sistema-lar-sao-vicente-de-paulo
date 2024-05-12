@@ -1,4 +1,4 @@
-import { Idoso, Prisma } from '@prisma/client';
+import { $Enums, Idoso, Prisma } from '@prisma/client';
 import { idosoRepository } from '../idoso.repository';
 import { DeleteIdosoDto } from '@/app/modules/idoso/dtos/delete-idoso.dto';
 import { UpdateIdosoDto } from '@/app/modules/idoso/dtos/update-idoso.dto';
@@ -12,7 +12,6 @@ export class PrismaIdosoRepository implements idosoRepository {
 
 		return idoso;
 	}
-
 	async findByCpf(cpf: string) {
 		const idoso = await prisma.idoso.findFirst({
 			where: {
@@ -22,7 +21,6 @@ export class PrismaIdosoRepository implements idosoRepository {
 
 		return idoso;
 	}
-
 	async findByCnh(cnh: string) {
 		const idoso = await prisma.idoso.findFirst({
 			where: {
@@ -32,7 +30,6 @@ export class PrismaIdosoRepository implements idosoRepository {
 
 		return idoso;
 	}
-
 	async findByRg(rg: string) {
 		const idoso = await prisma.idoso.findFirst({
 			where: {
@@ -42,7 +39,6 @@ export class PrismaIdosoRepository implements idosoRepository {
 
 		return idoso;
 	}
-
 	async findByUid(uid: string) {
 		const idoso = await prisma.idoso.findUnique({
 			where: {
@@ -60,6 +56,15 @@ export class PrismaIdosoRepository implements idosoRepository {
 
 		return idoso;
 	}
+	async findById(id: bigint) {
+		const idoso = await prisma.idoso.findUnique({
+			where: {
+				id,
+			},
+		});
+
+		return idoso;
+	}
 
 	async update(data: UpdateIdosoDto, from: Idoso) {
 		const idoso = await prisma.idoso.update({
@@ -71,7 +76,6 @@ export class PrismaIdosoRepository implements idosoRepository {
 
 		return idoso;
 	}
-
 	async delete(data: DeleteIdosoDto, from: Idoso) {
 		const idoso = await prisma.idoso.update({
 			where: {

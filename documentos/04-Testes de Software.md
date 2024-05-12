@@ -116,3 +116,94 @@ _Funcionalidade pendente, será testada na próxima na próxima sprint._
 20. Verificar se os dados sensíveis, como senhas, são armazenados de forma segura, utilizando técnicas adequadas de criptografia e proteção
 
 ![teste20](img/Testes%20-%20Sprint%201/20.%20Validar%20criptografia/Teste20.jpeg)
+
+21. Upload da foto do usuario
+
+![teste20](img/Testes%20-%20Sprint%201/21.%20Upload%20da%20foto%20do%20usuario/2.com_foto.png)
+
+22. Validação com regras mínimas de criação de senha feita
+
+![teste20](img/Testes%20-%20Sprint%201/22.%20Validacao%20com%20as%20regras%20de%20senha/1.erro_de_senha.png)
+
+![teste20](img/Testes%20-%20Sprint%201/22.%20Validacao%20com%20as%20regras%20de%20senha/2.senha_aceita.png)
+
+23. Atualizar usuário/cargo corrigido
+
+![teste20](img/Testes%20-%20Sprint%201/23.%20Atualizar%20usuario_cargo/1.png)
+
+![teste20](img/Testes%20-%20Sprint%201/23.%20Atualizar%20usuario_cargo/2.png)
+
+24. IDOSO
+
+Editar: 
+
+![teste20](img/Testes%20-%20Sprint%201/24.%20Idoso/1.edicao_idoso_data_nasc.png)
+
+![teste20](img/Testes%20-%20Sprint%201/24.%20Idoso/2.edica_idoso_data_nasc.png)
+
+![teste20](img/Testes%20-%20Sprint%201/24.%20Idoso/3.confirmacao_edicao_idoso.png)
+
+Ativar:
+
+![teste20](img/Testes%20-%20Sprint%201/24.%20Idoso/ativacaoidoso.jpg)
+
+Inativar:
+
+![teste20](img/Testes%20-%20Sprint%201/24.%20Idoso/inativacaoidoso.jpg)
+
+Filtro: 
+
+![teste20](img/Testes%20-%20Sprint%201/24.%20Idoso/filtroidoso1.png)
+![teste20](img/Testes%20-%20Sprint%201/24.%20Idoso/filtroidoso2.png)
+
+25. Inativar Cargo
+
+![teste20](img/Testes%20-%20Sprint%201/25.%20Inativar%20Cargo/1.inativar.png)
+![teste20](img/Testes%20-%20Sprint%201/25.%20Inativar%20Cargo/2.%20feito.png)
+
+26. Teste: Esqueci senha
+
+![teste20](img/Testes%20-%20Sprint%201/26.%20Teste.%20Esqueci%20senha/1.%20tela%20de%20redefinicao%20de%20senha.png)
+
+![teste20](img/Testes%20-%20Sprint%201/26.%20Teste.%20Esqueci%20senha/2.%20carregamento.png)
+
+![teste20](img/Testes%20-%20Sprint%201/26.%20Teste.%20Esqueci%20senha/3.%20email%20de%20recuperacao%20recebido%20com%20sucesso.png)
+
+27. Teste duplicidade: e-mail e CPF
+
+![teste20](img/Testes%20-%20Sprint%201/27.%20Teste%20Duplicidade%20e-mail%20e%20CPF/1.%20mesmo%20email.png)
+
+![teste20](img/Testes%20-%20Sprint%201/27.%20Teste%20Duplicidade%20e-mail%20e%20CPF/2.%20mesmo%20cpf.png)
+
+28. Validação do campo Nome do usuario
+
+Nome com números:
+
+![teste20](img/Testes%20-%20Sprint%201/28.%20Teste%20validacao%20de%20campo%20nome%20do%20usuario/1.%20nome%20com%20numeros.png)
+
+Apenas primeiro nome:
+
+![teste20](img/Testes%20-%20Sprint%201/28.%20Teste%20validacao%20de%20campo%20nome%20do%20usuario/2.%20apenas%20primeiro%20nome.png)
+
+Nome com traços e pontos:
+
+![teste20](img/Testes%20-%20Sprint%201/28.%20Teste%20validacao%20de%20campo%20nome%20do%20usuario/3.%20com%20trac%CC%A7os%20e%20pontos.png)
+
+29. Tela do perfil: ediçao e senha
+
+Página do perfil: 
+
+![teste20](img/Testes%20-%20Sprint%201/29.%20Tela%20do%20perfil%2C%20edicao%20e%20senha/1.%20pagina%20do%20perfil.png)
+
+Nome do usuário alterado:
+
+![teste20](img/Testes%20-%20Sprint%201/29.%20Tela%20do%20perfil%2C%20edicao%20e%20senha/2.%20nome%20de%20usuario%20alterado.png)
+
+Tela alteraçao senha
+
+![teste20](img/Testes%20-%20Sprint%201/29.%20Tela%20do%20perfil%2C%20edicao%20e%20senha/3.%20tela%20alteracao%20senha.png)
+
+Senha alterada com sucesso
+
+![teste20](img/Testes%20-%20Sprint%201/29.%20Tela%20do%20perfil%2C%20edicao%20e%20senha/4.%20senha%20alterada%20com%20sucesso%20-%20a%20pagina%20volta%20ao%20login.png)
+

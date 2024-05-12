@@ -69,6 +69,9 @@ export class InMemoryIdosoRepository implements idosoRepository {
 	async findByUid(uid: string) {
 		return this.idososArray.find((idoso) => idoso.uid === uid) || null;
 	}
+	async findById(id: bigint) {
+		return this.idososArray.find((idoso) => idoso.id === id) || null;
+	}
 	async update(data: UpdateIdosoDto, from: Idoso): Promise<Idoso> {
 		const idosoIndex = this.idososArray.findIndex(
 			(item) => item.uid === from.uid,
