@@ -38,6 +38,15 @@ export interface IRelatorioNutricional {
     percentil_panturrilha: number
     classificao_panturrilha: number
     circ_abdominal: number
+    data_registro_antropometrico: Date
+    peso_antropometrico: number
+    edema_antropometrico: string
+    ascite_antropometrico: string
+    imc_antropometrico: number
+    classificao_antropometrico: string
+    cb_antropometrico: string
+    cp_antropometrico: string
+    observacoes_antropometrico: string
 }
 
 export interface IOperationRelatorioNutricional {

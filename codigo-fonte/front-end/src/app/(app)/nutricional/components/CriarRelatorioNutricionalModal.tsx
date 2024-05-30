@@ -12,6 +12,9 @@ import { Divider, Select, Tabs } from "antd";
 import { InputDatePicker } from "@/components/input/InputDatePicker";
 import { InputRadioButton } from "@/components/input/InputRadioButton";
 import { InputTextArea } from "@/components/input/InputTextArea";
+import { ColumnsType } from "antd/es/table";
+import { TableDefault } from "@/components/table/TableDefault";
+import { CriarRegistroAntropometricoModal } from "./CriarRegistroAntropometricoModal";
 
 export const CriarRelatorioNutricionalModal = ({
     refetchList,
@@ -35,6 +38,36 @@ export const CriarRelatorioNutricionalModal = ({
 
         },
     });
+
+    const columnsDadosAntropometricos: ColumnsType<IRelatorioNutricional> = [
+        {
+            title: "Data"
+        },
+        {
+            title: "Peso (kg)"
+        },
+        {
+            title: "Ascite"
+        },
+        {
+            title: "Edema"
+        },
+        {
+            title: "IMC (kg/m²)"
+        },
+        {
+            title: "Classificaçaõ"
+        },
+        {
+            title: "CB (cm)"
+        },
+        {
+            title: "CP (cm)"
+        },
+        {
+            title: "Observações"
+        },
+    ]
 
     return (
         <ModalDefault 
@@ -89,7 +122,6 @@ export const CriarRelatorioNutricionalModal = ({
                             />
                         )}
                     />
-
                 </div>
                 <Tabs 
                     defaultActiveKey="1"
@@ -840,7 +872,18 @@ export const CriarRelatorioNutricionalModal = ({
                         },
                         {
                             key: "5",
-                            label: "Dados Antropométricos"
+                            label: "Dados Antropométricos",
+                            children: (
+                                <div className="w-full flex flex-col gap-[15px]">
+                                    <div className="">
+                                        <CriarRegistroAntropometricoModal/>
+                                        <TableDefault
+                                            dataSource={[]}
+                                            columns={columnsDadosAntropometricos}
+                                        />
+                                    </div>
+                                </div>
+                            )
                         },
                         {
                             key: "6",
