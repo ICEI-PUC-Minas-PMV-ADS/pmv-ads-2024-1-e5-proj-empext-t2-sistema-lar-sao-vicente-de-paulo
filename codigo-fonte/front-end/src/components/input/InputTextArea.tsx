@@ -15,6 +15,7 @@ interface IInputTextArea {
   tooltip?: string;
   defaultValue?: any;
   maxLength?: number;
+  rows: number
 }
 
 export const InputTextArea = ({
@@ -27,6 +28,7 @@ export const InputTextArea = ({
   tooltip,
   defaultValue,
   maxLength,
+  rows,
 }: IInputTextArea) => {
   return (
     <div className="flex flex-col gap-1 w-full">
@@ -56,6 +58,7 @@ export const InputTextArea = ({
         value={value}
         defaultValue={defaultValue}
         maxLength={maxLength || 100}
+        rows={rows}
       />
       {error && (
         <div className="flex gap-2 items-center text-red-600 text-xs">
