@@ -2,7 +2,6 @@ import { InputDatePicker } from "@/components/input/InputDatePicker";
 import { ModalDefault } from "@/components/modal/ModalDefault"
 import { authToken } from "@/config/authToken";
 import { PlusOutlined } from "@ant-design/icons"
-import { error } from "console"
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 import { Controller, useForm } from "react-hook-form";
@@ -23,7 +22,7 @@ export const CriarRegistroAntropometricoModal = ({
         <ModalDefault
             showFooter
             nameButtonOpenModal="Adicionar"
-            iconButtonOpenModal={<PlusOutlined />}
+            iconButtonOpenModal={<PlusOutlined/>}
             titleModal="Adicionando registro Antropométrico"
             okText="Adicionar"
             width="550px"

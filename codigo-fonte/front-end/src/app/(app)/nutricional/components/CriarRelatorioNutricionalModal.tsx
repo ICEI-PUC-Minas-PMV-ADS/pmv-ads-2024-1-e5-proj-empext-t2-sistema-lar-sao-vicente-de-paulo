@@ -15,6 +15,7 @@ import { InputTextArea } from "@/components/input/InputTextArea";
 import { ColumnsType } from "antd/es/table";
 import { TableDefault } from "@/components/table/TableDefault";
 import { CriarRegistroAntropometricoModal } from "./CriarRegistroAntropometricoModal";
+import { CriarRegistroClinicoModal } from "./CriarRegistroClinicoModal";
 
 export const CriarRelatorioNutricionalModal = ({
     refetchList,
@@ -56,7 +57,7 @@ export const CriarRelatorioNutricionalModal = ({
             title: "IMC (kg/m²)"
         },
         {
-            title: "Classificaçaõ"
+            title: "Classificação"
         },
         {
             title: "CB (cm)"
@@ -69,6 +70,39 @@ export const CriarRelatorioNutricionalModal = ({
         },
     ]
 
+    const columnsDadosRegistroClinico: ColumnsType<IRelatorioNutricional> = [
+        {
+            title: "Data"
+        },
+        {
+            title: "Aceitação Dieta Vo"
+        },
+        {
+            title: "Sumplementação Oral"
+        },
+        {
+            title: "Apetite"
+        },
+        {
+            title: "Disfagia"
+        },
+        {
+            title: "Náuse/Vômito"
+        },
+        {
+            title: "Dor Abdominal"
+        },
+        {
+            title: "Evacuação"
+        },
+        {
+            title: "Diurese"
+        },
+        {
+            title: "Observação"
+        }
+    ]
+
     return (
         <ModalDefault 
             showFooter
@@ -78,7 +112,7 @@ export const CriarRelatorioNutricionalModal = ({
             okText="Cadastrar"
             onSubmit={handleSubmit(createRelatorioNutricional)}
             isFetching={isFetchingData}
-            width="1200px"
+            width="1350px"
             setOpenModal={setOpen}
             openModal={open}
         >
@@ -877,21 +911,260 @@ export const CriarRelatorioNutricionalModal = ({
                                 <div className="w-full flex flex-col gap-[15px]">
                                     <div className="">
                                         <CriarRegistroAntropometricoModal/>
-                                        <TableDefault
-                                            dataSource={[]}
-                                            columns={columnsDadosAntropometricos}
-                                        />
+                                        <div className="mt-2">
+                                            <TableDefault
+                                                dataSource={[]}
+                                                columns={columnsDadosAntropometricos}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             )
                         },
                         {
                             key: "6",
-                            label: "Necessidades Nutricionais"
+                            label: "Necessidades Nutricionais",
+                            children: (
+                                <div>
+                                    <div className="w-full flex flex-col gap-[15px]">
+                                        <div className="flex gap-4">
+                                            <Controller
+                                                name="peso_necessidades_nutricionais"
+                                                control={control}
+                                                rules={{}}
+                                                render={({
+                                                field: { onChange, value },
+                                                fieldState: { error },
+                                                }) => (
+                                                <InputForm
+                                                    label="Peso(kg)"
+                                                    error={error?.message}
+                                                    onChange={onChange}
+                                                    value={value}
+                                                    placeholder=""
+                                                    suffix="kg"
+                                                />
+                                                )}
+                                            />
+                                            <Controller
+                                                name="tipo"
+                                                control={control}
+                                                rules={{}}
+                                                render={({
+                                                    field: { onChange, value },
+                                                    fieldState: { error },
+                                                }) => (
+                                                    <InputRadioButton
+                                                    label="Tipo"
+                                                    error={error?.message}
+                                                    value={value}
+                                                    onChange={onChange}
+                                                    options={[
+                                                        { label: "Atual", value: 1 },
+                                                        { label: "Estimado", value: 2 },
+                                                        { label: "Seco", value: 2 },
+                                                    ]}
+                                                />
+                                                )}
+                                            />
+                                            <Controller
+                                                name="observacao_necessidades_nutrionais_peso"
+                                                control={control}
+                                                rules={{}}
+                                                render={({
+                                                field: { onChange, value },
+                                                fieldState: { error },
+                                                }) => (
+                                                <InputForm
+                                                    label="Observação"
+                                                    error={error?.message}
+                                                    onChange={onChange}
+                                                    value={value}
+                                                    placeholder=""
+                                                />
+                                                )}
+                                            />
+                                        </div>
+                                        <Divider  style={{
+                                            margin: 0
+                                        }}/>
+                                        <div className="flex gap-4">
+                                            <Controller
+                                                name="calorias"
+                                                control={control}
+                                                rules={{}}
+                                                render={({
+                                                field: { onChange, value },
+                                                fieldState: { error },
+                                                }) => (
+                                                <InputForm
+                                                    label="Calorias(kcal)"
+                                                    error={error?.message}
+                                                    onChange={onChange}
+                                                    value={value}
+                                                    placeholder=""
+                                                    suffix="kcal"
+                                                />
+                                                )}
+                                            />
+                                            <Controller
+                                                name="metodo_calorias"
+                                                control={control}
+                                                rules={{}}
+                                                render={({
+                                                    field: { onChange, value },
+                                                    fieldState: { error },
+                                                }) => (
+                                                    <InputRadioButton
+                                                    label="Método"
+                                                    error={error?.message}
+                                                    value={value}
+                                                    onChange={onChange}
+                                                    options={[
+                                                        { label: "Fórmula de bolso", value: 1 },
+                                                        { label: "Outro", value: 2 },
+                                                    ]}
+                                                />
+                                                )}
+                                            />
+                                            <Controller
+                                                name="observacao_calorias"
+                                                control={control}
+                                                rules={{}}
+                                                render={({
+                                                field: { onChange, value },
+                                                fieldState: { error },
+                                                }) => (
+                                                <InputForm
+                                                    label="Observação"
+                                                    error={error?.message}
+                                                    onChange={onChange}
+                                                    value={value}
+                                                    placeholder=""
+                                                />
+                                                )}
+                                            />
+                                        </div>
+                                        <Divider  style={{
+                                            margin: 0
+                                        }}/>
+                                        <div className="flex gap-4">
+                                            <Controller
+                                                name="proteinas"
+                                                control={control}
+                                                rules={{}}
+                                                render={({
+                                                field: { onChange, value },
+                                                fieldState: { error },
+                                                }) => (
+                                                <InputForm
+                                                    label="Proteína(g)"
+                                                    error={error?.message}
+                                                    onChange={onChange}
+                                                    value={value}
+                                                    placeholder=""
+                                                    suffix="g"
+                                                />
+                                                )}
+                                            />
+                                            <Controller
+                                                name="metodo_proteinas"
+                                                control={control}
+                                                rules={{}}
+                                                render={({
+                                                    field: { onChange, value },
+                                                    fieldState: { error },
+                                                }) => (
+                                                    <InputRadioButton
+                                                    label="Método"
+                                                    error={error?.message}
+                                                    value={value}
+                                                    onChange={onChange}
+                                                    options={[
+                                                        { label: "Prático", value: 1 },
+                                                        { label: "%VCT", value: 2 },
+                                                    ]}
+                                                />
+                                                )}
+                                            />
+                                            <Controller
+                                                name="observacao_proteinas"
+                                                control={control}
+                                                rules={{}}
+                                                render={({
+                                                field: { onChange, value },
+                                                fieldState: { error },
+                                                }) => (
+                                                <InputForm
+                                                    label="Observação"
+                                                    error={error?.message}
+                                                    onChange={onChange}
+                                                    value={value}
+                                                    placeholder=""
+                                                />
+                                                )}
+                                            />
+                                        </div>
+                                        <Divider  style={{
+                                            margin: 0
+                                        }}/>
+                                        <div className="flex gap-4">
+                                            <Controller
+                                                name="hidrica"
+                                                control={control}
+                                                rules={{}}
+                                                render={({
+                                                field: { onChange, value },
+                                                fieldState: { error },
+                                                }) => (
+                                                <InputForm
+                                                    label="Hídrica(ml)"
+                                                    error={error?.message}
+                                                    onChange={onChange}
+                                                    value={value}
+                                                    placeholder=""
+                                                    suffix="ml"
+                                                />
+                                                )}
+                                            />
+                                            <Controller
+                                                name="observacao_hidrica"
+                                                control={control}
+                                                rules={{}}
+                                                render={({
+                                                field: { onChange, value },
+                                                fieldState: { error },
+                                                }) => (
+                                                <InputForm
+                                                    label="Observação"
+                                                    error={error?.message}
+                                                    onChange={onChange}
+                                                    value={value}
+                                                    placeholder=""
+                                                />
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            )
                         },
                         {
                             key: "7",
-                            label: "Quadro Clínico"
+                            label: "Quadro Clínico",
+                            children: (
+                                <div className="w-full flex flex-col gap-[15px]">
+                                    <div className="">
+                                        <CriarRegistroClinicoModal/>
+                                        <div className="mt-2">
+                                            <TableDefault
+                                                dataSource={[]}
+                                                columns={columnsDadosRegistroClinico}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            )
                         },
                         {
                             key: "8",

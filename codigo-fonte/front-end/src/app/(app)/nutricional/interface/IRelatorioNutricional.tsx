@@ -1,3 +1,4 @@
+
 export interface IRelatorioNutricional {
     id: bigint
     uid: string
@@ -47,6 +48,27 @@ export interface IRelatorioNutricional {
     cb_antropometrico: string
     cp_antropometrico: string
     observacoes_antropometrico: string
+    peso_necessidades_nutricionais: number
+    tipo: string
+    observacao_necessidades_nutrionais_peso: string
+    calorias: number
+    metodo_calorias: string
+    observacao_calorias: string
+    proteinas: number
+    metodo_proteinas: string
+    observacao_proteinas: string
+    hidrica: string
+    observacao_hidrica: string
+    data_registro_clinico: Date
+    aceitacao_dieta_vo: string
+    suplemento_oral: string
+    apetite: string
+    disfagia: string
+    nausea_vomito: string
+    dor_abdominal: string
+    evacuacao: string
+    diurese: string
+    observacao_registro_clinico: string
 }
 
 export interface IOperationRelatorioNutricional {
