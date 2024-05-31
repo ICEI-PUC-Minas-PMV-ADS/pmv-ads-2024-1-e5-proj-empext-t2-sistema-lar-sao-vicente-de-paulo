@@ -69,6 +69,14 @@ export interface IRelatorioNutricional {
     evacuacao: string
     diurese: string
     observacao_registro_clinico: string
+    data_registro_nutricional: Date
+    dieta_indicada_registro_nutricional: string
+    volume_registro_nutricional: string
+    fracionamento_registro_nutricional: string
+    calorias_dia_registro_nutricional: string
+    ptn_dia_registro_nutriocional: string
+    agua_hidratacao_registro_nutricional: string
+
 }
 
 export interface IOperationRelatorioNutricional {

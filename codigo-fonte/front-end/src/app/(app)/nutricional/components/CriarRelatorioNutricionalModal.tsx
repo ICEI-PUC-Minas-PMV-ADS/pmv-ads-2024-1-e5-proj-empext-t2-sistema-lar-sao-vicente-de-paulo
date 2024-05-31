@@ -16,6 +16,7 @@ import { ColumnsType } from "antd/es/table";
 import { TableDefault } from "@/components/table/TableDefault";
 import { CriarRegistroAntropometricoModal } from "./CriarRegistroAntropometricoModal";
 import { CriarRegistroClinicoModal } from "./CriarRegistroClinicoModal";
+import { CriarRegistroNutriconalModal } from "./CriarRegistroNutrionalModal";
 
 export const CriarRelatorioNutricionalModal = ({
     refetchList,
@@ -100,6 +101,30 @@ export const CriarRelatorioNutricionalModal = ({
         },
         {
             title: "Observação"
+        }
+    ]
+
+    const columnsDadosRegistroNutricional: ColumnsType<IRelatorioNutricional> = [
+        { 
+            title: "Data"
+        },
+        { 
+            title: "Dieta Indicada"
+        },
+        { 
+            title: "Volume"
+        },
+        { 
+            title: "Fracionamento"
+        },
+        { 
+            title: "Kcal/Dia"
+        },
+        { 
+            title: "PTN/Dia"
+        },
+        { 
+            title: "Água p/Hidratação"
         }
     ]
 
@@ -1168,7 +1193,20 @@ export const CriarRelatorioNutricionalModal = ({
                         },
                         {
                             key: "8",
-                            label: "Conduta Nutricional"
+                            label: "Conduta Nutricional",
+                            children: (
+                                <div className="w-full flex flex-col gap-[15px]">
+                                    <div className="">
+                                        <CriarRegistroNutriconalModal />
+                                        <div className="mt-2">
+                                            <TableDefault
+                                                dataSource={[]}
+                                                columns={columnsDadosRegistroNutricional}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            )
                         }
 
                     ]}
