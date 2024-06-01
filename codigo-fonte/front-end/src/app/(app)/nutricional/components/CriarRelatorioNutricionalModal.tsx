@@ -56,45 +56,49 @@ export const CriarRelatorioNutricionalModal = ({
             openModal={open}
         >
             <form className="w-full flex flex-col gap-[15px]">
-                <div className="flex items-center gap-[15px]">
-                    <Controller 
-                        name="nome_idoso"
-                        control={control}
-                        rules={{
-                            required: "Selecione o idoso",
-                        }}
-                        render={({ field: { onChange, value}, fieldState: { error } }) => (
-                            <InputSelect 
-                                label="Idoso"
-                                required
-                                onChange={onChange}
-                                error={error?.message}
-                                placeholder="Selecionar"
-                                value={value}
-                                showSearch>
-                                    {idosos?.map((idoso) => (
-                                        <Select.Option key={idoso.uid} value={idoso.nome_completo}>
-                                            {idoso.nome_completo}
-                                        </Select.Option>
-                                    ))}
-                            </InputSelect>
-                        )}
-                    />
-                    <Controller 
-                        name="data_vencimento"
-                        control={control}
-                        render={({
-                            field: { onChange, value },
-                            fieldState: { error }
-                        }) => (
-                            <InputDatePicker 
-                                label="Data de Vencimento"
-                                error={error?.message}
-                                onChange={onChange}
-                                placeholder="Selicione data"    
-                            />
-                        )}
-                    />
+                <div className="flex gap-4">
+                    <div className="flex-grow w-80">
+                        <Controller
+                            name="nome_idoso"
+                            control={control}
+                            rules={{
+                                required: "Selecione o idoso",
+                            }}
+                            render={({ field: { onChange, value}, fieldState: { error } }) => (
+                                <InputSelect 
+                                    label="Idoso"
+                                    required
+                                    onChange={onChange}
+                                    error={error?.message}
+                                    placeholder="Selecionar"
+                                    value={value}
+                                    showSearch>
+                                        {idosos?.map((idoso) => (
+                                            <Select.Option key={idoso.uid} value={idoso.nome_completo}>
+                                                {idoso.nome_completo}
+                                            </Select.Option>
+                                        ))}
+                                </InputSelect>
+                            )}
+                        />
+                    </div>
+                    <div className="w-80">
+                        <Controller 
+                            name="data_vencimento"
+                            control={control}
+                            render={({
+                                field: { onChange, value },
+                                fieldState: { error }
+                            }) => (
+                                <InputDatePicker 
+                                    label="Data de Vencimento"
+                                    error={error?.message}
+                                    onChange={onChange}
+                                    placeholder="Selicione data"    
+                                />
+                            )}
+                        />
+                    </div>
                 </div>
                 <Tabs 
                     defaultActiveKey="1"
