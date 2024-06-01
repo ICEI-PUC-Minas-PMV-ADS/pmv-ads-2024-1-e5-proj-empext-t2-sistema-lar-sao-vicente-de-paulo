@@ -58,6 +58,11 @@ export const headerMenus = [
       },
       {
         key: "key-pia",
+        label: "Modelo PIA",
+        path: "/modelo-pia",
+      },
+      {
+        key: "key-pia",
         label: "PIA",
         path: "/pia",
       },
