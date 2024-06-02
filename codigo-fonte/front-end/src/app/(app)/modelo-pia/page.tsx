@@ -10,6 +10,8 @@ import { ColumnsType } from "antd/es/table";
 import { TableDefault } from "@/components/table/TableDefault";
 import { IModeloRelatorioPia } from "./Interface/IModeloRelatorioPia";
 import { CriarModeloPiaModal } from "./components/CriarModeloPiaModal";
+import dayjs from "dayjs";
+import { AtualizarModeloPiaModal } from "./components/AtualizarModeloPiaModal";
 
 export default function ModeloPia() {
   const [pageLimit, setPageLimit] = useState<number>(10);
@@ -44,6 +46,35 @@ export default function ModeloPia() {
       title: "Nome",
       dataIndex: "nome",
       key: "nome",
+    },
+    {
+      title: "Versão",
+      dataIndex: "versao",
+      key: "versao",
+    },
+    {
+      title: "Data de Criação",
+      key: "criado_em",
+      render(_value, record, _index) {
+        return <p>{dayjs(record.criado_em).format("DD/MM/YYYY, H:mm")}</p>;
+      },
+    },
+    {
+      title: "Última Atualização",
+      key: "atualizado_em",
+      render(_value, record, _index) {
+        return <p>{dayjs(record.atualizado_em).format("DD/MM/YYYY, H:mm")}</p>;
+      },
+    },
+    {
+      key: "atualizar_usuario",
+      render(_: any, record) {
+        return (
+          <div className="flex justify-end">
+            <AtualizarModeloPiaModal uid={record.uid} refetchList={refetch} />
+          </div>
+        );
+      },
     },
   ];
 
