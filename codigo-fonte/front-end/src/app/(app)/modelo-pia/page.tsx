@@ -9,7 +9,7 @@ import { Filter } from "@/interface/IQuery";
 import { ColumnsType } from "antd/es/table";
 import { TableDefault } from "@/components/table/TableDefault";
 import { IModeloRelatorioPia } from "./Interface/IModeloRelatorioPia";
-import { CriarModeloPiaModal } from "./Interface/components/CriarModeloPiaModal";
+import { CriarModeloPiaModal } from "./components/CriarModeloPiaModal";
 
 export default function ModeloPia() {
   const [pageLimit, setPageLimit] = useState<number>(10);
