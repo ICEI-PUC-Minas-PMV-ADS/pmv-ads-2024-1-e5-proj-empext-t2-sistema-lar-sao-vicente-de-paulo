@@ -1,11 +1,37 @@
-import { useMutation } from "@/utils/hooks/useMutation";
-import { PlusOutlined, UserAddOutlined } from "@ant-design/icons";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { IErrorState, useMutation } from "@/utils/hooks/useMutation";
+import {
+  DeleteFilled,
+  PlusCircleOutlined,
+  PlusOutlined,
+  QuestionCircleOutlined,
+  UserAddOutlined,
+} from "@ant-design/icons";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { InputForm } from "@/components/input";
 import { ModalDefault } from "@/components/modal/ModalDefault";
 import { IOperationModeloRelatorioPia } from "../Interface/IModeloRelatorioPia";
-import { Input, InputRef, Radio, Tag, Tooltip, theme } from "antd";
+import {
+  Button,
+  Input,
+  InputRef,
+  Popconfirm,
+  Radio,
+  Tag,
+  Tooltip,
+  notification,
+  theme,
+} from "antd";
+import { api } from "@/utils/service/api";
+import { useCookies } from "react-cookie";
+import { authToken } from "@/config/authToken";
+import {
+  IModeloRelatorioPiaPergunta,
+  IOperationModeloRelatorioPiaPergunta,
+} from "../Interface/IModeloRelatorioPiaPergunta";
+import { IOperationModeloRelatorioPiaResposta } from "../Interface/IModeloRelatorioPiaResposta";
+import { IOperationModeloRelatorioPiaRespostaOpcao } from "../Interface/IModeloRelatorioPiaRespostaOpcao";
+import { AxiosError } from "axios";
 
 interface ICreateRelatorioPia {
   nome: string;
@@ -26,7 +52,8 @@ export const CriarModeloPiaModal = ({
   refetchList: () => void;
 }) => {
   const [open, setOpen] = useState(false);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [cookies] = useCookies([authToken.nome]);
   const [perguntas, setPerguntas] = useState<ICreateRelatorioPia["perguntas"]>([
     {
       pergunta: "",
@@ -34,18 +61,137 @@ export const CriarModeloPiaModal = ({
     },
   ]);
 
-  console.log(perguntas);
+  const { handleSubmit, control, reset } = useForm<{ nome: string }>();
 
-  const { handleSubmit, control } = useForm<ICreateRelatorioPia>();
-
-  const { mutate: createUsuario, isFetching: isFetchingData } = useMutation<
+  const { mutate: createModeloPia, isFetching: isFetchingData } = useMutation<
     IOperationModeloRelatorioPia,
-    { uid: string }
-  >("/usuarios", {
+    { id: bigint }
+  >("/modelo-relatorio-pia", {
     method: "post",
     messageSucess: null,
+    resNotInData: true,
+    onSuccess: (data) => {
+      setIsLoading(true);
+      perguntas.map(
+        async (item) =>
+          await api
+            .post<{ id: bigint }>(
+              "/modelo-relatorio-pia-pergunta",
+              {
+                pergunta: item.pergunta,
+                id_modelo_relatorio_pia: data.data.id,
+              } as IOperationModeloRelatorioPiaPergunta,
+              {
+                headers: {
+                  Authorization: "Bearer " + cookies[authToken.nome],
+                },
+              }
+            )
+            .then((data) => {
+              item.respostas.map(
+                async (itemResposta) =>
+                  await api
+                    .post<{ id: bigint }>(
+                      "/modelo-relatorio-pia-resposta",
+                      {
+                        id_modelo_relatorio_pia_pergunta: data.data.id,
+                        tipo: itemResposta.tipo,
+                        titulo: itemResposta.titulo,
+                      } as IOperationModeloRelatorioPiaResposta,
+                      {
+                        headers: {
+                          Authorization: "Bearer " + cookies[authToken.nome],
+                        },
+                      }
+                    )
+                    .then((data) => {
+                      if (itemResposta.opcoes) {
+                        itemResposta.opcoes.map(
+                          async (itemOpcao) =>
+                            await api
+                              .post<{ id: bigint }>(
+                                "/modelo-relatorio-pia-resposta-opcao",
+                                {
+                                  id_modelo_relatorio_pia_resposta:
+                                    data.data.id,
+                                  opcao: itemOpcao.opcao,
+                                } as IOperationModeloRelatorioPiaRespostaOpcao,
+                                {
+                                  headers: {
+                                    Authorization:
+                                      "Bearer " + cookies[authToken.nome],
+                                  },
+                                }
+                              )
+                              .then(() => {
+                                notification.open({
+                                  message: "Operação realizada",
+                                  description:
+                                    "Modelo PIA cadastrado com sucesso!",
+                                  type: "success",
+                                });
+                                setIsLoading(false);
+                                setPerguntas([
+                                  {
+                                    pergunta: "",
+                                    respostas: [{ tipo: "TEXT", titulo: "" }],
+                                  },
+                                ]);
+                                reset();
+                                refetchList();
+                                setOpen(false);
+                              })
+                              .catch(
+                                (err: AxiosError<{ error: IErrorState }>) => {
+                                  notification.open({
+                                    message: "Ocorreu um erro",
+                                    description:
+                                      err.response?.data?.error.message,
+                                    type: "error",
+                                  });
+                                  setIsLoading(false);
+                                }
+                              )
+                        );
+                      } else {
+                        notification.open({
+                          message: "Operação realizada",
+                          description: "Modelo PIA cadastrado com sucesso!",
+                          type: "success",
+                        });
+                        setIsLoading(false);
+                        setPerguntas([
+                          {
+                            pergunta: "",
+                            respostas: [{ tipo: "TEXT", titulo: "" }],
+                          },
+                        ]);
+                        reset();
+                        refetchList();
+                        setOpen(false);
+                      }
+                    })
+                    .catch((err: AxiosError<{ error: IErrorState }>) => {
+                      notification.open({
+                        message: "Ocorreu um erro",
+                        description: err.response?.data?.error.message,
+                        type: "error",
+                      });
+                      setIsLoading(false);
+                    })
+              );
+            })
+            .catch((err: AxiosError<{ error: IErrorState }>) => {
+              notification.open({
+                message: "Ocorreu um erro",
+                description: err.response?.data?.error.message,
+                type: "error",
+              });
+              setIsLoading(false);
+            })
+      );
+    },
   });
-
   return (
     <ModalDefault
       showFooter
@@ -53,8 +199,8 @@ export const CriarModeloPiaModal = ({
       iconButtonOpenModal={<UserAddOutlined />}
       titleModal={"Adicionando modelo de relatório PIA"}
       okText="Cadastrar"
-      onSubmit={handleSubmit(createUsuario)}
-      isFetching={isFetchingData}
+      onSubmit={handleSubmit(createModeloPia)}
+      isFetching={isFetchingData || isLoading}
       width="900px"
       setOpenModal={setOpen}
       openModal={open}
@@ -84,9 +230,43 @@ export const CriarModeloPiaModal = ({
             key={indexPergunta + pergunta.pergunta}
             className="p-[20px] bg-primaria/10 rounded-[5px] flex gap-[10px] flex-col"
           >
-            <p className="text-primaria font-semibold">
-              Pergunta #{indexPergunta + 1}
-            </p>
+            <div className="flex justify-between">
+              <p className="text-primaria font-semibold">
+                Pergunta #{indexPergunta + 1}
+              </p>
+              <div>
+                <Popconfirm
+                  overlayStyle={{ maxWidth: 350 }}
+                  placement="rightBottom"
+                  title={"Remover Pergunta #" + (indexPergunta + 1)}
+                  description={
+                    "Você tem certeza que deseja remover a pergunta?"
+                  }
+                  onConfirm={() =>
+                    setPerguntas((old) =>
+                      old.filter(
+                        (_perguntaOld, perguntaOldIndex) =>
+                          perguntaOldIndex !== indexPergunta
+                      )
+                    )
+                  }
+                  okType={"danger"}
+                  okText={"Confirmar"}
+                  cancelText={"Cancelar"}
+                  icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+                >
+                  <Tooltip title={"Remover Pergunta"}>
+                    <button
+                      type="button"
+                      className="text-red-500 w-[20px] h-full flex justify-center items-center hover:text-red-700"
+                    >
+                      <DeleteFilled className="text-[16px]" />
+                    </button>
+                  </Tooltip>
+                </Popconfirm>
+              </div>
+            </div>
+
             <InputForm
               label="Qual a pergunta?"
               required
@@ -109,9 +289,52 @@ export const CriarModeloPiaModal = ({
                 key={resposta.titulo + indexResposta}
                 className="flex flex-col bg-white p-[15px] rounded-[5px] gap-[10px]"
               >
-                <p className="text-black/50 font-semibold">
-                  Resposta #{indexResposta + 1}
-                </p>
+                <div className="flex justify-between">
+                  <p className="text-black/50 font-semibold">
+                    Resposta #{indexResposta + 1}
+                  </p>
+                  <div>
+                    <Popconfirm
+                      overlayStyle={{ maxWidth: 350 }}
+                      placement="rightBottom"
+                      title={"Remover Resposta #" + (indexResposta + 1)}
+                      description={
+                        "Você tem certeza que deseja remover a resposta?"
+                      }
+                      onConfirm={() =>
+                        setPerguntas((old) =>
+                          old.map((perguntaOld, perguntaOldIndex) => {
+                            if (perguntaOldIndex === indexPergunta) {
+                              return {
+                                ...perguntaOld,
+                                respostas: perguntaOld.respostas.filter(
+                                  (_respostaOld, respostaOldIndex) =>
+                                    respostaOldIndex !== indexResposta
+                                ),
+                              };
+                            } else {
+                              return perguntaOld;
+                            }
+                          })
+                        )
+                      }
+                      okType={"danger"}
+                      okText={"Confirmar"}
+                      cancelText={"Cancelar"}
+                      icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+                    >
+                      <Tooltip title={"Remover Pergunta"}>
+                        <button
+                          type="button"
+                          className="text-red-500 w-[20px] h-full flex justify-center items-center hover:text-red-700"
+                        >
+                          <DeleteFilled className="text-[16px]" />
+                        </button>
+                      </Tooltip>
+                    </Popconfirm>
+                  </div>
+                </div>
+
                 <div className="flex gap-[10px] w-full">
                   <InputForm
                     label="Título da Resposta"
@@ -211,8 +434,49 @@ export const CriarModeloPiaModal = ({
                 </div>
               </div>
             ))}
+            <Button
+              type="dashed"
+              size="large"
+              htmlType="button"
+              onClick={() =>
+                setPerguntas((old) =>
+                  old.map((perguntaOld, perguntaOldIndex) => {
+                    if (perguntaOldIndex === indexPergunta) {
+                      return {
+                        ...perguntaOld,
+                        respostas: perguntaOld.respostas.concat([
+                          { tipo: "TEXT", titulo: "" },
+                        ]),
+                      };
+                    } else {
+                      return perguntaOld;
+                    }
+                  })
+                )
+              }
+              icon={<PlusCircleOutlined />}
+            >
+              Adicionar resposta
+            </Button>
           </div>
         ))}
+        <Button
+          type="primary"
+          size="large"
+          htmlType="button"
+          onClick={() =>
+            setPerguntas((old) => [
+              ...old,
+              {
+                pergunta: "",
+                respostas: [{ tipo: "TEXT", titulo: "" }],
+              },
+            ])
+          }
+          icon={<PlusCircleOutlined />}
+        >
+          Adicionar pergunta
+        </Button>
       </form>
     </ModalDefault>
   );

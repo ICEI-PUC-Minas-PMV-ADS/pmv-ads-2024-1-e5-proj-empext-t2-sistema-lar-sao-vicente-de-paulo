@@ -5,13 +5,16 @@ import { ModeloRelatorioPia } from '../entities/modelo-relatorio-pia.entity';
 
 @Injectable()
 export class FindUidModeloRelatorioPiaService {
-	constructor(private modeloRelatorioPiaRepository: PrismaModeloRelatorioPiaRepository,) {}
+	constructor(
+		private modeloRelatorioPiaRepository: PrismaModeloRelatorioPiaRepository,
+	) {}
 
 	async execute(uid: string): Promise<ModeloRelatorioPia | null> {
-		const modeloRelatorioPia = await this.modeloRelatorioPiaRepository.findByUid(uid);
+		const modeloRelatorioPia =
+			await this.modeloRelatorioPiaRepository.findByUid(uid);
 
 		if (!modeloRelatorioPia) {
-			throw new AppError("Modelo de Relatório PIA não encontrado");
+			throw new AppError('Modelo de Relatório PIA não encontrado');
 		}
 
 		return modeloRelatorioPia;
