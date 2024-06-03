@@ -1,3 +1,5 @@
+import { IModeloRelatorioPiaResposta } from "./IModeloRelatorioPiaResposta";
+
 export interface IModeloRelatorioPiaPergunta {
   id: bigint;
   uid: string;
@@ -5,6 +7,7 @@ export interface IModeloRelatorioPiaPergunta {
   criado_em: Date;
   atualizado_em: Date;
   id_modelo_relatorio_pia: bigint;
+  modelo_relatorio_pia_resposta?: IModeloRelatorioPiaResposta[];
 }
 
 export interface IOperationModeloRelatorioPiaPergunta {

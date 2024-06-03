@@ -25,10 +25,7 @@ import {
 import { api } from "@/utils/service/api";
 import { useCookies } from "react-cookie";
 import { authToken } from "@/config/authToken";
-import {
-  IModeloRelatorioPiaPergunta,
-  IOperationModeloRelatorioPiaPergunta,
-} from "../Interface/IModeloRelatorioPiaPergunta";
+import { IOperationModeloRelatorioPiaPergunta } from "../Interface/IModeloRelatorioPiaPergunta";
 import { IOperationModeloRelatorioPiaResposta } from "../Interface/IModeloRelatorioPiaResposta";
 import { IOperationModeloRelatorioPiaRespostaOpcao } from "../Interface/IModeloRelatorioPiaRespostaOpcao";
 import { AxiosError } from "axios";

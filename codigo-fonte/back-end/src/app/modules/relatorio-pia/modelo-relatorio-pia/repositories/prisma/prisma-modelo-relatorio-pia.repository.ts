@@ -46,8 +46,15 @@ export class PrismaModeloRelatorioPiaRepository
 				uid,
 			},
 			include: {
-				modelo_relatorio_pia_pergunta: true,
-				relatorio_pia: true,
+				modelo_relatorio_pia_pergunta: {
+					include: {
+						modelo_relatorio_pia_resposta: {
+							include: {
+								modelo_relatorio_pia_resposta_opcao: true,
+							},
+						},
+					},
+				},
 			},
 		});
 		return modeloRelatorioPia;
