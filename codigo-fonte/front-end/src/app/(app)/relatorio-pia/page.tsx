@@ -10,12 +10,13 @@ import { IRelatorioPia } from "./Interface/IRelatorioPia";
 import { Input, Select } from "antd";
 import { CriarUsuarioModal } from "../usuario/components/CriarUsuarioModal";
 import { SearchOutlined } from "@ant-design/icons";
+import { ColumnsType } from "antd/es/table";
+import { CriarRelatorioPiaModal } from "./components/CriarRelatorioPiaModal";
 
 export default function RelatorioPia() {
   const [pageLimit, setPageLimit] = useState<number>(10);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pesquisa, setPesquisa] = useState<string>("");
-  const [situacao, setSituacao] = useState<Situacao>(Situacao.ATIVO);
 
   let filtros: Filter | undefined = new Array();
 
@@ -27,16 +28,9 @@ export default function RelatorioPia() {
       insensitive: true,
     });
 
-  if (situacao)
-    filtros.push({
-      path: "situacao",
-      operator: "equals",
-      value: situacao,
-    });
-
   const { data, totalCount, refetch } = useFetch<IRelatorioPia[]>(
     "/relatorio-pia",
-    [pesquisa, situacao, pageLimit, currentPage],
+    [pesquisa, pageLimit, currentPage],
     {
       params: queryBuilder({
         page_limit: pageLimit,
@@ -58,23 +52,12 @@ export default function RelatorioPia() {
   return (
     <div className="flex flex-col gap-[15px] mt-8">
       <div className="flex gap-5">
-        <CriarUsuarioModal refetchList={refetch} />
+        <CriarRelatorioPiaModal refetchList={refetch} />
         <Input
           placeholder="Buscar"
           size="large"
           onChange={(e) => setPesquisa(e.target.value)}
           suffix={<SearchOutlined className="cursor-pointer opacity-50" />}
-        />
-        <Select
-          className="w-[105px]"
-          size="large"
-          onChange={(e) => setSituacao(e as Situacao)}
-          defaultValue="ATIVO"
-          options={[
-            { value: "ATIVO", label: "Ativos" },
-            { value: "INATIVO", label: "Inativos" },
-            { value: "", label: "Todos" },
-          ]}
         />
       </div>
       <TableDefault

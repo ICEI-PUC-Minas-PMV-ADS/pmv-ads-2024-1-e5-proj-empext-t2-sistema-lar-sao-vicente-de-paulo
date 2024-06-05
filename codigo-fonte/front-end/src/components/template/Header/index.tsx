@@ -59,7 +59,7 @@ export const headerMenus = [
       {
         key: "key-pia",
         label: "PIA",
-        path: "/pia",
+        path: "/relatorio-pia",
       },
       {
         key: "key-nutricional",
