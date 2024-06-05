@@ -4,7 +4,16 @@ export interface IRelatorioPia {
   nome: string;
   criado_em: Date;
   atualizado_em: Date;
+  data_validade?: Date;
   id_modelo_relatorio_pia: bigint;
   id_usuario: bigint;
   id_idoso: bigint;
+}
+
+export interface IOperationRelatorioPia {
+  nome: string;
+  id_modelo_relatorio_pia: bigint;
+  id_usuario: bigint;
+  id_idoso: bigint;
+  data_validade?: Date;
 }
