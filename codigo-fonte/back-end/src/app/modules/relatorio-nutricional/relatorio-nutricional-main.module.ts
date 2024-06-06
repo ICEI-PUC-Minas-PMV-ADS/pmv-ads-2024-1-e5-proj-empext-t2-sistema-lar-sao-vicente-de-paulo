@@ -3,6 +3,7 @@ import { FichaNutricionalModule } from './ficha-nutricional/ficha-nutricional.mo
 import { SemiologiaNutricionalModule } from './semiologia-nutricional/semiologia-nutricional.module';
 import { AntropometriaModule } from './antropometria/antropometria.module';
 import { NecessidadeNutricionalModule } from './necessidade-nutricional/necessidade-nutricional.module';
+import { CondutaNutricionalModule } from './conduta-nutricional/conduta-nutricional.module';
 
 @Module({
 	imports: [
@@ -10,6 +11,7 @@ import { NecessidadeNutricionalModule } from './necessidade-nutricional/necessid
 		SemiologiaNutricionalModule,
 		AntropometriaModule,
 		NecessidadeNutricionalModule,
+		CondutaNutricionalModule,
 	],
 })
 export class RelatorioNutricionalMainModule {}

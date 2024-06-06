@@ -14,10 +14,10 @@ export class CreateNecessidadeNutricionalController {
 	) {}
 
 	@Post()
-	@ApiOperation({ summary: 'Cadastra uma nova Necessidade nutricional' })
+	@ApiOperation({ summary: 'Cadastra uma nova Necessidade Nutricional' })
 	@ApiBody({
 		type: CreateNecessidadeNutricionalDto,
-		description: 'Dados da nova Necessidade nutricional a ser criada',
+		description: 'Dados da nova Necessidade Nutricional a ser criada',
 	})
 	@ApiResponseError()
 	async handle(

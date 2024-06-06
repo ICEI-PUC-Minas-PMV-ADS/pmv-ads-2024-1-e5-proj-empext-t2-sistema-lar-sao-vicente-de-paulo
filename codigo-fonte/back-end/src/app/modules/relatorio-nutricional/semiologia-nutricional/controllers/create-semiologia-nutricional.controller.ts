@@ -14,10 +14,10 @@ export class CreateSemiologiaNutricionalController {
 	) {}
 
 	@Post()
-	@ApiOperation({ summary: 'Cadastra uma nova Semiologia nutricional' })
+	@ApiOperation({ summary: 'Cadastra uma nova Semiologia Nutricional' })
 	@ApiBody({
 		type: CreateSemiologiaNutricionalDto,
-		description: 'Dados da nova Semiologia nutricional a ser criada',
+		description: 'Dados da nova Semiologia Nutricional a ser criada',
 	})
 	@ApiResponseError()
 	async handle(

@@ -14,10 +14,10 @@ export class CreateFichaNutricionalController {
 	) {}
 
 	@Post()
-	@ApiOperation({ summary: 'Cadastra uma nova ficha nutricional' })
+	@ApiOperation({ summary: 'Cadastra uma nova Ficha Nutricional' })
 	@ApiBody({
 		type: CreateFichaNutricionalDto,
-		description: 'Dados da nova ficha nutricional a ser criada',
+		description: 'Dados da nova Ficha Nutricional a ser criada',
 	})
 	@ApiResponseError()
 	async handle(
