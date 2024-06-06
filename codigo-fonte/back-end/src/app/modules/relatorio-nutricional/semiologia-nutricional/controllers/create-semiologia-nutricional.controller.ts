@@ -23,9 +23,9 @@ export class CreateSemiologiaNutricionalController {
 	async handle(
 		@Body() data: CreateSemiologiaNutricionalDto,
 	): Promise<SemiologiaNutricional> {
-		const SemiologiaNutricional =
+		const semiologiaNutricional =
 			await this.createSemiologiaNutricional.execute(data);
 
-		return SemiologiaNutricional;
+		return semiologiaNutricional;
 	}
 }

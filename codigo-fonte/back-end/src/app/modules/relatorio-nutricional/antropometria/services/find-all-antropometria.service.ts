@@ -13,15 +13,7 @@ export class FindAllAntropometriaService {
 		query = {
 			...query,
 			include: {
-				ficha_nutricional: {
-					select: {
-						idoso: {
-							select: {
-								nome_completo: true,
-							},
-						},
-					},
-				},
+				ficha_nutricional: true,
 			},
 		};
 

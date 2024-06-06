@@ -7,7 +7,7 @@ import { UpdateSemiologiaNutricionalDto } from '../dtos/update-semiologia-nutric
 @Injectable()
 export class UpdateSemiologiaNutricionalService {
 	constructor(
-		private SemiologiaNutricionalRepository: PrismaSemiologiaNutricionalRepository,
+		private semiologiaNutricionalRepository: PrismaSemiologiaNutricionalRepository,
 	) {}
 
 	async execute(
@@ -15,14 +15,14 @@ export class UpdateSemiologiaNutricionalService {
 		data: UpdateSemiologiaNutricionalDto,
 	): Promise<SemiologiaNutricional | null> {
 		const alreadyExists =
-			await this.SemiologiaNutricionalRepository.findByUid(uid);
+			await this.semiologiaNutricionalRepository.findByUid(uid);
 
 		if (!alreadyExists) {
 			throw new AppError('Semiologia Nutricional não encontrada');
 		}
 
 		const semiologiaNutricional =
-			await this.SemiologiaNutricionalRepository.update(
+			await this.semiologiaNutricionalRepository.update(
 				data,
 				alreadyExists,
 			);
