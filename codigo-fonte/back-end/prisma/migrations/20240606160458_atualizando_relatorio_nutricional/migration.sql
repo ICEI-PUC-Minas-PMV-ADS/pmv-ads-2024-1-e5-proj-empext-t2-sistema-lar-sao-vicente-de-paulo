@@ -47,7 +47,6 @@
   - Made the column `dor_abdominal` on table `quadro_clinico` required. This step will fail if there are existing NULL values in that column.
   - Made the column `evacuacao` on table `quadro_clinico` required. This step will fail if there are existing NULL values in that column.
   - Made the column `diurese` on table `quadro_clinico` required. This step will fail if there are existing NULL values in that column.
-  - Made the column `observacao` on table `quadro_clinico` required. This step will fail if there are existing NULL values in that column.
 
 */
 -- CreateEnum
@@ -137,7 +136,6 @@ ALTER COLUMN "evacuacao" SET NOT NULL,
 ALTER COLUMN "evacuacao" SET DATA TYPE VARCHAR(20),
 ALTER COLUMN "diurese" SET NOT NULL,
 ALTER COLUMN "diurese" SET DATA TYPE VARCHAR(20),
-ALTER COLUMN "observacao" SET NOT NULL,
 ALTER COLUMN "observacao" SET DATA TYPE VARCHAR(20);
 
 -- DropTable
@@ -209,7 +207,7 @@ CREATE TABLE "necessidade_nutricional" (
     "caloria_metodo" "caloriaMetodo" NOT NULL,
     "caloria_fdb" VARCHAR(50),
     "caloria_outro" VARCHAR(50),
-    "proteina" VARCHAR(255),
+    "proteina" VARCHAR(50),
     "proteina_metodo" "proteinaMetodo" NOT NULL,
     "proteina_pratico" VARCHAR(50),
     "proteina_vct" VARCHAR(50),

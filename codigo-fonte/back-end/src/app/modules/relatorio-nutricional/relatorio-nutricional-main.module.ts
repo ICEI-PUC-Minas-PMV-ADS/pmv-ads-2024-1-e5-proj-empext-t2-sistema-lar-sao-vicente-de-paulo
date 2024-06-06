@@ -4,6 +4,7 @@ import { SemiologiaNutricionalModule } from './semiologia-nutricional/semiologia
 import { AntropometriaModule } from './antropometria/antropometria.module';
 import { NecessidadeNutricionalModule } from './necessidade-nutricional/necessidade-nutricional.module';
 import { CondutaNutricionalModule } from './conduta-nutricional/conduta-nutricional.module';
+import { QuadroClinicoModule } from './quadro-clinico/quadro-clinico.module';
 
 @Module({
 	imports: [
@@ -12,6 +13,7 @@ import { CondutaNutricionalModule } from './conduta-nutricional/conduta-nutricio
 		AntropometriaModule,
 		NecessidadeNutricionalModule,
 		CondutaNutricionalModule,
+		QuadroClinicoModule,
 	],
 })
 export class RelatorioNutricionalMainModule {}

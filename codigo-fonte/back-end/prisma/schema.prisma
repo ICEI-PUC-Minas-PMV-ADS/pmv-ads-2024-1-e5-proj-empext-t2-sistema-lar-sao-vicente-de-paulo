@@ -472,7 +472,7 @@ model NecessidadeNutricional {
   caloria_metodo     caloriaMetodo
   caloria_fdb        String?        @db.VarChar(50)
   caloria_outro      String?        @db.VarChar(50)
-  proteina           String?        @db.VarChar(255)
+  proteina           String?        @db.VarChar(50)
   proteina_metodo    proteinaMetodo
   proteina_pratico   String?        @db.VarChar(50)
   proteina_vct       String?        @db.VarChar(50)
@@ -518,7 +518,7 @@ model QuadroClinico {
   dor_abdominal       String   @db.VarChar(20)
   evacuacao           String   @db.VarChar(20)
   diurese             String   @db.VarChar(20)
-  observacao          String   @db.VarChar(20)
+  observacao          String?  @db.VarChar(20)
   criado_em           DateTime @default(now()) @db.Timestamp
   atualizado_em       DateTime @updatedAt @db.Timestamp
 
