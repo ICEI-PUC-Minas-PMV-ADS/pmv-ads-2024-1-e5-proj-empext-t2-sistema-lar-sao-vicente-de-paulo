@@ -52,11 +52,6 @@ export const headerMenus = [
     key: "menu-relatorio",
     itens: [
       {
-        key: "key-prontuario",
-        label: "Prontuário",
-        path: "/prontuario",
-      },
-      {
         key: "key-pia",
         label: "Modelo PIA",
         path: "/modelo-pia",
@@ -70,21 +65,6 @@ export const headerMenus = [
         key: "key-nutricional",
         label: "Nutricional",
         path: "/nutricional",
-      },
-      {
-        key: "key-braden",
-        label: "Escala de Braden",
-        path: "/escalabraden",
-      },
-      {
-        key: "key-perroca",
-        label: "Tabela de Perroca",
-        path: "/tabelaperroca",
-      },
-      {
-        key: "key-sistematizacao",
-        label: "Sistematização",
-        path: "/sistematizacao",
       },
     ],
   },
