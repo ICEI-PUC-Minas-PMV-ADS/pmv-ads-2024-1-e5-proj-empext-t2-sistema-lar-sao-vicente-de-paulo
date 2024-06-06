@@ -9,22 +9,22 @@ export class CreateSemiologiaNutricionalDto {
 	@MaxLength(100)
 	perda_aparente: string;
 
-	@ApiProperty()
+	@ApiProperty({ enum: $Enums.Status })
 	@IsNotEmpty()
 	@IsEnum($Enums.Status)
 	gordura_subcutanea: $Enums.Status;
 
-	@ApiProperty()
+	@ApiProperty({ enum: $Enums.Edema })
 	@IsNotEmpty()
 	@IsEnum($Enums.Edema)
 	edema: $Enums.Edema;
 
-	@ApiProperty()
+	@ApiProperty({ enum: $Enums.LocalEdema })
 	@IsNotEmpty()
 	@IsEnum($Enums.LocalEdema)
 	local_edema: $Enums.LocalEdema;
 
-	@ApiProperty()
+	@ApiProperty({ enum: $Enums.Status })
 	@IsNotEmpty()
 	@IsEnum($Enums.Status)
 	ascite: $Enums.Status;
