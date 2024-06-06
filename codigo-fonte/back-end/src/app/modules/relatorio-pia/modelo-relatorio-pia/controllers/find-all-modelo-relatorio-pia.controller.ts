@@ -18,7 +18,9 @@ export class FindAllModeloRelatorioPiaController {
 	) {}
 
 	@Get()
-	@ApiOperation({ summary: 'Lista todos os modelos de relatório PIA com paginação' })
+	@ApiOperation({
+		summary: 'Lista todos os modelos de relatório PIA com paginação',
+	})
 	@ApiPaginatedResponse(ModeloRelatorioPia)
 	@ApiQueryBuilder()
 	@ApiResponseError()
@@ -26,7 +28,8 @@ export class FindAllModeloRelatorioPiaController {
 		const { page_limit, page_number, ...query } =
 			await this.queryBuilder.query();
 
-		const { modelosRelatoriosPias, count } = await this.findAllModeloRelatorioService.execute(query);
+		const { modelosRelatoriosPias, count } =
+			await this.findAllModeloRelatorioService.execute(query);
 
 		return new AppResponse(modelosRelatoriosPias, {
 			page_limit,

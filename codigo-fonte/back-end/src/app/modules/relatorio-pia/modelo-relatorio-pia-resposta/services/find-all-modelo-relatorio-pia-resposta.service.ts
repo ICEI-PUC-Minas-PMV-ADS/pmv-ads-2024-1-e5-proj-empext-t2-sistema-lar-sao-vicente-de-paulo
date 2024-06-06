@@ -9,17 +9,21 @@ export class FindAllModeloRelatorioPiaRespostaService {
 
 	async execute(
 		query?: Prisma.ModeloRelatorioPiaRespostaFindManyArgs,
-	): Promise<{ count: number; modelosRelatoriosPiasRespostas: ModeloRelatorioPiaResposta[] }> {
+	): Promise<{
+		count: number;
+		modelosRelatoriosPiasRespostas: ModeloRelatorioPiaResposta[];
+	}> {
 		query = {
 			...query,
 		};
 
-		const [modelosRelatoriosPiasRespostas, count] = await this.prisma.$transaction([
-			this.prisma.modeloRelatorioPiaResposta.findMany(query),
-			this.prisma.modeloRelatorioPiaResposta.count({
-				where: query.where,
-			}),
-		]);
+		const [modelosRelatoriosPiasRespostas, count] =
+			await this.prisma.$transaction([
+				this.prisma.modeloRelatorioPiaResposta.findMany(query),
+				this.prisma.modeloRelatorioPiaResposta.count({
+					where: query.where,
+				}),
+			]);
 
 		return {
 			count,
