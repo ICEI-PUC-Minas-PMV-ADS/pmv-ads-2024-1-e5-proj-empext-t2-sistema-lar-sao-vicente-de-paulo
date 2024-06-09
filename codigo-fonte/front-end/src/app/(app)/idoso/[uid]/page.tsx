@@ -90,7 +90,10 @@ export default function PerfilIdoso() {
         <div className="flex p-[20px] w-[280px] h-full border border-[#CFE8FF] rounded-[10px] flex-col gap-[15px] justify-between">
           {dadosidoso.map((dados) => {
             return (
-              <div className="flex gap-1 justify-between text-sm items-center">
+              <div
+                key={dados.field}
+                className="flex gap-1 justify-between text-sm items-center"
+              >
                 <p className="text-black/40">{dados.field}</p>
                 <p className="text-right">{dados.value || "-"}</p>
               </div>

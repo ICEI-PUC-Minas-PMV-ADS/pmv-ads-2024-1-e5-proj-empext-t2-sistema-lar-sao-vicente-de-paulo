@@ -1,8 +1,8 @@
 import { QuestionCircleOutlined, WarningOutlined } from "@ant-design/icons";
 import { Input, Tooltip } from "antd";
-
 import {
   ChangeEventHandler,
+  FocusEventHandler,
   HTMLInputAutoCompleteAttribute,
   HTMLInputTypeAttribute,
 } from "react";
@@ -12,7 +12,8 @@ interface IInputForm {
   placeholder?: string;
   error?: string;
   value?: any;
-  onChange: ChangeEventHandler<HTMLInputElement> | undefined;
+  onChange?: ChangeEventHandler<HTMLInputElement> | undefined;
+  onBlur?: FocusEventHandler<HTMLInputElement> | undefined;
   required?: boolean;
   tooltip?: string;
   defaultValue?: any;
@@ -34,7 +35,8 @@ export const InputForm = ({
   type,
   autoComplete,
   maxLength,
-  suffix
+  suffix,
+  onBlur
 }: IInputForm) => {
   return (
     <div className="flex flex-col gap-1 w-full">
@@ -61,6 +63,7 @@ export const InputForm = ({
         placeholder={placeholder}
         size="large"
         onChange={onChange}
+        onBlur={onBlur}
         value={value}
         defaultValue={defaultValue}
         type={type}

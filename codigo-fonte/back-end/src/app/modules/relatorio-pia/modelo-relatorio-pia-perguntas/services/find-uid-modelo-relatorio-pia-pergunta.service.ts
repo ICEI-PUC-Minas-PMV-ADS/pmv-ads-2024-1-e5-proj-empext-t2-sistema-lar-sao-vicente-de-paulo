@@ -5,13 +5,18 @@ import { ModeloRelatorioPiaPergunta } from '../entities/modelo-relatorio-pia-per
 
 @Injectable()
 export class FindUidModeloRelatorioPiaPerguntaService {
-	constructor(private modeloRelatorioPiaPerguntaRepository: PrismaModeloRelatorioPiaPerguntaRepository,) {}
+	constructor(
+		private modeloRelatorioPiaPerguntaRepository: PrismaModeloRelatorioPiaPerguntaRepository,
+	) {}
 
 	async execute(uid: string): Promise<ModeloRelatorioPiaPergunta | null> {
-		const modeloRelatorioPiaPergunta = await this.modeloRelatorioPiaPerguntaRepository.findByUid(uid);
+		const modeloRelatorioPiaPergunta =
+			await this.modeloRelatorioPiaPerguntaRepository.findByUid(uid);
 
 		if (!modeloRelatorioPiaPergunta) {
-			throw new AppError("Modelo de pergunta do Relatório PIA não encontrado");
+			throw new AppError(
+				'Modelo de pergunta do Relatório PIA não encontrado',
+			);
 		}
 
 		return modeloRelatorioPiaPergunta;
