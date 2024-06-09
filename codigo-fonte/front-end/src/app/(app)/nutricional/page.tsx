@@ -5,13 +5,13 @@ import { Input, Tooltip } from "antd";
 import { useState } from "react";
 import { CriarRelatorioNutricionalModal } from "./components/CriarRelatorioNutricionalModal";
 import { useFetch } from "@/utils/hooks/useFetch";
-import { IRelatorioNutricional } from "./interface/IRelatorioNutricional";
 import { queryBuilder } from "@/utils/functions/query-builder";
 import { Filter } from "@/interface/IQuery";
 import { TableDefault } from "@/components/table/TableDefault";
 import { ColumnsType } from "antd/es/table";
 import { AtualizarRelatorioNutricionalModal } from "./components/AtualizarRelatorioNutricionalModal";
 import Link from "next/link";
+import { IFichaNutricional } from "./interface/IFichaNutricional";
 
 export default function RelatorioNutricional() {
     const [pesquisa, setPesquisa] = useState<string>("");
@@ -20,7 +20,7 @@ export default function RelatorioNutricional() {
 
     let filtros: Filter | undefined = new Array();
 
-    const { data, totalCount, refetch } = useFetch<IRelatorioNutricional[]>(
+    const { data, totalCount, refetch } = useFetch<IFichaNutricional[]>(
         "/relatorio-nutricao",
         [pesquisa, pageLimit, currentPage],
         {
@@ -33,7 +33,7 @@ export default function RelatorioNutricional() {
         }
       );
 
-      const columns: ColumnsType<IRelatorioNutricional> = [
+      const columns: ColumnsType<IFichaNutricional> = [
         {
           title: "Idoso",
           dataIndex: "idoso",
@@ -55,7 +55,7 @@ export default function RelatorioNutricional() {
         },
         {
             key: "atualizar_nutricional",
-            render(_: any, record: IRelatorioNutricional) {
+            render(_: any, record: IFichaNutricional) {
               return (
                 <div className="flex justify-end">
                   <AtualizarRelatorioNutricionalModal uid={record.uid} refetchList={refetch} />
@@ -65,7 +65,7 @@ export default function RelatorioNutricional() {
           },
           {
             key: "perfil_idoso",
-            render(_: any, record: IRelatorioNutricional) {
+            render(_: any, record: IFichaNutricional) {
               return (
                 <div className="flex justify-end">
                   <Tooltip title={"Visualizar"}>

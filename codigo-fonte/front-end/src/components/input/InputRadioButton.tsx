@@ -43,6 +43,7 @@ export const InputRadioButton = ({
         id={label}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        size="large"
       >
         {options.map((option) => (
           <Radio.Button key={option.value} value={option.value}>
