@@ -16,6 +16,7 @@ import { RedisGuard } from '@/core/guards/auth.guard';
 import { RolesGuard } from '@/core/guards/role.guard';
 import { ResponsavelIdosoModule } from './modules/responsavel-idoso/responsavel-idoso.module';
 import { RelatorioPiaMainModule } from './modules/relatorio-pia/relatorio-pia-main.module';
+import { RelatorioNutricionalMainModule } from './modules/relatorio-nutricional/relatorio-nutricional-main.module';
 
 @Module({
 	imports: [
@@ -44,6 +45,7 @@ import { RelatorioPiaMainModule } from './modules/relatorio-pia/relatorio-pia-ma
 		PermissaoModule,
 		ResponsavelIdosoModule,
 		RelatorioPiaMainModule,
+		RelatorioNutricionalMainModule,
 	],
 	providers: [
 		{
