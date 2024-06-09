@@ -8,6 +8,8 @@ import {
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { QuadroClinico } from '@prisma/client';
 import { FindUidQuadroClinicoService } from '../services/find-uid-quadro-clinico.service';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('quadro-clinico')
 @Controller('quadro-clinico')
@@ -16,6 +18,7 @@ export class FindUidQuadroClinicoController {
 	constructor(private findUidQuadroClinico: FindUidQuadroClinicoService) {}
 
 	@Get(':uid')
+	@Roles(RoleRelatorioNutricional.FIND)
 	@ApiOperation({ summary: 'Busca um Quadro Clínico pelo UID' })
 	@ApiParam({
 		name: 'uid',

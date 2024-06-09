@@ -10,6 +10,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { UpdateAntropometriaService } from '../services/update-antropometria.service';
 import { UpdateAntropometriaDto } from '../dtos/update-antropometria.dto';
 import { AntropometriaNutricional } from '@prisma/client';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('antropometria')
 @Controller('antropometria')
@@ -18,6 +20,7 @@ export class UpdateAntropometriaController {
 	constructor(private updateAntropometria: UpdateAntropometriaService) {}
 
 	@Patch(':uid')
+	@Roles(RoleRelatorioNutricional.UPDATE)
 	@ApiOperation({
 		summary: 'Atualiza uma Antropometria pelo UID',
 	})

@@ -7,6 +7,8 @@ import {
 } from '@nestjs/swagger';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { DeleteCondutaNutricionalService } from '../services/delete-conduta-nutricional.service';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('conduta-nutricional')
 @Controller('conduta-nutricional')
@@ -17,6 +19,7 @@ export class DeleteCondutaNutricionalController {
 	) {}
 
 	@Delete(':uid')
+	@Roles(RoleRelatorioNutricional.DELETE)
 	@ApiOperation({
 		summary: 'Exclui uma Conduta Nutricional pelo UID',
 	})

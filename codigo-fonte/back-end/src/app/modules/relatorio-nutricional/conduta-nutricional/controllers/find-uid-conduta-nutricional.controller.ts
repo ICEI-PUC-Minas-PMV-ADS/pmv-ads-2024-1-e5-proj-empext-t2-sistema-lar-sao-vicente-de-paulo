@@ -8,6 +8,8 @@ import {
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { CondutaNutricional } from '@prisma/client';
 import { FindUidCondutaNutricionalService } from '../services/find-uid-conduta-nutricional.service';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('conduta-nutricional')
 @Controller('conduta-nutricional')
@@ -18,6 +20,7 @@ export class FindUidCondutaNutricionalController {
 	) {}
 
 	@Get(':uid')
+	@Roles(RoleRelatorioNutricional.FIND)
 	@ApiOperation({ summary: 'Busca uma Conduta Nutricional pelo UID' })
 	@ApiParam({
 		name: 'uid',

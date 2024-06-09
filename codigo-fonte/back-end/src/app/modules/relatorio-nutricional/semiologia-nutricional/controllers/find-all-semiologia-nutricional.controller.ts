@@ -6,6 +6,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { ApiQueryBuilder } from '@/common/decorators/api-query-builder.decorator';
 import { SemiologiaNutricional } from '@prisma/client';
 import { FindAllSemiologiaNutricionalService } from '../services/find-all-semiologia-nutricional.service';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('semiologia-nutricional')
 @Controller('semiologia-nutricional')
@@ -17,6 +19,7 @@ export class FindAllSemiologiaNutricionalController {
 	) {}
 
 	@Get()
+	@Roles(RoleRelatorioNutricional.FIND)
 	@ApiOperation({
 		summary: 'Busca todas as Semiologias Nutricionais',
 	})

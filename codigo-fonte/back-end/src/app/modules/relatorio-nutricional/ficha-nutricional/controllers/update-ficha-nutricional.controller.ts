@@ -10,6 +10,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { UpdateFichaNutricionalDto } from '../dtos/update-ficha-nutricional';
 import { UpdateFichaNutricionalService } from '../services/update-ficha-nutricional.service';
 import { FichaNutricional } from '@prisma/client';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('ficha-nutricional')
 @Controller('ficha-nutricional')
@@ -20,6 +22,7 @@ export class UpdateFichaNutricionalController {
 	) {}
 
 	@Patch(':uid')
+	@Roles(RoleRelatorioNutricional.UPDATE)
 	@ApiOperation({
 		summary: 'Atualiza uma Ficha Nutricional pelo UID',
 	})

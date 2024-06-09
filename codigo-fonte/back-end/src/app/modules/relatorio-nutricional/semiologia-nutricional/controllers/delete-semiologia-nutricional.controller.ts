@@ -7,6 +7,8 @@ import {
 } from '@nestjs/swagger';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { DeleteSemiologiaNutricionalService } from '../services/delete-semiologia-nutricional.service';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('semiologia-nutricional')
 @Controller('semiologia-nutricional')
@@ -17,6 +19,7 @@ export class DeleteSemiologiaNutricionalController {
 	) {}
 
 	@Delete(':uid')
+	@Roles(RoleRelatorioNutricional.DELETE)
 	@ApiOperation({
 		summary: 'Exclui uma Semiologia Nutricional pelo UID',
 	})

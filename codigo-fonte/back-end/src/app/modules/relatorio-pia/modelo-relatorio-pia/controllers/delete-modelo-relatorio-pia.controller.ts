@@ -7,6 +7,8 @@ import {
 import { Controller, Delete, Param } from '@nestjs/common';
 import { DeleteModeloRelatorioPiaService } from '../services/delete-modelo-relatorio-pia.service';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
+import { RoleModeloRelatorioPia } from '@/common/enums/roles';
+import { Roles } from '@/common/decorators/roles.decorator';
 
 @ApiTags('modelo-relatorio-pia')
 @Controller('modelo-relatorio-pia')
@@ -17,6 +19,7 @@ export class DeleteModeloRelatorioPiaController {
 	) {}
 
 	@Delete(':uid')
+	@Roles(RoleModeloRelatorioPia.DELETE)
 	@ApiOperation({ summary: 'Exclui um modelo de relatório PIA pelo UID' })
 	@ApiParam({
 		name: 'uid',

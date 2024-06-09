@@ -10,6 +10,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { QuadroClinico } from '@prisma/client';
 import { UpdateQuadroClinicoDto } from '../dtos/update-quadro-clinico.dto';
 import { UpdateQuadroClinicoService } from '../services/update-quadro-clinico.service';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('quadro-clinico')
 @Controller('quadro-clinico')
@@ -18,6 +20,7 @@ export class UpdateQuadroClinicoController {
 	constructor(private updateQuadroClinico: UpdateQuadroClinicoService) {}
 
 	@Patch(':uid')
+	@Roles(RoleRelatorioNutricional.UPDATE)
 	@ApiOperation({
 		summary: 'Atualiza um Quadro Clínico pelo UID',
 	})

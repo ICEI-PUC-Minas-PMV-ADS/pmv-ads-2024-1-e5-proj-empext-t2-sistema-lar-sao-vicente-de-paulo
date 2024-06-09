@@ -4,6 +4,8 @@ import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateFichaNutricionalDto } from '../dtos/create-ficha-nutricional';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { FichaNutricional } from '@prisma/client';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('ficha-nutricional')
 @Controller('ficha-nutricional')
@@ -14,6 +16,7 @@ export class CreateFichaNutricionalController {
 	) {}
 
 	@Post()
+	@Roles(RoleRelatorioNutricional.CREATE)
 	@ApiOperation({ summary: 'Cadastra uma nova Ficha Nutricional' })
 	@ApiBody({
 		type: CreateFichaNutricionalDto,

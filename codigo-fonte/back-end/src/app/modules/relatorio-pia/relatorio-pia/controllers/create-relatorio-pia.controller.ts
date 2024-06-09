@@ -4,6 +4,8 @@ import { CreateRelatorioPiaDto } from '../dtos/create-relatorio-pia.dto';
 import { CreateRelatorioPiaService } from '../services/create-relatorio-pia.service';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { RelatorioPia } from '../entities/relatorio-pia.entity';
+import { RoleRelatorioPia } from '@/common/enums/roles';
+import { Roles } from '@/common/decorators/roles.decorator';
 
 @ApiTags('relatorio-pia')
 @Controller('relatorio-pia')
@@ -12,6 +14,7 @@ export class CreateRelatorioPiaController {
 	constructor(private createRelatorioPia: CreateRelatorioPiaService) {}
 
 	@Post()
+	@Roles(RoleRelatorioPia.CREATE)
 	@ApiOperation({ summary: 'Cria um Relatório PIA' })
 	@ApiBody({
 		type: CreateRelatorioPiaDto,

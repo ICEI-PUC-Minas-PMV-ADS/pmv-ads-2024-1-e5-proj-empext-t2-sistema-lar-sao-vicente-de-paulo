@@ -9,6 +9,8 @@ import { Body, Controller, Param, Patch } from '@nestjs/common';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { UpdateModeloRelatorioPiaService } from '../services/update-modelo-relatorio-pia.service';
 import { UpdateModeloRelatorioPiaDto } from '../dtos/update-modelo-relatorio-pia.dto';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleModeloRelatorioPia } from '@/common/enums/roles';
 
 @ApiTags('modelo-relatorio-pia')
 @Controller('modelo-relatorio-pia')
@@ -19,6 +21,7 @@ export class UpdateModeloRelatorioPiaController {
 	) {}
 
 	@Patch(':uid')
+	@Roles(RoleModeloRelatorioPia.UPDATE)
 	@ApiOperation({ summary: 'Atualiza um modelo de relatório PIA pelo UID' })
 	@ApiBody({
 		type: UpdateModeloRelatorioPiaDto,

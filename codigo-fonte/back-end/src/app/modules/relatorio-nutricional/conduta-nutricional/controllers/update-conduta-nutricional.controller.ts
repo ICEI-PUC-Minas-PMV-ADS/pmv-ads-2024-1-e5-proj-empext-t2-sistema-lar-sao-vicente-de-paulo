@@ -10,6 +10,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { CondutaNutricional } from '@prisma/client';
 import { UpdateCondutaNutricionalDto } from '../dtos/update-conduta-nutricional.dto';
 import { UpdateCondutaNutricionalService } from '../services/update-conduta-nutricional.service';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('conduta-nutricional')
 @Controller('conduta-nutricional')
@@ -20,6 +22,7 @@ export class UpdateCondutaNutricionalController {
 	) {}
 
 	@Patch(':uid')
+	@Roles(RoleRelatorioNutricional.UPDATE)
 	@ApiOperation({
 		summary: 'Atualiza uma Conduta Nutricional pelo UID',
 	})

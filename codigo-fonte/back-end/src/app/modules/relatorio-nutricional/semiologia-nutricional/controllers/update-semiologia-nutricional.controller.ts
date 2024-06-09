@@ -10,6 +10,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { SemiologiaNutricional } from '@prisma/client';
 import { UpdateSemiologiaNutricionalDto } from '../dtos/update-semiologia-nutricional.dto';
 import { UpdateSemiologiaNutricionalService } from '../services/update-semiologia-nutricional.service';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('semiologia-nutricional')
 @Controller('semiologia-nutricional')
@@ -20,6 +22,7 @@ export class UpdateSemiologiaNutricionalController {
 	) {}
 
 	@Patch(':uid')
+	@Roles(RoleRelatorioNutricional.UPDATE)
 	@ApiOperation({
 		summary: 'Atualiza uma Semiologia Nutricional pelo UID',
 	})

@@ -10,6 +10,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { UpdateRelatorioPiaOpcaoService } from '../services/update-relatorio-pia-opcao.service';
 import { UpdateRelatorioPiaOpcaoDto } from '../dtos/update-relatorio-pia-opcao.dto';
 import { RelatorioPiaRespostaOpcao } from '../entities/relatorio-pia-opcao.entity';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioPia } from '@/common/enums/roles';
 
 @ApiTags('relatorio-pia-resposta-opcao')
 @Controller('relatorio-pia-resposta-opcao')
@@ -20,6 +22,7 @@ export class UpdateRelatorioPiaOpcaoController {
 	) {}
 
 	@Patch(':uid')
+	@Roles(RoleRelatorioPia.UPDATE)
 	@ApiOperation({
 		summary: 'Atualiza um Relatório PIA Resposta Opção pelo UID',
 	})

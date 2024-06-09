@@ -7,6 +7,8 @@ import {
 } from '@nestjs/swagger';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { DeleteQuadroClinicoService } from '../services/delete-quadro-clinico.service';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('quadro-clinico')
 @Controller('quadro-clinico')
@@ -15,6 +17,7 @@ export class DeleteQuadroClinicoController {
 	constructor(private deleteQuadroClinico: DeleteQuadroClinicoService) {}
 
 	@Delete(':uid')
+	@Roles(RoleRelatorioNutricional.DELETE)
 	@ApiOperation({
 		summary: 'Exclui um Quadro Clínico pelo UID',
 	})

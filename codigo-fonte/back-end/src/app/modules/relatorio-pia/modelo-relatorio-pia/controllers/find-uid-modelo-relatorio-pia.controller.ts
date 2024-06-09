@@ -8,6 +8,8 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { FindUidModeloRelatorioPiaService } from '../services/find-uid-modelo-relatorio-pia.service';
 import { ModeloRelatorioPia } from '../entities/modelo-relatorio-pia.entity';
+import { RoleModeloRelatorioPia } from '@/common/enums/roles';
+import { Roles } from '@/common/decorators/roles.decorator';
 
 @ApiTags('modelo-relatorio-pia')
 @Controller('modelo-relatorio-pia')
@@ -18,6 +20,7 @@ export class FindUidModeloRelatorioPiaController {
 	) {}
 
 	@Get(':uid')
+	@Roles(RoleModeloRelatorioPia.FIND)
 	@ApiOperation({ summary: 'Busca um modelo de relatório PIA pelo UID' })
 	@ApiParam({
 		name: 'uid',

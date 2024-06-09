@@ -8,6 +8,8 @@ import {
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { NecessidadeNutricional } from '@prisma/client';
 import { FindUidNecessidadeNutricionalService } from '../services/find-uid-necessidade-nutricional.service';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('necessidade-nutricional')
 @Controller('necessidade-nutricional')
@@ -18,6 +20,7 @@ export class FindUidNecessidadeNutricionalController {
 	) {}
 
 	@Get(':uid')
+	@Roles(RoleRelatorioNutricional.FIND)
 	@ApiOperation({ summary: 'Busca uma Necessidade Nutricional pelo UID' })
 	@ApiParam({
 		name: 'uid',

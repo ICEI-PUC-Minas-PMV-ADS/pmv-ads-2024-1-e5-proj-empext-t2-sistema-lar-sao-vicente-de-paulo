@@ -7,6 +7,8 @@ import {
 } from '@nestjs/swagger';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { DeleteAntropometriaService } from '../services/delete-antropometria.service';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('antropometria')
 @Controller('antropometria')
@@ -15,6 +17,7 @@ export class DeleteAntropometriaController {
 	constructor(private deleteAntropometria: DeleteAntropometriaService) {}
 
 	@Delete(':uid')
+	@Roles(RoleRelatorioNutricional.DELETE)
 	@ApiOperation({
 		summary: 'Exclui uma Antropometria pelo UID',
 	})

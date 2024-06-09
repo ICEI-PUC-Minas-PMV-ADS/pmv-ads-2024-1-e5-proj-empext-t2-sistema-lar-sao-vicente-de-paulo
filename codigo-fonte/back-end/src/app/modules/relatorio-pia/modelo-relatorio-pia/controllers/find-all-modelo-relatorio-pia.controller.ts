@@ -7,6 +7,8 @@ import { ApiPaginatedResponse } from '@/common/decorators/api-paginated-response
 import { ApiQueryBuilder } from '@/common/decorators/api-query-builder.decorator';
 import { FindAllModeloRelatorioPiaService } from '../services/find-all-modelo-relatorio-pia.service';
 import { ModeloRelatorioPia } from '../entities/modelo-relatorio-pia.entity';
+import { RoleModeloRelatorioPia } from '@/common/enums/roles';
+import { Roles } from '@/common/decorators/roles.decorator';
 
 @ApiTags('modelo-relatorio-pia')
 @Controller('modelo-relatorio-pia')
@@ -18,6 +20,7 @@ export class FindAllModeloRelatorioPiaController {
 	) {}
 
 	@Get()
+	@Roles(RoleModeloRelatorioPia.FIND)
 	@ApiOperation({
 		summary: 'Lista todos os modelos de relatório PIA com paginação',
 	})

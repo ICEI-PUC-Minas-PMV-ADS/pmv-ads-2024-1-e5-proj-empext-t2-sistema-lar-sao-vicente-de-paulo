@@ -10,6 +10,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { NecessidadeNutricional } from '@prisma/client';
 import { UpdateNecessidadeNutricionalDto } from '../dtos/update-necessidade-nutricional.dto';
 import { UpdateNecessidadeNutricionalService } from '../services/update-necessidade-nutricional.service';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('necessidade-nutricional')
 @Controller('necessidade-nutricional')
@@ -20,6 +22,7 @@ export class UpdateNecessidadeNutricionalController {
 	) {}
 
 	@Patch(':uid')
+	@Roles(RoleRelatorioNutricional.UPDATE)
 	@ApiOperation({
 		summary: 'Atualiza uma Necessidade Nutricional pelo UID',
 	})

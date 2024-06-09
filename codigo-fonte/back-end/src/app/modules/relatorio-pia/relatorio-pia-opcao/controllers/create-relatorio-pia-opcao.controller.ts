@@ -4,6 +4,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { CreateRelatorioPiaOpcaoService } from '../services/create-relatorio-pia-opcao.service';
 import { CreateRelatorioPiaOpcaoDto } from '../dtos/create-relatorio-pia-opcao.dto';
 import { RelatorioPiaRespostaOpcao } from '../entities/relatorio-pia-opcao.entity';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioPia } from '@/common/enums/roles';
 
 @ApiTags('relatorio-pia-resposta-opcao')
 @Controller('relatorio-pia-resposta-opcao')
@@ -14,6 +16,7 @@ export class CreateRelatorioPiaOpcaoController {
 	) {}
 
 	@Post()
+	@Roles(RoleRelatorioPia.CREATE)
 	@ApiOperation({ summary: 'Cria um Relatório PIA Resposta Opção' })
 	@ApiBody({
 		type: CreateRelatorioPiaOpcaoDto,

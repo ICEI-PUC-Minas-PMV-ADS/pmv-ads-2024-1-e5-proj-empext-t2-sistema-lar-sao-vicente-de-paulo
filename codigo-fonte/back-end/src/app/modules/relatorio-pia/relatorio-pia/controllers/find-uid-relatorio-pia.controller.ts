@@ -8,6 +8,8 @@ import {
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { FindUidRelatorioPiaService } from '../services/find-uid-relatorio-pia.service';
 import { RelatorioPia } from '../entities/relatorio-pia.entity';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioPia } from '@/common/enums/roles';
 
 @ApiTags('relatorio-pia')
 @Controller('relatorio-pia')
@@ -16,6 +18,7 @@ export class FindUidRelatorioPiaController {
 	constructor(private findUidRelatorioPia: FindUidRelatorioPiaService) {}
 
 	@Get(':uid')
+	@Roles(RoleRelatorioPia.FIND)
 	@ApiOperation({ summary: 'Busca um Relatório PIA pelo UID' })
 	@ApiParam({
 		name: 'uid',

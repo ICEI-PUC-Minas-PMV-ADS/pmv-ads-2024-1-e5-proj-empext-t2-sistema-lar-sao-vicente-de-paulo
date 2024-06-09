@@ -4,6 +4,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { AntropometriaNutricional } from '@prisma/client';
 import { CreateAntropometriaService } from '../services/create-antropometria.service';
 import { CreateAntropometriaDto } from '../dtos/create-antropometria.dto';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('antropometria')
 @Controller('antropometria')
@@ -12,6 +14,7 @@ export class CreateAntropometriaController {
 	constructor(private createAntropometria: CreateAntropometriaService) {}
 
 	@Post()
+	@Roles(RoleRelatorioNutricional.CREATE)
 	@ApiOperation({ summary: 'Cadastra uma nova Antropometria' })
 	@ApiBody({
 		type: CreateAntropometriaDto,

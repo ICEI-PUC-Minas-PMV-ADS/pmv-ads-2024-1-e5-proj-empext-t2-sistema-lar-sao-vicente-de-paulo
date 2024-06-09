@@ -8,6 +8,8 @@ import {
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { SemiologiaNutricional } from '@prisma/client';
 import { FindUidSemiologiaNutricionalService } from '../services/find-uid-semiologia-nutricional.service';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('semiologia-nutricional')
 @Controller('semiologia-nutricional')
@@ -18,6 +20,7 @@ export class FindUidSemiologiaNutricionalController {
 	) {}
 
 	@Get(':uid')
+	@Roles(RoleRelatorioNutricional.FIND)
 	@ApiOperation({ summary: 'Busca uma Semiologia Nutricional pelo UID' })
 	@ApiParam({
 		name: 'uid',

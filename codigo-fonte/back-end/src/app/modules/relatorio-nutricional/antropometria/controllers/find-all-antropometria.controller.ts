@@ -6,6 +6,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { ApiQueryBuilder } from '@/common/decorators/api-query-builder.decorator';
 import { AntropometriaNutricional } from '@prisma/client';
 import { FindAllAntropometriaService } from '../services/find-all-antropometria.service';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('antropometria')
 @Controller('antropometria')
@@ -17,6 +19,7 @@ export class FindAllAntropometriaController {
 	) {}
 
 	@Get()
+	@Roles(RoleRelatorioNutricional.FIND)
 	@ApiOperation({
 		summary: 'Busca todas as Antropometrias cadastradas no sistema',
 	})

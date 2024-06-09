@@ -6,6 +6,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { ApiQueryBuilder } from '@/common/decorators/api-query-builder.decorator';
 import { CondutaNutricional } from '@prisma/client';
 import { FindAllCondutaNutricionalService } from '../services/find-all-conduta-nutricional.service';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('conduta-nutricional')
 @Controller('conduta-nutricional')
@@ -17,6 +19,7 @@ export class FindAllCondutaNutricionalController {
 	) {}
 
 	@Get()
+	@Roles(RoleRelatorioNutricional.FIND)
 	@ApiOperation({
 		summary: 'Busca todas as Condutas Nutricionais',
 	})

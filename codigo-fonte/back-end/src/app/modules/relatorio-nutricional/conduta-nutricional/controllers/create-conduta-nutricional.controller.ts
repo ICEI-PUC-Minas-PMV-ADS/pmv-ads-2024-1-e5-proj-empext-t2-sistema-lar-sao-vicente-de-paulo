@@ -4,6 +4,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { CondutaNutricional } from '@prisma/client';
 import { CreateCondutaNutricionalService } from '../services/create-conduta-nutricional.service';
 import { CreateCondutaNutricionalDto } from '../dtos/create-conduta-nutricional.dto';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('conduta-nutricional')
 @Controller('conduta-nutricional')
@@ -14,6 +16,7 @@ export class CreateCondutaNutricionalController {
 	) {}
 
 	@Post()
+	@Roles(RoleRelatorioNutricional.CREATE)
 	@ApiOperation({ summary: 'Cadastra uma nova Conduta Nutricional' })
 	@ApiBody({
 		type: CreateCondutaNutricionalDto,

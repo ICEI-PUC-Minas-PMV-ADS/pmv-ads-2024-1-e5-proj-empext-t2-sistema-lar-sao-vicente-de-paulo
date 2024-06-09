@@ -4,6 +4,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { QuadroClinico } from '@prisma/client';
 import { CreateQuadroClinicoService } from '../services/create-quadro-clinico.service';
 import { CreateQuadroClinicoDto } from '../dtos/create-quadro-clinico.dto';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('quadro-clinico')
 @Controller('quadro-clinico')
@@ -12,6 +14,7 @@ export class CreateQuadroClinicoController {
 	constructor(private createQuadroClinico: CreateQuadroClinicoService) {}
 
 	@Post()
+	@Roles(RoleRelatorioNutricional.CREATE)
 	@ApiOperation({ summary: 'Cadastra um novo Quadro Clínico' })
 	@ApiBody({
 		type: CreateQuadroClinicoDto,

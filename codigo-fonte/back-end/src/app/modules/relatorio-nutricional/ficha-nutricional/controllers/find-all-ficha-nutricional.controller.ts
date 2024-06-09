@@ -6,6 +6,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { ApiQueryBuilder } from '@/common/decorators/api-query-builder.decorator';
 import { FichaNutricional } from '@prisma/client';
 import { FindAllFichaNutricionalService } from '../services/find-all-ficha-nutricional.service';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('ficha-nutricional')
 @Controller('ficha-nutricional')
@@ -17,6 +19,7 @@ export class FindAllFichaNutricionalController {
 	) {}
 
 	@Get()
+	@Roles(RoleRelatorioNutricional.FIND)
 	@ApiOperation({
 		summary: 'Busca todas as Fichas Nutricionais',
 	})

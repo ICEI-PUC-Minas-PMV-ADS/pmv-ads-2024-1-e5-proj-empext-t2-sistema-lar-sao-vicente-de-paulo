@@ -6,6 +6,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { ApiQueryBuilder } from '@/common/decorators/api-query-builder.decorator';
 import { QuadroClinico } from '@prisma/client';
 import { FindAllQuadroClinicoService } from '../services/find-all-quadro-clinico.service';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioNutricional } from '@/common/enums/roles';
 
 @ApiTags('quadro-clinico')
 @Controller('quadro-clinico')
@@ -17,6 +19,7 @@ export class FindAllQuadroClinicoController {
 	) {}
 
 	@Get()
+	@Roles(RoleRelatorioNutricional.FIND)
 	@ApiOperation({
 		summary: 'Busca todos os Quadros Clínicos',
 	})
