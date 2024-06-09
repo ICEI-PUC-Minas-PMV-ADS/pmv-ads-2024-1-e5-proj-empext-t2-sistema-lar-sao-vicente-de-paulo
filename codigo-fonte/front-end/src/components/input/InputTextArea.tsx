@@ -1,29 +1,24 @@
 import { QuestionCircleOutlined, WarningOutlined } from "@ant-design/icons";
 import { Input, Tooltip } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import {
   ChangeEventHandler,
-  FocusEventHandler,
-  HTMLInputAutoCompleteAttribute,
-  HTMLInputTypeAttribute,
 } from "react";
 
-interface IInputForm {
+interface IInputTextArea {
   label?: string;
   placeholder?: string;
   error?: string;
   value?: any;
-  onChange?: ChangeEventHandler<HTMLInputElement> | undefined;
-  onBlur?: FocusEventHandler<HTMLInputElement> | undefined;
+  onChange: ChangeEventHandler<HTMLTextAreaElement> | undefined;
   required?: boolean;
   tooltip?: string;
   defaultValue?: any;
-  type?: HTMLInputTypeAttribute;
-  autoComplete?: HTMLInputAutoCompleteAttribute;
   maxLength?: number;
-  suffix?: string
+  rows: number
 }
 
-export const InputForm = ({
+export const InputTextArea = ({
   label,
   placeholder,
   error,
@@ -32,12 +27,9 @@ export const InputForm = ({
   value,
   tooltip,
   defaultValue,
-  type,
-  autoComplete,
   maxLength,
-  suffix,
-  onBlur
-}: IInputForm) => {
+  rows,
+}: IInputTextArea) => {
   return (
     <div className="flex flex-col gap-1 w-full">
       {label && (
@@ -57,23 +49,16 @@ export const InputForm = ({
           {required && <span className="text-red-600 pl-1">*</span>}
         </label>
       )}
-      <Input
+      <TextArea
         id={label}
         status={error && "error"}
         placeholder={placeholder}
         size="large"
         onChange={onChange}
-        onBlur={onBlur}
         value={value}
         defaultValue={defaultValue}
-        type={type}
-        autoComplete={autoComplete}
         maxLength={maxLength || 100}
-        suffix={suffix && (
-          <span style={{ opacity: 0.5 }}>
-            {suffix}
-          </span>
-        )}
+        rows={rows}
       />
       {error && (
         <div className="flex gap-2 items-center text-red-600 text-xs">

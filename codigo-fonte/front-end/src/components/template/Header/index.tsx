@@ -63,7 +63,7 @@ export const headerMenus = [
       },
       {
         key: "key-nutricional",
-        label: "Nutricional",
+        label: "Relatório Nutricional",
         path: "/nutricional",
       },
     ],
