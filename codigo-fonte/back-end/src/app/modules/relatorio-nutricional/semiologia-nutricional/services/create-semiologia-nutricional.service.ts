@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaSemiologiaNutricionalRepository } from '../repositories/prisma/prisma-Semiologia-nutricional.repository';
 import { AppError } from '@utils/app-error';
 import { CreateSemiologiaNutricionalDto } from '../dtos/create-semiologia-nutricional.dto';
 import { PrismaFichaNutricionalRepository } from '../../ficha-nutricional/repositories/prisma/prisma-ficha-nutricional.repository';
+import { PrismaSemiologiaNutricionalRepository } from '../repositories/prisma/prisma-semiologia-nutricional.repository';
 
 @Injectable()
 export class CreateSemiologiaNutricionalService {

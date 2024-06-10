@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AppError } from '@utils/app-error';
 import { SemiologiaNutricional } from '@prisma/client';
-import { PrismaSemiologiaNutricionalRepository } from '../repositories/prisma/prisma-Semiologia-nutricional.repository';
+import { PrismaSemiologiaNutricionalRepository } from '../repositories/prisma/prisma-semiologia-nutricional.repository';
 import { UpdateSemiologiaNutricionalDto } from '../dtos/update-semiologia-nutricional.dto';
 
 @Injectable()
