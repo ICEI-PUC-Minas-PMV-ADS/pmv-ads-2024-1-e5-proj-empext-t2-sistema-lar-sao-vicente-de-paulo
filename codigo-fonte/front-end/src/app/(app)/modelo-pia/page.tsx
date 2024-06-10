@@ -11,7 +11,6 @@ import { TableDefault } from "@/components/table/TableDefault";
 import { IModeloRelatorioPia } from "./Interface/IModeloRelatorioPia";
 import { CriarModeloPiaModal } from "./components/CriarModeloPiaModal";
 import dayjs from "dayjs";
-import { AtualizarModeloPiaModal } from "./components/AtualizarModeloPiaModal";
 
 export default function ModeloPia() {
   const [pageLimit, setPageLimit] = useState<number>(10);
@@ -66,7 +65,7 @@ export default function ModeloPia() {
         return <p>{dayjs(record.atualizado_em).format("DD/MM/YYYY, H:mm")}</p>;
       },
     },
-    {
+    /* {
       key: "atualizar_usuario",
       render(_: any, record) {
         return (
@@ -75,7 +74,7 @@ export default function ModeloPia() {
           </div>
         );
       },
-    },
+    }, */
   ];
 
   return (

@@ -36,11 +36,14 @@ export const AtualizarModeloPiaModal = ({
 }) => {
   const [cookies] = useCookies([authToken.nome]);
   const [open, setOpen] = useState(false);
-  const [perguntas, setPerguntas] =
-    useState<IModeloRelatorioPia["modelo_relatorio_pia_pergunta"]>();
+  const [perguntas, setPerguntas] = useState<
+    IModeloRelatorioPia["modelo_relatorio_pia_pergunta"]
+  >([]);
 
   const { handleSubmit, control, setValue } =
     useForm<Partial<IOperationModeloRelatorioPia>>();
+
+  console.log(perguntas);
 
   const { data: modeloPia } = useFetch<IModeloRelatorioPia>(
     "/modelo-relatorio-pia/" + uid,
@@ -49,6 +52,8 @@ export const AtualizarModeloPiaModal = ({
       enable: open,
       resNotInData: true,
       onSuccess: (data) => {
+        setValue("nome", data.data.nome);
+
         if (data.data.modelo_relatorio_pia_pergunta)
           setPerguntas(data.data.modelo_relatorio_pia_pergunta);
       },
@@ -70,7 +75,7 @@ export const AtualizarModeloPiaModal = ({
         </Tooltip>
       }
       titleModal={"Editando modelo relatório PIA"}
-      okText="Salvar"
+      okText="Concluído"
       onSubmit={() => {}}
       isFetching={false}
       width="950px"
@@ -286,6 +291,11 @@ export const AtualizarModeloPiaModal = ({
                       {resposta.tipo === "RADIO" ||
                       resposta.tipo === "CHECKBOX" ? (
                         <InputTag
+                          value={resposta.modelo_relatorio_pia_resposta_opcao?.map(
+                            (v) => {
+                              return v.opcao;
+                            }
+                          )}
                           onChange={(e) =>
                             setPerguntas((old) =>
                               old?.map((perguntaOld) => {
@@ -332,10 +342,10 @@ export const AtualizarModeloPiaModal = ({
                       if (perguntaOldIndex === indexPergunta) {
                         return {
                           ...perguntaOld,
-                          respostas:
-                            perguntaOld.modelo_relatorio_pia_resposta?.concat(
-                              []
-                            ),
+                          respostas: [
+                            ...[perguntaOld.modelo_relatorio_pia_resposta],
+                            [{ tipo: "TEXT", titulo: "" }],
+                          ],
                         };
                       } else {
                         return perguntaOld;
@@ -366,9 +376,15 @@ export const AtualizarModeloPiaModal = ({
   );
 };
 
-const InputTag = ({ onChange }: { onChange: (value: string[]) => void }) => {
+const InputTag = ({
+  value,
+  onChange,
+}: {
+  value?: string[];
+  onChange: (value: string[]) => void;
+}) => {
   const { token } = theme.useToken();
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>(value || []);
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [editInputIndex, setEditInputIndex] = useState(-1);
