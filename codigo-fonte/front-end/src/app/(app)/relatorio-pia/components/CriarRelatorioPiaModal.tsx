@@ -1,12 +1,12 @@
 import { useMutation } from "@/utils/hooks/useMutation";
 import { UserAddOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { InputForm, InputSelect } from "@/components/input";
 import { ModalDefault } from "@/components/modal/ModalDefault";
 import { authToken } from "@/config/authToken";
 import { useCookies } from "react-cookie";
-import { Input, Radio, Select } from "antd";
+import { Checkbox, Input, Radio, Select } from "antd";
 import { InputDatePicker } from "@/components/input/InputDatePicker";
 import dayjs from "dayjs";
 import { useFetch } from "@/utils/hooks/useFetch";
@@ -15,6 +15,7 @@ import { IIdoso } from "../../idoso/Interface/IIdoso";
 import { IOperationRelatorioPia } from "../Interface/IRelatorioPia";
 import RelatorioPia from "../page";
 import TextArea from "antd/es/input/TextArea";
+import { IModeloRelatorioPia } from "../../modelo-pia/Interface/IModeloRelatorioPia";
 
 export const CriarRelatorioPiaModal = ({
   refetchList,
@@ -24,7 +25,7 @@ export const CriarRelatorioPiaModal = ({
   const [cookies] = useCookies([authToken.nome]);
   const [open, setOpen] = useState(false);
 
-  const { handleSubmit, control, reset, watch } =
+  const { handleSubmit, control, reset, watch, getValues } =
     useForm<IOperationRelatorioPia>();
 
   const { mutate: createRelatorioPia, isFetching: isFetchingData } =
@@ -57,6 +58,22 @@ export const CriarRelatorioPiaModal = ({
       sort: [{ field: "criado_em", criteria: "desc" }],
     }),
   });
+
+  const modeloUid = modelosPia?.find(
+    (v) => v.id === getValues("id_modelo_relatorio_pia")
+  )?.uid;
+
+  const { data: findModeloPiaSelect, refetch: refetchModelo } =
+    useFetch<IModeloRelatorioPia>(
+      "/modelo-relatorio-pia/" + modeloUid,
+      [modeloUid],
+      {
+        enable: open && !!modeloUid,
+        resNotInData: true,
+      }
+    );
+
+  console.log(findModeloPiaSelect);
 
   return (
     <ModalDefault
@@ -102,7 +119,10 @@ export const CriarRelatorioPiaModal = ({
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputSelect
                 label="Modelo"
-                onChange={onChange}
+                onChange={async (e) => {
+                  await onChange(e);
+                  await refetchModelo();
+                }}
                 error={error?.message}
                 required
                 placeholder="Selecionar"
@@ -136,21 +156,54 @@ export const CriarRelatorioPiaModal = ({
           />
         </div>
         <p>Questionário do Relatório</p>
-        <div className="py-[10px] px-[15px] flex gap-[20px] w-full items-center bg-[#f9f9f9] rounded-md">
-          <p className="w-full text-left min-w-[300px]">
-            Faz algum tratamento especializado?
-          </p>
-          <div className="w-full flex justify-center items-center">
-            <Radio.Group onChange={() => {}} value={""}>
-              <Radio value={1}>Sim</Radio>
-              <Radio value={2}>Nao</Radio>
-            </Radio.Group>
+        {findModeloPiaSelect?.modelo_relatorio_pia_pergunta?.map((pergunta) => (
+          <div
+            key={pergunta.uid}
+            className="py-[10px] px-[15px] flex gap-[20px] w-full bg-[#f9f9f9] rounded-md"
+          >
+            <p className="w-full text-left min-w-[300px]">
+              {pergunta.pergunta}
+            </p>
+            {pergunta.modelo_relatorio_pia_resposta?.map((resposta) => (
+              <>
+                {resposta.tipo === "RADIO" && (
+                  <div className="w-full flex flex-col gap-1">
+                    <p>{resposta.titulo}</p>
+                    <Radio.Group onChange={() => {}} value={""}>
+                      {resposta.modelo_relatorio_pia_resposta_opcao?.map(
+                        (opcao) => (
+                          <Radio key={opcao.uid} value={opcao.uid}>
+                            {opcao.opcao}
+                          </Radio>
+                        )
+                      )}
+                    </Radio.Group>
+                  </div>
+                )}
+                {resposta.tipo === "CHECKBOX" && (
+                  <div className="w-full flex flex-col gap-1">
+                    <p>{resposta.titulo}</p>
+                    <Checkbox.Group onChange={() => {}}>
+                      {resposta.modelo_relatorio_pia_resposta_opcao?.map(
+                        (opcao) => (
+                          <Checkbox key={opcao.uid} value={opcao.uid}>
+                            {opcao.opcao}
+                          </Checkbox>
+                        )
+                      )}
+                    </Checkbox.Group>
+                  </div>
+                )}
+                {resposta.tipo === "TEXT" && (
+                  <div className="flex flex-col gap-1 w-full">
+                    <p>{resposta.titulo}</p>
+                    <TextArea rows={2} />
+                  </div>
+                )}
+              </>
+            ))}
           </div>
-          <div className="flex flex-col gap-1 w-full">
-            <p>Descricao</p>
-            <TextArea rows={2} />
-          </div>
-        </div>
+        ))}
       </form>
     </ModalDefault>
   );
