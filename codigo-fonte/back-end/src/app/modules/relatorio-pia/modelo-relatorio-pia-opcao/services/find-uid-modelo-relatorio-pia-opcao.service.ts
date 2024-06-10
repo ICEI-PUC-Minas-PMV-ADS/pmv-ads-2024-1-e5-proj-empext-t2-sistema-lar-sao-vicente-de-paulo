@@ -5,13 +5,18 @@ import { PrismaModeloRelatorioPiaOpcaoRepository } from '../repositories/prisma/
 
 @Injectable()
 export class FindUidModeloRelatorioPiaOpcaoService {
-	constructor(private modeloRelatorioPiaOpcaoRepository: PrismaModeloRelatorioPiaOpcaoRepository,) {}
+	constructor(
+		private modeloRelatorioPiaOpcaoRepository: PrismaModeloRelatorioPiaOpcaoRepository,
+	) {}
 
-	async execute(uid: string): Promise<ModeloRelatorioPiaRespostaOpcao | null> {
-		const modeloRelatorioPiaOpcao = await this.modeloRelatorioPiaOpcaoRepository.findByUid(uid);
+	async execute(
+		uid: string,
+	): Promise<ModeloRelatorioPiaRespostaOpcao | null> {
+		const modeloRelatorioPiaOpcao =
+			await this.modeloRelatorioPiaOpcaoRepository.findByUid(uid);
 
 		if (!modeloRelatorioPiaOpcao) {
-			throw new AppError("Modelo de opção de resposta não encontrado");
+			throw new AppError('Modelo de opção de resposta não encontrado');
 		}
 
 		return modeloRelatorioPiaOpcao;

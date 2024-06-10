@@ -26,6 +26,18 @@ export async function CreateUsuarioAdmin() {
 				{ id_cargo, id_permissao: 10, ativo: true },
 				{ id_cargo, id_permissao: 11, ativo: true },
 				{ id_cargo, id_permissao: 12, ativo: true },
+				{ id_cargo, id_permissao: 13, ativo: true },
+				{ id_cargo, id_permissao: 14, ativo: true },
+				{ id_cargo, id_permissao: 15, ativo: true },
+				{ id_cargo, id_permissao: 16, ativo: true },
+				{ id_cargo, id_permissao: 17, ativo: true },
+				{ id_cargo, id_permissao: 18, ativo: true },
+				{ id_cargo, id_permissao: 19, ativo: true },
+				{ id_cargo, id_permissao: 20, ativo: true },
+				{ id_cargo, id_permissao: 21, ativo: true },
+				{ id_cargo, id_permissao: 22, ativo: true },
+				{ id_cargo, id_permissao: 23, ativo: true },
+				{ id_cargo, id_permissao: 24, ativo: true },
 			],
 		});
 	}

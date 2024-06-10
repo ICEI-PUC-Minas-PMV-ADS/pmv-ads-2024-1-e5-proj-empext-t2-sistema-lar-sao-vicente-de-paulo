@@ -8,6 +8,8 @@ import {
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { FindUidRelatorioPiaRespostaDefinidaService } from '../services/find-uid-relatorio-pia-resposta-definida.service';
 import { RelatorioPiaRespostaDefinida } from '../entities/relatorio-pia-resposta-definida.entity';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioPia } from '@/common/enums/roles';
 
 @ApiTags('relatorio-pia-resposta-definida')
 @Controller('relatorio-pia-resposta-definida')
@@ -18,6 +20,7 @@ export class FindUidRelatorioPiaRespostaDefinidaController {
 	) {}
 
 	@Get(':uid')
+	@Roles(RoleRelatorioPia.FIND)
 	@ApiOperation({
 		summary: 'Busca um Relatório PIA Resposta Definida pelo UID',
 	})

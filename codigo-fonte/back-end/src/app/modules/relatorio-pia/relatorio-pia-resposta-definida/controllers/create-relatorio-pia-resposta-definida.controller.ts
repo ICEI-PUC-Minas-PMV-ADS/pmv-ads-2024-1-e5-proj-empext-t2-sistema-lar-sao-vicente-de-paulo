@@ -4,6 +4,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { CreateRelatorioPiaRespostaDefinidaService } from '../services/create-relatorio-pia-resposta-definida.service';
 import { CreateRelatorioPiaRespostaDefinidaDto } from '../dtos/create-relatorio-pia-resposta-definida.dto';
 import { RelatorioPiaRespostaDefinida } from '../entities/relatorio-pia-resposta-definida.entity';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioPia } from '@/common/enums/roles';
 
 @ApiTags('relatorio-pia-resposta-definida')
 @Controller('relatorio-pia-resposta-definida')
@@ -14,6 +16,7 @@ export class CreateRelatorioPiaRespostaDefinidaController {
 	) {}
 
 	@Post()
+	@Roles(RoleRelatorioPia.CREATE)
 	@ApiOperation({ summary: 'Cria um Relatório PIA Resposta Definida' })
 	@ApiBody({
 		type: CreateRelatorioPiaRespostaDefinidaDto,

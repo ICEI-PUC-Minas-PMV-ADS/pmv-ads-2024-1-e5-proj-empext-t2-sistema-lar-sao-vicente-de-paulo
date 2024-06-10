@@ -7,6 +7,8 @@ import { ApiPaginatedResponse } from '@/common/decorators/api-paginated-response
 import { ApiQueryBuilder } from '@/common/decorators/api-query-builder.decorator';
 import { FindAllModeloRelatorioPiaService } from '../services/find-all-modelo-relatorio-pia.service';
 import { ModeloRelatorioPia } from '../entities/modelo-relatorio-pia.entity';
+import { RoleModeloRelatorioPia } from '@/common/enums/roles';
+import { Roles } from '@/common/decorators/roles.decorator';
 
 @ApiTags('modelo-relatorio-pia')
 @Controller('modelo-relatorio-pia')
@@ -18,7 +20,10 @@ export class FindAllModeloRelatorioPiaController {
 	) {}
 
 	@Get()
-	@ApiOperation({ summary: 'Lista todos os modelos de relatório PIA com paginação' })
+	@Roles(RoleModeloRelatorioPia.FIND)
+	@ApiOperation({
+		summary: 'Lista todos os modelos de relatório PIA com paginação',
+	})
 	@ApiPaginatedResponse(ModeloRelatorioPia)
 	@ApiQueryBuilder()
 	@ApiResponseError()
@@ -26,7 +31,8 @@ export class FindAllModeloRelatorioPiaController {
 		const { page_limit, page_number, ...query } =
 			await this.queryBuilder.query();
 
-		const { modelosRelatoriosPias, count } = await this.findAllModeloRelatorioService.execute(query);
+		const { modelosRelatoriosPias, count } =
+			await this.findAllModeloRelatorioService.execute(query);
 
 		return new AppResponse(modelosRelatoriosPias, {
 			page_limit,

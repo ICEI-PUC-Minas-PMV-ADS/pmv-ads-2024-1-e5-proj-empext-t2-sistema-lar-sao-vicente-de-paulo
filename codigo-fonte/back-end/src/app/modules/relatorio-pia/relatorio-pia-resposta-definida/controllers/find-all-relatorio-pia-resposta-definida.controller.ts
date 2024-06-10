@@ -7,6 +7,8 @@ import { ApiPaginatedResponse } from '@/common/decorators/api-paginated-response
 import { ApiQueryBuilder } from '@/common/decorators/api-query-builder.decorator';
 import { FindAllRelatorioPiaRespostaDefinidaService } from '../services/find-all-relatorio-pia-resposta-definida.service';
 import { RelatorioPiaRespostaDefinida } from '../entities/relatorio-pia-resposta-definida.entity';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioPia } from '@/common/enums/roles';
 
 @ApiTags('relatorio-pia-resposta-definida')
 @Controller('relatorio-pia-resposta-definida')
@@ -18,6 +20,7 @@ export class FindAllRelatorioPiaRespostaDefinidaController {
 	) {}
 
 	@Get()
+	@Roles(RoleRelatorioPia.FIND)
 	@ApiOperation({
 		summary: 'Lista todos os Relatório PIA Resposta Definida com paginação',
 	})

@@ -10,6 +10,8 @@ import { ApiResponseError } from '@/common/decorators/api-response-error.decorat
 import { UpdateRelatorioPiaService } from '../services/update-relatorio-pia.service';
 import { UpdateRelatorioPiaDto } from '../dtos/update-relatorio-pia.dto';
 import { RelatorioPia } from '../entities/relatorio-pia.entity';
+import { Roles } from '@/common/decorators/roles.decorator';
+import { RoleRelatorioPia } from '@/common/enums/roles';
 
 @ApiTags('relatorio-pia')
 @Controller('relatorio-pia')
@@ -18,6 +20,7 @@ export class UpdateRelatorioPiaController {
 	constructor(private updateRelatorioPia: UpdateRelatorioPiaService) {}
 
 	@Patch(':uid')
+	@Roles(RoleRelatorioPia.UPDATE)
 	@ApiOperation({ summary: 'Atualiza um Relatório PIA pelo UID' })
 	@ApiBody({
 		type: UpdateRelatorioPiaDto,

@@ -7,6 +7,8 @@ import {
 } from '@nestjs/swagger';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { DeleteRelatorioPiaRespostaDefinidaService } from '../services/delete-relatorio-pia-resposta-definida.service';
+import { RoleRelatorioPia } from '@/common/enums/roles';
+import { Roles } from '@/common/decorators/roles.decorator';
 
 @ApiTags('relatorio-pia-resposta-definida')
 @Controller('relatorio-pia-resposta-definida')
@@ -17,6 +19,7 @@ export class DeleteRelatorioPiaRespostaDefinidaController {
 	) {}
 
 	@Delete(':uid')
+	@Roles(RoleRelatorioPia.DELETE)
 	@ApiOperation({
 		summary: 'Exclui um Relatório PIA Resposta Definida pelo UID',
 	})

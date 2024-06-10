@@ -41,7 +41,7 @@ export const CriarUsuarioModal = ({
   const [isFetchingFoto, setIsFetchingFoto] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const { handleSubmit, control, reset, watch } = useForm<IOperationUsuario>();
+  const { handleSubmit, control, reset } = useForm<IOperationUsuario>();
 
   const { mutate: createUsuario, isFetching: isFetchingData } = useMutation<
     IOperationUsuario,

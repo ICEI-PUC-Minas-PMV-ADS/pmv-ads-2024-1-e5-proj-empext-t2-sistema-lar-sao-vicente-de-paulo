@@ -1,7 +1,7 @@
 "use client";
 
-import { Input, Select } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Input, Select, Tooltip } from "antd";
+import { EyeOutlined, SearchOutlined } from "@ant-design/icons";
 import { useFetch } from "@/utils/hooks/useFetch";
 import { useState } from "react";
 import { queryBuilder } from "@/utils/functions/query-builder";
@@ -14,6 +14,7 @@ import { CriarIdosoModal } from "./components";
 import dayjs from "dayjs";
 import { AtualizarIdosoModal } from "./components/AtualizarIdosoModal";
 import { VisualizarResponsaveis } from "./components/VisualizarResponsaveisModal";
+import Link from "next/link";
 
 export default function Idoso() {
   const [pageLimit, setPageLimit] = useState<number>(10);
@@ -109,6 +110,23 @@ export default function Idoso() {
               uid={record.uid}
               refetchList={refetch}
             />
+          </div>
+        );
+      },
+    },
+    {
+      key: "perfil_idoso",
+      render(_: any, record: IIdoso) {
+        return (
+          <div className="flex justify-end">
+            <Tooltip title={"Visualizar"}>
+              <Link
+                href={"/idoso/" + record.uid}
+                className="text-black/30 hover:text-primaria h-full w-[50px] flex justify-center items-center"
+              >
+                <EyeOutlined className={"text-[18px]"} />
+              </Link>
+            </Tooltip>
           </div>
         );
       },
