@@ -4,7 +4,7 @@ import { Module } from '@nestjs/common';
 import { CreateSemiologiaNutricionalService } from './services/create-semiologia-nutricional.service';
 import { CreateSemiologiaNutricionalController } from './controllers/create-semiologia-nutricional.controller';
 import { PrismaFichaNutricionalRepository } from '../ficha-nutricional/repositories/prisma/prisma-ficha-nutricional.repository';
-import { PrismaSemiologiaNutricionalRepository } from './repositories/prisma/prisma-Semiologia-nutricional.repository';
+import { PrismaSemiologiaNutricionalRepository } from './repositories/prisma/prisma-semiologia-nutricional.repository';
 import { DeleteSemiologiaNutricionalService } from './services/delete-semiologia-nutricional.service';
 import { FindAllSemiologiaNutricionalService } from './services/find-all-semiologia-nutricional.service';
 import { FindUidSemiologiaNutricionalService } from './services/find-uid-semiologia-nutricional.service';
