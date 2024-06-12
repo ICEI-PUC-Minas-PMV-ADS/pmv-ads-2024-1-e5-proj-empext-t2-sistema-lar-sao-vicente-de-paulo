@@ -25,4 +25,7 @@ export class RelatorioPia implements RelatorioPiaModel {
 
 	@ApiProperty()
 	id_idoso: bigint;
+
+	@ApiProperty()
+	data_vencimento: Date;
 }

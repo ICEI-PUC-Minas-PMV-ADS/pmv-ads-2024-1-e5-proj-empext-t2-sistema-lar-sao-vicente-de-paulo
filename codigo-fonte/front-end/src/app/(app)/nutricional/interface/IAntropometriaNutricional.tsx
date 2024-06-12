@@ -21,10 +21,10 @@ export interface IAntropometriaNutricional {
   circ_braco: string;
   braco_lado: "E" | "D";
   circ_braco_percentil: string;
-  circ_braco_classificacao: string; //mudar tipagem back
+  circ_braco_classificacao: string; //mudar tipagem back ok
   circ_panturrilha: string;
   circ_panturrilha_percentil: string;
-  circ_panturrilha_classificacao: string; //mudar tipagem back
+  circ_panturrilha_classificacao: string; //mudar tipagem back ok
   circ_abdominal: string;
   criado_em: Date;
   atualizado_em: Date;

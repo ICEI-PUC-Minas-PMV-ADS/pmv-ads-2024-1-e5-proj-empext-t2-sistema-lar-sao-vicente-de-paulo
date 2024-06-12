@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
 	IsBoolean,
+	IsDate,
 	IsNotEmpty,
 	IsOptional,
 	IsString,
@@ -11,7 +12,11 @@ export class CreateFichaNutricionalDto {
 	@ApiProperty()
 	@IsNotEmpty()
 	@IsString()
-	@MaxLength(300)
+	diagnostico: string;
+
+	@ApiProperty()
+	@IsNotEmpty()
+	@IsString()
 	especificacao: string;
 
 	@ApiProperty()
@@ -28,7 +33,6 @@ export class CreateFichaNutricionalDto {
 	@ApiProperty()
 	@IsOptional()
 	@IsString()
-	@MaxLength(300)
 	observacao?: string;
 
 	@ApiProperty()
@@ -38,4 +42,8 @@ export class CreateFichaNutricionalDto {
 	@ApiProperty()
 	@IsNotEmpty()
 	id_usuario: bigint;
+
+	@ApiProperty()
+	@IsDate()
+	data_vencimento: Date;
 }

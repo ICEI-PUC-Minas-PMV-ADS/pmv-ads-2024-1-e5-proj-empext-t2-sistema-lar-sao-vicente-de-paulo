@@ -3,12 +3,10 @@
 import { useFetch } from "@/utils/hooks/useFetch";
 import { useState } from "react";
 import { queryBuilder } from "@/utils/functions/query-builder";
-import { Situacao } from "@/interface/ISituacao";
 import { Filter } from "@/interface/IQuery";
 import { TableDefault } from "@/components/table/TableDefault";
 import { IRelatorioPia } from "./Interface/IRelatorioPia";
-import { Input, Select } from "antd";
-import { CriarUsuarioModal } from "../usuario/components/CriarUsuarioModal";
+import { Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
 import { CriarRelatorioPiaModal } from "./components/CriarRelatorioPiaModal";

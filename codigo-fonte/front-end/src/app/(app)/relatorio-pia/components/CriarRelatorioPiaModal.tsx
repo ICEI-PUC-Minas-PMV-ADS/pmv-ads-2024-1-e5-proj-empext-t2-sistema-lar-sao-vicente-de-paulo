@@ -1,19 +1,18 @@
 import { useMutation } from "@/utils/hooks/useMutation";
-import { UserAddOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { InboxOutlined, UserAddOutlined } from "@ant-design/icons";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { InputForm, InputSelect } from "@/components/input";
+import { InputSelect } from "@/components/input";
 import { ModalDefault } from "@/components/modal/ModalDefault";
 import { authToken } from "@/config/authToken";
 import { useCookies } from "react-cookie";
-import { Checkbox, Input, Radio, Select } from "antd";
+import { Checkbox, Radio, Select } from "antd";
 import { InputDatePicker } from "@/components/input/InputDatePicker";
 import dayjs from "dayjs";
 import { useFetch } from "@/utils/hooks/useFetch";
 import { queryBuilder } from "@/utils/functions/query-builder";
 import { IIdoso } from "../../idoso/Interface/IIdoso";
 import { IOperationRelatorioPia } from "../Interface/IRelatorioPia";
-import RelatorioPia from "../page";
 import TextArea from "antd/es/input/TextArea";
 import { IModeloRelatorioPia } from "../../modelo-pia/Interface/IModeloRelatorioPia";
 
@@ -156,54 +155,60 @@ export const CriarRelatorioPiaModal = ({
           />
         </div>
         <p>Questionário do Relatório</p>
-        {findModeloPiaSelect?.modelo_relatorio_pia_pergunta?.map((pergunta) => (
-          <div
-            key={pergunta.uid}
-            className="py-[10px] px-[15px] flex gap-[20px] w-full bg-[#f9f9f9] rounded-md"
-          >
-            <p className="w-full text-left min-w-[300px]">
-              {pergunta.pergunta}
-            </p>
-            {pergunta.modelo_relatorio_pia_resposta?.map((resposta) => (
-              <>
-                {resposta.tipo === "RADIO" && (
-                  <div className="w-full flex flex-col gap-1">
-                    <p>{resposta.titulo}</p>
-                    <Radio.Group onChange={() => {}} value={""}>
-                      {resposta.modelo_relatorio_pia_resposta_opcao?.map(
-                        (opcao) => (
-                          <Radio key={opcao.uid} value={opcao.uid}>
-                            {opcao.opcao}
-                          </Radio>
-                        )
-                      )}
-                    </Radio.Group>
-                  </div>
-                )}
-                {resposta.tipo === "CHECKBOX" && (
-                  <div className="w-full flex flex-col gap-1">
-                    <p>{resposta.titulo}</p>
-                    <Checkbox.Group onChange={() => {}}>
-                      {resposta.modelo_relatorio_pia_resposta_opcao?.map(
-                        (opcao) => (
-                          <Checkbox key={opcao.uid} value={opcao.uid}>
-                            {opcao.opcao}
-                          </Checkbox>
-                        )
-                      )}
-                    </Checkbox.Group>
-                  </div>
-                )}
-                {resposta.tipo === "TEXT" && (
-                  <div className="flex flex-col gap-1 w-full">
-                    <p>{resposta.titulo}</p>
-                    <TextArea rows={2} />
-                  </div>
-                )}
-              </>
-            ))}
+        {findModeloPiaSelect ? (
+          findModeloPiaSelect.modelo_relatorio_pia_pergunta?.map((pergunta) => (
+            <div
+              key={pergunta.uid}
+              className="py-[10px] px-[15px] flex gap-[20px] w-full bg-[#f9f9f9] rounded-md"
+            >
+              <p className="w-full text-left min-w-[300px]">
+                {pergunta.pergunta}
+              </p>
+              {pergunta.modelo_relatorio_pia_resposta?.map((resposta) => (
+                <>
+                  {resposta.tipo === "RADIO" && (
+                    <div className="w-full flex flex-col gap-1">
+                      <p>{resposta.titulo}</p>
+                      <Radio.Group onChange={() => {}} value={""}>
+                        {resposta.modelo_relatorio_pia_resposta_opcao?.map(
+                          (opcao) => (
+                            <Radio key={opcao.uid} value={opcao.uid}>
+                              {opcao.opcao}
+                            </Radio>
+                          )
+                        )}
+                      </Radio.Group>
+                    </div>
+                  )}
+                  {resposta.tipo === "CHECKBOX" && (
+                    <div className="w-full flex flex-col gap-1">
+                      <p>{resposta.titulo}</p>
+                      <Checkbox.Group onChange={() => {}}>
+                        {resposta.modelo_relatorio_pia_resposta_opcao?.map(
+                          (opcao) => (
+                            <Checkbox key={opcao.uid} value={opcao.uid}>
+                              {opcao.opcao}
+                            </Checkbox>
+                          )
+                        )}
+                      </Checkbox.Group>
+                    </div>
+                  )}
+                  {resposta.tipo === "TEXT" && (
+                    <div className="flex flex-col gap-1 w-full">
+                      <p>{resposta.titulo}</p>
+                      <TextArea rows={2} />
+                    </div>
+                  )}
+                </>
+              ))}
+            </div>
+          ))
+        ) : (
+          <div className="text-black/40 flex w-full justify-center items-center gap-2">
+            <InboxOutlined className="text-xl" /> Nenhum modelo selecionado.
           </div>
-        ))}
+        )}
       </form>
     </ModalDefault>
   );
