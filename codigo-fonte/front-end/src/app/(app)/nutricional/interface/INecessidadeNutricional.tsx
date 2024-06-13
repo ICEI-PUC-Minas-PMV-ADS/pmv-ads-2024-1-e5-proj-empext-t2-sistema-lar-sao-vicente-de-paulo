@@ -1,6 +1,6 @@
 export interface INecessidadeNutricional {
-  id: number;
-  uid: string;
+  id?: bigint;
+  uid?: string;
   peso: string;
   peso_tipo: "Atual" | "Estimado" | "Seco";
   peso_obs: string;
@@ -16,7 +16,7 @@ export interface INecessidadeNutricional {
   proteina_observacao: string; //adicionar campo no back
   hidrica: string;
   hidrica_observacao: string;
-  criado_em: Date;
-  atualizado_em: Date;
-  id_ficha_nutricional: number;
+  criado_em?: Date;
+  atualizado_em?: Date;
+  id_ficha_nutricional: bigint;
 }

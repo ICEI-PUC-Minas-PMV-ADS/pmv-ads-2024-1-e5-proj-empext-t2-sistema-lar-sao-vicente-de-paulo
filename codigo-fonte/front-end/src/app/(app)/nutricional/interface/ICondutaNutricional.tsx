@@ -1,6 +1,6 @@
 export interface ICondutaNutricional {
-  id: number;
-  uid: string;
+  id?: bigint;
+  uid?: string;
   data: Date;
   dieta: string;
   volume: string;
@@ -8,7 +8,7 @@ export interface ICondutaNutricional {
   kcal_dia: string;
   ptn_dia: string;
   agua_ml: string;
-  criado_em: Date;
-  atualizado_em: Date;
-  id_ficha_nutricional: number;
+  criado_em?: Date;
+  atualizado_em?: Date;
+  id_ficha_nutricional: bigint;
 }

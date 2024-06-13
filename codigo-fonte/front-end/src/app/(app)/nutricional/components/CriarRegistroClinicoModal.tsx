@@ -1,21 +1,30 @@
 import { InputDatePicker } from "@/components/input/InputDatePicker";
 import { ModalDefault } from "@/components/modal/ModalDefault";
-import { authToken } from "@/config/authToken";
 import { PlusOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { useCookies } from "react-cookie";
 import { Controller, useForm } from "react-hook-form";
 import { InputForm } from "@/components/input";
 import { InputTextArea } from "@/components/input/InputTextArea";
 import { IQuadroClinico } from "../interface/IQuadroClinico";
 
-export const CriarRegistroClinicoModal = ({}: {}) => {
-  const [cookies] = useCookies([authToken.nome]);
+export const CriarRegistroClinicoModal = ({
+  setData,
+}: {
+  setData: (value: IQuadroClinico) => void;
+}) => {
   const [open, setOpen] = useState(false);
-  const { control } = useForm<IQuadroClinico>();
+  const { control, handleSubmit, reset } = useForm<IQuadroClinico>();
+
+  const adicionarQuadroClinico = async (data: IQuadroClinico) => {
+    if (setData) await setData(data);
+
+    await reset();
+    await setOpen(false);
+  };
 
   return (
     <ModalDefault
+      onSubmit={handleSubmit(adicionarQuadroClinico)}
       showFooter
       nameButtonOpenModal="Adicionar"
       iconButtonOpenModal={<PlusOutlined />}

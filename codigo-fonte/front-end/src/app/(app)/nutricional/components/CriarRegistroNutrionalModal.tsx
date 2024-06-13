@@ -1,6 +1,4 @@
-import { authToken } from "@/config/authToken";
 import { useState } from "react";
-import { useCookies } from "react-cookie";
 import { ModalDefault } from "@/components/modal/ModalDefault";
 import { PlusOutlined } from "@ant-design/icons";
 import { InputDatePicker } from "@/components/input/InputDatePicker";
@@ -8,13 +6,24 @@ import { InputForm } from "@/components/input";
 import { ICondutaNutricional } from "../interface/ICondutaNutricional";
 import { Controller, useForm } from "react-hook-form";
 
-export const CriarRegistroNutriconalModal = ({}: {}) => {
-  const [cookies] = useCookies([authToken.nome]);
+export const CriarRegistroNutriconalModal = ({
+  setData,
+}: {
+  setData: (value: ICondutaNutricional) => void;
+}) => {
   const [open, setOpen] = useState(false);
-  const { control } = useForm<ICondutaNutricional>();
+  const { control, handleSubmit, reset } = useForm<ICondutaNutricional>();
+
+  const adicionarRegistroNutricional = async (data: ICondutaNutricional) => {
+    if (setData) await setData(data);
+
+    await reset();
+    await setOpen(false);
+  };
 
   return (
     <ModalDefault
+      onSubmit={handleSubmit(adicionarRegistroNutricional)}
       showFooter
       nameButtonOpenModal="Adcionar"
       iconButtonOpenModal={<PlusOutlined />}
