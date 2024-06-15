@@ -5,6 +5,7 @@ import { AntropometriaModule } from './antropometria/antropometria.module';
 import { NecessidadeNutricionalModule } from './necessidade-nutricional/necessidade-nutricional.module';
 import { CondutaNutricionalModule } from './conduta-nutricional/conduta-nutricional.module';
 import { QuadroClinicoModule } from './quadro-clinico/quadro-clinico.module';
+import { RegistroAntropometricoModule } from './registro-antropometrico/registro-antropometrico.module';
 
 @Module({
 	imports: [
@@ -14,6 +15,7 @@ import { QuadroClinicoModule } from './quadro-clinico/quadro-clinico.module';
 		NecessidadeNutricionalModule,
 		CondutaNutricionalModule,
 		QuadroClinicoModule,
+		RegistroAntropometricoModule,
 	],
 })
 export class RelatorioNutricionalMainModule {}

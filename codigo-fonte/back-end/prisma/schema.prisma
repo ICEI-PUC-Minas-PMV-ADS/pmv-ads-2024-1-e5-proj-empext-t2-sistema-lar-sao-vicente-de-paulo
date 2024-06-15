@@ -376,11 +376,11 @@ model FichaNutricional {
   usuario    Usuario @relation(fields: [id_usuario], references: [id])
 
   antropometria_nutricional AntropometriaNutricional?
-  registro_antrometrico     RegistroAntropometrico?
-  conduta_nutricional       CondutaNutricional[]
-  quadro_clinico            QuadroClinico[]
-  necessidade_nutricional   NecessidadeNutricional[]
+  necessidade_nutricional   NecessidadeNutricional?
   semiologia_nutricional    SemiologiaNutricional?
+  registro_antrometrico     RegistroAntropometrico[]
+  quadro_clinico            QuadroClinico[]
+  conduta_nutricional       CondutaNutricional[]
 
   @@map("ficha_nutricional")
 }
