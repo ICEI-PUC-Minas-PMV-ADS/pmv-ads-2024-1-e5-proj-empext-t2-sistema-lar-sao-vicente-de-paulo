@@ -1,6 +1,6 @@
 export interface IAntropometriaNutricional {
-  id: number;
-  uid: string;
+  id?: bigint;
+  uid?: string;
   triagem: "NRS2002" | "MNA";
   triagem_obs: string;
   escore: string;
@@ -26,7 +26,7 @@ export interface IAntropometriaNutricional {
   circ_panturrilha_percentil: string;
   circ_panturrilha_classificacao: string; //mudar tipagem back ok
   circ_abdominal: string;
-  criado_em: Date;
-  atualizado_em: Date;
-  id_ficha_nutricional: number;
+  criado_em?: Date;
+  atualizado_em?: Date;
+  id_ficha_nutricional: bigint;
 }

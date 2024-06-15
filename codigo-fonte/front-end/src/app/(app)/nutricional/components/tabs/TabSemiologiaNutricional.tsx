@@ -2,16 +2,17 @@ import { Controller, useForm, useFormContext } from "react-hook-form";
 import { InputTextArea } from "@/components/input/InputTextArea";
 import { InputSelect } from "@/components/input";
 import { Select } from "antd";
-import { ISemiologiaNutricional } from "../../interface/ISemiologiaNutricional";
+
+import { IFormNutricional } from "../../interface/IFormNutricional";
 
 export const TabSemiologiaNutricional = () => {
-  const { control } = useFormContext<ISemiologiaNutricional>();
+  const { control } = useFormContext<IFormNutricional>();
 
   return (
     <div className="w-full flex flex-col gap-[15px]">
       <div className="">
         <Controller
-          name="perda_aparente"
+          name="semiologia_nutricional.perda_aparente"
           control={control}
           defaultValue=""
           rules={{}}
@@ -29,7 +30,7 @@ export const TabSemiologiaNutricional = () => {
       </div>
       <div className="flex gap-4">
         <Controller
-          name="gordura_subcutanea"
+          name="semiologia_nutricional.gordura_subcutanea"
           control={control}
           rules={{}}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -47,7 +48,7 @@ export const TabSemiologiaNutricional = () => {
           )}
         />
         <Controller
-          name="edema"
+          name="semiologia_nutricional.edema"
           control={control}
           rules={{}}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -71,7 +72,7 @@ export const TabSemiologiaNutricional = () => {
       </div>
       <div className="flex gap-4">
         <Controller
-          name="local_edema"
+          name="semiologia_nutricional.local_edema"
           control={control}
           rules={{}}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -92,7 +93,7 @@ export const TabSemiologiaNutricional = () => {
           )}
         />
         <Controller
-          name="ascite"
+          name="semiologia_nutricional.ascite"
           control={control}
           rules={{}}
           render={({ field: { onChange, value }, fieldState: { error } }) => (

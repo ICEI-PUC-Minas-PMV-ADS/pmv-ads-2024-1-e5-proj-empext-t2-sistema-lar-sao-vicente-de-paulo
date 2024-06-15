@@ -9,13 +9,26 @@ import { InputForm } from "@/components/input";
 import { InputTextArea } from "@/components/input/InputTextArea";
 import { IRegistroAntropometrico } from "../interface/IRegistroAntropometrico";
 
-export const CriarRegistroAntropometricoModal = ({}: {}) => {
-  const [cookies] = useCookies([authToken.nome]);
+export const CriarRegistroAntropometricoModal = ({
+  setData,
+}: {
+  setData: (value: IRegistroAntropometrico) => void;
+}) => {
   const [open, setOpen] = useState(false);
+  const { control, handleSubmit, reset } = useForm<IRegistroAntropometrico>();
 
-  const { control } = useForm<IRegistroAntropometrico>();
+  const adicionarRegistroAntropometrico = async (
+    data: IRegistroAntropometrico
+  ) => {
+    if (setData) await setData(data);
+
+    await reset();
+    await setOpen(false);
+  };
+
   return (
     <ModalDefault
+      onSubmit={handleSubmit(adicionarRegistroAntropometrico)}
       showFooter
       nameButtonOpenModal="Adicionar"
       iconButtonOpenModal={<PlusOutlined />}

@@ -2,10 +2,10 @@ import { Controller, useForm, useFormContext } from "react-hook-form";
 import { InputTextArea } from "@/components/input/InputTextArea";
 import { InputRadioButton } from "@/components/input/InputRadioButton";
 import { InputForm } from "@/components/input";
-import { IFichaNutricional } from "../../interface/IFichaNutricional";
+import { IFormNutricional } from "../../interface/IFormNutricional";
 
 export const TabDiagnosticoHipoteseClinico = () => {
-  const { control } = useFormContext<IFichaNutricional>();
+  const { control } = useFormContext<IFormNutricional>();
 
   return (
     <div className="w-full flex flex-col gap-[15px]">
