@@ -12,7 +12,7 @@ export const AtualizarRelatorioNutricionalModal = ({
   uid,
   refetchList,
 }: {
-  uid: string;
+  uid?: string;
   refetchList: () => void;
 }) => {
   const [cookies] = useCookies([authToken.nome]);
