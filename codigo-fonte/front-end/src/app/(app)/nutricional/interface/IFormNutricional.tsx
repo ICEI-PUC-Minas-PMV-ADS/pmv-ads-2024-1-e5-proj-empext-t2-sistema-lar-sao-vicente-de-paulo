@@ -6,6 +6,10 @@ import { IRegistroAntropometrico } from "./IRegistroAntropometrico";
 import { ISemiologiaNutricional } from "./ISemiologiaNutricional";
 
 export interface IFormNutricional {
+  id?: bigint;
+  uid?: string;
+  criado_em?: Date;
+  atualizado_em?: Date;
   data_vencimento: Date;
   diagnostico: string;
   especificacao: string;

@@ -1,7 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateRegistroAntropometricoDto {
+	@ApiProperty()
+	@IsNotEmpty()
+	@IsDateString()
+	data: Date;
+
 	@ApiProperty()
 	@IsNotEmpty()
 	@IsString()

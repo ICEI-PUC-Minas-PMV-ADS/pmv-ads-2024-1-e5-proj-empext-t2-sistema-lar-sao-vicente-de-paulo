@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@/utils/hooks/useMutation";
-import { IOperationFichaNutricional } from "../interface/IFichaNutricional";
+import { IFichaNutricional } from "../interface/IFichaNutricional";
 
 export const AtualizarRelatorioNutricionalModal = ({
   uid,
@@ -19,10 +19,10 @@ export const AtualizarRelatorioNutricionalModal = ({
   const [open, setOpen] = useState(false);
 
   const { handleSubmit, control, setValue } =
-    useForm<Partial<IOperationFichaNutricional>>();
+    useForm<Partial<IFichaNutricional>>();
 
   const { mutate: updateRelatorioNutricional, isFetching: isFetchingData } =
-    useMutation<Partial<IOperationFichaNutricional>, { uid: string }>(
+    useMutation<Partial<IFichaNutricional>, { uid: string }>(
       "/relatorio-nutricao/" + uid,
       {
         method: "patch",

@@ -6,10 +6,13 @@ import { IRegistroAntropometrico } from "../../interface/IRegistroAntropometrico
 import { useEffect, useState } from "react";
 import { IFormNutricional } from "../../interface/IFormNutricional";
 import dayjs from "dayjs";
+import { Popconfirm, Tooltip } from "antd";
+import { DeleteFilled, QuestionCircleOutlined } from "@ant-design/icons";
+import { AtualizarRegistroAntropometricoModal } from "../AtualizarRegistroAntropometricoModal";
 
 export const TabDadosAntropometricos = () => {
   const [list, setList] = useState<IRegistroAntropometrico[]>([]);
-  const { control, setValue } = useFormContext<IFormNutricional>();
+  const { setValue } = useFormContext<IFormNutricional>();
   useEffect(() => {
     setValue("registro_antrometrico", list);
   }, [list, setValue]);
@@ -53,6 +56,59 @@ export const TabDadosAntropometricos = () => {
     {
       title: "Observações",
       dataIndex: "observacao",
+    },
+    {
+      key: "atualizar",
+      width: 50,
+      render(_: any, record: IRegistroAntropometrico, index) {
+        return (
+          <div className="flex justify-end w-full">
+            <AtualizarRegistroAntropometricoModal
+              data={record}
+              setData={(value) => {
+                setList(
+                  list.map((v, i) => {
+                    if (i === index) {
+                      return { ...value };
+                    }
+                    return v;
+                  })
+                );
+              }}
+            />
+          </div>
+        );
+      },
+    },
+    {
+      key: "deletar",
+      width: 50,
+      render(_: any, _record, index) {
+        return (
+          <div className="flex justify-end w-full">
+            <Popconfirm
+              overlayStyle={{ maxWidth: 350 }}
+              placement="rightBottom"
+              title={"Excluir"}
+              description={"Você tem certeza que deseja excluir?"}
+              onConfirm={() => setList(list.filter((e, i) => i !== index))}
+              okType={"danger"}
+              okText={"Confirmar"}
+              cancelText={"Cancelar"}
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+            >
+              <Tooltip title={"Excluir"}>
+                <button
+                  type="button"
+                  className="text-red-500 w-[50px] h-full flex justify-center items-center hover:text-red-700"
+                >
+                  <DeleteFilled className="text-[16px]" />
+                </button>
+              </Tooltip>
+            </Popconfirm>
+          </div>
+        );
+      },
     },
   ];
 

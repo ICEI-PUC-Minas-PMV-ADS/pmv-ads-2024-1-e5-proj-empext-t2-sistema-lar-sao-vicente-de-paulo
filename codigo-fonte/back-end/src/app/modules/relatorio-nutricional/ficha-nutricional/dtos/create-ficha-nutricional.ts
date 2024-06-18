@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
 	IsBoolean,
-	IsDate,
+	IsDateString,
 	IsNotEmpty,
 	IsOptional,
 	IsString,
@@ -44,6 +44,6 @@ export class CreateFichaNutricionalDto {
 	id_usuario: bigint;
 
 	@ApiProperty()
-	@IsDate()
+	@IsDateString()
 	data_vencimento: Date;
 }

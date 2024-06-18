@@ -6,10 +6,13 @@ import { IFormNutricional } from "../../interface/IFormNutricional";
 import { useFormContext } from "react-hook-form";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { QuestionCircleOutlined, DeleteFilled } from "@ant-design/icons";
+import { Popconfirm, Tooltip } from "antd";
+import { AtualizarRegistroNutrionalModal } from "../AtualizarRegistroNutrionalModal";
 
 export const TabCondutaNutricional = () => {
   const [list, setList] = useState<ICondutaNutricional[]>([]);
-  const { control, setValue } = useFormContext<IFormNutricional>();
+  const { setValue } = useFormContext<IFormNutricional>();
   useEffect(() => {
     setValue("conduta_nutricional", list);
   }, [list, setValue]);
@@ -45,6 +48,59 @@ export const TabCondutaNutricional = () => {
     {
       title: "Água p/Hidratação",
       dataIndex: "agua_ml",
+    },
+    {
+      key: "atualizar",
+      width: 50,
+      render(_: any, record: ICondutaNutricional, index) {
+        return (
+          <div className="flex justify-end w-full">
+            <AtualizarRegistroNutrionalModal
+              data={record}
+              setData={(value) => {
+                setList(
+                  list.map((v, i) => {
+                    if (i === index) {
+                      return { ...value };
+                    }
+                    return v;
+                  })
+                );
+              }}
+            />
+          </div>
+        );
+      },
+    },
+    {
+      key: "deletar",
+      width: 50,
+      render(_: any, _record, index) {
+        return (
+          <div className="flex justify-end w-full">
+            <Popconfirm
+              overlayStyle={{ maxWidth: 350 }}
+              placement="rightBottom"
+              title={"Excluir"}
+              description={"Você tem certeza que deseja excluir?"}
+              onConfirm={() => setList(list.filter((e, i) => i !== index))}
+              okType={"danger"}
+              okText={"Confirmar"}
+              cancelText={"Cancelar"}
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+            >
+              <Tooltip title={"Excluir"}>
+                <button
+                  type="button"
+                  className="text-red-500 w-[50px] h-full flex justify-center items-center hover:text-red-700"
+                >
+                  <DeleteFilled className="text-[16px]" />
+                </button>
+              </Tooltip>
+            </Popconfirm>
+          </div>
+        );
+      },
     },
   ];
 

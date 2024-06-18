@@ -1,4 +1,3 @@
-import { IsCPF } from '@/common/decorators/is-cpf.decorator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { $Enums } from '@prisma/client';
 import {

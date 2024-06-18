@@ -1,18 +1,22 @@
 import { InputDatePicker } from "@/components/input/InputDatePicker";
 import { ModalDefault } from "@/components/modal/ModalDefault";
-import { authToken } from "@/config/authToken";
 import { PlusOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { useCookies } from "react-cookie";
 import { Controller, useForm } from "react-hook-form";
 import { InputForm } from "@/components/input";
 import { InputTextArea } from "@/components/input/InputTextArea";
 import { IRegistroAntropometrico } from "../interface/IRegistroAntropometrico";
+import dayjs from "dayjs";
+import { useMutation } from "@/utils/hooks/useMutation";
 
 export const CriarRegistroAntropometricoModal = ({
   setData,
+  refetch,
+  idRelatorio,
 }: {
   setData: (value: IRegistroAntropometrico) => void;
+  refetch?: () => void;
+  idRelatorio?: bigint;
 }) => {
   const [open, setOpen] = useState(false);
   const { control, handleSubmit, reset } = useForm<IRegistroAntropometrico>();
@@ -21,10 +25,23 @@ export const CriarRegistroAntropometricoModal = ({
     data: IRegistroAntropometrico
   ) => {
     if (setData) await setData(data);
-
+    if (refetch && idRelatorio)
+      await createRegistroAntropometrico({
+        ...data,
+        id_ficha_nutricional: idRelatorio,
+      });
     await reset();
     await setOpen(false);
   };
+
+  const { mutate: createRegistroAntropometrico } =
+    useMutation<IRegistroAntropometrico>("/registro-antropometrico", {
+      method: "post",
+      messageSucess: "Registro Antropométrico cadastrado com sucesso!",
+      onSuccess: () => {
+        refetch && refetch();
+      },
+    });
 
   return (
     <ModalDefault
@@ -43,21 +60,25 @@ export const CriarRegistroAntropometricoModal = ({
           <Controller
             name="data"
             control={control}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputDatePicker
+                required
                 label="Data"
                 error={error?.message}
+                value={value && dayjs(value)}
                 onChange={onChange}
-                placeholder="Selicione data"
+                placeholder="Selecione data"
               />
             )}
           />
           <Controller
             name="peso"
             control={control}
-            rules={{}}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
+                required
                 label="Peso"
                 error={error?.message}
                 onChange={onChange}
@@ -72,9 +93,10 @@ export const CriarRegistroAntropometricoModal = ({
           <Controller
             name="edema"
             control={control}
-            rules={{}}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
+                required
                 label="Edema"
                 error={error?.message}
                 onChange={onChange}
@@ -86,9 +108,10 @@ export const CriarRegistroAntropometricoModal = ({
           <Controller
             name="ascite"
             control={control}
-            rules={{}}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
+                required
                 label="Ascite"
                 error={error?.message}
                 onChange={onChange}
@@ -102,9 +125,10 @@ export const CriarRegistroAntropometricoModal = ({
           <Controller
             name="imc"
             control={control}
-            rules={{}}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
+                required
                 label="IMC"
                 error={error?.message}
                 onChange={onChange}
@@ -117,9 +141,10 @@ export const CriarRegistroAntropometricoModal = ({
           <Controller
             name="imc_classificacao"
             control={control}
-            rules={{}}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
+                required
                 label="Classificação"
                 error={error?.message}
                 onChange={onChange}
@@ -133,9 +158,10 @@ export const CriarRegistroAntropometricoModal = ({
           <Controller
             name="cb"
             control={control}
-            rules={{}}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
+                required
                 label="CB"
                 error={error?.message}
                 onChange={onChange}
@@ -148,9 +174,10 @@ export const CriarRegistroAntropometricoModal = ({
           <Controller
             name="cp"
             control={control}
-            rules={{}}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
+                required
                 label="CP"
                 error={error?.message}
                 onChange={onChange}
@@ -166,9 +193,10 @@ export const CriarRegistroAntropometricoModal = ({
             name="observacao"
             control={control}
             defaultValue=""
-            rules={{}}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputTextArea
+                required
                 label="Observações"
                 error={error?.message}
                 onChange={onChange}

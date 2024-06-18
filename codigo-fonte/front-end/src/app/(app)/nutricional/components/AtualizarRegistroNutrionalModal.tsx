@@ -1,55 +1,82 @@
-import { InputDatePicker } from "@/components/input/InputDatePicker";
-import { ModalDefault } from "@/components/modal/ModalDefault";
-import { PlusOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { InputForm } from "@/components/input";
+import { InputDatePicker } from "@/components/input/InputDatePicker";
 import { InputTextArea } from "@/components/input/InputTextArea";
-import { IQuadroClinico } from "../interface/IQuadroClinico";
+import { ModalDefault } from "@/components/modal/ModalDefault";
+import { EditOutlined, UserAddOutlined } from "@ant-design/icons";
+import { Tooltip } from "antd";
 import { useMutation } from "@/utils/hooks/useMutation";
+import { useFetch } from "@/utils/hooks/useFetch";
+import dayjs from "dayjs";
+import { ICondutaNutricional } from "../interface/ICondutaNutricional";
 
-export const CriarRegistroClinicoModal = ({
+export const AtualizarRegistroNutrionalModal = ({
   setData,
+  data,
+  uid,
   refetch,
-  idRelatorio,
 }: {
-  setData: (value: IQuadroClinico) => void;
+  setData?: (value: ICondutaNutricional) => void;
+  data?: ICondutaNutricional;
+  uid?: string;
   refetch?: () => void;
-  idRelatorio?: bigint;
 }) => {
   const [open, setOpen] = useState(false);
-  const { control, handleSubmit, reset } = useForm<IQuadroClinico>();
+  const { control, handleSubmit, setValue } = useForm<ICondutaNutricional>({
+    defaultValues: data,
+  });
 
-  const adicionarQuadroClinico = async (data: IQuadroClinico) => {
+  useFetch<ICondutaNutricional>("conduta-nutricional" + uid, [uid], {
+    enable: open && !!uid,
+    onSuccess: (data) => {
+      const registro = data.data;
+      if (registro) {
+        setValue("agua_ml", registro.agua_ml);
+        setValue("data", registro.data);
+        setValue("dieta", registro.dieta);
+        setValue("fracionamento", registro.fracionamento);
+        setValue("kcal_dia", registro.kcal_dia);
+        setValue("ptn_dia", registro.ptn_dia);
+        setValue("volume", registro.volume);
+      }
+    },
+  });
+
+  const adicionarCondutaNutricional = async (data: ICondutaNutricional) => {
     if (setData) await setData(data);
-    if (refetch && idRelatorio)
-      await createQuadroClinico({
-        ...data,
-        id_ficha_nutricional: idRelatorio,
-      });
-    await reset();
+    if (refetch && uid) await updateQuadroClinico(data);
     await setOpen(false);
   };
 
-  const { mutate: createQuadroClinico } = useMutation<IQuadroClinico>(
-    "/quadro-clinico",
-    {
-      method: "post",
-      messageSucess: "Quadro Clínico cadastrado com sucesso!",
-      onSuccess: () => {
-        refetch && refetch();
-      },
-    }
-  );
+  const { mutate: updateQuadroClinico } = useMutation<
+    Partial<ICondutaNutricional>
+  >("/quadro-clinico/" + uid, {
+    method: "patch",
+    messageSucess: "Registro Nutricional atualizado com sucesso!",
+    onSuccess: () => {
+      refetch && refetch();
+    },
+  });
 
   return (
     <ModalDefault
-      onSubmit={handleSubmit(adicionarQuadroClinico)}
       showFooter
-      nameButtonOpenModal="Adicionar"
-      iconButtonOpenModal={<PlusOutlined />}
-      titleModal="Adicionando registro Clínico"
-      okText="Adicionar"
+      customButtonOpenModal={
+        <Tooltip title={"Editar"}>
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            className="text-black/30 hover:text-primaria h-full w-[50px] flex justify-center items-center"
+          >
+            <EditOutlined className={"text-[18px]"} />
+          </button>
+        </Tooltip>
+      }
+      iconButtonOpenModal={<UserAddOutlined />}
+      titleModal={"Atualizando registro Nutricional"}
+      okText="Salvar"
+      onSubmit={handleSubmit(adicionarCondutaNutricional)}
       width="800px"
       setOpenModal={setOpen}
       openModal={open}
@@ -65,34 +92,20 @@ export const CriarRegistroClinicoModal = ({
                 required
                 label="Data"
                 error={error?.message}
+                value={value && dayjs(value)}
                 onChange={onChange}
                 placeholder="Selicione data"
               />
             )}
           />
           <Controller
-            name="aceitacao_alimentar"
+            name="dieta"
             control={control}
             rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
                 required
-                label="Aceitação Dieta Vo"
-                error={error?.message}
-                onChange={onChange}
-                value={value}
-                placeholder=""
-              />
-            )}
-          />
-          <Controller
-            name="suplemento_oral"
-            control={control}
-            rules={{ required: "Campo obrigatório." }}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <InputForm
-                required
-                label="Suplemento Oral"
+                label="Dieta Indicada"
                 error={error?.message}
                 onChange={onChange}
                 value={value}
@@ -103,13 +116,13 @@ export const CriarRegistroClinicoModal = ({
         </div>
         <div className="flex gap-4">
           <Controller
-            name="apetite"
+            name="volume"
             control={control}
             rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
                 required
-                label="Apetite"
+                label="Volume"
                 error={error?.message}
                 onChange={onChange}
                 value={value}
@@ -118,28 +131,13 @@ export const CriarRegistroClinicoModal = ({
             )}
           />
           <Controller
-            name="disfagia"
+            name="fracionamento"
             control={control}
             rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
                 required
-                label="Disfagia"
-                error={error?.message}
-                onChange={onChange}
-                value={value}
-                placeholder=""
-              />
-            )}
-          />
-          <Controller
-            name="nausea_vomito"
-            control={control}
-            rules={{ required: "Campo obrigatório." }}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <InputForm
-                required
-                label="Náusea/Vômito"
+                label="Fracionamento"
                 error={error?.message}
                 onChange={onChange}
                 value={value}
@@ -150,13 +148,13 @@ export const CriarRegistroClinicoModal = ({
         </div>
         <div className="flex gap-4">
           <Controller
-            name="dor_abdominal"
+            name="kcal_dia"
             control={control}
             rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
                 required
-                label="Dor Abdominal"
+                label="Kcal/Dia"
                 error={error?.message}
                 onChange={onChange}
                 value={value}
@@ -165,28 +163,13 @@ export const CriarRegistroClinicoModal = ({
             )}
           />
           <Controller
-            name="evacuacao"
+            name="ptn_dia"
             control={control}
             rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
                 required
-                label="Evacuação"
-                error={error?.message}
-                onChange={onChange}
-                value={value}
-                placeholder=""
-              />
-            )}
-          />
-          <Controller
-            name="diurese"
-            control={control}
-            rules={{ required: "Campo obrigatório." }}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <InputForm
-                required
-                label="Diurese"
+                label="PTN/Dia"
                 error={error?.message}
                 onChange={onChange}
                 value={value}
@@ -197,17 +180,17 @@ export const CriarRegistroClinicoModal = ({
         </div>
         <div className="flex gap-4">
           <Controller
-            name="observacao"
+            name="agua_ml"
             control={control}
-            defaultValue=""
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <InputTextArea
-                label="Observação"
+              <InputForm
+                required
+                label="Água p/Hidratação"
                 error={error?.message}
                 onChange={onChange}
                 value={value}
                 placeholder=""
-                rows={4}
               />
             )}
           />

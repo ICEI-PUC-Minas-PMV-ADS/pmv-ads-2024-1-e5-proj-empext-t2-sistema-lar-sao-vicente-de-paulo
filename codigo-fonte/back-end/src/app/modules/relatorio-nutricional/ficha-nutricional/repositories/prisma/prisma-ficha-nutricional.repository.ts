@@ -18,6 +18,16 @@ export class PrismaFichaNutricionalRepository
 			where: {
 				id,
 			},
+			include: {
+				idoso: true,
+				usuario: true,
+				antropometria_nutricional: true,
+				conduta_nutricional: true,
+				necessidade_nutricional: true,
+				quadro_clinico: true,
+				registro_antrometrico: true,
+				semiologia_nutricional: true,
+			},
 		});
 
 		return fichaNutricional;
@@ -26,6 +36,16 @@ export class PrismaFichaNutricionalRepository
 		const fichaNutricional = await prisma.fichaNutricional.findUnique({
 			where: {
 				uid,
+			},
+			include: {
+				idoso: true,
+				usuario: true,
+				antropometria_nutricional: true,
+				conduta_nutricional: true,
+				necessidade_nutricional: true,
+				quadro_clinico: true,
+				registro_antrometrico: true,
+				semiologia_nutricional: true,
 			},
 		});
 

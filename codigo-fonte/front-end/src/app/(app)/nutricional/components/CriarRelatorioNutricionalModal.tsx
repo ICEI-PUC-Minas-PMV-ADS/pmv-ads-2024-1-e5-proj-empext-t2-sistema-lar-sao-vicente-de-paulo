@@ -6,7 +6,7 @@ import { useCookies } from "react-cookie";
 import { authToken } from "@/config/authToken";
 import { InputSelect } from "@/components/input";
 import { IIdoso } from "../../idoso/Interface/IIdoso";
-import { Select, Tabs } from "antd";
+import { Select, Tabs, notification } from "antd";
 import { InputDatePicker } from "@/components/input/InputDatePicker";
 import { TabGeral } from "./tabs/TabGeral";
 import { TabDiagnosticoHipoteseClinico } from "./tabs/TabDiagnosticoHipoteseClinico";
@@ -27,6 +27,9 @@ import { INecessidadeNutricional } from "../interface/INecessidadeNutricional";
 import { ICondutaNutricional } from "../interface/ICondutaNutricional";
 import { IQuadroClinico } from "../interface/IQuadroClinico";
 import { IRegistroAntropometrico } from "../interface/IRegistroAntropometrico";
+import dayjs from "dayjs";
+import { AxiosError } from "axios";
+import { IErrorState } from "@/utils/hooks/useMutation";
 
 export const CriarRelatorioNutricionalModal = ({
   refetchList,
@@ -64,85 +67,104 @@ export const CriarRelatorioNutricionalModal = ({
         }
       )
       .then(async (res) => {
-        await api.post<{ id: bigint }>(
-          "/semiologia-nutricional",
-          {
-            ...data.semiologia_nutricional,
-            id_ficha_nutricional: res.data.id,
-          } as ISemiologiaNutricional,
-          {
-            headers: {
-              Authorization: "Bearer " + cookies[authToken.nome],
-            },
-          }
-        );
-        await api.post<{ id: bigint }>(
-          "/antropometria",
-          {
-            ...data.antropometria_nutricional,
-            id_ficha_nutricional: res.data.id,
-          } as IAntropometriaNutricional,
-          {
-            headers: {
-              Authorization: "Bearer " + cookies[authToken.nome],
-            },
-          }
-        );
-        await api.post<{ id: bigint }>(
-          "/necessidade-nutricional",
-          {
-            ...data.necessidade_nutricional,
-            id_ficha_nutricional: res.data.id,
-          } as INecessidadeNutricional,
-          {
-            headers: {
-              Authorization: "Bearer " + cookies[authToken.nome],
-            },
-          }
-        );
-        await data.conduta_nutricional.map((conduta) => {
-          api.post<{ id: bigint }>(
-            "/conduta-nutricional",
+        try {
+          await api.post<{ id: bigint }>(
+            "/semiologia-nutricional",
             {
-              ...conduta,
+              ...data.semiologia_nutricional,
               id_ficha_nutricional: res.data.id,
-            } as ICondutaNutricional,
+            } as ISemiologiaNutricional,
             {
               headers: {
                 Authorization: "Bearer " + cookies[authToken.nome],
               },
             }
           );
-        });
-        await data.quadro_clinico.map((quadro) => {
-          api.post<{ id: bigint }>(
-            "/quadro-clinico",
+          await api.post<{ id: bigint }>(
+            "/antropometria",
             {
-              ...quadro,
+              ...data.antropometria_nutricional,
               id_ficha_nutricional: res.data.id,
-            } as IQuadroClinico,
+            } as IAntropometriaNutricional,
             {
               headers: {
                 Authorization: "Bearer " + cookies[authToken.nome],
               },
             }
           );
-        });
-        await data.registro_antrometrico.map((registro) => {
-          api.post<{ id: bigint }>(
-            "/registro-antropometrico",
+          await api.post<{ id: bigint }>(
+            "/necessidade-nutricional",
             {
-              ...registro,
+              ...data.necessidade_nutricional,
               id_ficha_nutricional: res.data.id,
-            } as IRegistroAntropometrico,
+            } as INecessidadeNutricional,
             {
               headers: {
                 Authorization: "Bearer " + cookies[authToken.nome],
               },
             }
           );
-        });
-        setIsloading(false);
+          await data.conduta_nutricional.map((conduta) => {
+            api.post<{ id: bigint }>(
+              "/conduta-nutricional",
+              {
+                ...conduta,
+                id_ficha_nutricional: res.data.id,
+              } as ICondutaNutricional,
+              {
+                headers: {
+                  Authorization: "Bearer " + cookies[authToken.nome],
+                },
+              }
+            );
+          });
+          await data.quadro_clinico.map((quadro) => {
+            api.post<{ id: bigint }>(
+              "/quadro-clinico",
+              {
+                ...quadro,
+                id_ficha_nutricional: res.data.id,
+              } as IQuadroClinico,
+              {
+                headers: {
+                  Authorization: "Bearer " + cookies[authToken.nome],
+                },
+              }
+            );
+          });
+          await data.registro_antrometrico.map((registro) => {
+            api.post<{ id: bigint }>(
+              "/registro-antropometrico",
+              {
+                ...registro,
+                id_ficha_nutricional: res.data.id,
+              } as IRegistroAntropometrico,
+              {
+                headers: {
+                  Authorization: "Bearer " + cookies[authToken.nome],
+                },
+              }
+            );
+          });
+
+          await notification.open({
+            message: "Operação realizada",
+            description: "Relatório Nutricional cadastrado com sucesso!",
+            type: "success",
+          });
+          await reset();
+          await refetchList();
+          await setOpen(false);
+        } catch (err) {
+          const error = err as AxiosError<{ error: IErrorState }>;
+
+          notification.open({
+            message: "Ocorreu um erro",
+            description: error.response?.data?.error.message,
+            type: "error",
+          });
+          setIsloading(false);
+        }
       });
   }
 
@@ -168,9 +190,9 @@ export const CriarRelatorioNutricionalModal = ({
       iconButtonOpenModal={<FileAddOutlined />}
       titleModal={"Adicionando Relatório Nutricional"}
       okText="Cadastrar"
-      onSubmit={handleSubmit((e) => console.log(e))}
+      onSubmit={handleSubmit(createRelatorioNutricional)}
       isFetching={isLoading}
-      width="1350px"
+      width="1340px"
       setOpenModal={setOpen}
       openModal={open}
     >
@@ -210,14 +232,17 @@ export const CriarRelatorioNutricionalModal = ({
               <Controller
                 name="data_vencimento"
                 control={control}
+                rules={{ required: "Campo obrigatório." }}
                 render={({
                   field: { onChange, value },
                   fieldState: { error },
                 }) => (
                   <InputDatePicker
+                    required
                     label="Data de Vencimento"
                     error={error?.message}
                     onChange={onChange}
+                    value={value && dayjs(value)}
                     placeholder="Selicione data"
                   />
                 )}
@@ -235,7 +260,11 @@ export const CriarRelatorioNutricionalModal = ({
               },
               {
                 key: "2",
-                label: "Diagnóstico Clínico / Hipótese Diagnosticadas",
+                label: (
+                  <p className="text-left">
+                    Diagnóstico Clínico / <br /> Hipótese Diagnosticadas
+                  </p>
+                ),
                 children: <TabDiagnosticoHipoteseClinico />,
               },
               {
