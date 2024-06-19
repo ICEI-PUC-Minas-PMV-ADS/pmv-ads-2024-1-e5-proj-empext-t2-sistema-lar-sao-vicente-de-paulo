@@ -28,5 +28,5 @@ export interface IAntropometriaNutricional {
   circ_panturrilha_percentil: string;
   circ_panturrilha_classificacao: string;
   circ_abdominal: string;
-  id_ficha_nutricional: bigint;
+  id_ficha_nutricional?: bigint;
 }

@@ -154,6 +154,7 @@ export const CriarRelatorioNutricionalModal = ({
           });
           await reset();
           await refetchList();
+          await setIsloading(false);
           await setOpen(false);
         } catch (err) {
           const error = err as AxiosError<{ error: IErrorState }>;

@@ -13,7 +13,7 @@ export const CriarRegistroNutriconalModal = ({
   refetch,
   idRelatorio,
 }: {
-  setData: (value: ICondutaNutricional) => void;
+  setData?: (value: ICondutaNutricional) => void;
   refetch?: () => void;
   idRelatorio?: bigint;
 }) => {

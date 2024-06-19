@@ -7,10 +7,16 @@ import { useEffect, useState } from "react";
 import { IFormNutricional } from "../../interface/IFormNutricional";
 import dayjs from "dayjs";
 import { QuestionCircleOutlined, DeleteFilled } from "@ant-design/icons";
-import { Popconfirm, Tooltip } from "antd";
+import { Popconfirm, Tooltip, notification } from "antd";
 import { AtualizarRegistroClinicoModal } from "../AtualizarRegistroClinicoModal";
+import { useFetch } from "@/utils/hooks/useFetch";
+import { queryBuilder } from "@/utils/functions/query-builder";
+import { api } from "@/utils/service/api";
+import { useCookies } from "react-cookie";
+import { authToken } from "@/config/authToken";
 
-export const TabQuadroClinico = () => {
+export const TabQuadroClinico = ({ id }: { id?: bigint }) => {
+  const [cookies] = useCookies([authToken.nome]);
   const [list, setList] = useState<IQuadroClinico[]>([]);
   const { setValue } = useFormContext<IFormNutricional>();
   useEffect(() => {
@@ -67,19 +73,26 @@ export const TabQuadroClinico = () => {
       render(_: any, record: IQuadroClinico, index) {
         return (
           <div className="flex justify-end w-full">
-            <AtualizarRegistroClinicoModal
-              data={record}
-              setData={(value) => {
-                setList(
-                  list.map((v, i) => {
-                    if (i === index) {
-                      return { ...value };
-                    }
-                    return v;
-                  })
-                );
-              }}
-            />
+            {id ? (
+              <AtualizarRegistroClinicoModal
+                refetch={refetch}
+                uid={record.uid}
+              />
+            ) : (
+              <AtualizarRegistroClinicoModal
+                data={record}
+                setData={(value) => {
+                  setList(
+                    list.map((v, i) => {
+                      if (i === index) {
+                        return { ...value };
+                      }
+                      return v;
+                    })
+                  );
+                }}
+              />
+            )}
           </div>
         );
       },
@@ -87,7 +100,7 @@ export const TabQuadroClinico = () => {
     {
       key: "deletar",
       width: 50,
-      render(_: any, _record, index) {
+      render(_: any, record, index) {
         return (
           <div className="flex justify-end w-full">
             <Popconfirm
@@ -95,7 +108,27 @@ export const TabQuadroClinico = () => {
               placement="rightBottom"
               title={"Excluir"}
               description={"Você tem certeza que deseja excluir?"}
-              onConfirm={() => setList(list.filter((e, i) => i !== index))}
+              onConfirm={() => {
+                if (id) {
+                  api
+                    .delete("/quadro-clinico/" + record.uid, {
+                      headers: {
+                        Authorization: "Bearer " + cookies[authToken.nome],
+                      },
+                    })
+                    .then(() => {
+                      notification.open({
+                        message: "Operação realizada",
+                        description: "Registro excluído com sucesso!",
+                        type: "success",
+                      });
+
+                      refetch();
+                    });
+                } else {
+                  setList(list.filter((e, i) => i !== index));
+                }
+              }}
               okType={"danger"}
               okText={"Confirmar"}
               cancelText={"Cancelar"}
@@ -116,16 +149,39 @@ export const TabQuadroClinico = () => {
     },
   ];
 
+  const { refetch } = useFetch<IQuadroClinico[]>(
+    "/quadro-clinico",
+    ["quadro-clinico", id],
+    {
+      enable: !!id,
+      params: queryBuilder({
+        page_limit: 99999,
+        filter: [
+          { path: "id_ficha_nutricional", operator: "equals", value: id },
+        ],
+        sort: [{ field: "criado_em", criteria: "desc" }],
+      }),
+      onSuccess: (res) => {
+        setList(res.data);
+      },
+    }
+  );
+
   return (
     <div className="w-full flex flex-col gap-[15px]">
-      <div className="">
-        <CriarRegistroClinicoModal
-          setData={(v) => {
-            if (v) {
-              setList([...list, v]);
-            }
-          }}
-        />
+      <div>
+        {id ? (
+          <CriarRegistroClinicoModal refetch={refetch} idRelatorio={id} />
+        ) : (
+          <CriarRegistroClinicoModal
+            setData={(v) => {
+              if (v) {
+                setList([...list, v]);
+              }
+            }}
+          />
+        )}
+
         <div className="mt-2">
           <TableDefault
             dataSource={list}

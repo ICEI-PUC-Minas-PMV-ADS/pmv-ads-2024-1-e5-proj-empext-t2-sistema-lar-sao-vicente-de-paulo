@@ -7,10 +7,16 @@ import { useFormContext } from "react-hook-form";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { QuestionCircleOutlined, DeleteFilled } from "@ant-design/icons";
-import { Popconfirm, Tooltip } from "antd";
+import { Popconfirm, Tooltip, notification } from "antd";
 import { AtualizarRegistroNutrionalModal } from "../AtualizarRegistroNutrionalModal";
+import { useCookies } from "react-cookie";
+import { authToken } from "@/config/authToken";
+import { api } from "@/utils/service/api";
+import { useFetch } from "@/utils/hooks/useFetch";
+import { queryBuilder } from "@/utils/functions/query-builder";
 
-export const TabCondutaNutricional = () => {
+export const TabCondutaNutricional = ({ id }: { id?: bigint }) => {
+  const [cookies] = useCookies([authToken.nome]);
   const [list, setList] = useState<ICondutaNutricional[]>([]);
   const { setValue } = useFormContext<IFormNutricional>();
   useEffect(() => {
@@ -55,19 +61,26 @@ export const TabCondutaNutricional = () => {
       render(_: any, record: ICondutaNutricional, index) {
         return (
           <div className="flex justify-end w-full">
-            <AtualizarRegistroNutrionalModal
-              data={record}
-              setData={(value) => {
-                setList(
-                  list.map((v, i) => {
-                    if (i === index) {
-                      return { ...value };
-                    }
-                    return v;
-                  })
-                );
-              }}
-            />
+            {id ? (
+              <AtualizarRegistroNutrionalModal
+                refetch={refetch}
+                uid={record.uid}
+              />
+            ) : (
+              <AtualizarRegistroNutrionalModal
+                data={record}
+                setData={(value) => {
+                  setList(
+                    list.map((v, i) => {
+                      if (i === index) {
+                        return { ...value };
+                      }
+                      return v;
+                    })
+                  );
+                }}
+              />
+            )}
           </div>
         );
       },
@@ -75,7 +88,7 @@ export const TabCondutaNutricional = () => {
     {
       key: "deletar",
       width: 50,
-      render(_: any, _record, index) {
+      render(_: any, record, index) {
         return (
           <div className="flex justify-end w-full">
             <Popconfirm
@@ -83,7 +96,27 @@ export const TabCondutaNutricional = () => {
               placement="rightBottom"
               title={"Excluir"}
               description={"Você tem certeza que deseja excluir?"}
-              onConfirm={() => setList(list.filter((e, i) => i !== index))}
+              onConfirm={() => {
+                if (id) {
+                  api
+                    .delete("/conduta-nutricional/" + record.uid, {
+                      headers: {
+                        Authorization: "Bearer " + cookies[authToken.nome],
+                      },
+                    })
+                    .then(() => {
+                      notification.open({
+                        message: "Operação realizada",
+                        description: "Registro excluído com sucesso!",
+                        type: "success",
+                      });
+
+                      refetch();
+                    });
+                } else {
+                  setList(list.filter((e, i) => i !== index));
+                }
+              }}
               okType={"danger"}
               okText={"Confirmar"}
               cancelText={"Cancelar"}
@@ -104,16 +137,39 @@ export const TabCondutaNutricional = () => {
     },
   ];
 
+  const { refetch } = useFetch<ICondutaNutricional[]>(
+    "/conduta-nutricional",
+    ["conduta-nutricional", id],
+    {
+      enable: !!id,
+      params: queryBuilder({
+        page_limit: 99999,
+        filter: [
+          { path: "id_ficha_nutricional", operator: "equals", value: id },
+        ],
+        sort: [{ field: "criado_em", criteria: "desc" }],
+      }),
+      onSuccess: (res) => {
+        setList(res.data);
+      },
+    }
+  );
+
   return (
     <div className="w-full flex flex-col gap-[15px]">
       <div className="">
-        <CriarRegistroNutriconalModal
-          setData={(v) => {
-            if (v) {
-              setList([...list, v]);
-            }
-          }}
-        />
+        {id ? (
+          <CriarRegistroNutriconalModal refetch={refetch} idRelatorio={id} />
+        ) : (
+          <CriarRegistroNutriconalModal
+            setData={(v) => {
+              if (v) {
+                setList([...list, v]);
+              }
+            }}
+          />
+        )}
+
         <div className="mt-2">
           <TableDefault
             dataSource={list}

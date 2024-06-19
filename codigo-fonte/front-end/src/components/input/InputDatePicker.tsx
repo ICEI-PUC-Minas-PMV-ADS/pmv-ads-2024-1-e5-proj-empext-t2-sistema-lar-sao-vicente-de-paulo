@@ -11,6 +11,7 @@ interface IInputDatePicker {
   required?: boolean;
   tooltip?: string;
   defaultValue?: any;
+  disabled?: boolean;
 }
 
 export const InputDatePicker = ({
@@ -22,6 +23,7 @@ export const InputDatePicker = ({
   value,
   tooltip,
   defaultValue,
+  disabled,
 }: IInputDatePicker) => {
   return (
     <div className="flex flex-col gap-1 w-full">
@@ -51,6 +53,7 @@ export const InputDatePicker = ({
         value={value}
         defaultValue={defaultValue}
         format="DD/MM/YYYY"
+        disabled={disabled}
       />
       {error && (
         <div className="flex gap-2 items-center text-red-600 text-xs">

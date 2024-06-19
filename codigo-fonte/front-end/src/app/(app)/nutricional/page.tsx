@@ -76,10 +76,13 @@ export default function RelatorioNutricional() {
       render(_: any, record: IFichaNutricional) {
         return (
           <div className="flex justify-end">
-            <AtualizarRelatorioNutricionalModal
-              uid={record.uid}
-              refetchList={refetch}
-            />
+            {record.id && record.uid ? (
+              <AtualizarRelatorioNutricionalModal
+                id={record.id}
+                uid={record.uid}
+                refetchList={refetch}
+              />
+            ) : undefined}
           </div>
         );
       },

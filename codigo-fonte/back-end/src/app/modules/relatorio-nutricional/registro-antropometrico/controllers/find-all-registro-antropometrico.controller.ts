@@ -4,7 +4,7 @@ import { AppResponse } from '@/common/utils/app-response';
 import { QueryBuilderService } from '@/core/providers/query-builder/query-builder.service';
 import { ApiResponseError } from '@/common/decorators/api-response-error.decorator';
 import { ApiQueryBuilder } from '@/common/decorators/api-query-builder.decorator';
-import { AntropometriaNutricional } from '@prisma/client';
+import { RegistroAntropometrico } from '@prisma/client';
 import { Roles } from '@/common/decorators/roles.decorator';
 import { RoleRelatorioNutricional } from '@/common/enums/roles';
 import { FindAllRegistroAntropometricoService } from '../services/find-all-registro-antropometrico.service';
@@ -26,14 +26,14 @@ export class FindAllRegistroAntropometricoController {
 	})
 	@ApiQueryBuilder()
 	@ApiResponseError()
-	async handle(): Promise<AppResponse<AntropometriaNutricional[]>> {
+	async handle(): Promise<AppResponse<RegistroAntropometrico[]>> {
 		const { page_limit, page_number, ...query } =
 			await this.queryBuilder.query();
 
-		const { antropometrias, count } =
+		const { registrosAntropometrico, count } =
 			await this.findAllRegistroAntropometricoService.execute(query);
 
-		return new AppResponse(antropometrias, {
+		return new AppResponse(registrosAntropometrico, {
 			page_limit,
 			page_number,
 			total_count: count,

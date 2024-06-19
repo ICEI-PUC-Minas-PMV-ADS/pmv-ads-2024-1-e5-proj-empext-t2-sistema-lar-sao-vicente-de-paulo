@@ -14,7 +14,7 @@ export const CriarRegistroAntropometricoModal = ({
   refetch,
   idRelatorio,
 }: {
-  setData: (value: IRegistroAntropometrico) => void;
+  setData?: (value: IRegistroAntropometrico) => void;
   refetch?: () => void;
   idRelatorio?: bigint;
 }) => {

@@ -13,7 +13,7 @@ export const CriarRegistroClinicoModal = ({
   refetch,
   idRelatorio,
 }: {
-  setData: (value: IQuadroClinico) => void;
+  setData?: (value: IQuadroClinico) => void;
   refetch?: () => void;
   idRelatorio?: bigint;
 }) => {
