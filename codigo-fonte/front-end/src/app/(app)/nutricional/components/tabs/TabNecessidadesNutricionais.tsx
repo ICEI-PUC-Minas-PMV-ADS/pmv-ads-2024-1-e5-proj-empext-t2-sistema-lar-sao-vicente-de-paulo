@@ -2,20 +2,21 @@ import { Controller, useFormContext } from "react-hook-form";
 import { InputForm } from "@/components/input";
 import { InputRadioButton } from "@/components/input/InputRadioButton";
 import { Divider } from "antd";
-import { INecessidadeNutricional } from "../../interface/INecessidadeNutricional";
+import { IFormNutricional } from "../../interface/IFormNutricional";
 
 export const TabNecessidadesNutricionais = () => {
-  const { control } = useFormContext<INecessidadeNutricional>();
+  const { control } = useFormContext<IFormNutricional>();
 
   return (
     <div className="w-full flex flex-col gap-[15px]">
       <div className="flex gap-4">
         <Controller
-          name="peso"
+          name="necessidade_nutricional.peso"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Peso(kg)"
               error={error?.message}
               onChange={onChange}
@@ -26,11 +27,12 @@ export const TabNecessidadesNutricionais = () => {
           )}
         />
         <Controller
-          name="peso_tipo"
+          name="necessidade_nutricional.peso_tipo"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputRadioButton
+              required
               label="Tipo"
               error={error?.message}
               value={value}
@@ -44,9 +46,8 @@ export const TabNecessidadesNutricionais = () => {
           )}
         />
         <Controller
-          name="peso_obs"
+          name="necessidade_nutricional.peso_obs"
           control={control}
-          rules={{}}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
               label="Observação"
@@ -65,11 +66,12 @@ export const TabNecessidadesNutricionais = () => {
       />
       <div className="flex gap-4">
         <Controller
-          name="caloria"
+          name="necessidade_nutricional.caloria"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Calorias(kcal)"
               error={error?.message}
               onChange={onChange}
@@ -80,11 +82,12 @@ export const TabNecessidadesNutricionais = () => {
           )}
         />
         <Controller
-          name="caloria_metodo"
+          name="necessidade_nutricional.caloria_metodo"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputRadioButton
+              required
               label="Método"
               error={error?.message}
               value={value}
@@ -97,9 +100,8 @@ export const TabNecessidadesNutricionais = () => {
           )}
         />
         <Controller
-          name="caloria_observacao"
+          name="necessidade_nutricional.caloria_observacao"
           control={control}
-          rules={{}}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
               label="Observação"
@@ -118,9 +120,8 @@ export const TabNecessidadesNutricionais = () => {
       />
       <div className="flex gap-4">
         <Controller
-          name="proteina"
+          name="necessidade_nutricional.proteina"
           control={control}
-          rules={{}}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
               label="Proteína(g)"
@@ -133,11 +134,12 @@ export const TabNecessidadesNutricionais = () => {
           )}
         />
         <Controller
-          name="proteina_metodo"
+          name="necessidade_nutricional.proteina_metodo"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputRadioButton
+              required
               label="Método"
               error={error?.message}
               value={value}
@@ -150,9 +152,8 @@ export const TabNecessidadesNutricionais = () => {
           )}
         />
         <Controller
-          name="proteina_observacao"
+          name="necessidade_nutricional.proteina_observacao"
           control={control}
-          rules={{}}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
               label="Observação"
@@ -171,11 +172,12 @@ export const TabNecessidadesNutricionais = () => {
       />
       <div className="flex gap-4">
         <Controller
-          name="hidrica"
+          name="necessidade_nutricional.hidrica"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Hídrica(ml)"
               error={error?.message}
               onChange={onChange}
@@ -186,9 +188,8 @@ export const TabNecessidadesNutricionais = () => {
           )}
         />
         <Controller
-          name="hidrica_observacao"
+          name="necessidade_nutricional.hidrica_observacao"
           control={control}
-          rules={{}}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
               label="Observação"

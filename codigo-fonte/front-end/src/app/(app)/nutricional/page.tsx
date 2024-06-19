@@ -12,96 +12,102 @@ import { ColumnsType } from "antd/es/table";
 import { AtualizarRelatorioNutricionalModal } from "./components/AtualizarRelatorioNutricionalModal";
 import Link from "next/link";
 import { IFichaNutricional } from "./interface/IFichaNutricional";
+import dayjs from "dayjs";
 
 export default function RelatorioNutricional() {
-    const [pesquisa, setPesquisa] = useState<string>("");
-    const [pageLimit, setPageLimit] = useState<number>(10);
-    const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pesquisa, setPesquisa] = useState<string>("");
+  const [pageLimit, setPageLimit] = useState<number>(10);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
-    let filtros: Filter | undefined = new Array();
+  let filtros: Filter | undefined = new Array();
 
-    const { data, totalCount, refetch } = useFetch<IFichaNutricional[]>(
-        "/relatorio-nutricao",
-        [pesquisa, pageLimit, currentPage],
-        {
-          params: queryBuilder({
-            page_limit: pageLimit,
-            page_number: currentPage,
-            filter: filtros,
-            sort: [{ field: "criado_em", criteria: "desc" }],
-          }),
-        }
-      );
+  if (pesquisa !== "")
+    filtros.push({
+      path: "id_idoso",
+      operator: "contains",
+      value: pesquisa,
+      insensitive: true,
+    });
 
-      const columns: ColumnsType<IFichaNutricional> = [
-        {
-          title: "Idoso",
-          dataIndex: "idoso",
-          key: "idoso",
-        },
-        {
-          title: "Modelo",
-          key: "modelo",
-        },
-        {
-          title: "Data de Criação",
-          dataIndex: "dataCriacao",
-          key: "dataCriacao",
-        },
-        {
-            title: "Última Atualização",
-            dataIndex: "ultimaAtualizacao",
-            key: "ultimaAtualizacao",
-        },
-        {
-            key: "atualizar_nutricional",
-            render(_: any, record: IFichaNutricional) {
-              return (
-                <div className="flex justify-end">
-                  <AtualizarRelatorioNutricionalModal uid={record.uid} refetchList={refetch} />
-                </div>
-              );
-            },
-          },
-          {
-            key: "perfil_idoso",
-            render(_: any, record: IFichaNutricional) {
-              return (
-                <div className="flex justify-end">
-                  <Tooltip title={"Visualizar"}>
-                    <Link
-                      href={"/idoso/" + record.uid}
-                      className="text-black/30 hover:text-primaria h-full w-[50px] flex justify-center items-center"
-                    >
-                      <EyeOutlined className={"text-[18px]"} />
-                    </Link>
-                  </Tooltip>
-                </div>
-              );
-            },
-          },
+  const { data, totalCount, refetch } = useFetch<IFichaNutricional[]>(
+    "/ficha-nutricional",
+    [pesquisa, pageLimit, currentPage],
+    {
+      params: queryBuilder({
+        page_limit: pageLimit,
+        page_number: currentPage,
+        filter: filtros,
+        sort: [{ field: "criado_em", criteria: "desc" }],
+      }),
+    }
+  );
 
-      ];
+  const columns: ColumnsType<IFichaNutricional> = [
+    {
+      title: "Idoso",
+      key: "idoso",
+      render(_value, record, _index) {
+        return <p>{record.idoso?.nome_completo}</p>;
+      },
+    },
+    {
+      title: "Criado por",
+      key: "modelo",
+      render(_value, record, _index) {
+        return <p>{record.usuario?.nome}</p>;
+      },
+    },
+    {
+      title: "Data de Vencimento",
+      key: "data_vencimento",
+      render(_value, record, _index) {
+        return <p>{dayjs(record.data_vencimento).format("DD/MM/YYYY")}</p>;
+      },
+    },
+    {
+      title: "Data de Criação",
+      key: "criado_em",
+      render(_value, record, _index) {
+        return <p>{dayjs(record.criado_em).format("DD/MM/YYYY, H:mm")}</p>;
+      },
+    },
+    {
+      key: "atualizar_nutricional",
+      render(_: any, record: IFichaNutricional) {
+        return (
+          <div className="flex justify-end">
+            {record.id && record.uid ? (
+              <AtualizarRelatorioNutricionalModal
+                id={record.id}
+                uid={record.uid}
+                refetchList={refetch}
+              />
+            ) : undefined}
+          </div>
+        );
+      },
+    },
+  ];
 
-    return (
-        <div className="flex flex-col gap-[15px] mt-8">
-            <div className="flex gap-5">
-                <CriarRelatorioNutricionalModal refetchList={refetch}/>
-                <Input
-                placeholder="Buscar"
-                size="large"
-                onChange={(e) => setPesquisa(e.target.value)}
-                suffix={<SearchOutlined className="cursor-pointer opacity-50" />}
-                />
-            </div>
-            <TableDefault
-                dataSource={data}
-                columns={columns}
-                pagination
-                totalCount={totalCount}
-                setPageLimit={setPageLimit}
-                setCurrentPage={setCurrentPage}
-            />
-        </div>
-    );
+  return (
+    <div className="flex flex-col gap-[15px] mt-8">
+      <div className="flex gap-5">
+        <CriarRelatorioNutricionalModal refetchList={refetch} />
+        <Input
+          placeholder="Buscar"
+          size="large"
+          onChange={(e) => setPesquisa(e.target.value)}
+          suffix={<SearchOutlined className="cursor-pointer opacity-50" />}
+        />
+      </div>
+      <TableDefault
+        dataSource={data}
+        columns={columns}
+        pagination
+        totalCount={totalCount}
+        setPageLimit={setPageLimit}
+        setCurrentPage={setCurrentPage}
+      />
+    </div>
+  );
 }

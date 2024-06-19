@@ -1,8 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { RelatorioPiaRespostaDefinida as RelatorioPiaDefRelatorioPiaRespostaDefinidaModel } from '@prisma/client';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { RelatorioPiaRespostaDefinida as RelatorioPiaRespostaDefinidaModel } from '@prisma/client';
 
 export class RelatorioPiaRespostaDefinida
-	implements RelatorioPiaDefRelatorioPiaRespostaDefinidaModel
+	implements RelatorioPiaRespostaDefinidaModel
 {
 	@ApiProperty()
 	id: bigint;
@@ -10,8 +10,8 @@ export class RelatorioPiaRespostaDefinida
 	@ApiProperty()
 	uid: string;
 
-	@ApiProperty()
-	valor: string;
+	@ApiPropertyOptional()
+	valor: string | null;
 
 	@ApiProperty()
 	criado_em: Date;
@@ -19,6 +19,6 @@ export class RelatorioPiaRespostaDefinida
 	@ApiProperty()
 	atualizado_em: Date;
 
-	@ApiProperty()
-	uid_relatorio_pia_resposta_opcao: string;
+	@ApiPropertyOptional()
+	uid_relatorio_pia_resposta_opcao: string | null;
 }

@@ -2,13 +2,11 @@ import { ModalDefault } from "@/components/modal/ModalDefault";
 import { FileAddOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { IFichaNutricional } from "../interface/IFichaNutricional";
-import { useMutation } from "@/utils/hooks/useMutation";
 import { useCookies } from "react-cookie";
 import { authToken } from "@/config/authToken";
 import { InputSelect } from "@/components/input";
 import { IIdoso } from "../../idoso/Interface/IIdoso";
-import { Select, Tabs } from "antd";
+import { Select, Tabs, notification } from "antd";
 import { InputDatePicker } from "@/components/input/InputDatePicker";
 import { TabGeral } from "./tabs/TabGeral";
 import { TabDiagnosticoHipoteseClinico } from "./tabs/TabDiagnosticoHipoteseClinico";
@@ -20,6 +18,18 @@ import { TabQuadroClinico } from "./tabs/TabQuadroClinico";
 import { TabCondutaNutricional } from "./tabs/TabCondutaNutricional";
 import { useFetch } from "@/utils/hooks/useFetch";
 import { queryBuilder } from "@/utils/functions/query-builder";
+import { IFormNutricional } from "../interface/IFormNutricional";
+import { api } from "@/utils/service/api";
+import { useAppSelector } from "@/utils/hooks/useRedux";
+import { ISemiologiaNutricional } from "../interface/ISemiologiaNutricional";
+import { IAntropometriaNutricional } from "../interface/IAntropometriaNutricional";
+import { INecessidadeNutricional } from "../interface/INecessidadeNutricional";
+import { ICondutaNutricional } from "../interface/ICondutaNutricional";
+import { IQuadroClinico } from "../interface/IQuadroClinico";
+import { IRegistroAntropometrico } from "../interface/IRegistroAntropometrico";
+import dayjs from "dayjs";
+import { AxiosError } from "axios";
+import { IErrorState } from "@/utils/hooks/useMutation";
 
 export const CriarRelatorioNutricionalModal = ({
   refetchList,
@@ -28,19 +38,136 @@ export const CriarRelatorioNutricionalModal = ({
 }) => {
   const [cookies] = useCookies([authToken.nome]);
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsloading] = useState(false);
+  const usuario = useAppSelector((v) => v.auth.usuario.id);
 
-  const methods = useForm<IFichaNutricional>();
+  const methods = useForm<IFormNutricional>();
 
   const { handleSubmit, control, reset } = methods;
 
-  const { mutate: createRelatorioNutricional, isFetching: isFetchingData } =
-    useMutation<IFichaNutricional, { uid: string }>("/relatorio-nutricao", {
-      method: "post",
-      messageSucess: null,
-      onSuccess: async (data) => {
-        const formData = new FormData();
-      },
-    });
+  async function createRelatorioNutricional(data: IFormNutricional) {
+    setIsloading(true);
+    await api
+      .post<{ id: bigint }>(
+        "/ficha-nutricional",
+        {
+          diagnostico: data.diagnostico,
+          especificacao: data.especificacao,
+          alergia_intolerancia: data.alergia_intolerancia,
+          alergia_intolerancia_obs: data.alergia_intolerancia_obs,
+          observacao: data.observacao,
+          id_idoso: data.id_idoso,
+          id_usuario: usuario,
+          data_vencimento: data.data_vencimento,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + cookies[authToken.nome],
+          },
+        }
+      )
+      .then(async (res) => {
+        try {
+          await api.post<{ id: bigint }>(
+            "/semiologia-nutricional",
+            {
+              ...data.semiologia_nutricional,
+              id_ficha_nutricional: res.data.id,
+            } as ISemiologiaNutricional,
+            {
+              headers: {
+                Authorization: "Bearer " + cookies[authToken.nome],
+              },
+            }
+          );
+          await api.post<{ id: bigint }>(
+            "/antropometria",
+            {
+              ...data.antropometria_nutricional,
+              id_ficha_nutricional: res.data.id,
+            } as IAntropometriaNutricional,
+            {
+              headers: {
+                Authorization: "Bearer " + cookies[authToken.nome],
+              },
+            }
+          );
+          await api.post<{ id: bigint }>(
+            "/necessidade-nutricional",
+            {
+              ...data.necessidade_nutricional,
+              id_ficha_nutricional: res.data.id,
+            } as INecessidadeNutricional,
+            {
+              headers: {
+                Authorization: "Bearer " + cookies[authToken.nome],
+              },
+            }
+          );
+          await data.conduta_nutricional.map((conduta) => {
+            api.post<{ id: bigint }>(
+              "/conduta-nutricional",
+              {
+                ...conduta,
+                id_ficha_nutricional: res.data.id,
+              } as ICondutaNutricional,
+              {
+                headers: {
+                  Authorization: "Bearer " + cookies[authToken.nome],
+                },
+              }
+            );
+          });
+          await data.quadro_clinico.map((quadro) => {
+            api.post<{ id: bigint }>(
+              "/quadro-clinico",
+              {
+                ...quadro,
+                id_ficha_nutricional: res.data.id,
+              } as IQuadroClinico,
+              {
+                headers: {
+                  Authorization: "Bearer " + cookies[authToken.nome],
+                },
+              }
+            );
+          });
+          await data.registro_antrometrico.map((registro) => {
+            api.post<{ id: bigint }>(
+              "/registro-antropometrico",
+              {
+                ...registro,
+                id_ficha_nutricional: res.data.id,
+              } as IRegistroAntropometrico,
+              {
+                headers: {
+                  Authorization: "Bearer " + cookies[authToken.nome],
+                },
+              }
+            );
+          });
+
+          await notification.open({
+            message: "Operação realizada",
+            description: "Relatório Nutricional cadastrado com sucesso!",
+            type: "success",
+          });
+          await reset();
+          await refetchList();
+          await setIsloading(false);
+          await setOpen(false);
+        } catch (err) {
+          const error = err as AxiosError<{ error: IErrorState }>;
+
+          notification.open({
+            message: "Ocorreu um erro",
+            description: error.response?.data?.error.message,
+            type: "error",
+          });
+          setIsloading(false);
+        }
+      });
+  }
 
   const { data: idosos } = useFetch<IIdoso[]>("/idosos", ["idosos-pia"], {
     enable: open,
@@ -65,8 +192,8 @@ export const CriarRelatorioNutricionalModal = ({
       titleModal={"Adicionando Relatório Nutricional"}
       okText="Cadastrar"
       onSubmit={handleSubmit(createRelatorioNutricional)}
-      isFetching={isFetchingData}
-      width="1350px"
+      isFetching={isLoading}
+      width="1340px"
       setOpenModal={setOpen}
       openModal={open}
     >
@@ -106,14 +233,17 @@ export const CriarRelatorioNutricionalModal = ({
               <Controller
                 name="data_vencimento"
                 control={control}
+                rules={{ required: "Campo obrigatório." }}
                 render={({
                   field: { onChange, value },
                   fieldState: { error },
                 }) => (
                   <InputDatePicker
+                    required
                     label="Data de Vencimento"
                     error={error?.message}
                     onChange={onChange}
+                    value={value && dayjs(value)}
                     placeholder="Selicione data"
                   />
                 )}
@@ -131,7 +261,11 @@ export const CriarRelatorioNutricionalModal = ({
               },
               {
                 key: "2",
-                label: "Diagnóstico Clínico / Hipótese Diagnosticadas",
+                label: (
+                  <p className="text-left">
+                    Diagnóstico Clínico / <br /> Hipótese Diagnosticadas
+                  </p>
+                ),
                 children: <TabDiagnosticoHipoteseClinico />,
               },
               {

@@ -1,21 +1,50 @@
 import { InputDatePicker } from "@/components/input/InputDatePicker";
 import { ModalDefault } from "@/components/modal/ModalDefault";
-import { authToken } from "@/config/authToken";
 import { PlusOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { useCookies } from "react-cookie";
 import { Controller, useForm } from "react-hook-form";
 import { InputForm } from "@/components/input";
 import { InputTextArea } from "@/components/input/InputTextArea";
 import { IQuadroClinico } from "../interface/IQuadroClinico";
+import { useMutation } from "@/utils/hooks/useMutation";
 
-export const CriarRegistroClinicoModal = ({}: {}) => {
-  const [cookies] = useCookies([authToken.nome]);
+export const CriarRegistroClinicoModal = ({
+  setData,
+  refetch,
+  idRelatorio,
+}: {
+  setData?: (value: IQuadroClinico) => void;
+  refetch?: () => void;
+  idRelatorio?: bigint;
+}) => {
   const [open, setOpen] = useState(false);
-  const { control } = useForm<IQuadroClinico>();
+  const { control, handleSubmit, reset } = useForm<IQuadroClinico>();
+
+  const adicionarQuadroClinico = async (data: IQuadroClinico) => {
+    if (setData) await setData(data);
+    if (refetch && idRelatorio)
+      await createQuadroClinico({
+        ...data,
+        id_ficha_nutricional: idRelatorio,
+      });
+    await reset();
+    await setOpen(false);
+  };
+
+  const { mutate: createQuadroClinico } = useMutation<IQuadroClinico>(
+    "/quadro-clinico",
+    {
+      method: "post",
+      messageSucess: "Quadro Clínico cadastrado com sucesso!",
+      onSuccess: () => {
+        refetch && refetch();
+      },
+    }
+  );
 
   return (
     <ModalDefault
+      onSubmit={handleSubmit(adicionarQuadroClinico)}
       showFooter
       nameButtonOpenModal="Adicionar"
       iconButtonOpenModal={<PlusOutlined />}
@@ -30,8 +59,10 @@ export const CriarRegistroClinicoModal = ({}: {}) => {
           <Controller
             name="data"
             control={control}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputDatePicker
+                required
                 label="Data"
                 error={error?.message}
                 onChange={onChange}
@@ -42,9 +73,10 @@ export const CriarRegistroClinicoModal = ({}: {}) => {
           <Controller
             name="aceitacao_alimentar"
             control={control}
-            rules={{}}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
+                required
                 label="Aceitação Dieta Vo"
                 error={error?.message}
                 onChange={onChange}
@@ -56,9 +88,10 @@ export const CriarRegistroClinicoModal = ({}: {}) => {
           <Controller
             name="suplemento_oral"
             control={control}
-            rules={{}}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
+                required
                 label="Suplemento Oral"
                 error={error?.message}
                 onChange={onChange}
@@ -72,9 +105,10 @@ export const CriarRegistroClinicoModal = ({}: {}) => {
           <Controller
             name="apetite"
             control={control}
-            rules={{}}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
+                required
                 label="Apetite"
                 error={error?.message}
                 onChange={onChange}
@@ -86,9 +120,10 @@ export const CriarRegistroClinicoModal = ({}: {}) => {
           <Controller
             name="disfagia"
             control={control}
-            rules={{}}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
+                required
                 label="Disfagia"
                 error={error?.message}
                 onChange={onChange}
@@ -100,9 +135,10 @@ export const CriarRegistroClinicoModal = ({}: {}) => {
           <Controller
             name="nausea_vomito"
             control={control}
-            rules={{}}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
+                required
                 label="Náusea/Vômito"
                 error={error?.message}
                 onChange={onChange}
@@ -116,9 +152,10 @@ export const CriarRegistroClinicoModal = ({}: {}) => {
           <Controller
             name="dor_abdominal"
             control={control}
-            rules={{}}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
+                required
                 label="Dor Abdominal"
                 error={error?.message}
                 onChange={onChange}
@@ -130,9 +167,10 @@ export const CriarRegistroClinicoModal = ({}: {}) => {
           <Controller
             name="evacuacao"
             control={control}
-            rules={{}}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
+                required
                 label="Evacuação"
                 error={error?.message}
                 onChange={onChange}
@@ -144,9 +182,10 @@ export const CriarRegistroClinicoModal = ({}: {}) => {
           <Controller
             name="diurese"
             control={control}
-            rules={{}}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
+                required
                 label="Diurese"
                 error={error?.message}
                 onChange={onChange}
@@ -161,7 +200,6 @@ export const CriarRegistroClinicoModal = ({}: {}) => {
             name="observacao"
             control={control}
             defaultValue=""
-            rules={{}}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputTextArea
                 label="Observação"

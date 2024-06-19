@@ -120,10 +120,10 @@ export class CreateAntropometriaDto {
 	@MaxLength(10)
 	circ_braco_percentil: string;
 
-	@ApiProperty({ enum: $Enums.antoprometriaClassificacao })
+	@ApiProperty()
 	@IsNotEmpty()
-	@IsEnum($Enums.antoprometriaClassificacao)
-	circ_braco_classificacao: $Enums.antoprometriaClassificacao;
+	@IsString()
+	circ_braco_classificacao: string;
 
 	@ApiProperty()
 	@IsNotEmpty()
@@ -137,10 +137,10 @@ export class CreateAntropometriaDto {
 	@MaxLength(10)
 	circ_panturrilha_percentil: string;
 
-	@ApiProperty({ enum: $Enums.antoprometriaClassificacao })
+	@ApiProperty()
 	@IsNotEmpty()
-	@IsEnum($Enums.antoprometriaClassificacao)
-	circ_panturrilha_classificacao: $Enums.antoprometriaClassificacao;
+	@IsString()
+	circ_panturrilha_classificacao: string;
 
 	@ApiProperty()
 	@IsNotEmpty()

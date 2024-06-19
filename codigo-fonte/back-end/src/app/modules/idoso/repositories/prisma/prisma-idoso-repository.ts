@@ -1,4 +1,4 @@
-import { $Enums, Idoso, Prisma } from '@prisma/client';
+import { Idoso, Prisma } from '@prisma/client';
 import { idosoRepository } from '../idoso.repository';
 import { DeleteIdosoDto } from '@/app/modules/idoso/dtos/delete-idoso.dto';
 import { UpdateIdosoDto } from '@/app/modules/idoso/dtos/update-idoso.dto';
@@ -46,11 +46,8 @@ export class PrismaIdosoRepository implements idosoRepository {
 			},
 			include: {
 				responsavel_idoso: true,
-				prontuario: true,
 				relatorio_pia: true,
 				ficha_nutricional: true,
-				perroca: true,
-				escala_braden: true,
 			},
 		});
 

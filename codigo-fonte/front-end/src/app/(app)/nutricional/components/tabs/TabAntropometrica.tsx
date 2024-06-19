@@ -2,10 +2,10 @@ import { Controller, useFormContext } from "react-hook-form";
 import { InputRadioButton } from "@/components/input/InputRadioButton";
 import { InputForm, InputSelect } from "@/components/input";
 import { Divider, Select } from "antd";
-import { IAntropometriaNutricional } from "../../interface/IAntropometriaNutricional";
+import { IFormNutricional } from "../../interface/IFormNutricional";
 
 export const TabAntropometria = () => {
-  const { control } = useFormContext<IAntropometriaNutricional>();
+  const { control } = useFormContext<IFormNutricional>();
 
   return (
     <div className="w-full flex flex-col gap-[15px]">
@@ -18,12 +18,13 @@ export const TabAntropometria = () => {
       </p>
       <div className="flex gap-4">
         <Controller
-          name="triagem"
+          name="antropometria_nutricional.triagem"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <div className="whitespace-nowrap">
               <InputRadioButton
+                required
                 label="Selecione:"
                 error={error?.message}
                 value={value}
@@ -37,12 +38,13 @@ export const TabAntropometria = () => {
           )}
         />
         <Controller
-          name="triagem_obs"
+          name="antropometria_nutricional.triagem_obs"
           control={control}
           defaultValue=""
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Observações"
               error={error?.message}
               onChange={onChange}
@@ -54,12 +56,13 @@ export const TabAntropometria = () => {
       </div>
       <div className="flex gap-4">
         <Controller
-          name="escore"
+          name="antropometria_nutricional.escore"
           control={control}
           defaultValue=""
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Escore"
               error={error?.message}
               onChange={onChange}
@@ -69,12 +72,13 @@ export const TabAntropometria = () => {
           )}
         />
         <Controller
-          name="triagem_classificacao"
+          name="antropometria_nutricional.triagem_classificacao"
           control={control}
           defaultValue=""
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Classificação"
               error={error?.message}
               onChange={onChange}
@@ -98,11 +102,12 @@ export const TabAntropometria = () => {
       </p>
       <div className="flex gap-4">
         <Controller
-          name="perda_peso"
+          name="antropometria_nutricional.perda_peso"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="% de Perda de Peso"
               error={error?.message}
               onChange={onChange}
@@ -113,11 +118,12 @@ export const TabAntropometria = () => {
           )}
         />
         <Controller
-          name="peso_atual"
+          name="antropometria_nutricional.peso_atual"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Peso Atual"
               error={error?.message}
               onChange={onChange}
@@ -128,11 +134,12 @@ export const TabAntropometria = () => {
           )}
         />
         <Controller
-          name="peso_estimado"
+          name="antropometria_nutricional.peso_estimado"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Peso Estimado"
               error={error?.message}
               onChange={onChange}
@@ -143,11 +150,12 @@ export const TabAntropometria = () => {
           )}
         />
         <Controller
-          name="peso_seco"
+          name="antropometria_nutricional.peso_seco"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Peso Seco"
               error={error?.message}
               onChange={onChange}
@@ -160,11 +168,12 @@ export const TabAntropometria = () => {
       </div>
       <div className="flex gap-4">
         <Controller
-          name="pp"
+          name="antropometria_nutricional.pp"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="PP"
               error={error?.message}
               onChange={onChange}
@@ -175,11 +184,12 @@ export const TabAntropometria = () => {
           )}
         />
         <Controller
-          name="pp_kg"
+          name="antropometria_nutricional.pp_kg"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="% PP"
               error={error?.message}
               onChange={onChange}
@@ -190,11 +200,12 @@ export const TabAntropometria = () => {
           )}
         />
         <Controller
-          name="pp_tempo"
+          name="antropometria_nutricional.pp_tempo"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Tempo"
               error={error?.message}
               onChange={onChange}
@@ -204,13 +215,13 @@ export const TabAntropometria = () => {
           )}
         />
         <Controller
-          name="pp_classificacao"
+          name="antropometria_nutricional.pp_classificacao"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputSelect
               label="PP"
-              required={false}
+              required
               onChange={onChange}
               error={error?.message}
               placeholder="Selecionar"
@@ -237,11 +248,12 @@ export const TabAntropometria = () => {
       </p>
       <div className="flex gap-4">
         <Controller
-          name="altura_atual"
+          name="antropometria_nutricional.altura_atual"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Altura atual"
               error={error?.message}
               onChange={onChange}
@@ -252,11 +264,12 @@ export const TabAntropometria = () => {
           )}
         />
         <Controller
-          name="altura_estimada"
+          name="antropometria_nutricional.altura_estimada"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Altura estimada"
               error={error?.message}
               onChange={onChange}
@@ -267,11 +280,12 @@ export const TabAntropometria = () => {
           )}
         />
         <Controller
-          name="altura_aj"
+          name="antropometria_nutricional.altura_aj"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="AJ"
               error={error?.message}
               onChange={onChange}
@@ -296,11 +310,12 @@ export const TabAntropometria = () => {
       </p>
       <div className="flex gap-4">
         <Controller
-          name="imc"
+          name="antropometria_nutricional.imc"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Resultado IMC"
               error={error?.message}
               onChange={onChange}
@@ -311,11 +326,12 @@ export const TabAntropometria = () => {
           )}
         />
         <Controller
-          name="imc_classificacao"
+          name="antropometria_nutricional.imc_classificacao"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Classificação"
               error={error?.message}
               onChange={onChange}
@@ -339,11 +355,12 @@ export const TabAntropometria = () => {
       </p>
       <div className="flex gap-4 items-center">
         <Controller
-          name="circ_braco"
+          name="antropometria_nutricional.circ_braco"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Circ. Braço"
               error={error?.message}
               onChange={onChange}
@@ -354,9 +371,9 @@ export const TabAntropometria = () => {
           )}
         />
         <Controller
-          name="braco_lado"
+          name="antropometria_nutricional.braco_lado"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <div className="h-full whitespace-nowrap self-end">
               <InputRadioButton
@@ -374,11 +391,12 @@ export const TabAntropometria = () => {
           )}
         />
         <Controller
-          name="circ_braco_percentil"
+          name="antropometria_nutricional.circ_braco_percentil"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Percentil"
               error={error?.message}
               onChange={onChange}
@@ -388,11 +406,12 @@ export const TabAntropometria = () => {
           )}
         />
         <Controller
-          name="circ_braco_classificacao"
+          name="antropometria_nutricional.circ_braco_classificacao"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Classificação"
               error={error?.message}
               onChange={onChange}
@@ -404,11 +423,12 @@ export const TabAntropometria = () => {
       </div>
       <div className="flex gap-4">
         <Controller
-          name="circ_panturrilha"
+          name="antropometria_nutricional.circ_panturrilha"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Circ. Panturrilha"
               error={error?.message}
               onChange={onChange}
@@ -419,11 +439,12 @@ export const TabAntropometria = () => {
           )}
         />
         <Controller
-          name="circ_panturrilha_percentil"
+          name="antropometria_nutricional.circ_panturrilha_percentil"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Percentil"
               error={error?.message}
               onChange={onChange}
@@ -433,11 +454,12 @@ export const TabAntropometria = () => {
           )}
         />
         <Controller
-          name="circ_panturrilha_classificacao"
+          name="antropometria_nutricional.circ_panturrilha_classificacao"
           control={control}
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputForm
+              required
               label="Classificação"
               error={error?.message}
               onChange={onChange}
@@ -450,11 +472,12 @@ export const TabAntropometria = () => {
       <div className="flex gap-4">
         <div className="w-1/3">
           <Controller
-            name="circ_abdominal"
+            name="antropometria_nutricional.circ_abdominal"
             control={control}
-            rules={{}}
+            rules={{ required: "Campo obrigatório." }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
+                required
                 label="Circ. Abdominal"
                 error={error?.message}
                 onChange={onChange}

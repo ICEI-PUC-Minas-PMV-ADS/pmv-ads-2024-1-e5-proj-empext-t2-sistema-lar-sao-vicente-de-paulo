@@ -56,12 +56,6 @@ enum ladoBraco {
   D // DIREITO
 }
 
-enum antoprometriaClassificacao {
-  A // Adequado
-  R // Risco
-  D // Desnutrido
-}
-
 enum pesoTipo {
   Atual
   Estimado
@@ -93,12 +87,10 @@ model Usuario {
   id_cargo BigInt? @db.BigInt
   cargo    Cargo?  @relation(fields: [id_cargo], references: [id])
 
-  idosos              Idoso[]
-  prontuarios         Prontuario[]
+  idosos Idoso[]
+
   relatorios_pia      RelatorioPia[]
   fichas_nutricionais FichaNutricional[]
-  perroca             Perroca[]
-  escala_braden       EscalaBraden[]
 
   @@map("usuario")
 }
@@ -141,11 +133,8 @@ model Idoso {
   usuario    Usuario @relation(fields: [id_usuario], references: [id])
 
   responsavel_idoso ResponsavelIdoso[]
-  prontuario        Prontuario[]
   relatorio_pia     RelatorioPia[]
   ficha_nutricional FichaNutricional[]
-  perroca           Perroca[]
-  escala_braden     EscalaBraden[]
 
   @@map("idoso")
 }
@@ -231,22 +220,6 @@ model GrupoPermissao {
   @@map("grupo_permissao")
 }
 
-model Prontuario {
-  id            BigInt   @id @default(autoincrement()) @db.BigInt
-  uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  relatorio     String   @db.Text
-  criado_em     DateTime @default(now()) @db.Timestamp
-  atualizado_em DateTime @updatedAt @db.Timestamp
-
-  id_idoso BigInt @db.BigInt
-  idoso    Idoso  @relation(fields: [id_idoso], references: [id])
-
-  id_usuario BigInt  @db.BigInt
-  usuario    Usuario @relation(fields: [id_usuario], references: [id])
-
-  @@map("prontuario")
-}
-
 model ModeloRelatorioPia {
   id            BigInt   @id @default(autoincrement()) @db.BigInt
   uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -305,11 +278,12 @@ model ModeloRelatorioPiaRespostaOpcao {
 }
 
 model RelatorioPia {
-  id            BigInt   @id @default(autoincrement()) @db.BigInt
-  uid           String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  nome          String   @db.VarChar(255)
-  criado_em     DateTime @default(now()) @db.Timestamp
-  atualizado_em DateTime @updatedAt @db.Timestamp
+  id              BigInt   @id @default(autoincrement()) @db.BigInt
+  uid             String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nome            String   @db.VarChar(255)
+  criado_em       DateTime @default(now()) @db.Timestamp
+  atualizado_em   DateTime @updatedAt @db.Timestamp
+  data_vencimento DateTime @db.Timestamp
 
   id_modelo_relatorio_pia BigInt             @db.BigInt
   modelo_relatorio_pia    ModeloRelatorioPia @relation(fields: [id_modelo_relatorio_pia], references: [id])
@@ -386,10 +360,12 @@ model RelatorioPiaRespostaDefinida {
 model FichaNutricional {
   id                       BigInt   @id @default(autoincrement()) @db.BigInt
   uid                      String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  especificacao            String   @db.VarChar(300)
+  diagnostico              String   @db.VarChar
+  especificacao            String   @db.VarChar
   alergia_intolerancia     Boolean  @db.Boolean
   alergia_intolerancia_obs String?  @db.VarChar(100)
-  observacao               String?  @db.VarChar(300)
+  observacao               String?  @db.VarChar
+  data_vencimento          DateTime @db.Timestamp
   criado_em                DateTime @default(now()) @db.Timestamp
   atualizado_em            DateTime @updatedAt @db.Timestamp
 
@@ -400,10 +376,11 @@ model FichaNutricional {
   usuario    Usuario @relation(fields: [id_usuario], references: [id])
 
   antropometria_nutricional AntropometriaNutricional?
-  conduta_nutricional       CondutaNutricional[]
-  quadro_clinico            QuadroClinico[]
-  necessidade_nutricional   NecessidadeNutricional[]
+  necessidade_nutricional   NecessidadeNutricional?
   semiologia_nutricional    SemiologiaNutricional?
+  registro_antrometrico     RegistroAntropometrico[]
+  quadro_clinico            QuadroClinico[]
+  conduta_nutricional       CondutaNutricional[]
 
   @@map("ficha_nutricional")
 }
@@ -426,35 +403,35 @@ model SemiologiaNutricional {
 }
 
 model AntropometriaNutricional {
-  id                             BigInt                     @id @default(autoincrement()) @db.BigInt
-  uid                            String                     @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                             BigInt       @id @default(autoincrement()) @db.BigInt
+  uid                            String       @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   triagem                        tiposTriagem
-  triagem_obs                    String                     @db.VarChar(100)
-  escore                         String                     @db.VarChar(20)
-  triagem_classificacao          String                     @db.VarChar(200)
-  perda_peso                     String                     @db.VarChar(200)
-  peso_atual                     String                     @db.VarChar(10)
-  peso_estimado                  String                     @db.VarChar(10)
-  peso_seco                      String                     @db.VarChar(10)
-  pp_kg                          String                     @db.VarChar(10)
-  pp                             String                     @db.VarChar(10)
-  pp_tempo                       String                     @db.VarChar(10)
+  triagem_obs                    String       @db.VarChar(100)
+  escore                         String       @db.VarChar(20)
+  triagem_classificacao          String       @db.VarChar(200)
+  perda_peso                     String       @db.VarChar(200)
+  peso_atual                     String       @db.VarChar(10)
+  peso_estimado                  String       @db.VarChar(10)
+  peso_seco                      String       @db.VarChar(10)
+  pp_kg                          String       @db.VarChar(10)
+  pp                             String       @db.VarChar(10)
+  pp_tempo                       String       @db.VarChar(10)
   pp_classificacao               PPStatus
-  altura_atual                   String                     @db.VarChar(10)
-  altura_estimada                String                     @db.VarChar(10)
-  altura_aj                      String                     @db.VarChar(10)
-  imc                            String                     @db.VarChar(10)
-  imc_classificacao              String                     @db.VarChar(50)
-  circ_braco                     String                     @db.VarChar(10)
+  altura_atual                   String       @db.VarChar(10)
+  altura_estimada                String       @db.VarChar(10)
+  altura_aj                      String       @db.VarChar(10)
+  imc                            String       @db.VarChar(10)
+  imc_classificacao              String       @db.VarChar(50)
+  circ_braco                     String       @db.VarChar(10)
   braco_lado                     ladoBraco
-  circ_braco_percentil           String                     @db.VarChar(10)
-  circ_braco_classificacao       antoprometriaClassificacao
-  circ_panturrilha               String                     @db.VarChar(10)
-  circ_panturrilha_percentil     String                     @db.VarChar(10)
-  circ_panturrilha_classificacao antoprometriaClassificacao
-  circ_abdominal                 String                     @db.VarChar(10)
-  criado_em                      DateTime                   @default(now()) @db.Timestamp
-  atualizado_em                  DateTime                   @updatedAt @db.Timestamp
+  circ_braco_percentil           String       @db.VarChar(10)
+  circ_braco_classificacao       String       @db.VarChar(100)
+  circ_panturrilha               String       @db.VarChar(10)
+  circ_panturrilha_percentil     String       @db.VarChar(10)
+  circ_panturrilha_classificacao String       @db.VarChar(100)
+  circ_abdominal                 String       @db.VarChar(10)
+  criado_em                      DateTime     @default(now()) @db.Timestamp
+  atualizado_em                  DateTime     @updatedAt @db.Timestamp
 
   id_ficha_nutricional BigInt           @unique @db.BigInt
   ficha_nutricional    FichaNutricional @relation(fields: [id_ficha_nutricional], references: [id])
@@ -462,24 +439,43 @@ model AntropometriaNutricional {
   @@map("antropometria_nutricional")
 }
 
+model RegistroAntropometrico {
+  id                BigInt   @id @default(autoincrement()) @db.BigInt
+  uid               String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  data              DateTime @db.Date
+  peso              String   @db.VarChar(20)
+  edema             String   @db.VarChar(20)
+  ascite            String   @db.VarChar(20)
+  imc               String   @db.VarChar(20)
+  imc_classificacao String   @db.VarChar(20)
+  cb                String   @db.VarChar(20)
+  cp                String   @db.VarChar(20)
+  observacao        String   @db.VarChar
+  criado_em         DateTime @default(now()) @db.Timestamp
+  atualizado_em     DateTime @updatedAt @db.Timestamp
+
+  id_ficha_nutricional BigInt           @db.BigInt
+  ficha_nutricional    FichaNutricional @relation(fields: [id_ficha_nutricional], references: [id])
+
+  @@map("registro_antrometrico")
+}
+
 model NecessidadeNutricional {
-  id                 BigInt         @id @default(autoincrement()) @db.BigInt
-  uid                String         @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  peso               String         @db.VarChar(50)
-  peso_tipo          pesoTipo
-  peso_obs           String?        @db.VarChar(50)
-  caloria            String         @db.VarChar(50)
-  caloria_metodo     caloriaMetodo
-  caloria_fdb        String?        @db.VarChar(50)
-  caloria_outro      String?        @db.VarChar(50)
-  proteina           String?        @db.VarChar(50)
-  proteina_metodo    proteinaMetodo
-  proteina_pratico   String?        @db.VarChar(50)
-  proteina_vct       String?        @db.VarChar(50)
-  hidrica            String         @db.VarChar(50)
-  hidrica_observacao String?        @db.VarChar(50)
-  criado_em          DateTime       @default(now()) @db.Timestamp
-  atualizado_em      DateTime       @updatedAt @db.Timestamp
+  id                  BigInt         @id @default(autoincrement()) @db.BigInt
+  uid                 String         @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  peso                String         @db.VarChar(50)
+  peso_tipo           pesoTipo
+  peso_obs            String?        @db.VarChar(50)
+  caloria             String         @db.VarChar(50)
+  caloria_metodo      caloriaMetodo
+  caloria_observacao  String?        @db.VarChar
+  proteina            String?        @db.VarChar(50)
+  proteina_metodo     proteinaMetodo
+  proteina_observacao String?        @db.VarChar
+  hidrica             String         @db.VarChar(50)
+  hidrica_observacao  String?        @db.VarChar
+  criado_em           DateTime       @default(now()) @db.Timestamp
+  atualizado_em       DateTime       @updatedAt @db.Timestamp
 
   id_ficha_nutricional BigInt           @unique @db.BigInt
   ficha_nutricional    FichaNutricional @relation(fields: [id_ficha_nutricional], references: [id])
@@ -500,7 +496,7 @@ model CondutaNutricional {
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  id_ficha_nutricional BigInt           @unique @db.BigInt
+  id_ficha_nutricional BigInt          @db.BigInt
   ficha_nutricional    FichaNutricional @relation(fields: [id_ficha_nutricional], references: [id])
 
   @@map("conduta_nutricional")
@@ -522,60 +518,8 @@ model QuadroClinico {
   criado_em           DateTime @default(now()) @db.Timestamp
   atualizado_em       DateTime @updatedAt @db.Timestamp
 
-  id_ficha_nutricional BigInt           @unique @db.BigInt
+  id_ficha_nutricional BigInt           @db.BigInt
   ficha_nutricional    FichaNutricional @relation(fields: [id_ficha_nutricional], references: [id])
 
   @@map("quadro_clinico")
-}
-
-model Perroca {
-  id                         BigInt   @id @default(autoincrement()) @db.BigInt
-  uid                        String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  estado_metal_conciencia    Int      @db.Integer
-  oxigenacao                 Int      @db.Integer
-  sinais_vitais              Int      @db.Integer
-  nutricao_hidratacao        Int      @db.Integer
-  motilidade                 Int      @db.Integer
-  locomocao                  Int      @db.Integer
-  cuidado_corporal           Int      @db.Integer
-  eliminacoes                Int      @db.Integer
-  terapeutica                Int      @db.Integer
-  educacao_saude             Int      @db.Integer
-  comportamento              Int      @db.Integer
-  comunicacao                Int      @db.Integer
-  integridade_cutaneo_mucosa Int      @db.Integer
-  tipo_cuidado_pontuacao     Int      @db.Integer
-  tipo_cuidado_classificacao Int      @db.Integer
-  criado_em                  DateTime @default(now()) @db.Timestamp
-  atualizado_em              DateTime @updatedAt @db.Timestamp
-
-  id_idoso BigInt @db.BigInt
-  idoso    Idoso  @relation(fields: [id_idoso], references: [id])
-
-  id_usuario BigInt  @db.BigInt
-  usuario    Usuario @relation(fields: [id_usuario], references: [id])
-
-  @@map("perroca")
-}
-
-model EscalaBraden {
-  id                   BigInt   @id @default(autoincrement()) @db.BigInt
-  uid                  String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  pontuacao_escala     String   @db.VarChar(255)
-  percepcao_sensorial  String   @db.VarChar(255)
-  umidade              String   @db.VarChar(255)
-  atividade            String   @db.VarChar(255)
-  mobilidade           String   @db.VarChar(255)
-  nutricao             String   @db.VarChar(255)
-  friccao_cisalhamento String   @db.VarChar(255)
-  criado_em            DateTime @default(now()) @db.Timestamp
-  atualizado_em        DateTime @updatedAt @db.Timestamp
-
-  id_idoso BigInt @db.BigInt
-  idoso    Idoso  @relation(fields: [id_idoso], references: [id])
-
-  id_usuario BigInt  @db.BigInt
-  usuario    Usuario @relation(fields: [id_usuario], references: [id])
-
-  @@map("escala_braden")
 }

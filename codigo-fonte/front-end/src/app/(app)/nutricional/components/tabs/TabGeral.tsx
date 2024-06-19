@@ -1,9 +1,9 @@
 import { InputTextArea } from "@/components/input/InputTextArea";
 import { Controller, useFormContext } from "react-hook-form";
-import { IFichaNutricional } from "../../interface/IFichaNutricional";
+import { IFormNutricional } from "../../interface/IFormNutricional";
 
 export const TabGeral = () => {
-  const { control } = useFormContext<IFichaNutricional>();
+  const { control } = useFormContext<IFormNutricional>();
 
   return (
     <div className="w-full flex flex-col gap-[15px]">
@@ -12,9 +12,10 @@ export const TabGeral = () => {
           name="diagnostico"
           control={control}
           defaultValue=""
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputTextArea
+              required
               label="Diagnóstico Nutricional"
               error={error?.message}
               onChange={onChange}

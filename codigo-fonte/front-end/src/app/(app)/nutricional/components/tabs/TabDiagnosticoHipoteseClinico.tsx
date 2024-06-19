@@ -2,10 +2,10 @@ import { Controller, useForm, useFormContext } from "react-hook-form";
 import { InputTextArea } from "@/components/input/InputTextArea";
 import { InputRadioButton } from "@/components/input/InputRadioButton";
 import { InputForm } from "@/components/input";
-import { IFichaNutricional } from "../../interface/IFichaNutricional";
+import { IFormNutricional } from "../../interface/IFormNutricional";
 
 export const TabDiagnosticoHipoteseClinico = () => {
-  const { control } = useFormContext<IFichaNutricional>();
+  const { control } = useFormContext<IFormNutricional>();
 
   return (
     <div className="w-full flex flex-col gap-[15px]">
@@ -14,9 +14,10 @@ export const TabDiagnosticoHipoteseClinico = () => {
           name="especificacao"
           control={control}
           defaultValue=""
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputTextArea
+              required
               label="Especificações"
               error={error?.message}
               onChange={onChange}
@@ -32,18 +33,17 @@ export const TabDiagnosticoHipoteseClinico = () => {
           <Controller
             name="alergia_intolerancia"
             control={control}
-            defaultValue={true}
-            rules={{}}
+            defaultValue={false}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputRadioButton
-                label="Possui alergias/intorerâncias alimentares"
+                label="Possui alergias/intolerâncias alimentares"
                 error={error?.message}
                 value={value}
                 required
                 onChange={onChange}
                 options={[
-                  { label: "Sim", value: 1 },
-                  { label: "Não", value: 2 },
+                  { label: "Sim", value: true },
+                  { label: "Não", value: false },
                 ]}
               />
             )}
@@ -54,7 +54,6 @@ export const TabDiagnosticoHipoteseClinico = () => {
             name="alergia_intolerancia_obs"
             control={control}
             defaultValue=""
-            rules={{}}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputForm
                 label="Quais são"

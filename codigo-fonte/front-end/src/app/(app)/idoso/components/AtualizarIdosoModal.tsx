@@ -58,9 +58,6 @@ export const AtualizarIdosoModal = ({
   const [isFetchingFoto, setIsFetchingFoto] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [cidades, setCidades] = useState<ICidade[]>([]);
-  const [responsaveis, setResponsaveis] = useState<
-    IOperationResponsavelIdoso[]
-  >([]);
 
   const { handleSubmit, control, reset, setValue } = useForm<IOperationIdoso>();
 

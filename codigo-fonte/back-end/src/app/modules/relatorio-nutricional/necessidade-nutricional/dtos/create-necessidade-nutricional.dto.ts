@@ -45,14 +45,7 @@ export class CreateNecessidadeNutricionalDto {
 	@ApiProperty()
 	@IsOptional()
 	@IsString()
-	@MaxLength(50)
-	caloria_fdb?: string;
-
-	@ApiProperty()
-	@IsOptional()
-	@IsString()
-	@MaxLength(50)
-	caloria_outro?: string;
+	caloria_observacao?: string;
 
 	@ApiProperty()
 	@IsOptional()
@@ -68,14 +61,7 @@ export class CreateNecessidadeNutricionalDto {
 	@ApiProperty()
 	@IsOptional()
 	@IsString()
-	@MaxLength(50)
-	proteina_pratico?: string;
-
-	@ApiProperty()
-	@IsOptional()
-	@IsString()
-	@MaxLength(50)
-	proteina_vct?: string;
+	proteina_observacao?: string;
 
 	@ApiProperty()
 	@IsNotEmpty()

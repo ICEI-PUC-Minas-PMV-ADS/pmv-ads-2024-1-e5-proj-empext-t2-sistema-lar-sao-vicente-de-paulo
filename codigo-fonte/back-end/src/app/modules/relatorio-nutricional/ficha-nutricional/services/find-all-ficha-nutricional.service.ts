@@ -13,6 +13,7 @@ export class FindAllFichaNutricionalService {
 			...query,
 			include: {
 				idoso: true,
+				usuario: true,
 			},
 		};
 
