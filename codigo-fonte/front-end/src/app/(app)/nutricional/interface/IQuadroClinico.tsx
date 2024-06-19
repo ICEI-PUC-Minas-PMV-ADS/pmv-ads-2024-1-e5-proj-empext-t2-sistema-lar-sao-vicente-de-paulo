@@ -13,5 +13,5 @@ export interface IQuadroClinico {
   observacao: string;
   criado_em?: Date;
   atualizado_em?: Date;
-  id_ficha_nutricional: bigint;
+  id_ficha_nutricional?: bigint;
 }

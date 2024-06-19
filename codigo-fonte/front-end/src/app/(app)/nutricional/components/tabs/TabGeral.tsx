@@ -12,9 +12,10 @@ export const TabGeral = () => {
           name="diagnostico"
           control={control}
           defaultValue=""
-          rules={{}}
+          rules={{ required: "Campo obrigatório." }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <InputTextArea
+              required
               label="Diagnóstico Nutricional"
               error={error?.message}
               onChange={onChange}

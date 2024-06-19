@@ -442,6 +442,7 @@ model AntropometriaNutricional {
 model RegistroAntropometrico {
   id                BigInt   @id @default(autoincrement()) @db.BigInt
   uid               String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  data              DateTime @db.Date
   peso              String   @db.VarChar(20)
   edema             String   @db.VarChar(20)
   ascite            String   @db.VarChar(20)
@@ -453,7 +454,7 @@ model RegistroAntropometrico {
   criado_em         DateTime @default(now()) @db.Timestamp
   atualizado_em     DateTime @updatedAt @db.Timestamp
 
-  id_ficha_nutricional BigInt           @unique @db.BigInt
+  id_ficha_nutricional BigInt           @db.BigInt
   ficha_nutricional    FichaNutricional @relation(fields: [id_ficha_nutricional], references: [id])
 
   @@map("registro_antrometrico")
@@ -495,7 +496,7 @@ model CondutaNutricional {
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  id_ficha_nutricional BigInt           @unique @db.BigInt
+  id_ficha_nutricional BigInt          @db.BigInt
   ficha_nutricional    FichaNutricional @relation(fields: [id_ficha_nutricional], references: [id])
 
   @@map("conduta_nutricional")
@@ -517,7 +518,7 @@ model QuadroClinico {
   criado_em           DateTime @default(now()) @db.Timestamp
   atualizado_em       DateTime @updatedAt @db.Timestamp
 
-  id_ficha_nutricional BigInt           @unique @db.BigInt
+  id_ficha_nutricional BigInt           @db.BigInt
   ficha_nutricional    FichaNutricional @relation(fields: [id_ficha_nutricional], references: [id])
 
   @@map("quadro_clinico")

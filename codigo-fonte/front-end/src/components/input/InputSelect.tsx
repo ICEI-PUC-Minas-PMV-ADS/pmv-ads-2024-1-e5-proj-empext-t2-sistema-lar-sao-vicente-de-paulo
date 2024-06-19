@@ -13,6 +13,7 @@ interface IInputSelect {
   tooltip?: string;
   defaultValue?: any;
   showSearch?: boolean;
+  disabled?: boolean;
 }
 
 export const InputSelect = ({
@@ -26,6 +27,7 @@ export const InputSelect = ({
   tooltip,
   defaultValue,
   showSearch,
+  disabled,
 }: IInputSelect) => {
   return (
     <div className="flex flex-col gap-1 w-full">
@@ -56,6 +58,7 @@ export const InputSelect = ({
         placeholder={placeholder}
         defaultValue={defaultValue}
         showSearch={showSearch}
+        disabled={disabled}
       >
         {children}
       </Select>

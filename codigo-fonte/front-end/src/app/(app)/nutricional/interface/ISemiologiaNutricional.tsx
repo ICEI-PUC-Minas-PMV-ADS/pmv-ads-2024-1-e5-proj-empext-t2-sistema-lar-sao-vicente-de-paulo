@@ -8,5 +8,5 @@ export interface ISemiologiaNutricional {
   ascite: "A" | "L" | "M" | "G";
   criado_em?: Date;
   atualizado_em?: Date;
-  id_ficha_nutricional: bigint;
+  id_ficha_nutricional?: bigint;
 }

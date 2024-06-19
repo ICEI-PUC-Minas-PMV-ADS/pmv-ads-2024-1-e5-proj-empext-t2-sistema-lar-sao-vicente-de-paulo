@@ -12,6 +12,7 @@ import { ColumnsType } from "antd/es/table";
 import { AtualizarRelatorioNutricionalModal } from "./components/AtualizarRelatorioNutricionalModal";
 import Link from "next/link";
 import { IFichaNutricional } from "./interface/IFichaNutricional";
+import dayjs from "dayjs";
 
 export default function RelatorioNutricional() {
   const [pesquisa, setPesquisa] = useState<string>("");
@@ -44,50 +45,44 @@ export default function RelatorioNutricional() {
   const columns: ColumnsType<IFichaNutricional> = [
     {
       title: "Idoso",
-      dataIndex: "id_idoso",
       key: "idoso",
+      render(_value, record, _index) {
+        return <p>{record.idoso?.nome_completo}</p>;
+      },
     },
     {
       title: "Criado por",
-      dataIndex: "id_usuario",
       key: "modelo",
+      render(_value, record, _index) {
+        return <p>{record.usuario?.nome}</p>;
+      },
     },
     {
       title: "Data de Vencimento",
-      dataIndex: "data_vencimento",
-      key: "dataCriacao",
+      key: "data_vencimento",
+      render(_value, record, _index) {
+        return <p>{dayjs(record.data_vencimento).format("DD/MM/YYYY")}</p>;
+      },
     },
     {
       title: "Data de Criação",
-      dataIndex: "criado_em",
-      key: "dataCriacao",
+      key: "criado_em",
+      render(_value, record, _index) {
+        return <p>{dayjs(record.criado_em).format("DD/MM/YYYY, H:mm")}</p>;
+      },
     },
     {
       key: "atualizar_nutricional",
       render(_: any, record: IFichaNutricional) {
         return (
           <div className="flex justify-end">
-            <AtualizarRelatorioNutricionalModal
-              uid={record.uid}
-              refetchList={refetch}
-            />
-          </div>
-        );
-      },
-    },
-    {
-      key: "perfil_idoso",
-      render(_: any, record: IFichaNutricional) {
-        return (
-          <div className="flex justify-end">
-            <Tooltip title={"Visualizar"}>
-              <Link
-                href={"/idoso/" + record.uid}
-                className="text-black/30 hover:text-primaria h-full w-[50px] flex justify-center items-center"
-              >
-                <EyeOutlined className={"text-[18px]"} />
-              </Link>
-            </Tooltip>
+            {record.id && record.uid ? (
+              <AtualizarRelatorioNutricionalModal
+                id={record.id}
+                uid={record.uid}
+                refetchList={refetch}
+              />
+            ) : undefined}
           </div>
         );
       },

@@ -6,17 +6,13 @@ export interface INecessidadeNutricional {
   peso_obs: string;
   caloria: string;
   caloria_metodo: "FDB" | "Outro";
-  //   caloria_fdb: string; remover
-  //   caloria_outro: string; remover
-  caloria_observacao: string; //adicionar campo no back
+  caloria_observacao: string;
   proteina: string;
   proteina_metodo: "Pratico" | "VCT";
-  //   proteina_pratico: string; remover
-  //   proteina_vct: string; remover
-  proteina_observacao: string; //adicionar campo no back
+  proteina_observacao: string;
   hidrica: string;
   hidrica_observacao: string;
   criado_em?: Date;
   atualizado_em?: Date;
-  id_ficha_nutricional: bigint;
+  id_ficha_nutricional?: bigint;
 }

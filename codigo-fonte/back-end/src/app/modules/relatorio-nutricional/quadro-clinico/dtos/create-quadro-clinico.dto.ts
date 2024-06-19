@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
 import {
-	IsDate,
+	IsDateString,
 	IsNotEmpty,
 	IsOptional,
 	IsString,
@@ -11,8 +10,7 @@ import {
 export class CreateQuadroClinicoDto {
 	@ApiProperty()
 	@IsNotEmpty()
-	@IsDate()
-	@Type(() => Date)
+	@IsDateString()
 	data: Date;
 
 	@ApiProperty()
