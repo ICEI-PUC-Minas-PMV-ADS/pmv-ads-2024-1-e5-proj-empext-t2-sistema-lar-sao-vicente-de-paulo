@@ -1,3 +1,6 @@
+import { IIdoso } from "../../idoso/Interface/IIdoso";
+import { IUsuario } from "../../usuario/Interface/IUsuario";
+
 export interface IRelatorioPia {
   id?: bigint;
   uid?: string;
@@ -8,6 +11,8 @@ export interface IRelatorioPia {
   id_modelo_relatorio_pia?: bigint;
   id_usuario?: bigint;
   id_idoso?: bigint;
+  idoso?: IIdoso;
+  usuario?: IUsuario;
 }
 
 export interface IOperationRelatorioPia {

@@ -10,6 +10,7 @@ import { Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
 import { CriarRelatorioPiaModal } from "./components/CriarRelatorioPiaModal";
+import dayjs from "dayjs";
 
 export default function RelatorioPia() {
   const [pageLimit, setPageLimit] = useState<number>(10);
@@ -41,10 +42,55 @@ export default function RelatorioPia() {
 
   const columns: ColumnsType<IRelatorioPia> = [
     {
-      title: "Nome",
+      title: "Idoso",
+      key: "idoso",
+      render(_value, record, _index) {
+        return <p>{record.idoso?.nome_completo}</p>;
+      },
+    },
+    {
+      title: "Modelo",
       dataIndex: "nome",
       key: "nome",
     },
+
+    {
+      title: "Criado por",
+      key: "modelo",
+      render(_value, record, _index) {
+        return <p>{record.usuario?.nome}</p>;
+      },
+    },
+    {
+      title: "Data de Vencimento",
+      key: "data_vencimento",
+      render(_value, record, _index) {
+        return <p>{dayjs(record.data_vencimento).format("DD/MM/YYYY")}</p>;
+      },
+    },
+    {
+      title: "Data de Criação",
+      key: "criado_em",
+      render(_value, record, _index) {
+        return <p>{dayjs(record.criado_em).format("DD/MM/YYYY, H:mm")}</p>;
+      },
+    },
+    /*  {
+      key: "atualizar_nutricional",
+      render(_: any, record: IFichaNutricional) {
+        return (
+          <div className="flex justify-end">
+            {record.id && record.uid ? (
+              <AtualizarRelatorioNutricionalModal
+                id={record.id}
+                uid={record.uid}
+                refetchList={refetch}
+              />
+            ) : undefined}
+          </div>
+        );
+      },
+    }, */
   ];
 
   return (
