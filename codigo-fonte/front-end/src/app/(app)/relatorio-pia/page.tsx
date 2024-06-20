@@ -11,6 +11,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
 import { CriarRelatorioPiaModal } from "./components/CriarRelatorioPiaModal";
 import dayjs from "dayjs";
+import { AtualizarRelatorioPiaModal } from "./components/AtualizarRelatorioPiaModal";
 
 export default function RelatorioPia() {
   const [pageLimit, setPageLimit] = useState<number>(10);
@@ -75,14 +76,13 @@ export default function RelatorioPia() {
         return <p>{dayjs(record.criado_em).format("DD/MM/YYYY, H:mm")}</p>;
       },
     },
-    /*  {
-      key: "atualizar_nutricional",
-      render(_: any, record: IFichaNutricional) {
+    {
+      key: "atualizar_dados",
+      render(_: any, record) {
         return (
           <div className="flex justify-end">
             {record.id && record.uid ? (
-              <AtualizarRelatorioNutricionalModal
-                id={record.id}
+              <AtualizarRelatorioPiaModal
                 uid={record.uid}
                 refetchList={refetch}
               />
@@ -90,7 +90,7 @@ export default function RelatorioPia() {
           </div>
         );
       },
-    }, */
+    },
   ];
 
   return (

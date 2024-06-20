@@ -47,7 +47,6 @@ export default function PerfilIdoso() {
     { field: "CPF", value: idoso?.cpf },
     { field: "Cartão do SUS", value: idoso?.cartao_sus },
   ];
-  console.log(idoso);
   return (
     <div className="flex flex-col gap-[20px] w-full h-full">
       <div className="flex justify-between items-center">

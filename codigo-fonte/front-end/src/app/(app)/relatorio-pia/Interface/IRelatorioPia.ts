@@ -1,5 +1,6 @@
 import { IIdoso } from "../../idoso/Interface/IIdoso";
 import { IUsuario } from "../../usuario/Interface/IUsuario";
+import { IRelatorioPiaPergunta } from "./IRelatorioPiaPergunta";
 
 export interface IRelatorioPia {
   id?: bigint;
@@ -13,6 +14,7 @@ export interface IRelatorioPia {
   id_idoso?: bigint;
   idoso?: IIdoso;
   usuario?: IUsuario;
+  relatorio_pia_pergunta?: IRelatorioPiaPergunta[];
 }
 
 export interface IOperationRelatorioPia {

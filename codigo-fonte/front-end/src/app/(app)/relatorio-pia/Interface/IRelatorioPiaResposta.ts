@@ -1,3 +1,4 @@
+import { IRelatorioPiaRespostaDefinida } from "./IRelatorioPiaRespostaDefinida";
 import { IRelatorioPiaRespostaOpcao } from "./IRelatorioPiaRespostaOpcao";
 
 export interface IRelatorioPiaResposta {
@@ -9,6 +10,7 @@ export interface IRelatorioPiaResposta {
   atualizado_em?: Date;
   id_relatorio_pia_pergunta?: bigint;
   relatorio_pia_resposta_opcao?: IRelatorioPiaRespostaOpcao[];
+  relatorio_pia_resposta_definida?: IRelatorioPiaRespostaDefinida[];
 }
 
 export interface IOperationRelatorioPiaResposta {

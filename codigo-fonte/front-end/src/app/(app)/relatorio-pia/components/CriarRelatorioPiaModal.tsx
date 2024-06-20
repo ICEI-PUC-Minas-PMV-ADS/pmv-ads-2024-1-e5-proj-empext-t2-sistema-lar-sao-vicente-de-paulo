@@ -101,7 +101,7 @@ export const CriarRelatorioPiaModal = ({
                                 Promise.all(
                                   itemResposta.opcoes.map((itemOpcao) =>
                                     api
-                                      .post<{ uid: bigint }>(
+                                      .post<{ uid: string }>(
                                         "/relatorio-pia-resposta-opcao",
                                         {
                                           id_relatorio_pia_resposta:
@@ -182,7 +182,7 @@ export const CriarRelatorioPiaModal = ({
           } finally {
             notification.open({
               message: "Operação realizada",
-              description: "Modelo PIA cadastrado com sucesso!",
+              description: "Relatório PIA cadastrado com sucesso!",
               type: "success",
             });
             setIsLoading(false);
