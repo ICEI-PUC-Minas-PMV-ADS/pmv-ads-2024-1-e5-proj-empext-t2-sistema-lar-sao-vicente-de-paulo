@@ -544,11 +544,15 @@ export const AtualizarModeloPiaModal = ({
                                           return {
                                             ...respostaOld,
                                             ...(respostaOld.tipo === "TEXT"
-                                              ? { opcoes: [] }
+                                              ? {
+                                                  modelo_relatorio_pia_resposta_opcao:
+                                                    [],
+                                                }
                                               : {
-                                                  opcoes: e.map((opcao) => {
-                                                    return { opcao: opcao };
-                                                  }),
+                                                  modelo_relatorio_pia_resposta_opcao:
+                                                    e.map((opcao) => {
+                                                      return { opcao: opcao };
+                                                    }),
                                                 }),
                                           };
                                         } else {
