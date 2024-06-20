@@ -67,7 +67,7 @@ export const CriarRelatorioPiaModal = ({
       "/modelo-relatorio-pia/" + modeloUid,
       [modeloUid],
       {
-        enable: open && !!modeloUid,
+        enable: open && !!modeloUid && modeloUid !== undefined,
         resNotInData: true,
       }
     );

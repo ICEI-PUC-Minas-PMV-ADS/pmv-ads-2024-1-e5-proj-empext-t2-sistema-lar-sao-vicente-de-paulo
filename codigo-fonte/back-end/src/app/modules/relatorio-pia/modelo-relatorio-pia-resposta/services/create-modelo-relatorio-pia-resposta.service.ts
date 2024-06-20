@@ -22,19 +22,6 @@ export class CreateModeloRelatorioPiaRespostaService {
 			throw new AppError('id_modelo_relatorio_pia_pergunta não existe');
 		}
 
-		const respostaExists =
-			await prisma.modeloRelatorioPiaResposta.findFirst({
-				where: {
-					id_modelo_relatorio_pia_pergunta:
-						data.id_modelo_relatorio_pia_pergunta,
-					titulo: data.titulo,
-				},
-			});
-
-		if (respostaExists) {
-			throw new AppError('Já existe uma resposta com os mesmos dados');
-		}
-
 		const modeloRelatorioPiaResposta =
 			await this.modeloRelatorioPiaRespostaRepository.create(data);
 

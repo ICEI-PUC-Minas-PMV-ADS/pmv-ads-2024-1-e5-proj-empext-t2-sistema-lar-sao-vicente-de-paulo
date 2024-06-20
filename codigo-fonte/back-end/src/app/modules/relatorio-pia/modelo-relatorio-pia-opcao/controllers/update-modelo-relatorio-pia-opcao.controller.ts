@@ -11,6 +11,7 @@ import { UpdateModeloRelatorioPiaOpcaoDto } from '../dtos/update-modelo-relatori
 import { UpdateModeloRelatorioPiaOpcaoService } from '../services/update-modelo-relatorio-pia-opcao.service';
 import { Roles } from '@/common/decorators/roles.decorator';
 import { RoleModeloRelatorioPia } from '@/common/enums/roles';
+import { ModeloRelatorioPiaRespostaOpcao } from '@prisma/client';
 
 @ApiTags('modelo-relatorio-pia-resposta-opcao')
 @Controller('modelo-relatorio-pia-resposta-opcao')
@@ -38,7 +39,12 @@ export class UpdateModeloRelatorioPiaOpcaoController {
 	async handle(
 		@Param('uid') uid: string,
 		@Body() data: UpdateModeloRelatorioPiaOpcaoDto,
-	): Promise<void> {
-		await this.updateModeloRelatorioPiaOpcao.execute(uid, data);
+	): Promise<ModeloRelatorioPiaRespostaOpcao> {
+		const update = await this.updateModeloRelatorioPiaOpcao.execute(
+			uid,
+			data,
+		);
+
+		return update;
 	}
 }

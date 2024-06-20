@@ -22,15 +22,6 @@ export class CreateModeloRelatorioPiaPerguntaService {
 			throw new AppError('id_modelo_relatorio_pia não existe');
 		}
 
-		const alreadyExists =
-			await this.modeloRelatorioPiaPerguntaRepository.findByPergunta(
-				data.pergunta,
-			);
-
-		if (alreadyExists) {
-			throw new AppError('Pergunta já existente');
-		}
-
 		const modeloRelatorioPia =
 			await this.modeloRelatorioPiaPerguntaRepository.create(data);
 
