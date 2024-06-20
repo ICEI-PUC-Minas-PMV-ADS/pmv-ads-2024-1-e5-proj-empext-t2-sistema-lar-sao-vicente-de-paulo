@@ -17,6 +17,7 @@ export class PrismaRelatorioPiaRespostaDefinidaRepository
 
 		return relatorioPiaRespostaDefinida;
 	}
+
 	async findByUid(uid: string): Promise<RelatorioPiaRespostaDefinida> {
 		const relatorioPiaRespostaDefinida =
 			await prisma.relatorioPiaRespostaDefinida.findUnique({

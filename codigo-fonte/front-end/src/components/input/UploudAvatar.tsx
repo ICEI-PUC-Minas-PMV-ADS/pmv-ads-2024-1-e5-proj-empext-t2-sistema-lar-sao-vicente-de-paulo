@@ -26,7 +26,6 @@ export const UploudAvatar = ({
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj as FileType);
     }
-    console.log(file.status);
 
     setPreviewImage(file.url || (file.preview as string));
     setPreviewOpen(true);

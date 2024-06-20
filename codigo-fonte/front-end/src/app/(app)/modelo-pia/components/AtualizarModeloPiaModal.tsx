@@ -48,8 +48,6 @@ export const AtualizarModeloPiaModal = ({
   const { handleSubmit, control, setValue } =
     useForm<Partial<IModeloRelatorioPia>>();
 
-  console.log(perguntas);
-
   const { data: modeloPia } = useFetch<IModeloRelatorioPia>(
     "/modelo-relatorio-pia/" + uid,
     [uid],

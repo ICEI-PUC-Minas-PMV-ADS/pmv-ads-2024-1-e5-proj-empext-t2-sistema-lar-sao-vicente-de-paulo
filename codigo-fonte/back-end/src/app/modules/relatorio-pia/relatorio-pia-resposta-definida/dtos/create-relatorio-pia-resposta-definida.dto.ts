@@ -1,5 +1,5 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString, MaxLength } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class CreateRelatorioPiaRespostaDefinidaDto {
 	@ApiPropertyOptional()
@@ -12,4 +12,8 @@ export class CreateRelatorioPiaRespostaDefinidaDto {
 	@IsOptional()
 	@IsString()
 	uid_relatorio_pia_resposta_opcao: string | null;
+
+	@ApiProperty()
+	@IsNotEmpty()
+	id_relatorio_pia_resposta: bigint;
 }

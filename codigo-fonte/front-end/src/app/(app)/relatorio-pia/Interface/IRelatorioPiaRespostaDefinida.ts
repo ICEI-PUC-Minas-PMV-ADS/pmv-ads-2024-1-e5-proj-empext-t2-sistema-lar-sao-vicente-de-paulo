@@ -1,13 +1,15 @@
 export interface IRelatorioPiaRespostaDefinida {
   id?: bigint;
   uid?: string;
-  valor: string;
+  valor?: string;
   criado_em?: Date;
   atualizado_em?: Date;
-  uid_relatorio_pia_resposta_opcao?: bigint;
+  uid_relatorio_pia_resposta_opcao?: string;
+  id_relatorio_pia_resposta?: bigint;
 }
 
 export interface IOperationRelatorioPiaRespostaDefinida {
-  valor: string;
-  uid_relatorio_pia_resposta_opcao: bigint;
+  valor?: string;
+  uid_relatorio_pia_resposta_opcao?: string;
+  id_relatorio_pia_resposta: bigint;
 }

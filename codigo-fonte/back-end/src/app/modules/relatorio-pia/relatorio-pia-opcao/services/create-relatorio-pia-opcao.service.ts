@@ -26,13 +26,6 @@ export class CreateRelatorioPiaOpcaoService {
 			);
 		}
 
-		const alreadyExists =
-			await this.relatorioPiaOpcaoRepository.findByOption(data.opcao);
-
-		if (alreadyExists) {
-			throw new AppError('Relatório PIA Opção já existente');
-		}
-
 		const relatorioPiaOpcao =
 			await this.relatorioPiaOpcaoRepository.create(data);
 

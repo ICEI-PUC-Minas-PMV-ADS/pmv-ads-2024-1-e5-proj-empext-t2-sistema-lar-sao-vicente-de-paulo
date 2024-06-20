@@ -23,15 +23,6 @@ export class CreateRelatorioPiaPerguntaService {
 			throw new AppError('Relatório PIA com o ID fornecido não existe');
 		}
 
-		const alreadyExists =
-			await this.relatorioPiaPerguntaRepository.findByPergunta(
-				data.pergunta,
-			);
-
-		if (alreadyExists) {
-			throw new AppError('Relatório PIA Pergunta já existente');
-		}
-
 		const relatorioPia =
 			await this.relatorioPiaPerguntaRepository.create(data);
 

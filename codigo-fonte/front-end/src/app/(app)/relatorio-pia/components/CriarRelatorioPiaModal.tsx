@@ -1,4 +1,4 @@
-import { useMutation } from "@/utils/hooks/useMutation";
+import { IErrorState, useMutation } from "@/utils/hooks/useMutation";
 import { InboxOutlined, UserAddOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -6,7 +6,7 @@ import { InputSelect } from "@/components/input";
 import { ModalDefault } from "@/components/modal/ModalDefault";
 import { authToken } from "@/config/authToken";
 import { useCookies } from "react-cookie";
-import { Checkbox, Radio, Select } from "antd";
+import { Checkbox, Radio, Select, notification } from "antd";
 import { InputDatePicker } from "@/components/input/InputDatePicker";
 import dayjs from "dayjs";
 import { useFetch } from "@/utils/hooks/useFetch";
@@ -15,6 +15,27 @@ import { IIdoso } from "../../idoso/Interface/IIdoso";
 import { IOperationRelatorioPia } from "../Interface/IRelatorioPia";
 import TextArea from "antd/es/input/TextArea";
 import { IModeloRelatorioPia } from "../../modelo-pia/Interface/IModeloRelatorioPia";
+import { api } from "@/utils/service/api";
+import { IRelatorioPiaPergunta } from "../Interface/IRelatorioPiaPergunta";
+import { IRelatorioPiaResposta } from "../Interface/IRelatorioPiaResposta";
+import { IRelatorioPiaRespostaOpcao } from "../Interface/IRelatorioPiaRespostaOpcao";
+import { AxiosError } from "axios";
+import { IRelatorioPiaRespostaDefinida } from "../Interface/IRelatorioPiaRespostaDefinida";
+import { useAppSelector } from "@/utils/hooks/useRedux";
+
+interface ICreateRelatorioPia {
+  nome: string;
+  perguntas: {
+    pergunta: string;
+    respostas?: {
+      titulo: string;
+      tipo: "TEXT" | "RADIO" | "CHECKBOX";
+      value?: { text?: string; opcao_uid?: string[] };
+      opcoes?: { opcao: string; uid: string }[];
+    }[];
+  }[];
+}
+[];
 
 export const CriarRelatorioPiaModal = ({
   refetchList,
@@ -22,15 +43,161 @@ export const CriarRelatorioPiaModal = ({
   refetchList: () => void;
 }) => {
   const [cookies] = useCookies([authToken.nome]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const usuario = useAppSelector((v) => v.auth.usuario.id);
   const [open, setOpen] = useState(false);
+  const [perguntas, setPerguntas] =
+    useState<ICreateRelatorioPia["perguntas"]>();
 
-  const { handleSubmit, control, reset, watch, getValues } =
+  const { handleSubmit, control, reset, getValues, setValue } =
     useForm<IOperationRelatorioPia>();
 
   const { mutate: createRelatorioPia, isFetching: isFetchingData } =
-    useMutation<IOperationRelatorioPia, { uid: string }>("/relatorio-pia", {
+    useMutation<IOperationRelatorioPia, { id: bigint }>("/relatorio-pia", {
+      enable: !!perguntas,
       method: "post",
       messageSucess: null,
+      resNotInData: true,
+      onSuccess: (data) => {
+        setIsLoading(true);
+        if (perguntas) {
+          try {
+            Promise.all(
+              perguntas.map((item) =>
+                api
+                  .post<{ id: bigint }>(
+                    "/relatorio-pia-pergunta",
+                    {
+                      pergunta: item.pergunta,
+                      id_relatorio_pia: data.data.id,
+                    } as IRelatorioPiaPergunta,
+                    {
+                      headers: {
+                        Authorization: "Bearer " + cookies[authToken.nome],
+                      },
+                    }
+                  )
+                  .then((data) => {
+                    if (item.respostas) {
+                      Promise.all(
+                        item.respostas.map((itemResposta) =>
+                          api
+                            .post<{ id: bigint }>(
+                              "/relatorio-pia-resposta",
+                              {
+                                id_relatorio_pia_pergunta: data.data.id,
+                                tipo: itemResposta.tipo,
+                                titulo: itemResposta.titulo,
+                              } as IRelatorioPiaResposta,
+                              {
+                                headers: {
+                                  Authorization:
+                                    "Bearer " + cookies[authToken.nome],
+                                },
+                              }
+                            )
+                            .then((data_resposta) => {
+                              if (itemResposta.opcoes) {
+                                Promise.all(
+                                  itemResposta.opcoes.map((itemOpcao) =>
+                                    api
+                                      .post<{ uid: string }>(
+                                        "/relatorio-pia-resposta-opcao",
+                                        {
+                                          id_relatorio_pia_resposta:
+                                            data_resposta.data.id,
+                                          opcao: itemOpcao.opcao,
+                                        } as IRelatorioPiaRespostaOpcao,
+                                        {
+                                          headers: {
+                                            Authorization:
+                                              "Bearer " +
+                                              cookies[authToken.nome],
+                                          },
+                                        }
+                                      )
+                                      .then((data) => {
+                                        if (itemResposta.value?.opcao_uid) {
+                                          itemResposta.value?.opcao_uid.map(
+                                            (opcao) => {
+                                              if (opcao === itemOpcao.uid) {
+                                                api.post<{ id: bigint }>(
+                                                  "/relatorio-pia-resposta-definida",
+                                                  {
+                                                    uid_relatorio_pia_resposta_opcao:
+                                                      data.data.uid,
+                                                    id_relatorio_pia_resposta:
+                                                      data_resposta.data.id,
+                                                  } as IRelatorioPiaRespostaDefinida,
+                                                  {
+                                                    headers: {
+                                                      Authorization:
+                                                        "Bearer " +
+                                                        cookies[authToken.nome],
+                                                    },
+                                                  }
+                                                );
+                                              }
+                                            }
+                                          );
+                                        }
+                                      })
+                                  )
+                                );
+                                if (itemResposta.value?.text) {
+                                  api.post<{ id: bigint }>(
+                                    "/relatorio-pia-resposta-definida",
+                                    {
+                                      valor: itemResposta.value.text,
+                                      id_relatorio_pia_resposta:
+                                        data_resposta.data.id,
+                                      uid_relatorio_pia_resposta_opcao:
+                                        undefined,
+                                    } as IRelatorioPiaRespostaDefinida,
+                                    {
+                                      headers: {
+                                        Authorization:
+                                          "Bearer " + cookies[authToken.nome],
+                                      },
+                                    }
+                                  );
+                                }
+                              }
+                            })
+                        )
+                      );
+                    }
+                  })
+              )
+            );
+          } catch (err) {
+            const error = err as AxiosError<{ error: IErrorState }>;
+
+            notification.open({
+              message: "Ocorreu um erro",
+              description: error.response?.data?.error.message,
+              type: "error",
+            });
+            setIsLoading(false);
+          } finally {
+            notification.open({
+              message: "Operação realizada",
+              description: "Relatório PIA cadastrado com sucesso!",
+              type: "success",
+            });
+            setIsLoading(false);
+            setPerguntas([
+              {
+                pergunta: "",
+                respostas: [{ tipo: "TEXT", titulo: "" }],
+              },
+            ]);
+            reset();
+            refetchList();
+            setOpen(false);
+          }
+        }
+      },
     });
 
   const { data: idosos } = useFetch<IIdoso[]>("/idosos", ["idosos-pia"], {
@@ -52,6 +219,7 @@ export const CriarRelatorioPiaModal = ({
     { uid: string; id: bigint; nome: string }[]
   >("/modelo-relatorio-pia", ["modelos-relatorio-pia"], {
     enable: open,
+
     params: queryBuilder({
       page_limit: 9999,
       sort: [{ field: "criado_em", criteria: "desc" }],
@@ -67,12 +235,36 @@ export const CriarRelatorioPiaModal = ({
       "/modelo-relatorio-pia/" + modeloUid,
       [modeloUid],
       {
-        enable: open && !!modeloUid && modeloUid !== undefined,
+        enable: open && !!modeloUid && (modeloUid === undefined ? false : true),
         resNotInData: true,
+        messageError: null,
+        onSuccess: (data) => {
+          setPerguntas(
+            data.data.modelo_relatorio_pia_pergunta?.map((pergunta) => {
+              return {
+                pergunta: pergunta.pergunta,
+                respostas: pergunta.modelo_relatorio_pia_resposta?.map(
+                  (resposta) => {
+                    return {
+                      titulo: resposta.titulo,
+                      tipo: resposta.tipo,
+                      opcoes: resposta.modelo_relatorio_pia_resposta_opcao?.map(
+                        (opcao) => {
+                          return { opcao: opcao.opcao, uid: opcao.uid || "" };
+                        }
+                      ),
+                    };
+                  }
+                ),
+              };
+            })
+          );
+          setValue("nome", data.data.nome);
+          setValue("id_modelo_relatorio_pia", data.data.id);
+          setValue("id_usuario", usuario);
+        },
       }
     );
-
-  console.log(findModeloPiaSelect);
 
   return (
     <ModalDefault
@@ -81,8 +273,8 @@ export const CriarRelatorioPiaModal = ({
       iconButtonOpenModal={<UserAddOutlined />}
       titleModal={"Adicionando Relatório PIA"}
       okText="Cadastrar"
-      onSubmit={() => {}}
-      isFetching={isFetchingData}
+      onSubmit={handleSubmit(createRelatorioPia)}
+      isFetching={isFetchingData || isLoading}
       width="900px"
       setOpenModal={setOpen}
       openModal={open}
@@ -118,9 +310,9 @@ export const CriarRelatorioPiaModal = ({
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputSelect
                 label="Modelo"
-                onChange={async (e) => {
-                  await onChange(e);
-                  await refetchModelo();
+                onChange={(e) => {
+                  onChange(e);
+                  if (e) refetchModelo();
                 }}
                 error={error?.message}
                 required
@@ -137,7 +329,7 @@ export const CriarRelatorioPiaModal = ({
           />
 
           <Controller
-            name="data_validade"
+            name="data_vencimento"
             control={control}
             rules={{
               required: "Selecionar data de vencimento",
@@ -156,48 +348,132 @@ export const CriarRelatorioPiaModal = ({
         </div>
         <p>Questionário do Relatório</p>
         {findModeloPiaSelect ? (
-          findModeloPiaSelect.modelo_relatorio_pia_pergunta?.map((pergunta) => (
+          perguntas?.map((pergunta, indexPergunta) => (
             <div
-              key={pergunta.uid}
+              key={pergunta.pergunta + indexPergunta}
               className="py-[10px] px-[15px] flex gap-[20px] w-full bg-[#f9f9f9] rounded-md"
             >
               <p className="w-full text-left min-w-[300px]">
                 {pergunta.pergunta}
               </p>
-              {pergunta.modelo_relatorio_pia_resposta?.map((resposta) => (
+              {pergunta.respostas?.map((resposta, indexResposta) => (
                 <>
                   {resposta.tipo === "RADIO" && (
                     <div className="w-full flex flex-col gap-1">
                       <p>{resposta.titulo}</p>
-                      <Radio.Group onChange={() => {}} value={""}>
-                        {resposta.modelo_relatorio_pia_resposta_opcao?.map(
-                          (opcao) => (
-                            <Radio key={opcao.uid} value={opcao.uid}>
-                              {opcao.opcao}
-                            </Radio>
+                      <Radio.Group
+                        onChange={(e) =>
+                          setPerguntas((old) =>
+                            old?.map((perguntaOld, perguntaOldIndex) => {
+                              if (perguntaOldIndex === indexPergunta) {
+                                return {
+                                  ...perguntaOld,
+                                  respostas: perguntaOld.respostas?.map(
+                                    (respostaOld, indexRespostaOld) => {
+                                      if (indexRespostaOld === indexResposta) {
+                                        return {
+                                          ...respostaOld,
+                                          value: {
+                                            opcao_uid: [e.target.value],
+                                          },
+                                        };
+                                      } else {
+                                        return respostaOld;
+                                      }
+                                    }
+                                  ),
+                                };
+                              } else {
+                                return perguntaOld;
+                              }
+                            })
                           )
-                        )}
+                        }
+                        value={resposta.value?.opcao_uid?.[0]}
+                      >
+                        {resposta.opcoes?.map((opcao) => (
+                          <Radio key={opcao.uid} value={opcao.uid}>
+                            {opcao.opcao}
+                          </Radio>
+                        ))}
                       </Radio.Group>
                     </div>
                   )}
                   {resposta.tipo === "CHECKBOX" && (
                     <div className="w-full flex flex-col gap-1">
                       <p>{resposta.titulo}</p>
-                      <Checkbox.Group onChange={() => {}}>
-                        {resposta.modelo_relatorio_pia_resposta_opcao?.map(
-                          (opcao) => (
-                            <Checkbox key={opcao.uid} value={opcao.uid}>
-                              {opcao.opcao}
-                            </Checkbox>
+                      <Checkbox.Group
+                        onChange={(e) =>
+                          setPerguntas((old) =>
+                            old?.map((perguntaOld, perguntaOldIndex) => {
+                              if (perguntaOldIndex === indexPergunta) {
+                                return {
+                                  ...perguntaOld,
+                                  respostas: perguntaOld.respostas?.map(
+                                    (respostaOld, indexRespostaOld) => {
+                                      if (indexRespostaOld === indexResposta) {
+                                        return {
+                                          ...respostaOld,
+                                          value: {
+                                            opcao_uid: e,
+                                          },
+                                        };
+                                      } else {
+                                        return respostaOld;
+                                      }
+                                    }
+                                  ),
+                                };
+                              } else {
+                                return perguntaOld;
+                              }
+                            })
                           )
-                        )}
+                        }
+                        value={resposta.value?.opcao_uid}
+                      >
+                        {resposta.opcoes?.map((opcao) => (
+                          <Checkbox key={opcao.uid} value={opcao.uid}>
+                            {opcao.opcao}
+                          </Checkbox>
+                        ))}
                       </Checkbox.Group>
                     </div>
                   )}
                   {resposta.tipo === "TEXT" && (
                     <div className="flex flex-col gap-1 w-full">
                       <p>{resposta.titulo}</p>
-                      <TextArea rows={2} />
+                      <TextArea
+                        value={resposta.value?.text}
+                        rows={2}
+                        onChange={(e) =>
+                          setPerguntas((old) =>
+                            old?.map((perguntaOld, perguntaOldIndex) => {
+                              if (perguntaOldIndex === indexPergunta) {
+                                return {
+                                  ...perguntaOld,
+                                  respostas: perguntaOld.respostas?.map(
+                                    (respostaOld, indexRespostaOld) => {
+                                      if (indexRespostaOld === indexResposta) {
+                                        return {
+                                          ...respostaOld,
+                                          value: {
+                                            text: e.target.value,
+                                          },
+                                        };
+                                      } else {
+                                        return respostaOld;
+                                      }
+                                    }
+                                  ),
+                                };
+                              } else {
+                                return perguntaOld;
+                              }
+                            })
+                          )
+                        }
+                      />
                     </div>
                   )}
                 </>

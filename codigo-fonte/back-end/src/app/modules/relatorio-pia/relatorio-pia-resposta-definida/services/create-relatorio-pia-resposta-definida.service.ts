@@ -15,22 +15,17 @@ export class CreateRelatorioPiaRespostaDefinidaService {
 	async execute(
 		data: CreateRelatorioPiaRespostaDefinidaDto,
 	): Promise<RelatorioPiaRespostaDefinida> {
-		const relatorioPiaRespostaOpcaoExists =
-			await this.relatorioPiaOpcaoRepository.findByUid(
-				data.uid_relatorio_pia_resposta_opcao,
-			);
+		if (data.uid_relatorio_pia_resposta_opcao) {
+			const relatorioPiaRespostaOpcaoExists =
+				await this.relatorioPiaOpcaoRepository.findByUid(
+					data.uid_relatorio_pia_resposta_opcao,
+				);
 
-		if (!relatorioPiaRespostaOpcaoExists) {
-			throw new AppError('Relatório PIA Resposta Opção UID não existe');
-		}
-
-		const alreadyExists =
-			await this.relatorioPiaRespostaDefinidaRepository.findByValor(
-				data.valor,
-			);
-
-		if (alreadyExists) {
-			throw new AppError('Relatório PIA Resposta Definida já existente');
+			if (!relatorioPiaRespostaOpcaoExists) {
+				throw new AppError(
+					'Relatório PIA Resposta Opção UID não existe',
+				);
+			}
 		}
 
 		const relatorioPiaRespostaDefinida =

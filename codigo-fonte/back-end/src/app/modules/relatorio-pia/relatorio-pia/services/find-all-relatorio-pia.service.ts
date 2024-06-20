@@ -12,6 +12,10 @@ export class FindAllRelatorioPiaService {
 	): Promise<{ count: number; relatoriosPias: RelatorioPia[] }> {
 		query = {
 			...query,
+			include: {
+				idoso: true,
+				usuario: true,
+			},
 		};
 
 		const [relatoriosPias, count] = await this.prisma.$transaction([
