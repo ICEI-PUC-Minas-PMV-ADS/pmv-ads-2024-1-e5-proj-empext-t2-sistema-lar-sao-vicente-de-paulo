@@ -16,16 +16,20 @@ import {
   Radio,
   Tag,
   Tooltip,
+  notification,
   theme,
 } from "antd";
 import { useCookies } from "react-cookie";
 import { authToken } from "@/config/authToken";
-import {
-  IModeloRelatorioPia,
-  IOperationModeloRelatorioPia,
-} from "../Interface/IModeloRelatorioPia";
+import { IModeloRelatorioPia } from "../Interface/IModeloRelatorioPia";
 import { useFetch } from "@/utils/hooks/useFetch";
 import { InputForm } from "@/components/input";
+import { IErrorState, useMutation } from "@/utils/hooks/useMutation";
+import { api } from "@/utils/service/api";
+import { IModeloRelatorioPiaRespostaOpcao } from "../Interface/IModeloRelatorioPiaRespostaOpcao";
+import { IModeloRelatorioPiaResposta } from "../Interface/IModeloRelatorioPiaResposta";
+import { IModeloRelatorioPiaPergunta } from "../Interface/IModeloRelatorioPiaPergunta";
+import { AxiosError } from "axios";
 
 export const AtualizarModeloPiaModal = ({
   uid,
@@ -35,13 +39,14 @@ export const AtualizarModeloPiaModal = ({
   refetchList: () => void;
 }) => {
   const [cookies] = useCookies([authToken.nome]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const [perguntas, setPerguntas] = useState<
     IModeloRelatorioPia["modelo_relatorio_pia_pergunta"]
   >([]);
 
   const { handleSubmit, control, setValue } =
-    useForm<Partial<IOperationModeloRelatorioPia>>();
+    useForm<Partial<IModeloRelatorioPia>>();
 
   console.log(perguntas);
 
@@ -60,6 +65,235 @@ export const AtualizarModeloPiaModal = ({
     }
   );
 
+  const { mutate: updateModeloPia, isFetching: isFetchingData } = useMutation<
+    Partial<IModeloRelatorioPia>,
+    { id: bigint }
+  >("/modelo-relatorio-pia/" + uid, {
+    method: "patch",
+    messageSucess: null,
+    resNotInData: true,
+    onSuccess: (data) => {
+      setIsLoading(true);
+      try {
+        if (perguntas) {
+          Promise.all(
+            perguntas.map((item) => {
+              if (item.uid) {
+                api
+                  .patch<{ id: bigint }>(
+                    "/modelo-relatorio-pia-pergunta/" + item.uid,
+                    {
+                      pergunta: item.pergunta,
+                    } as IModeloRelatorioPiaPergunta,
+                    {
+                      headers: {
+                        Authorization: "Bearer " + cookies[authToken.nome],
+                      },
+                    }
+                  )
+                  .then((data) => {
+                    if (item.modelo_relatorio_pia_resposta) {
+                      Promise.all(
+                        item.modelo_relatorio_pia_resposta.map(
+                          (itemResposta) => {
+                            if (itemResposta.uid) {
+                              api
+                                .patch<{ id: bigint }>(
+                                  "/modelo-relatorio-pia-resposta/" +
+                                    itemResposta.uid,
+                                  {
+                                    tipo: itemResposta.tipo,
+                                    titulo: itemResposta.titulo,
+                                  } as IModeloRelatorioPiaResposta,
+                                  {
+                                    headers: {
+                                      Authorization:
+                                        "Bearer " + cookies[authToken.nome],
+                                    },
+                                  }
+                                )
+                                .then((data) => {
+                                  if (
+                                    itemResposta.modelo_relatorio_pia_resposta_opcao
+                                  ) {
+                                    Promise.all(
+                                      itemResposta.modelo_relatorio_pia_resposta_opcao.map(
+                                        (itemOpcao) => {
+                                          if (itemOpcao.uid) {
+                                            api.patch<{ id: bigint }>(
+                                              "/modelo-relatorio-pia-resposta-opcao/" +
+                                                itemOpcao.uid,
+                                              {
+                                                opcao: itemOpcao.opcao,
+                                              } as IModeloRelatorioPiaRespostaOpcao,
+                                              {
+                                                headers: {
+                                                  Authorization:
+                                                    "Bearer " +
+                                                    cookies[authToken.nome],
+                                                },
+                                              }
+                                            );
+                                          } else {
+                                            api.post<{ id: bigint }>(
+                                              "/modelo-relatorio-pia-resposta-opcao",
+                                              {
+                                                id_modelo_relatorio_pia_resposta:
+                                                  data.data.id,
+                                                opcao: itemOpcao.opcao,
+                                              } as IModeloRelatorioPiaRespostaOpcao,
+                                              {
+                                                headers: {
+                                                  Authorization:
+                                                    "Bearer " +
+                                                    cookies[authToken.nome],
+                                                },
+                                              }
+                                            );
+                                          }
+                                        }
+                                      )
+                                    );
+                                  }
+                                });
+                            } else {
+                              api
+                                .post<{ id: bigint }>(
+                                  "/modelo-relatorio-pia-resposta",
+                                  {
+                                    id_modelo_relatorio_pia_pergunta:
+                                      data.data.id,
+                                    tipo: itemResposta.tipo,
+                                    titulo: itemResposta.titulo,
+                                  } as IModeloRelatorioPiaResposta,
+                                  {
+                                    headers: {
+                                      Authorization:
+                                        "Bearer " + cookies[authToken.nome],
+                                    },
+                                  }
+                                )
+                                .then((data) => {
+                                  if (
+                                    itemResposta.modelo_relatorio_pia_resposta_opcao
+                                  ) {
+                                    Promise.all(
+                                      itemResposta.modelo_relatorio_pia_resposta_opcao.map(
+                                        (itemOpcao) =>
+                                          api.post<{ id: bigint }>(
+                                            "/modelo-relatorio-pia-resposta-opcao",
+                                            {
+                                              id_modelo_relatorio_pia_resposta:
+                                                data.data.id,
+                                              opcao: itemOpcao.opcao,
+                                            } as IModeloRelatorioPiaRespostaOpcao,
+                                            {
+                                              headers: {
+                                                Authorization:
+                                                  "Bearer " +
+                                                  cookies[authToken.nome],
+                                              },
+                                            }
+                                          )
+                                      )
+                                    );
+                                  }
+                                });
+                            }
+                          }
+                        )
+                      );
+                    }
+                  });
+              } else {
+                api
+                  .post<{ id: bigint }>(
+                    "/modelo-relatorio-pia-pergunta",
+                    {
+                      pergunta: item.pergunta,
+                      id_modelo_relatorio_pia: data.data.id,
+                    } as IModeloRelatorioPiaPergunta,
+                    {
+                      headers: {
+                        Authorization: "Bearer " + cookies[authToken.nome],
+                      },
+                    }
+                  )
+                  .then((data) => {
+                    if (item.modelo_relatorio_pia_resposta) {
+                      Promise.all(
+                        item.modelo_relatorio_pia_resposta.map((itemResposta) =>
+                          api
+                            .post<{ id: bigint }>(
+                              "/modelo-relatorio-pia-resposta",
+                              {
+                                id_modelo_relatorio_pia_pergunta: data.data.id,
+                                tipo: itemResposta.tipo,
+                                titulo: itemResposta.titulo,
+                              } as IModeloRelatorioPiaResposta,
+                              {
+                                headers: {
+                                  Authorization:
+                                    "Bearer " + cookies[authToken.nome],
+                                },
+                              }
+                            )
+                            .then((data) => {
+                              if (
+                                itemResposta.modelo_relatorio_pia_resposta_opcao
+                              ) {
+                                Promise.all(
+                                  itemResposta.modelo_relatorio_pia_resposta_opcao.map(
+                                    (itemOpcao) =>
+                                      api.post<{ id: bigint }>(
+                                        "/modelo-relatorio-pia-resposta-opcao",
+                                        {
+                                          id_modelo_relatorio_pia_resposta:
+                                            data.data.id,
+                                          opcao: itemOpcao.opcao,
+                                        } as IModeloRelatorioPiaRespostaOpcao,
+                                        {
+                                          headers: {
+                                            Authorization:
+                                              "Bearer " +
+                                              cookies[authToken.nome],
+                                          },
+                                        }
+                                      )
+                                  )
+                                );
+                              }
+                            })
+                        )
+                      );
+                    }
+                  });
+              }
+            })
+          );
+        }
+      } catch (err) {
+        const error = err as AxiosError<{ error: IErrorState }>;
+
+        notification.open({
+          message: "Ocorreu um erro",
+          description: error.response?.data?.error.message,
+          type: "error",
+        });
+        setIsLoading(false);
+      } finally {
+        notification.open({
+          message: "Operação realizada",
+          description: "Modelo PIA atualizado com sucesso!",
+          type: "success",
+        });
+        setIsLoading(false);
+        refetchList();
+        setOpen(false);
+      }
+    },
+  });
+
   return (
     <ModalDefault
       showFooter
@@ -76,8 +310,8 @@ export const AtualizarModeloPiaModal = ({
       }
       titleModal={"Editando modelo relatório PIA"}
       okText="Concluído"
-      onSubmit={() => {}}
-      isFetching={false}
+      onSubmit={handleSubmit(updateModeloPia)}
+      isFetching={isFetchingData || isLoading}
       width="950px"
       setOpenModal={setOpen}
       openModal={open}
@@ -188,7 +422,7 @@ export const AtualizarModeloPiaModal = ({
                                 if (perguntaOldIndex === indexPergunta) {
                                   return {
                                     ...perguntaOld,
-                                    respostas:
+                                    modelo_relatorio_pia_resposta:
                                       perguntaOld.modelo_relatorio_pia_resposta?.filter(
                                         (_respostaOld, respostaOldIndex) =>
                                           respostaOldIndex !== indexResposta
@@ -228,7 +462,7 @@ export const AtualizarModeloPiaModal = ({
                             old?.map((perguntaOld) => {
                               return {
                                 ...perguntaOld,
-                                respostas:
+                                modelo_relatorio_pia_resposta:
                                   perguntaOld.modelo_relatorio_pia_resposta?.map(
                                     (respostaOld, indexRespostaOld) => {
                                       if (indexRespostaOld === indexResposta) {
@@ -258,7 +492,7 @@ export const AtualizarModeloPiaModal = ({
                               old?.map((perguntaOld) => {
                                 return {
                                   ...perguntaOld,
-                                  respostas:
+                                  modelo_relatorio_pia_resposta:
                                     perguntaOld.modelo_relatorio_pia_resposta?.map(
                                       (respostaOld, indexRespostaOld) => {
                                         if (
@@ -301,7 +535,7 @@ export const AtualizarModeloPiaModal = ({
                               old?.map((perguntaOld) => {
                                 return {
                                   ...perguntaOld,
-                                  respostas:
+                                  modelo_relatorio_pia_resposta:
                                     perguntaOld.modelo_relatorio_pia_resposta?.map(
                                       (respostaOld, indexRespostaOld) => {
                                         if (
@@ -342,10 +576,14 @@ export const AtualizarModeloPiaModal = ({
                       if (perguntaOldIndex === indexPergunta) {
                         return {
                           ...perguntaOld,
-                          respostas: [
-                            ...[perguntaOld.modelo_relatorio_pia_resposta],
-                            [{ tipo: "TEXT", titulo: "" }],
-                          ],
+                          modelo_relatorio_pia_resposta:
+                            perguntaOld.modelo_relatorio_pia_resposta?.concat([
+                              {
+                                tipo: "TEXT",
+                                titulo: "",
+                                id_modelo_relatorio_pia_pergunta: pergunta.id,
+                              },
+                            ]),
                         };
                       } else {
                         return perguntaOld;

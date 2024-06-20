@@ -58,8 +58,6 @@ export const CriarModeloPiaModal = ({
     },
   ]);
 
-  console.log(perguntas);
-
   const { handleSubmit, control, reset } = useForm<{ nome: string }>();
 
   const { mutate: createModeloPia, isFetching: isFetchingData } = useMutation<
@@ -488,7 +486,6 @@ const InputTag = ({ onChange }: { onChange: (value: string[]) => void }) => {
 
   const handleClose = (removedTag: string) => {
     const newTags = tags.filter((tag) => tag !== removedTag);
-    console.log(newTags);
     setTags(newTags);
   };
 
