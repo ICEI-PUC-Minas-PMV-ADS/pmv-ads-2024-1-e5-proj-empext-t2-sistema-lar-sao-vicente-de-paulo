@@ -322,10 +322,11 @@ model RelatorioPiaResposta {
   criado_em     DateTime     @default(now()) @db.Timestamp
   atualizado_em DateTime     @updatedAt @db.Timestamp
 
-  id_relatorio_pia_pergunta BigInt               @unique @db.BigInt
+  id_relatorio_pia_pergunta BigInt               @db.BigInt
   relatorio_pia_pergunta    RelatorioPiaPergunta @relation(fields: [id_relatorio_pia_pergunta], references: [id])
 
-  relatorio_pia_resposta_opcao RelatorioPiaRespostaOpcao[]
+  relatorio_pia_resposta_opcao    RelatorioPiaRespostaOpcao[]
+  relatorio_pia_resposta_definida RelatorioPiaRespostaDefinida[]
 
   @@map("relatorio_pia_resposta")
 }
@@ -351,8 +352,11 @@ model RelatorioPiaRespostaDefinida {
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  uid_relatorio_pia_resposta_opcao String                    @unique @db.Uuid
-  relatorio_pia_resposta_opcao     RelatorioPiaRespostaOpcao @relation(fields: [uid_relatorio_pia_resposta_opcao], references: [uid])
+  id_relatorio_pia_resposta BigInt               @db.BigInt
+  relatorio_pia_resposta    RelatorioPiaResposta @relation(fields: [id_relatorio_pia_resposta], references: [id])
+
+  uid_relatorio_pia_resposta_opcao String?                    @unique @db.Uuid
+  relatorio_pia_resposta_opcao     RelatorioPiaRespostaOpcao? @relation(fields: [uid_relatorio_pia_resposta_opcao], references: [uid])
 
   @@map("relatorio_pia_resposta_definida")
 }
@@ -496,7 +500,7 @@ model CondutaNutricional {
   criado_em     DateTime @default(now()) @db.Timestamp
   atualizado_em DateTime @updatedAt @db.Timestamp
 
-  id_ficha_nutricional BigInt          @db.BigInt
+  id_ficha_nutricional BigInt           @db.BigInt
   ficha_nutricional    FichaNutricional @relation(fields: [id_ficha_nutricional], references: [id])
 
   @@map("conduta_nutricional")

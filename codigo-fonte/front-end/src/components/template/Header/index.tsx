@@ -52,7 +52,7 @@ export const headerMenus = [
     key: "menu-relatorio",
     itens: [
       {
-        key: "key-pia",
+        key: "key-modelo-pia",
         label: "Modelo PIA",
         path: "/modelo-pia",
       },

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class CreateRelatorioPiaDto {
 	@ApiProperty()
@@ -21,6 +21,6 @@ export class CreateRelatorioPiaDto {
 	id_idoso: bigint;
 
 	@ApiProperty()
-	@IsDate()
+	@IsDateString()
 	data_vencimento: Date;
 }

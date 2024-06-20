@@ -18,10 +18,16 @@ export class PrismaRelatorioPiaRepository implements relatorioPiaRepository {
 				uid,
 			},
 			include: {
-				modelo_relatorio_pia: true,
-				usuario: true,
-				idoso: true,
-				relatorio_pia_pergunta: true,
+				relatorio_pia_pergunta: {
+					include: {
+						relatorio_pia_resposta: {
+							include: {
+								relatorio_pia_resposta_opcao: true,
+								relatorio_pia_resposta_definida: true,
+							},
+						},
+					},
+				},
 			},
 		});
 

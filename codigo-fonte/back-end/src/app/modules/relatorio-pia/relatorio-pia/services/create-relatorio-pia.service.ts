@@ -42,14 +42,6 @@ export class CreateRelatorioPiaService {
 			throw new AppError('Idoso com o ID fornecido não existe');
 		}
 
-		const alreadyExists = await this.relatorioPiaRepository.findByName(
-			data.nome,
-		);
-
-		if (alreadyExists) {
-			throw new AppError('Um Relatório PIA com o mesmo nome já existe');
-		}
-
 		const relatorioPia = await this.relatorioPiaRepository.create(data);
 
 		return relatorioPia;
