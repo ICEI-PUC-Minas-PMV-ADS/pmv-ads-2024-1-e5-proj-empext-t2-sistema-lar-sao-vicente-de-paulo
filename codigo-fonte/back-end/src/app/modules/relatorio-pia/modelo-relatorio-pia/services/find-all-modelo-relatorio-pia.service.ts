@@ -10,10 +10,6 @@ export class FindAllModeloRelatorioPiaService {
 	async execute(
 		query?: Prisma.ModeloRelatorioPiaFindManyArgs,
 	): Promise<{ count: number; modelosRelatoriosPias: ModeloRelatorioPia[] }> {
-		query = {
-			...query,
-		};
-
 		const [modelosRelatoriosPias, count] = await this.prisma.$transaction([
 			this.prisma.modeloRelatorioPia.findMany(query),
 			this.prisma.modeloRelatorioPia.count({
