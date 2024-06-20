@@ -527,7 +527,7 @@ export const AtualizarModeloPiaModal = ({
                         <InputTag
                           value={resposta.modelo_relatorio_pia_resposta_opcao?.map(
                             (v) => {
-                              return v.opcao;
+                              return [v.opcao, v.uid];
                             }
                           )}
                           onChange={(e) =>
@@ -551,7 +551,10 @@ export const AtualizarModeloPiaModal = ({
                                               : {
                                                   modelo_relatorio_pia_resposta_opcao:
                                                     e.map((opcao) => {
-                                                      return { opcao: opcao };
+                                                      return {
+                                                        opcao: opcao[0],
+                                                        uid: opcao[1],
+                                                      };
                                                     }),
                                                 }),
                                           };
@@ -622,11 +625,14 @@ const InputTag = ({
   value,
   onChange,
 }: {
-  value?: string[];
-  onChange: (value: string[]) => void;
+  value?: [string, string | undefined][];
+  onChange: (value: [string, string | undefined][]) => void;
 }) => {
+  const [cookies] = useCookies([authToken.nome]);
   const { token } = theme.useToken();
-  const [tags, setTags] = useState<string[]>(value || []);
+  const [tags, setTags] = useState<[string, string | undefined][]>(
+    value || [["", undefined]]
+  );
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [editInputIndex, setEditInputIndex] = useState(-1);
@@ -649,9 +655,18 @@ const InputTag = ({
     editInputRef.current?.focus();
   }, [editInputValue]);
 
-  const handleClose = (removedTag: string) => {
+  const handleClose = (removedTag: [string, string | undefined]) => {
+    if (removedTag[1]) {
+      api.delete<{ id: bigint }>(
+        "/modelo-relatorio-pia-resposta-opcao/" + removedTag[1],
+        {
+          headers: {
+            Authorization: "Bearer " + cookies[authToken.nome],
+          },
+        }
+      );
+    }
     const newTags = tags.filter((tag) => tag !== removedTag);
-    console.log(newTags);
     setTags(newTags);
   };
 
@@ -664,8 +679,8 @@ const InputTag = ({
   };
 
   const handleInputConfirm = () => {
-    if (inputValue && !tags.includes(inputValue)) {
-      setTags([...tags, inputValue]);
+    if (inputValue && !tags[0].includes(inputValue)) {
+      setTags([...tags, [inputValue, undefined]]);
     }
     setInputVisible(false);
     setInputValue("");
@@ -677,7 +692,7 @@ const InputTag = ({
 
   const handleEditInputConfirm = () => {
     const newTags = [...tags];
-    newTags[editInputIndex] = editInputValue;
+    newTags[editInputIndex][0] = editInputValue;
     setTags(newTags);
     setEditInputIndex(-1);
     setEditInputValue("");
@@ -692,7 +707,7 @@ const InputTag = ({
             return (
               <Input
                 ref={editInputRef}
-                key={tag}
+                key={tag[0]}
                 size="small"
                 style={{
                   width: 64,
@@ -710,7 +725,7 @@ const InputTag = ({
           const isLongTag = tag.length > 20;
           const tagElem = (
             <Tag
-              key={tag}
+              key={tag[0]}
               closable
               style={{ userSelect: "none" }}
               onClose={() => handleClose(tag)}
@@ -719,17 +734,17 @@ const InputTag = ({
                 onDoubleClick={(e) => {
                   if (index !== 0) {
                     setEditInputIndex(index);
-                    setEditInputValue(tag);
+                    setEditInputValue(tag[0]);
                     e.preventDefault();
                   }
                 }}
               >
-                {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                {isLongTag ? `${tag[0].slice(0, 20)}...` : tag[0]}
               </span>
             </Tag>
           );
           return isLongTag ? (
-            <Tooltip title={tag} key={tag}>
+            <Tooltip title={tag} key={tag[0]}>
               {tagElem}
             </Tooltip>
           ) : (

@@ -12,7 +12,7 @@ export class UpdateModeloRelatorioPiaService {
 	async execute(
 		uid: string,
 		data: UpdateModeloRelatorioPiaDto,
-	): Promise<ModeloRelatorioPia | null> {
+	): Promise<ModeloRelatorioPia> {
 		const AlreadyExists =
 			await this.modeloRelatorioPiaRepository.findByUid(uid);
 
@@ -20,18 +20,14 @@ export class UpdateModeloRelatorioPiaService {
 			throw new AppError('Modelo de relatório PIA não encontrado');
 		}
 
-		if (AlreadyExists.nome === data.nome) {
-			throw new AppError('Não houve mudanças no modelo de relatório PIA');
-		}
-
 		const modeloRelatorioPia =
 			await this.modeloRelatorioPiaRepository.versioningUpdate(uid);
 
-		await this.modeloRelatorioPiaRepository.update(
+		const update = await this.modeloRelatorioPiaRepository.update(
 			data,
 			modeloRelatorioPia,
 		);
 
-		return modeloRelatorioPia;
+		return update;
 	}
 }
