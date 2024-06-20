@@ -16,6 +16,20 @@ import { IOperationRelatorioPia } from "../Interface/IRelatorioPia";
 import TextArea from "antd/es/input/TextArea";
 import { IModeloRelatorioPia } from "../../modelo-pia/Interface/IModeloRelatorioPia";
 
+interface ICreateRelatorioPia {
+  nome: string;
+  perguntas: {
+    pergunta: string;
+    respostas?: {
+      titulo: string;
+      tipo: "TEXT" | "RADIO" | "CHECKBOX";
+      value?: { text?: string; opcao_uid?: string[] };
+      opcoes?: { opcao: string; uid: string }[];
+    }[];
+  }[];
+}
+[];
+
 export const CriarRelatorioPiaModal = ({
   refetchList,
 }: {
@@ -23,6 +37,10 @@ export const CriarRelatorioPiaModal = ({
 }) => {
   const [cookies] = useCookies([authToken.nome]);
   const [open, setOpen] = useState(false);
+  const [perguntas, setPerguntas] =
+    useState<ICreateRelatorioPia["perguntas"]>();
+
+  console.log(perguntas);
 
   const { handleSubmit, control, reset, watch, getValues } =
     useForm<IOperationRelatorioPia>();
@@ -69,6 +87,28 @@ export const CriarRelatorioPiaModal = ({
       {
         enable: open && !!modeloUid && modeloUid !== undefined,
         resNotInData: true,
+        onSuccess: (data) => {
+          setPerguntas(
+            data.data.modelo_relatorio_pia_pergunta?.map((pergunta) => {
+              return {
+                pergunta: pergunta.pergunta,
+                respostas: pergunta.modelo_relatorio_pia_resposta?.map(
+                  (resposta) => {
+                    return {
+                      titulo: resposta.titulo,
+                      tipo: resposta.tipo,
+                      opcoes: resposta.modelo_relatorio_pia_resposta_opcao?.map(
+                        (opcao) => {
+                          return { opcao: opcao.opcao, uid: opcao.uid || "" };
+                        }
+                      ),
+                    };
+                  }
+                ),
+              };
+            })
+          );
+        },
       }
     );
 
@@ -156,48 +196,132 @@ export const CriarRelatorioPiaModal = ({
         </div>
         <p>Questionário do Relatório</p>
         {findModeloPiaSelect ? (
-          findModeloPiaSelect.modelo_relatorio_pia_pergunta?.map((pergunta) => (
+          perguntas?.map((pergunta, indexPergunta) => (
             <div
-              key={pergunta.uid}
+              key={pergunta.pergunta + indexPergunta}
               className="py-[10px] px-[15px] flex gap-[20px] w-full bg-[#f9f9f9] rounded-md"
             >
               <p className="w-full text-left min-w-[300px]">
                 {pergunta.pergunta}
               </p>
-              {pergunta.modelo_relatorio_pia_resposta?.map((resposta) => (
+              {pergunta.respostas?.map((resposta, indexResposta) => (
                 <>
                   {resposta.tipo === "RADIO" && (
                     <div className="w-full flex flex-col gap-1">
                       <p>{resposta.titulo}</p>
-                      <Radio.Group onChange={() => {}} value={""}>
-                        {resposta.modelo_relatorio_pia_resposta_opcao?.map(
-                          (opcao) => (
-                            <Radio key={opcao.uid} value={opcao.uid}>
-                              {opcao.opcao}
-                            </Radio>
+                      <Radio.Group
+                        onChange={(e) =>
+                          setPerguntas((old) =>
+                            old?.map((perguntaOld, perguntaOldIndex) => {
+                              if (perguntaOldIndex === indexPergunta) {
+                                return {
+                                  ...perguntaOld,
+                                  respostas: perguntaOld.respostas?.map(
+                                    (respostaOld, indexRespostaOld) => {
+                                      if (indexRespostaOld === indexResposta) {
+                                        return {
+                                          ...respostaOld,
+                                          value: {
+                                            opcao_uid: [e.target.value],
+                                          },
+                                        };
+                                      } else {
+                                        return respostaOld;
+                                      }
+                                    }
+                                  ),
+                                };
+                              } else {
+                                return perguntaOld;
+                              }
+                            })
                           )
-                        )}
+                        }
+                        value={resposta.value?.opcao_uid?.[0]}
+                      >
+                        {resposta.opcoes?.map((opcao) => (
+                          <Radio key={opcao.uid} value={opcao.uid}>
+                            {opcao.opcao}
+                          </Radio>
+                        ))}
                       </Radio.Group>
                     </div>
                   )}
                   {resposta.tipo === "CHECKBOX" && (
                     <div className="w-full flex flex-col gap-1">
                       <p>{resposta.titulo}</p>
-                      <Checkbox.Group onChange={() => {}}>
-                        {resposta.modelo_relatorio_pia_resposta_opcao?.map(
-                          (opcao) => (
-                            <Checkbox key={opcao.uid} value={opcao.uid}>
-                              {opcao.opcao}
-                            </Checkbox>
+                      <Checkbox.Group
+                        onChange={(e) =>
+                          setPerguntas((old) =>
+                            old?.map((perguntaOld, perguntaOldIndex) => {
+                              if (perguntaOldIndex === indexPergunta) {
+                                return {
+                                  ...perguntaOld,
+                                  respostas: perguntaOld.respostas?.map(
+                                    (respostaOld, indexRespostaOld) => {
+                                      if (indexRespostaOld === indexResposta) {
+                                        return {
+                                          ...respostaOld,
+                                          value: {
+                                            opcao_uid: e,
+                                          },
+                                        };
+                                      } else {
+                                        return respostaOld;
+                                      }
+                                    }
+                                  ),
+                                };
+                              } else {
+                                return perguntaOld;
+                              }
+                            })
                           )
-                        )}
+                        }
+                        value={resposta.value?.opcao_uid}
+                      >
+                        {resposta.opcoes?.map((opcao) => (
+                          <Checkbox key={opcao.uid} value={opcao.uid}>
+                            {opcao.opcao}
+                          </Checkbox>
+                        ))}
                       </Checkbox.Group>
                     </div>
                   )}
                   {resposta.tipo === "TEXT" && (
                     <div className="flex flex-col gap-1 w-full">
                       <p>{resposta.titulo}</p>
-                      <TextArea rows={2} />
+                      <TextArea
+                        value={resposta.value?.text}
+                        rows={2}
+                        onChange={(e) =>
+                          setPerguntas((old) =>
+                            old?.map((perguntaOld, perguntaOldIndex) => {
+                              if (perguntaOldIndex === indexPergunta) {
+                                return {
+                                  ...perguntaOld,
+                                  respostas: perguntaOld.respostas?.map(
+                                    (respostaOld, indexRespostaOld) => {
+                                      if (indexRespostaOld === indexResposta) {
+                                        return {
+                                          ...respostaOld,
+                                          value: {
+                                            text: e.target.value,
+                                          },
+                                        };
+                                      } else {
+                                        return respostaOld;
+                                      }
+                                    }
+                                  ),
+                                };
+                              } else {
+                                return perguntaOld;
+                              }
+                            })
+                          )
+                        }
+                      />
                     </div>
                   )}
                 </>
