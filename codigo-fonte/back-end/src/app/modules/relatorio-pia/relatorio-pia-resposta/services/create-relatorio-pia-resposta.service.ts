@@ -26,24 +26,6 @@ export class CreateRelatorioPiaRespostaService {
 			);
 		}
 
-		const alreadyExistsSameTitle =
-			await this.relatorioPiaRespostaRepository.findByTitulo(data.titulo);
-
-		if (alreadyExistsSameTitle) {
-			throw new AppError(
-				'Relatório PIA Resposta já existe com o mesmo titulo',
-			);
-		}
-
-		const alreadyExistsSameType =
-			await this.relatorioPiaRespostaRepository.findByTipo(data.tipo);
-
-		if (alreadyExistsSameType) {
-			throw new AppError(
-				'Relatório PIA Resposta já existe com o mesmo tipo',
-			);
-		}
-
 		const relatorioPiaResposta =
 			await this.relatorioPiaRespostaRepository.create(data);
 

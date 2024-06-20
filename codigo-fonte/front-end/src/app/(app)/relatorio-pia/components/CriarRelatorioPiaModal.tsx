@@ -1,4 +1,4 @@
-import { useMutation } from "@/utils/hooks/useMutation";
+import { IErrorState, useMutation } from "@/utils/hooks/useMutation";
 import { InboxOutlined, UserAddOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -6,7 +6,7 @@ import { InputSelect } from "@/components/input";
 import { ModalDefault } from "@/components/modal/ModalDefault";
 import { authToken } from "@/config/authToken";
 import { useCookies } from "react-cookie";
-import { Checkbox, Radio, Select } from "antd";
+import { Checkbox, Radio, Select, notification } from "antd";
 import { InputDatePicker } from "@/components/input/InputDatePicker";
 import dayjs from "dayjs";
 import { useFetch } from "@/utils/hooks/useFetch";
@@ -15,6 +15,13 @@ import { IIdoso } from "../../idoso/Interface/IIdoso";
 import { IOperationRelatorioPia } from "../Interface/IRelatorioPia";
 import TextArea from "antd/es/input/TextArea";
 import { IModeloRelatorioPia } from "../../modelo-pia/Interface/IModeloRelatorioPia";
+import { api } from "@/utils/service/api";
+import { IRelatorioPiaPergunta } from "../Interface/IRelatorioPiaPergunta";
+import { IRelatorioPiaResposta } from "../Interface/IRelatorioPiaResposta";
+import { IRelatorioPiaRespostaOpcao } from "../Interface/IRelatorioPiaRespostaOpcao";
+import { AxiosError } from "axios";
+import { IRelatorioPiaRespostaDefinida } from "../Interface/IRelatorioPiaRespostaDefinida";
+import { useAppSelector } from "@/utils/hooks/useRedux";
 
 interface ICreateRelatorioPia {
   nome: string;
@@ -36,19 +43,161 @@ export const CriarRelatorioPiaModal = ({
   refetchList: () => void;
 }) => {
   const [cookies] = useCookies([authToken.nome]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const usuario = useAppSelector((v) => v.auth.usuario.id);
   const [open, setOpen] = useState(false);
   const [perguntas, setPerguntas] =
     useState<ICreateRelatorioPia["perguntas"]>();
 
-  console.log(perguntas);
-
-  const { handleSubmit, control, reset, watch, getValues } =
+  const { handleSubmit, control, reset, getValues, setValue } =
     useForm<IOperationRelatorioPia>();
 
   const { mutate: createRelatorioPia, isFetching: isFetchingData } =
-    useMutation<IOperationRelatorioPia, { uid: string }>("/relatorio-pia", {
+    useMutation<IOperationRelatorioPia, { id: bigint }>("/relatorio-pia", {
+      enable: !!perguntas,
       method: "post",
       messageSucess: null,
+      resNotInData: true,
+      onSuccess: (data) => {
+        setIsLoading(true);
+        if (perguntas) {
+          try {
+            Promise.all(
+              perguntas.map((item) =>
+                api
+                  .post<{ id: bigint }>(
+                    "/relatorio-pia-pergunta",
+                    {
+                      pergunta: item.pergunta,
+                      id_relatorio_pia: data.data.id,
+                    } as IRelatorioPiaPergunta,
+                    {
+                      headers: {
+                        Authorization: "Bearer " + cookies[authToken.nome],
+                      },
+                    }
+                  )
+                  .then((data) => {
+                    if (item.respostas) {
+                      Promise.all(
+                        item.respostas.map((itemResposta) =>
+                          api
+                            .post<{ id: bigint }>(
+                              "/relatorio-pia-resposta",
+                              {
+                                id_relatorio_pia_pergunta: data.data.id,
+                                tipo: itemResposta.tipo,
+                                titulo: itemResposta.titulo,
+                              } as IRelatorioPiaResposta,
+                              {
+                                headers: {
+                                  Authorization:
+                                    "Bearer " + cookies[authToken.nome],
+                                },
+                              }
+                            )
+                            .then((data_resposta) => {
+                              if (itemResposta.opcoes) {
+                                Promise.all(
+                                  itemResposta.opcoes.map((itemOpcao) =>
+                                    api
+                                      .post<{ uid: bigint }>(
+                                        "/relatorio-pia-resposta-opcao",
+                                        {
+                                          id_relatorio_pia_resposta:
+                                            data_resposta.data.id,
+                                          opcao: itemOpcao.opcao,
+                                        } as IRelatorioPiaRespostaOpcao,
+                                        {
+                                          headers: {
+                                            Authorization:
+                                              "Bearer " +
+                                              cookies[authToken.nome],
+                                          },
+                                        }
+                                      )
+                                      .then((data) => {
+                                        if (itemResposta.value?.opcao_uid) {
+                                          itemResposta.value?.opcao_uid.map(
+                                            (opcao) => {
+                                              if (opcao === itemOpcao.uid) {
+                                                api.post<{ id: bigint }>(
+                                                  "/relatorio-pia-resposta-definida",
+                                                  {
+                                                    uid_relatorio_pia_resposta_opcao:
+                                                      data.data.uid,
+                                                    id_relatorio_pia_resposta:
+                                                      data_resposta.data.id,
+                                                  } as IRelatorioPiaRespostaDefinida,
+                                                  {
+                                                    headers: {
+                                                      Authorization:
+                                                        "Bearer " +
+                                                        cookies[authToken.nome],
+                                                    },
+                                                  }
+                                                );
+                                              }
+                                            }
+                                          );
+                                        }
+                                      })
+                                  )
+                                );
+                                if (itemResposta.value?.text) {
+                                  api.post<{ id: bigint }>(
+                                    "/relatorio-pia-resposta-definida",
+                                    {
+                                      valor: itemResposta.value.text,
+                                      id_relatorio_pia_resposta:
+                                        data_resposta.data.id,
+                                      uid_relatorio_pia_resposta_opcao:
+                                        undefined,
+                                    } as IRelatorioPiaRespostaDefinida,
+                                    {
+                                      headers: {
+                                        Authorization:
+                                          "Bearer " + cookies[authToken.nome],
+                                      },
+                                    }
+                                  );
+                                }
+                              }
+                            })
+                        )
+                      );
+                    }
+                  })
+              )
+            );
+          } catch (err) {
+            const error = err as AxiosError<{ error: IErrorState }>;
+
+            notification.open({
+              message: "Ocorreu um erro",
+              description: error.response?.data?.error.message,
+              type: "error",
+            });
+            setIsLoading(false);
+          } finally {
+            notification.open({
+              message: "Operação realizada",
+              description: "Modelo PIA cadastrado com sucesso!",
+              type: "success",
+            });
+            setIsLoading(false);
+            setPerguntas([
+              {
+                pergunta: "",
+                respostas: [{ tipo: "TEXT", titulo: "" }],
+              },
+            ]);
+            reset();
+            refetchList();
+            setOpen(false);
+          }
+        }
+      },
     });
 
   const { data: idosos } = useFetch<IIdoso[]>("/idosos", ["idosos-pia"], {
@@ -70,6 +219,7 @@ export const CriarRelatorioPiaModal = ({
     { uid: string; id: bigint; nome: string }[]
   >("/modelo-relatorio-pia", ["modelos-relatorio-pia"], {
     enable: open,
+
     params: queryBuilder({
       page_limit: 9999,
       sort: [{ field: "criado_em", criteria: "desc" }],
@@ -85,8 +235,9 @@ export const CriarRelatorioPiaModal = ({
       "/modelo-relatorio-pia/" + modeloUid,
       [modeloUid],
       {
-        enable: open && !!modeloUid && modeloUid !== undefined,
+        enable: open && !!modeloUid && (modeloUid === undefined ? false : true),
         resNotInData: true,
+        messageError: null,
         onSuccess: (data) => {
           setPerguntas(
             data.data.modelo_relatorio_pia_pergunta?.map((pergunta) => {
@@ -108,11 +259,12 @@ export const CriarRelatorioPiaModal = ({
               };
             })
           );
+          setValue("nome", data.data.nome);
+          setValue("id_modelo_relatorio_pia", data.data.id);
+          setValue("id_usuario", usuario);
         },
       }
     );
-
-  console.log(findModeloPiaSelect);
 
   return (
     <ModalDefault
@@ -121,8 +273,8 @@ export const CriarRelatorioPiaModal = ({
       iconButtonOpenModal={<UserAddOutlined />}
       titleModal={"Adicionando Relatório PIA"}
       okText="Cadastrar"
-      onSubmit={() => {}}
-      isFetching={isFetchingData}
+      onSubmit={handleSubmit(createRelatorioPia)}
+      isFetching={isFetchingData || isLoading}
       width="900px"
       setOpenModal={setOpen}
       openModal={open}
@@ -158,9 +310,9 @@ export const CriarRelatorioPiaModal = ({
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <InputSelect
                 label="Modelo"
-                onChange={async (e) => {
-                  await onChange(e);
-                  await refetchModelo();
+                onChange={(e) => {
+                  onChange(e);
+                  if (e) refetchModelo();
                 }}
                 error={error?.message}
                 required
@@ -177,7 +329,7 @@ export const CriarRelatorioPiaModal = ({
           />
 
           <Controller
-            name="data_validade"
+            name="data_vencimento"
             control={control}
             rules={{
               required: "Selecionar data de vencimento",

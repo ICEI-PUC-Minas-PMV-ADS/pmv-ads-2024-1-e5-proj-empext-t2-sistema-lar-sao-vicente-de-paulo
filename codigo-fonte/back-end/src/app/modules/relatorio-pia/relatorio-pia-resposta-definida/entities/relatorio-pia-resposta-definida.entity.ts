@@ -21,4 +21,7 @@ export class RelatorioPiaRespostaDefinida
 
 	@ApiPropertyOptional()
 	uid_relatorio_pia_resposta_opcao: string | null;
+
+	@ApiProperty()
+	id_relatorio_pia_resposta: bigint;
 }
