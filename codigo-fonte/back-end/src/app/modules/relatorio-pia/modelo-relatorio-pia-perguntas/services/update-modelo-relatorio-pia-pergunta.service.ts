@@ -12,7 +12,7 @@ export class UpdateModeloRelatorioPiaPerguntaService {
 	async execute(
 		uid: string,
 		data: UpdateModeloRelatorioPiaPerguntaDto,
-	): Promise<ModeloRelatorioPiaPergunta | null> {
+	): Promise<ModeloRelatorioPiaPergunta> {
 		const alreadyExists =
 			await this.modeloRelatorioPiaPerguntaRepository.findByUid(uid);
 

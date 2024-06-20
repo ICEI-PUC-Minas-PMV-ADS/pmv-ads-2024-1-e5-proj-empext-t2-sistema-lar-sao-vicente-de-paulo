@@ -69,44 +69,44 @@ export const CriarModeloPiaModal = ({
     resNotInData: true,
     onSuccess: (data) => {
       setIsLoading(true);
-      perguntas.map(
-        async (item) =>
-          await api
-            .post<{ id: bigint }>(
-              "/modelo-relatorio-pia-pergunta",
-              {
-                pergunta: item.pergunta,
-                id_modelo_relatorio_pia: data.data.id,
-              } as IOperationModeloRelatorioPiaPergunta,
-              {
-                headers: {
-                  Authorization: "Bearer " + cookies[authToken.nome],
-                },
-              }
-            )
-            .then((data) => {
-              item.respostas.map(
-                async (itemResposta) =>
-                  await api
-                    .post<{ id: bigint }>(
-                      "/modelo-relatorio-pia-resposta",
-                      {
-                        id_modelo_relatorio_pia_pergunta: data.data.id,
-                        tipo: itemResposta.tipo,
-                        titulo: itemResposta.titulo,
-                      } as IOperationModeloRelatorioPiaResposta,
-                      {
-                        headers: {
-                          Authorization: "Bearer " + cookies[authToken.nome],
-                        },
-                      }
-                    )
-                    .then((data) => {
-                      if (itemResposta.opcoes) {
-                        itemResposta.opcoes.map(
-                          async (itemOpcao) =>
-                            await api
-                              .post<{ id: bigint }>(
+      try {
+        Promise.all(
+          perguntas.map((item) =>
+            api
+              .post<{ id: bigint }>(
+                "/modelo-relatorio-pia-pergunta",
+                {
+                  pergunta: item.pergunta,
+                  id_modelo_relatorio_pia: data.data.id,
+                } as IOperationModeloRelatorioPiaPergunta,
+                {
+                  headers: {
+                    Authorization: "Bearer " + cookies[authToken.nome],
+                  },
+                }
+              )
+              .then((data) => {
+                Promise.all(
+                  item.respostas.map((itemResposta) =>
+                    api
+                      .post<{ id: bigint }>(
+                        "/modelo-relatorio-pia-resposta",
+                        {
+                          id_modelo_relatorio_pia_pergunta: data.data.id,
+                          tipo: itemResposta.tipo,
+                          titulo: itemResposta.titulo,
+                        } as IOperationModeloRelatorioPiaResposta,
+                        {
+                          headers: {
+                            Authorization: "Bearer " + cookies[authToken.nome],
+                          },
+                        }
+                      )
+                      .then((data) => {
+                        if (itemResposta.opcoes) {
+                          Promise.all(
+                            itemResposta.opcoes.map((itemOpcao) =>
+                              api.post<{ id: bigint }>(
                                 "/modelo-relatorio-pia-resposta-opcao",
                                 {
                                   id_modelo_relatorio_pia_resposta:
@@ -120,73 +120,41 @@ export const CriarModeloPiaModal = ({
                                   },
                                 }
                               )
-                              .then(() => {
-                                notification.open({
-                                  message: "Operação realizada",
-                                  description:
-                                    "Modelo PIA cadastrado com sucesso!",
-                                  type: "success",
-                                });
-                                setIsLoading(false);
-                                setPerguntas([
-                                  {
-                                    pergunta: "",
-                                    respostas: [{ tipo: "TEXT", titulo: "" }],
-                                  },
-                                ]);
-                                reset();
-                                refetchList();
-                                setOpen(false);
-                              })
-                              .catch(
-                                (err: AxiosError<{ error: IErrorState }>) => {
-                                  notification.open({
-                                    message: "Ocorreu um erro",
-                                    description:
-                                      err.response?.data?.error.message,
-                                    type: "error",
-                                  });
-                                  setIsLoading(false);
-                                }
-                              )
-                        );
-                      } else {
-                        notification.open({
-                          message: "Operação realizada",
-                          description: "Modelo PIA cadastrado com sucesso!",
-                          type: "success",
-                        });
-                        setIsLoading(false);
-                        setPerguntas([
-                          {
-                            pergunta: "",
-                            respostas: [{ tipo: "TEXT", titulo: "" }],
-                          },
-                        ]);
-                        reset();
-                        refetchList();
-                        setOpen(false);
-                      }
-                    })
-                    .catch((err: AxiosError<{ error: IErrorState }>) => {
-                      notification.open({
-                        message: "Ocorreu um erro",
-                        description: err.response?.data?.error.message,
-                        type: "error",
-                      });
-                      setIsLoading(false);
-                    })
-              );
-            })
-            .catch((err: AxiosError<{ error: IErrorState }>) => {
-              notification.open({
-                message: "Ocorreu um erro",
-                description: err.response?.data?.error.message,
-                type: "error",
-              });
-              setIsLoading(false);
-            })
-      );
+                            )
+                          );
+                        }
+                      })
+                  )
+                );
+              })
+          )
+        );
+      } catch (err) {
+        const error = err as AxiosError<{ error: IErrorState }>;
+
+        notification.open({
+          message: "Ocorreu um erro",
+          description: error.response?.data?.error.message,
+          type: "error",
+        });
+        setIsLoading(false);
+      } finally {
+        notification.open({
+          message: "Operação realizada",
+          description: "Modelo PIA cadastrado com sucesso!",
+          type: "success",
+        });
+        setIsLoading(false);
+        setPerguntas([
+          {
+            pergunta: "",
+            respostas: [{ tipo: "TEXT", titulo: "" }],
+          },
+        ]);
+        reset();
+        refetchList();
+        setOpen(false);
+      }
     },
   });
   return (
@@ -338,22 +306,26 @@ export const CriarModeloPiaModal = ({
                     required
                     onBlur={(e) =>
                       setPerguntas((old) =>
-                        old.map((perguntaOld) => {
-                          return {
-                            ...perguntaOld,
-                            respostas: perguntaOld.respostas.map(
-                              (respostaOld, indexRespostaOld) => {
-                                if (indexRespostaOld === indexResposta) {
-                                  return {
-                                    ...respostaOld,
-                                    titulo: e.target.value,
-                                  };
-                                } else {
-                                  return respostaOld;
+                        old.map((perguntaOld, perguntaOldIndex) => {
+                          if (perguntaOldIndex === indexPergunta) {
+                            return {
+                              ...perguntaOld,
+                              respostas: perguntaOld.respostas.map(
+                                (respostaOld, indexRespostaOld) => {
+                                  if (indexRespostaOld === indexResposta) {
+                                    return {
+                                      ...respostaOld,
+                                      titulo: e.target.value,
+                                    };
+                                  } else {
+                                    return respostaOld;
+                                  }
                                 }
-                              }
-                            ),
-                          };
+                              ),
+                            };
+                          } else {
+                            return perguntaOld;
+                          }
                         })
                       )
                     }
@@ -363,29 +335,33 @@ export const CriarModeloPiaModal = ({
                   <div className="flex flex-col gap-1 whitespace-nowrap">
                     <p>Tipo da Resposta</p>
                     <Radio.Group
-                      defaultValue={resposta.tipo}
                       size="large"
+                      value={resposta.tipo}
                       onChange={(e) =>
                         setPerguntas((old) =>
-                          old.map((perguntaOld) => {
-                            return {
-                              ...perguntaOld,
-                              respostas: perguntaOld.respostas.map(
-                                (respostaOld, indexRespostaOld) => {
-                                  if (indexRespostaOld === indexResposta) {
-                                    return {
-                                      ...respostaOld,
-                                      tipo: e.target.value,
-                                      ...(e.target.value === "TEXT" && {
-                                        opcoes: [],
-                                      }),
-                                    };
-                                  } else {
-                                    return respostaOld;
+                          old.map((perguntaOld, perguntaOldIndex) => {
+                            if (perguntaOldIndex === indexPergunta) {
+                              return {
+                                ...perguntaOld,
+                                respostas: perguntaOld.respostas.map(
+                                  (respostaOld, indexRespostaOld) => {
+                                    if (indexRespostaOld === indexResposta) {
+                                      return {
+                                        ...respostaOld,
+                                        tipo: e.target.value,
+                                        ...(e.target.value === "TEXT" && {
+                                          opcoes: [],
+                                        }),
+                                      };
+                                    } else {
+                                      return respostaOld;
+                                    }
                                   }
-                                }
-                              ),
-                            };
+                                ),
+                              };
+                            } else {
+                              return perguntaOld;
+                            }
                           })
                         )
                       }
@@ -401,28 +377,32 @@ export const CriarModeloPiaModal = ({
                     <InputTag
                       onChange={(e) =>
                         setPerguntas((old) =>
-                          old.map((perguntaOld) => {
-                            return {
-                              ...perguntaOld,
-                              respostas: perguntaOld.respostas.map(
-                                (respostaOld, indexRespostaOld) => {
-                                  if (indexRespostaOld === indexResposta) {
-                                    return {
-                                      ...respostaOld,
-                                      ...(respostaOld.tipo === "TEXT"
-                                        ? { opcoes: [] }
-                                        : {
-                                            opcoes: e.map((opcao) => {
-                                              return { opcao: opcao };
+                          old.map((perguntaOld, perguntaOldIndex) => {
+                            if (perguntaOldIndex === indexPergunta) {
+                              return {
+                                ...perguntaOld,
+                                respostas: perguntaOld.respostas.map(
+                                  (respostaOld, indexRespostaOld) => {
+                                    if (indexRespostaOld === indexResposta) {
+                                      return {
+                                        ...respostaOld,
+                                        ...(respostaOld.tipo === "TEXT"
+                                          ? { opcoes: [] }
+                                          : {
+                                              opcoes: e.map((opcao) => {
+                                                return { opcao: opcao };
+                                              }),
                                             }),
-                                          }),
-                                    };
-                                  } else {
-                                    return respostaOld;
+                                      };
+                                    } else {
+                                      return respostaOld;
+                                    }
                                   }
-                                }
-                              ),
-                            };
+                                ),
+                              };
+                            } else {
+                              return perguntaOld;
+                            }
                           })
                         )
                       }
@@ -506,7 +486,6 @@ const InputTag = ({ onChange }: { onChange: (value: string[]) => void }) => {
 
   const handleClose = (removedTag: string) => {
     const newTags = tags.filter((tag) => tag !== removedTag);
-    console.log(newTags);
     setTags(newTags);
   };
 
