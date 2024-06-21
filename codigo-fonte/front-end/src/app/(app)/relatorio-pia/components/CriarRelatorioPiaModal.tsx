@@ -38,8 +38,10 @@ interface ICreateRelatorioPia {
 [];
 
 export const CriarRelatorioPiaModal = ({
+  id,
   refetchList,
 }: {
+  id?: bigint;
   refetchList: () => void;
 }) => {
   const [cookies] = useCookies([authToken.nome]);
@@ -213,6 +215,9 @@ export const CriarRelatorioPiaModal = ({
       ],
       sort: [{ field: "criado_em", criteria: "desc" }],
     }),
+    onSuccess: () => {
+      if (id) setValue("id_idoso", id);
+    },
   });
 
   const { data: modelosPia } = useFetch<

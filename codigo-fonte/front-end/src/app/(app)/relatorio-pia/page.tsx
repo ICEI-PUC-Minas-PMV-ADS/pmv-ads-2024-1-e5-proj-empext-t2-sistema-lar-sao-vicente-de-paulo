@@ -13,7 +13,7 @@ import { CriarRelatorioPiaModal } from "./components/CriarRelatorioPiaModal";
 import dayjs from "dayjs";
 import { AtualizarRelatorioPiaModal } from "./components/AtualizarRelatorioPiaModal";
 
-export default function RelatorioPia() {
+export default function RelatorioPia({ id }: { id?: bigint }) {
   const [pageLimit, setPageLimit] = useState<number>(10);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pesquisa, setPesquisa] = useState<string>("");
@@ -28,9 +28,17 @@ export default function RelatorioPia() {
       insensitive: true,
     });
 
+  if (id) {
+    filtros.push({
+      path: "id_idoso",
+      operator: "equals",
+      value: id,
+    });
+  }
+  
   const { data, totalCount, refetch } = useFetch<IRelatorioPia[]>(
     "/relatorio-pia",
-    [pesquisa, pageLimit, currentPage],
+    [pesquisa, pageLimit, currentPage, id],
     {
       params: queryBuilder({
         page_limit: pageLimit,
@@ -94,15 +102,17 @@ export default function RelatorioPia() {
   ];
 
   return (
-    <div className="flex flex-col gap-[15px] mt-8">
+    <div className="flex flex-col gap-[15px] mt-8 w-full">
       <div className="flex gap-5">
-        <CriarRelatorioPiaModal refetchList={refetch} />
-        <Input
-          placeholder="Buscar"
-          size="large"
-          onChange={(e) => setPesquisa(e.target.value)}
-          suffix={<SearchOutlined className="cursor-pointer opacity-50" />}
-        />
+        <CriarRelatorioPiaModal refetchList={refetch} id={id} />
+        {!id && (
+          <Input
+            placeholder="Buscar"
+            size="large"
+            onChange={(e) => setPesquisa(e.target.value)}
+            suffix={<SearchOutlined className="cursor-pointer opacity-50" />}
+          />
+        )}
       </div>
       <TableDefault
         dataSource={data}
