@@ -7,8 +7,8 @@ import { UserOutlined } from "@ant-design/icons";
 import { AtualizarIdosoModal } from "../components/AtualizarIdosoModal";
 import { VisualizarResponsaveis } from "../components/VisualizarResponsaveisModal";
 import { useState } from "react";
-import RelatorioPia from "../../relatorio-pia/page";
-import RelatorioNutricional from "../../nutricional/page";
+import { RelatorioPiaTable } from "../../relatorio-pia/components/RelatorioPiaTable";
+import { RelatorioNutricionalTable } from "../../nutricional/components/RelatorioNutricionalTable";
 
 export default function PerfilIdoso() {
   const [tab, setTab] = useState<"pia" | "nutricional">("pia");
@@ -129,8 +129,10 @@ export default function PerfilIdoso() {
             </button>
           </div>
           <div className="w-full min-h-[600px] bg-primaria/5 rounded-b-[10px] flex px-[20px] pb-[20px] text-primaria/20">
-            {tab === "pia" && <RelatorioPia id={idoso?.id} />}
-            {tab === "nutricional" && <RelatorioNutricional id={idoso?.id} />}
+            {tab === "pia" && <RelatorioPiaTable id={idoso?.id} />}
+            {tab === "nutricional" && (
+              <RelatorioNutricionalTable id={idoso?.id} />
+            )}
           </div>
         </div>
       </div>
