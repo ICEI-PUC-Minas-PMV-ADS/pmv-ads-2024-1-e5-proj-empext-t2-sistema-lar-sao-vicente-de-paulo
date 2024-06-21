@@ -32,8 +32,10 @@ import { AxiosError } from "axios";
 import { IErrorState } from "@/utils/hooks/useMutation";
 
 export const CriarRelatorioNutricionalModal = ({
+  id,
   refetchList,
 }: {
+  id?: bigint;
   refetchList: () => void;
 }) => {
   const [cookies] = useCookies([authToken.nome]);
@@ -43,7 +45,7 @@ export const CriarRelatorioNutricionalModal = ({
 
   const methods = useForm<IFormNutricional>();
 
-  const { handleSubmit, control, reset } = methods;
+  const { handleSubmit, control, reset, setValue } = methods;
 
   async function createRelatorioNutricional(data: IFormNutricional) {
     setIsloading(true);
@@ -182,6 +184,9 @@ export const CriarRelatorioNutricionalModal = ({
       ],
       sort: [{ field: "criado_em", criteria: "desc" }],
     }),
+    onSuccess: () => {
+      if (id) setValue("id_idoso", id);
+    },
   });
 
   return (

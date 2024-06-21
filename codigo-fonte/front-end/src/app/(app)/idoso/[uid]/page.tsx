@@ -7,7 +7,8 @@ import { UserOutlined } from "@ant-design/icons";
 import { AtualizarIdosoModal } from "../components/AtualizarIdosoModal";
 import { VisualizarResponsaveis } from "../components/VisualizarResponsaveisModal";
 import { useState } from "react";
-import { set } from "react-hook-form";
+import RelatorioPia from "../../relatorio-pia/page";
+import RelatorioNutricional from "../../nutricional/page";
 
 export default function PerfilIdoso() {
   const [tab, setTab] = useState<"pia" | "nutricional">("pia");
@@ -53,7 +54,8 @@ export default function PerfilIdoso() {
         <div className="flex items-center">
           <div
             style={{
-              backgroundImage: idoso?.foto && `url(${idoso?.foto})`,
+              backgroundImage: idoso?.foto && `url(${idoso.foto})`,
+              backgroundPosition: "center",
             }}
             className="w-[80px] h-[80px] bg-azul2 rounded-full bg-cover flex justify-center items-center text-black/90"
           >
@@ -100,12 +102,12 @@ export default function PerfilIdoso() {
           })}
           {idoso && (
             <p className="text-center text-xs text-black/40">
-              Idoso cadastrado por José em{" "}
+              Idoso cadastrado por {idoso.usuario?.nome} em{" "}
               {dayjs(idoso?.criado_em).format("DD/MM/YY, H:mm")}
             </p>
           )}
         </div>
-        <div className="flex flex-col w-full h-full">
+        <div className="flex flex-col w-full">
           <div className="w-full flex bg-primaria rounded-t-[10px]">
             <button
               type="button"
@@ -126,8 +128,9 @@ export default function PerfilIdoso() {
               Relatório Nutricional
             </button>
           </div>
-          <div className="w-full h-[500px] bg-primaria/5 rounded-b-[10px] flex justify-center items-center text-primaria/20">
-            {tab} Conteúdo
+          <div className="w-full min-h-[600px] bg-primaria/5 rounded-b-[10px] flex px-[20px] pb-[20px] text-primaria/20">
+            {tab === "pia" && <RelatorioPia id={idoso?.id} />}
+            {tab === "nutricional" && <RelatorioNutricional id={idoso?.id} />}
           </div>
         </div>
       </div>

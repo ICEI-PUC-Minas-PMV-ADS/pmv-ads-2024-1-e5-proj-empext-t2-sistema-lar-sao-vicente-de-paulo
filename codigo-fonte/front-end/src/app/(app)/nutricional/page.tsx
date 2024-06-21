@@ -10,11 +10,10 @@ import { Filter } from "@/interface/IQuery";
 import { TableDefault } from "@/components/table/TableDefault";
 import { ColumnsType } from "antd/es/table";
 import { AtualizarRelatorioNutricionalModal } from "./components/AtualizarRelatorioNutricionalModal";
-import Link from "next/link";
 import { IFichaNutricional } from "./interface/IFichaNutricional";
 import dayjs from "dayjs";
 
-export default function RelatorioNutricional() {
+export default function RelatorioNutricional({ id }: { id?: bigint }) {
   const [pesquisa, setPesquisa] = useState<string>("");
   const [pageLimit, setPageLimit] = useState<number>(10);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -29,9 +28,17 @@ export default function RelatorioNutricional() {
       insensitive: true,
     });
 
+  if (id) {
+    filtros.push({
+      path: "id_idoso",
+      operator: "equals",
+      value: id,
+    });
+  }
+
   const { data, totalCount, refetch } = useFetch<IFichaNutricional[]>(
     "/ficha-nutricional",
-    [pesquisa, pageLimit, currentPage],
+    [pesquisa, pageLimit, currentPage, id],
     {
       params: queryBuilder({
         page_limit: pageLimit,
@@ -90,15 +97,17 @@ export default function RelatorioNutricional() {
   ];
 
   return (
-    <div className="flex flex-col gap-[15px] mt-8">
+    <div className="flex flex-col gap-[15px] mt-8 w-full">
       <div className="flex gap-5">
-        <CriarRelatorioNutricionalModal refetchList={refetch} />
-        <Input
-          placeholder="Buscar"
-          size="large"
-          onChange={(e) => setPesquisa(e.target.value)}
-          suffix={<SearchOutlined className="cursor-pointer opacity-50" />}
-        />
+        <CriarRelatorioNutricionalModal refetchList={refetch} id={id} />
+        {!id && (
+          <Input
+            placeholder="Buscar"
+            size="large"
+            onChange={(e) => setPesquisa(e.target.value)}
+            suffix={<SearchOutlined className="cursor-pointer opacity-50" />}
+          />
+        )}
       </div>
       <TableDefault
         dataSource={data}
