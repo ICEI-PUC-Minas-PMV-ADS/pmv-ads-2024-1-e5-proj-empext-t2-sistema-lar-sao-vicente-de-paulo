@@ -12,17 +12,9 @@ import dayjs from "dayjs";
 import { useFetch } from "@/utils/hooks/useFetch";
 import { queryBuilder } from "@/utils/functions/query-builder";
 import { IIdoso } from "../../idoso/Interface/IIdoso";
-import {
-  IOperationRelatorioPia,
-  IRelatorioPia,
-} from "../Interface/IRelatorioPia";
+import { IRelatorioPia } from "../Interface/IRelatorioPia";
 import TextArea from "antd/es/input/TextArea";
 import { api } from "@/utils/service/api";
-import { IRelatorioPiaPergunta } from "../Interface/IRelatorioPiaPergunta";
-import { IRelatorioPiaResposta } from "../Interface/IRelatorioPiaResposta";
-import { IRelatorioPiaRespostaOpcao } from "../Interface/IRelatorioPiaRespostaOpcao";
-import { AxiosError } from "axios";
-import { useAppSelector } from "@/utils/hooks/useRedux";
 import { IRelatorioPiaRespostaDefinida } from "../Interface/IRelatorioPiaRespostaDefinida";
 
 export const AtualizarRelatorioPiaModal = ({
