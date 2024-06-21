@@ -16,8 +16,8 @@ export interface IFormNutricional {
   alergia_intolerancia: boolean;
   alergia_intolerancia_obs: string;
   observacao: string;
-  id_idoso: number;
-  id_usuario: number;
+  id_idoso: bigint;
+  id_usuario: bigint;
   conduta_nutricional: ICondutaNutricional[];
   antropometria_nutricional: IAntropometriaNutricional;
   registro_antrometrico: IRegistroAntropometrico[];

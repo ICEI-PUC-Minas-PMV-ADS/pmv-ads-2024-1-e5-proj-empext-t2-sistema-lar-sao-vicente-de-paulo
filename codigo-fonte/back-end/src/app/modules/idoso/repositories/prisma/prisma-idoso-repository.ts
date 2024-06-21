@@ -48,6 +48,7 @@ export class PrismaIdosoRepository implements idosoRepository {
 				responsavel_idoso: true,
 				relatorio_pia: true,
 				ficha_nutricional: true,
+				usuario: true,
 			},
 		});
 

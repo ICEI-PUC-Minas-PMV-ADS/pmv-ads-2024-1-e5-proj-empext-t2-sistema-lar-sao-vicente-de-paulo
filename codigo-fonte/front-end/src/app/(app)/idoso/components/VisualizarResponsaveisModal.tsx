@@ -41,10 +41,12 @@ export const VisualizarResponsaveis = ({
     },
   ];
 
-  const { data, refetch } = useFetch<IResponsavelIdoso[]>(
+  const { data } = useFetch<IResponsavelIdoso[]>(
     "/responsaveis",
     ["responsaveis", idIdoso],
+
     {
+      enable: open,
       params: queryBuilder({
         page_limit: 99999,
         filter: [{ path: "id_idoso", operator: "equals", value: idIdoso }],

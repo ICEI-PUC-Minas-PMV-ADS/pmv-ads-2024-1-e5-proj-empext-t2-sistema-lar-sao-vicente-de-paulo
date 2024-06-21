@@ -19,12 +19,11 @@ export const CommonBreadcrumbs = () => {
     ...(pathname === "/" ? {} : { path: "/" }),
   };
 
-  const submenus: ItemType[] = segments.map(() => {
+  const submenus: ItemType[] = segments.map((path) => {
     const menu = headerMenus.find((v) => {
-      return v.itens.find((d) => d.path === pathname);
+      return v.itens.find((d) => d.path === "/" + path);
     });
-    const itemPath = menu?.itens.find((i) => i.path === pathname);
-
+    const itemPath = menu?.itens.find((i) => i.path === "/" + path);
     return {
       title: (
         <div className="flex gap-1.5">

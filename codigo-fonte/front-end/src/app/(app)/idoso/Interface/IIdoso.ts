@@ -3,6 +3,7 @@ import {
   IOperationResponsavelIdoso,
   IResponsavelIdoso,
 } from "./IResponsavelIdoso";
+import { IUsuario } from "../../usuario/Interface/IUsuario";
 
 export interface IIdoso {
   id: bigint;
@@ -40,6 +41,7 @@ export interface IIdoso {
   atualizado_em: Date;
   responsavel_idoso?: IResponsavelIdoso[];
   _count?: { responsavel_idoso: number };
+  usuario?: IUsuario;
 }
 
 export interface IOperationIdoso {
