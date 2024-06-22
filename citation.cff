@@ -1,0 +1,26 @@
+message: Please cite this software using these metadata.
+title:
+authors:
+  - family-names: do Carmo Vaz
+    given-names: Ana Carolina
+  - family-names: Augusto Ferreira de Lira
+    given-names: Gustavo
+  - family-names: Gonçalves dos Santos
+    given-names: Jéssica
+  - family-names: Jorges da Silva
+    given-names: João Paulo
+  - family-names: Teixeira Barbosa Contin
+    given-names: Mariano
+  - family-names: Terra da Silva
+    given-names: Thiago
+  - name-suffix: Professor
+    affiliation: PUC Minas
+    family-names: Lúcia da Silva
+    given-names: Soraia
+keywords:
+  - Gestão
+  - Idoso
+  - Relatório
+repository-code: https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t2-sistema-lar-sao-vicente-de-paulo.git
+version: 1.0.0
+date-released: 2024-06-23
