@@ -76,7 +76,7 @@ O diagrama de casos de uso é o próximo passo após a elicitação de requisito
 
 O modelo ER abaixo representa através de um diagrama como as entidades do sistema de relacionam entre si na aplicação, através deste também é possível verificar a cardinalidade entre as relações.
 
-![Diagrama ER](img/diagrama-er.jpg)
+![Diagrama ER](img/updated_diagrama_er.png)
 
 ## Projeto da Base de Dados
 
