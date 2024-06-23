@@ -12,11 +12,11 @@ Criamos um grupo de segurança permitindo o tráfego SSH (porta 22), HTTP (porta
 
 ### Registro de Domínio:
 
-Registramos um domínio e configuramos uma zona hospedada no Route 53.
+Registramos um domínio no GoDaddy.
 
 ### Configuração de DNS:
 
-Criamos um registro A no Route 53 apontando para o IP público da instância EC2, permitindo que o sistema seja acessado via web através do domínio.
+Configuramos na AWS para apontar este DNS para o IP público da instância EC2, permitindo que o sistema seja acessado via web através do domínio.
 
 ### Grupos de Permissões (Security Groups)
 
@@ -33,7 +33,7 @@ Acesso SSH restrito ao IP do administrador.
 
 ### Acessibilidade:
 
-Uso do Route 53 para garantir que o sistema esteja acessível via um domínio amigável.
+Uso do GoDaddy para garantir que o sistema esteja acessível via um domínio amigável.
 
 ### Eficiência:
 
