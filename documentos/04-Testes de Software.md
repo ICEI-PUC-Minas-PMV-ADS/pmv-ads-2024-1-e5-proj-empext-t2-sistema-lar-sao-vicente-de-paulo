@@ -207,85 +207,85 @@ Senha alterada com sucesso
 
 ![teste20](img/Testes%20-%20Sprint%201/29.%20Tela%20do%20perfil%2C%20edicao%20e%20senha/4.%20senha%20alterada%20com%20sucesso%20-%20a%20pagina%20volta%20ao%20login.png)
 
-Testes Página Relatório Nutricional
+## Testes Página Relatório Nutricional
 
-Registro tela inicial com relatórios já cadastrados:
+### Registro tela inicial com relatórios já cadastrados:
 
 ![Tela Inicial](img/Testes%20Relatorio%20Nutricional/pagina_inicial.png)
 
-Adicionando registro geral:
+### Adicionando registro geral:
 
 ![Geral](img/Testes%20Relatorio%20Nutricional/geral.png)
 
-Adicionando Diagnóstico Clínico/Hipótese Diagnosticadas:
+### Adicionando Diagnóstico Clínico/Hipótese Diagnosticadas:
 
 ![Diagnóstico Clínico](img/Testes%20Relatorio%20Nutricional/diagnostico_clinico.png)
 
-Adicionando Semiologia Nutricional:
+### Adicionando Semiologia Nutricional:
 
 ![Semiologia Nutricional](img/Testes%20Relatorio%20Nutricional/semiologia_nutricional.png)
 
-Adicionado Antropometria:
+### Adicionado Antropometria:
 
 ![Antropometria](img/Testes%20Relatorio%20Nutricional/antropometria.png)
 
-Adicinando Dados Antropométricos:
+### Adicinando Dados Antropométricos:
 
 ![Registro Antropométrico](img/Testes%20Relatorio%20Nutricional/adicionando_registro_antropometrico.png)
 
-Registro Antropométrico Adicionado:
+### Registro Antropométrico Adicionado:
 
 ![Registro Antropométrico Adicionado](img/Testes%20Relatorio%20Nutricional/registro_antropometrico_adicionado.png)
 
-Editando Registro Antropométrico:
+### Editando Registro Antropométrico:
 
 ![Editando Registro Antropométrico](img/Testes%20Relatorio%20Nutricional/atualizando_registro_antropometrico.png)
 
-Excluindo Registro Antropométrico:
+### Excluindo Registro Antropométrico:
 
 ![Excuindo Registro Antropométrico](img/Testes%20Relatorio%20Nutricional/excluindo_registro_antropometrico.png)
 
-Adicionado Necessidades Nutricionais:
+### Adicionado Necessidades Nutricionais:
 
 ![Adicionado Necessidades Nutricionais](img/Testes%20Relatorio%20Nutricional/adicionando_necessidades_nutricionais.png)
 
-Adicionando Quadro Clínico:
+### Adicionando Quadro Clínico:
 
 ![Adicionando Quadro Clínico](img/Testes%20Relatorio%20Nutricional/adicionando_quadro_clinico.png)
 
-Quadro Clínico Adicionado:
+### Quadro Clínico Adicionado:
 
 ![Quadro Clínico Adicionado](img/Testes%20Relatorio%20Nutricional/quadro_clinico_adicionado.png)
 
-Editando Quadro Clínico:
+### Editando Quadro Clínico:
 
 ![Editando Quadro Clínico](img/Testes%20Relatorio%20Nutricional/atualizando_quadro_clinico.png)
 
-Excluindo Quadro Clínico:
+### Excluindo Quadro Clínico:
 
 ![Excluindo Quadro Clínico](img/Testes%20Relatorio%20Nutricional/excluindo_quadro_clinico.png)
 
-Adicionado Conduta Nutricional:
+### Adicionado Conduta Nutricional:
 
 ![Adicionado Conduta Nutricional](img/Testes%20Relatorio%20Nutricional/adicionado_conduta_nutricional.png)
 
-Conduta Nutricional Adicionada:
+### Conduta Nutricional Adicionada:
 
 ![Conduta Nutricional Adicionada](img/Testes%20Relatorio%20Nutricional/conduta_nutricional_adicionada.png)
 
-Editando Conduta Nutricional:
+### Editando Conduta Nutricional:
 
 ![Editando Conduta Nutricional](img/Testes%20Relatorio%20Nutricional/atualizando_conduta_nutricional.png)
 
-Excluindo Conduta Nutricional:
+### Excluindo Conduta Nutricional:
 
 ![Excluindo Conduta Nutricional](img/Testes%20Relatorio%20Nutricional/excluindo_conduta_nutricional.png)
 
-Relatório Nutriocional para Idoso cadastrado com sucesso:
+### Relatório Nutriocional para Idoso cadastrado com sucesso:
 
 ![Relatório Nutriocional Cadastrado](img/Testes%20Relatorio%20Nutricional/relatorio_cadastrado.png)
 
-Possibilidade de Edição após finalização do cadastrado:
+### Possibilidade de Edição após finalização do cadastrado:
 
 ![Possibilidade de Edição](img/Testes%20Relatorio%20Nutricional/possibilidade_edicao_apos_cadastro.png)
 
