@@ -39,9 +39,21 @@ Portanto, com os estudos das personas e histórias dos usuários identificadas p
 | ID     | Descrição do Requisito                                | Prioridade |
 | ------ | ----------------------------------------------------- | -----------|
 | RF-001 | Permitir cadastro de usuários com diferentes funções  | ALTA       |
+| RF-002 | Permitir cadastro de idosos                           | ALTA       |
 | RF-002 | Emitir relatórios relacionados ao paciente            | ALTA       |
-| RF-003 | Emitir alertas de reavaliação para os profissionais   | ALTA       |
-| RF-004 | Controle de entrada e baixa de estoque                | BAIXA      |
+| RF-003 | Criação de relatório PIA                              | ALTA       |
+| RF-004 | Criação de Relatório Nutricional                      | ALTA       |
+| RF-005 | Criação de Relatório Modelo para o PIA                | ALTA       |
+| RF-006 | Tela Inicial com informaçãoes gerais sobre o Lar      | ALTA       |
+| RF-007 | Relatório Nutricional subdivido em vários etapas      | ALTA       |
+| RF-008 | Permissões configuradas via role                      | ALTA       |
+| RF-009 | Alteração de senha via envio de email                 | ALTA       |
+| RF-010 | Sistema de Login                                      | ALTA       |
+| RF-011 | Upload de foto do idoso para fácil identificação      | ALTA       |
+| RF-012 | Edição de todos os relatórios                         | ALTA       |
+| RF-013 | Idoso deverá ter um responsável vinculado             | ALTA       |
+| RF-014 | Emitir alertas de reavaliação para os profissionais   | BAIXA      |
+
 
 ### Requisitos não Funcionais
 
@@ -76,10 +88,10 @@ O diagrama de casos de uso é o próximo passo após a elicitação de requisito
 
 O modelo ER abaixo representa através de um diagrama como as entidades do sistema de relacionam entre si na aplicação, através deste também é possível verificar a cardinalidade entre as relações.
 
-![Diagrama ER](img/diagrama-er.jpg)
+![Diagrama ER](img/updated_diagrama_er.png)
 
 ## Projeto da Base de Dados
 
 O projeto da base de dados corresponde à representação das entidades e relacionamentos identificadas no Modelo ER, no formato de tabelas, com colunas e chaves primárias/estrangeiras necessárias para representar corretamente as restrições de integridade.
 
-![Projeto da Base de Dados](img/projeto-base-de-dados.png)
+![Projeto da Base de Dados](img/updated_databse_tables.png)
