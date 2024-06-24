@@ -78,6 +78,36 @@ export class PrismaModeloRelatorioPiaRepository
 	}
 
 	async delete(uid: string) {
+		const modeloRelatorioPia = await prisma.modeloRelatorioPia.findUnique({
+			where: {
+				uid,
+			},
+		});
+
+		await prisma.modeloRelatorioPiaRespostaOpcao.deleteMany({
+			where: {
+				modelo_relatorio_pia_resposta: {
+					modelo_relatorio_pia_pergunta: {
+						id_modelo_relatorio_pia: modeloRelatorioPia.id,
+					},
+				},
+			},
+		});
+
+		await prisma.modeloRelatorioPiaResposta.deleteMany({
+			where: {
+				modelo_relatorio_pia_pergunta: {
+					id_modelo_relatorio_pia: modeloRelatorioPia.id,
+				},
+			},
+		});
+
+		await prisma.modeloRelatorioPiaPergunta.deleteMany({
+			where: {
+				id_modelo_relatorio_pia: modeloRelatorioPia.id,
+			},
+		});
+
 		await prisma.modeloRelatorioPia.delete({
 			where: {
 				uid,

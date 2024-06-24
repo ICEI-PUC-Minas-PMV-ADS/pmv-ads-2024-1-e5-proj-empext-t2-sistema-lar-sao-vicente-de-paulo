@@ -105,7 +105,7 @@ export const RelatorioPiaTable = ({ id }: { id?: bigint }) => {
         <CriarRelatorioPiaModal refetchList={refetch} id={id} />
         {!id && (
           <Input
-            placeholder="Buscar"
+            placeholder="Buscar por Modelo"
             size="large"
             onChange={(e) => setPesquisa(e.target.value)}
             suffix={<SearchOutlined className="cursor-pointer opacity-50" />}
