@@ -22,11 +22,17 @@ export class PrismaRelatorioPiaRepository implements relatorioPiaRepository {
 					include: {
 						relatorio_pia_resposta: {
 							include: {
-								relatorio_pia_resposta_opcao: true,
-								relatorio_pia_resposta_definida: true,
+								relatorio_pia_resposta_opcao: {
+									orderBy: { criado_em: 'asc' },
+								},
+								relatorio_pia_resposta_definida: {
+									orderBy: { criado_em: 'asc' },
+								},
 							},
+							orderBy: { criado_em: 'asc' },
 						},
 					},
+					orderBy: { criado_em: 'asc' },
 				},
 			},
 		});

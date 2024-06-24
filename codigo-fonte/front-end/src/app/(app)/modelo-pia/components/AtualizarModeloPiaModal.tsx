@@ -673,9 +673,7 @@ const InputTag = ({
 }) => {
   const [cookies] = useCookies([authToken.nome]);
   const { token } = theme.useToken();
-  const [tags, setTags] = useState<[string, string | undefined][]>(
-    value || [["", undefined]]
-  );
+  const [tags, setTags] = useState<[string, string | undefined][]>(value || []);
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [editInputIndex, setEditInputIndex] = useState(-1);
@@ -722,7 +720,7 @@ const InputTag = ({
   };
 
   const handleInputConfirm = () => {
-    if (inputValue && !tags[0].includes(inputValue)) {
+    if (inputValue) {
       setTags([...tags, [inputValue, undefined]]);
     }
     setInputVisible(false);

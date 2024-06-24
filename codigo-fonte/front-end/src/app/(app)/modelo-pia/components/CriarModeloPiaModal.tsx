@@ -498,7 +498,7 @@ const InputTag = ({ onChange }: { onChange: (value: string[]) => void }) => {
   };
 
   const handleInputConfirm = () => {
-    if (inputValue && !tags.includes(inputValue)) {
+    if (inputValue) {
       setTags([...tags, inputValue]);
     }
     setInputVisible(false);

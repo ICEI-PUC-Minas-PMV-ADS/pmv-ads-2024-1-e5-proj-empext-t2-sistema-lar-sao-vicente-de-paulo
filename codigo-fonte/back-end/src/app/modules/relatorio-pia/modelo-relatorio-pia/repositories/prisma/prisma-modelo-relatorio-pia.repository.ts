@@ -50,10 +50,14 @@ export class PrismaModeloRelatorioPiaRepository
 					include: {
 						modelo_relatorio_pia_resposta: {
 							include: {
-								modelo_relatorio_pia_resposta_opcao: true,
+								modelo_relatorio_pia_resposta_opcao: {
+									orderBy: { criado_em: 'asc' },
+								},
 							},
+							orderBy: { criado_em: 'asc' },
 						},
 					},
+					orderBy: { criado_em: 'asc' },
 				},
 			},
 		});
