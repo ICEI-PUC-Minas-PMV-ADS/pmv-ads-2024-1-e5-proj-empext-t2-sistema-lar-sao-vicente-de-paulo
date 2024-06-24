@@ -1,5 +1,10 @@
 import { IErrorState, useMutation } from "@/utils/hooks/useMutation";
-import { EditOutlined, InboxOutlined } from "@ant-design/icons";
+import {
+  CloseCircleOutlined,
+  EditOutlined,
+  InboxOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { InputSelect } from "@/components/input";
@@ -16,6 +21,7 @@ import { IRelatorioPia } from "../Interface/IRelatorioPia";
 import TextArea from "antd/es/input/TextArea";
 import { api } from "@/utils/service/api";
 import { IRelatorioPiaRespostaDefinida } from "../Interface/IRelatorioPiaRespostaDefinida";
+import { AxiosError } from "axios";
 
 export const AtualizarRelatorioPiaModal = ({
   uid,
@@ -113,6 +119,50 @@ export const AtualizarRelatorioPiaModal = ({
       width="900px"
       setOpenModal={setOpen}
       openModal={open}
+      listOptions={[
+        {
+          popconfirm: true,
+          popconfirmType: "danger",
+          popconfirmTitle: "Excluir Relatório PIA",
+          popconfirmDescrition:
+            "Ao excluir o Relatório PIA, não será possível recuperá-lo novamente. Você tem certeza?",
+          popconfirmIcon: (
+            <QuestionCircleOutlined
+              style={{
+                color: "red",
+              }}
+            />
+          ),
+          label: "Excluir",
+          onClick: () => {
+            api
+              .delete<{ id: bigint }>("/relatorio-pia/" + uid, {
+                headers: {
+                  Authorization: "Bearer " + cookies[authToken.nome],
+                },
+              })
+              .then(() => {
+                notification.open({
+                  message: "Operação realizada",
+                  description: "Relatório PIA excluído com sucesso!",
+                  type: "success",
+                });
+                refetchList();
+                setOpen(false);
+              })
+              .catch((err) => {
+                const error = err as AxiosError<{ error: IErrorState }>;
+
+                notification.open({
+                  message: "Ocorreu um erro",
+                  description: error.response?.data?.error.message,
+                  type: "error",
+                });
+              });
+          },
+          icon: <CloseCircleOutlined />,
+        },
+      ]}
       created_item={relatorioPia?.criado_em}
       updated_item={relatorioPia?.atualizado_em}
     >
