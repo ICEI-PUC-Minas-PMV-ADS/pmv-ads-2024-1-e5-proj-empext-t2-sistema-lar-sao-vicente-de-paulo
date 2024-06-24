@@ -45,7 +45,7 @@ export const CriarRelatorioNutricionalModal = ({
 
   const methods = useForm<IFormNutricional>();
 
-  const { handleSubmit, control, reset, setValue } = methods;
+  const { handleSubmit, control, reset, setValue, formState } = methods;
 
   async function createRelatorioNutricional(data: IFormNutricional) {
     setIsloading(true);
@@ -261,47 +261,126 @@ export const CriarRelatorioNutricionalModal = ({
             items={[
               {
                 key: "1",
-                label: "Geral",
+                label: (
+                  <div className="text-left flex flex-col">
+                    <p>Geral</p>
+                    {formState.errors.diagnostico && (
+                      <p className="text-red-700 text-xs">
+                        * Campos obrigatórios <br /> não preenchidos.
+                      </p>
+                    )}
+                  </div>
+                ),
                 children: <TabGeral />,
+                forceRender: true,
               },
               {
                 key: "2",
                 label: (
-                  <p className="text-left">
-                    Diagnóstico Clínico / <br /> Hipótese Diagnosticadas
-                  </p>
+                  <div className="text-left flex flex-col">
+                    <p>
+                      Diagnóstico Clínico / <br /> Hipótese Diagnosticadas
+                    </p>
+                    {(formState.errors.especificacao ||
+                      formState.errors.alergia_intolerancia) && (
+                      <p className="text-red-700 text-xs">
+                        * Campos obrigatórios <br /> não preenchidos.
+                      </p>
+                    )}
+                  </div>
                 ),
                 children: <TabDiagnosticoHipoteseClinico />,
+                forceRender: true,
               },
               {
                 key: "3",
-                label: "Semiologia Nutricional",
+                label: (
+                  <div className="text-left flex flex-col">
+                    <p>Semiologia Nutricional</p>
+                    {formState.errors.semiologia_nutricional && (
+                      <p className="text-red-700 text-xs">
+                        * Campos obrigatórios <br /> não preenchidos.
+                      </p>
+                    )}
+                  </div>
+                ),
                 children: <TabSemiologiaNutricional />,
+                forceRender: true,
               },
               {
                 key: "4",
-                label: "Antropometria",
+                label: (
+                  <div className="text-left flex flex-col">
+                    <p>Antropometria</p>
+                    {formState.errors.antropometria_nutricional && (
+                      <p className="text-red-700 text-xs">
+                        * Campos obrigatórios <br /> não preenchidos.
+                      </p>
+                    )}
+                  </div>
+                ),
                 children: <TabAntropometria />,
+                forceRender: true,
               },
               {
                 key: "5",
-                label: "Dados Antropométricos",
+                label: (
+                  <div className="text-left flex flex-col">
+                    <p>Dados Antropométricos</p>
+                    {formState.errors.registro_antrometrico && (
+                      <p className="text-red-700 text-xs">
+                        * Campos obrigatórios <br /> não preenchidos.
+                      </p>
+                    )}
+                  </div>
+                ),
                 children: <TabDadosAntropometricos />,
+                forceRender: true,
               },
               {
                 key: "6",
-                label: "Necessidades Nutricionais",
+                label: (
+                  <div className="text-left flex flex-col">
+                    <p>Necessidades Nutricionais</p>
+                    {formState.errors.necessidade_nutricional && (
+                      <p className="text-red-700 text-xs">
+                        * Campos obrigatórios <br /> não preenchidos.
+                      </p>
+                    )}
+                  </div>
+                ),
                 children: <TabNecessidadesNutricionais />,
+                forceRender: true,
               },
               {
                 key: "7",
-                label: "Quadro Clínico",
+                label: (
+                  <div className="text-left flex flex-col">
+                    <p>Quadro Clínico</p>
+                    {formState.errors.quadro_clinico && (
+                      <p className="text-red-700 text-xs">
+                        * Campos obrigatórios <br /> não preenchidos.
+                      </p>
+                    )}
+                  </div>
+                ),
                 children: <TabQuadroClinico />,
+                forceRender: true,
               },
               {
                 key: "8",
-                label: "Conduta Nutricional",
+                label: (
+                  <div className="text-left flex flex-col">
+                    <p>Conduta Nutricional</p>
+                    {formState.errors.conduta_nutricional && (
+                      <p className="text-red-700 text-xs">
+                        * Campos obrigatórios <br /> não preenchidos.
+                      </p>
+                    )}
+                  </div>
+                ),
                 children: <TabCondutaNutricional />,
+                forceRender: true,
               },
             ]}
           />
