@@ -254,12 +254,12 @@ export const AtualizarRelatorioPiaModal = ({
                             if (
                               e.target.value !==
                               resposta.relatorio_pia_resposta_definida?.[0]
-                                .uid_relatorio_pia_resposta_opcao
+                                ?.uid_relatorio_pia_resposta_opcao
                             )
                               await api.delete<{ id: bigint }>(
                                 "/relatorio-pia-resposta-definida/" +
                                   resposta.relatorio_pia_resposta_definida?.[0]
-                                    .uid,
+                                    ?.uid,
                                 {
                                   headers: {
                                     Authorization:
@@ -285,7 +285,7 @@ export const AtualizarRelatorioPiaModal = ({
                           }}
                           value={
                             resposta.relatorio_pia_resposta_definida?.[0]
-                              .uid_relatorio_pia_resposta_opcao
+                              ?.uid_relatorio_pia_resposta_opcao
                           }
                         >
                           {resposta.relatorio_pia_resposta_opcao?.map(
@@ -379,7 +379,7 @@ export const AtualizarRelatorioPiaModal = ({
                         <p>{resposta.titulo}</p>
                         <TextArea
                           defaultValue={
-                            resposta.relatorio_pia_resposta_definida?.[0].valor
+                            resposta.relatorio_pia_resposta_definida?.[0]?.valor
                           }
                           rows={2}
                           onBlur={(e) => {
@@ -387,7 +387,7 @@ export const AtualizarRelatorioPiaModal = ({
                               .patch<{ id: bigint }>(
                                 "/relatorio-pia-resposta-definida/" +
                                   resposta.relatorio_pia_resposta_definida?.[0]
-                                    .uid,
+                                    ?.uid,
                                 {
                                   valor: e.target.value,
                                 } as IRelatorioPiaRespostaDefinida,
