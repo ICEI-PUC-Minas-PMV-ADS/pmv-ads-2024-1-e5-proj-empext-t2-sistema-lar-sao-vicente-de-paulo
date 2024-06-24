@@ -65,6 +65,46 @@ export class PrismaRelatorioPiaRepository implements relatorioPiaRepository {
 		return relatorioPia;
 	}
 	async delete(uid: string): Promise<void> {
+		const relatorioPia = await prisma.relatorioPia.findUnique({
+			where: {
+				uid,
+			},
+		});
+
+		await prisma.relatorioPiaRespostaDefinida.deleteMany({
+			where: {
+				relatorio_pia_resposta: {
+					relatorio_pia_pergunta: {
+						id_relatorio_pia: relatorioPia.id,
+					},
+				},
+			},
+		});
+
+		await prisma.relatorioPiaRespostaOpcao.deleteMany({
+			where: {
+				relatorio_pia_resposta: {
+					relatorio_pia_pergunta: {
+						id_relatorio_pia: relatorioPia.id,
+					},
+				},
+			},
+		});
+
+		await prisma.relatorioPiaResposta.deleteMany({
+			where: {
+				relatorio_pia_pergunta: {
+					id_relatorio_pia: relatorioPia.id,
+				},
+			},
+		});
+
+		await prisma.relatorioPiaPergunta.deleteMany({
+			where: {
+				id_relatorio_pia: relatorioPia.id,
+			},
+		});
+
 		await prisma.relatorioPia.delete({
 			where: {
 				uid,

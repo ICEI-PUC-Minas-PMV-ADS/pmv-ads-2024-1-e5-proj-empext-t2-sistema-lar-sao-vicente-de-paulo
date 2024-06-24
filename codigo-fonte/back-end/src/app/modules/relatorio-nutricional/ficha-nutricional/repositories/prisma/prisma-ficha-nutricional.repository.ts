@@ -65,6 +65,48 @@ export class PrismaFichaNutricionalRepository
 		return fichaNutricional;
 	}
 	async delete(uid: string): Promise<void> {
+		const fichaNutricional = await prisma.fichaNutricional.findUnique({
+			where: {
+				uid,
+			},
+		});
+
+		await prisma.antropometriaNutricional.deleteMany({
+			where: {
+				id_ficha_nutricional: fichaNutricional.id,
+			},
+		});
+
+		await prisma.condutaNutricional.deleteMany({
+			where: {
+				id_ficha_nutricional: fichaNutricional.id,
+			},
+		});
+
+		await prisma.necessidadeNutricional.deleteMany({
+			where: {
+				id_ficha_nutricional: fichaNutricional.id,
+			},
+		});
+
+		await prisma.quadroClinico.deleteMany({
+			where: {
+				id_ficha_nutricional: fichaNutricional.id,
+			},
+		});
+
+		await prisma.registroAntropometrico.deleteMany({
+			where: {
+				id_ficha_nutricional: fichaNutricional.id,
+			},
+		});
+
+		await prisma.semiologiaNutricional.deleteMany({
+			where: {
+				id_ficha_nutricional: fichaNutricional.id,
+			},
+		});
+
 		await prisma.fichaNutricional.delete({
 			where: {
 				uid,

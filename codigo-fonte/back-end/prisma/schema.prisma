@@ -285,8 +285,8 @@ model RelatorioPia {
   atualizado_em   DateTime @updatedAt @db.Timestamp
   data_vencimento DateTime @db.Timestamp
 
-  id_modelo_relatorio_pia BigInt             @db.BigInt
-  modelo_relatorio_pia    ModeloRelatorioPia @relation(fields: [id_modelo_relatorio_pia], references: [id])
+  id_modelo_relatorio_pia BigInt?             @db.BigInt
+  modelo_relatorio_pia    ModeloRelatorioPia? @relation(fields: [id_modelo_relatorio_pia], references: [id])
 
   id_usuario BigInt  @db.BigInt
   usuario    Usuario @relation(fields: [id_usuario], references: [id])

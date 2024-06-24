@@ -1,4 +1,5 @@
 import {
+  CloseCircleOutlined,
   DeleteFilled,
   EditOutlined,
   PlusCircleOutlined,
@@ -313,6 +314,50 @@ export const AtualizarModeloPiaModal = ({
       width="950px"
       setOpenModal={setOpen}
       openModal={open}
+      listOptions={[
+        {
+          popconfirm: true,
+          popconfirmType: "danger",
+          popconfirmTitle: "Excluir Modelo PIA",
+          popconfirmDescrition:
+            "Ao excluir o Modelo PIA, não será possível recuperá-lo novamente. Você tem certeza?",
+          popconfirmIcon: (
+            <QuestionCircleOutlined
+              style={{
+                color: "red",
+              }}
+            />
+          ),
+          label: "Excluir",
+          onClick: () => {
+            api
+              .delete<{ id: bigint }>("/modelo-relatorio-pia/" + uid, {
+                headers: {
+                  Authorization: "Bearer " + cookies[authToken.nome],
+                },
+              })
+              .then(() => {
+                notification.open({
+                  message: "Operação realizada",
+                  description: "Modelo PIA excluído com sucesso!",
+                  type: "success",
+                });
+                refetchList();
+                setOpen(false);
+              })
+              .catch((err) => {
+                const error = err as AxiosError<{ error: IErrorState }>;
+
+                notification.open({
+                  message: "Ocorreu um erro",
+                  description: error.response?.data?.error.message,
+                  type: "error",
+                });
+              });
+          },
+          icon: <CloseCircleOutlined />,
+        },
+      ]}
       created_item={modeloPia?.criado_em}
       updated_item={modeloPia?.atualizado_em}
     >

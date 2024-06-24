@@ -2,8 +2,6 @@ import { TableDefault } from "@/components/table/TableDefault";
 import { Filter } from "@/interface/IQuery";
 import { queryBuilder } from "@/utils/functions/query-builder";
 import { useFetch } from "@/utils/hooks/useFetch";
-import { SearchOutlined } from "@ant-design/icons";
-import { Input } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { useState } from "react";
@@ -12,19 +10,10 @@ import { AtualizarRelatorioNutricionalModal } from "./AtualizarRelatorioNutricio
 import { CriarRelatorioNutricionalModal } from "./CriarRelatorioNutricionalModal";
 
 export const RelatorioNutricionalTable = ({ id }: { id?: bigint }) => {
-  const [pesquisa, setPesquisa] = useState<string>("");
   const [pageLimit, setPageLimit] = useState<number>(10);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   let filtros: Filter | undefined = new Array();
-
-  if (pesquisa !== "")
-    filtros.push({
-      path: "id_idoso",
-      operator: "contains",
-      value: pesquisa,
-      insensitive: true,
-    });
 
   if (id) {
     filtros.push({
@@ -36,7 +25,7 @@ export const RelatorioNutricionalTable = ({ id }: { id?: bigint }) => {
 
   const { data, totalCount, refetch } = useFetch<IFichaNutricional[]>(
     "/ficha-nutricional",
-    [pesquisa, pageLimit, currentPage, id],
+    [pageLimit, currentPage, id],
     {
       params: queryBuilder({
         page_limit: pageLimit,
@@ -101,14 +90,6 @@ export const RelatorioNutricionalTable = ({ id }: { id?: bigint }) => {
           refetchList={refetch}
           id={id || undefined}
         />
-        {!id && (
-          <Input
-            placeholder="Buscar"
-            size="large"
-            onChange={(e) => setPesquisa(e.target.value)}
-            suffix={<SearchOutlined className="cursor-pointer opacity-50" />}
-          />
-        )}
       </div>
       <TableDefault
         dataSource={data}

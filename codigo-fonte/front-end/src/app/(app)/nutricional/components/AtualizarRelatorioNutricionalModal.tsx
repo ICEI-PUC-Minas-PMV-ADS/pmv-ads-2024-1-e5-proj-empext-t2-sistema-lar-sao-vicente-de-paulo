@@ -1,6 +1,10 @@
 import { ModalDefault } from "@/components/modal/ModalDefault";
 import { authToken } from "@/config/authToken";
-import { EditOutlined } from "@ant-design/icons";
+import {
+  CloseCircleOutlined,
+  EditOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import { Select, Tabs, Tooltip, notification } from "antd";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
@@ -247,6 +251,52 @@ export const AtualizarRelatorioNutricionalModal = ({
       width="1340px"
       setOpenModal={setOpen}
       openModal={open}
+      listOptions={[
+        {
+          popconfirm: true,
+          popconfirmType: "danger",
+          popconfirmTitle: "Excluir Relatório Nutricional",
+          popconfirmDescrition:
+            "Ao excluir o Relatório Nutricional, não será possível recuperá-lo novamente. Você tem certeza?",
+          popconfirmIcon: (
+            <QuestionCircleOutlined
+              style={{
+                color: "red",
+              }}
+            />
+          ),
+          label: "Excluir",
+          onClick: () => {
+            api
+              .delete<{ id: bigint }>("/ficha-nutricional/" + uid, {
+                headers: {
+                  Authorization: "Bearer " + cookies[authToken.nome],
+                },
+              })
+              .then(() => {
+                notification.open({
+                  message: "Operação realizada",
+                  description: "Relatório Nutricional excluído com sucesso!",
+                  type: "success",
+                });
+                refetchList();
+                setOpen(false);
+              })
+              .catch((err) => {
+                const error = err as AxiosError<{ error: IErrorState }>;
+
+                notification.open({
+                  message: "Ocorreu um erro",
+                  description: error.response?.data?.error.message,
+                  type: "error",
+                });
+              });
+          },
+          icon: <CloseCircleOutlined />,
+        },
+      ]}
+      created_item={relatorio?.criado_em}
+      updated_item={relatorio?.atualizado_em}
     >
       <FormProvider {...methods}>
         <form className="w-full flex flex-col gap-[15px]">
