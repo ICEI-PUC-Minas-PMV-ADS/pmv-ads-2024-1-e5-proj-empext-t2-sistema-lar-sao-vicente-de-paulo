@@ -1,5 +1,15 @@
 # Apresentação da Solução
 
-Apresentação feita em Slide, explicando um pouco sobre a Sociedade São Vicente de Paulo, sobre o Lar São Vicente de Paulo, e também sobre a aplicação a ser desenvolvida para O Lar. Também adicionamos o Project Model Canvas e o Diagrama de casos de uso.
+Apresentações de Slide e Vídeo, explicando um pouco sobre a Sociedade São Vicente de Paulo, sobre o Lar São Vicente de Paulo, e também sobre a aplicação a ser desenvolvida para O Lar. Também adicionamos o Project Model Canvas e o Diagrama de casos de uso.
 
-[Lar São Vicente de Paulo.pdf](/apresentacao/Apresentacao-Sistema-LarSaoVicentedePaulo.pdf)
+## Apresentação Inicial
+
+[Apresentação Inicial - Lar São Vicente de Paulo](/apresentacao/Apresentacao-Sistema-LarSaoVicentedePaulo.pdf)
+
+## Apresentação Final
+
+[Apresentação Final - Lar São Vicente de Paulo](/apresentacao/Apresentação%20final.pdf)
+
+## Vídeo de Apresentação
+
+[Vídeo Apresentação - Lar São Vicente de Paulo](/apresentacao/Vídeo%20Apresentação%20-%20Sistema%20Lar%20São%20Vicente%20de%20Paula.mp4)
