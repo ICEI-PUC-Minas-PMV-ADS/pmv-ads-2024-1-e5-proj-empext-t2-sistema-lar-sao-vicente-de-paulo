@@ -60,3 +60,10 @@ $ yarn dev
 4. CRUD de Cargos dos Usuários (back-end e front-end).
 
 Essas implementações garantem segurança, gestão de usuários e administração de cargos no sistema.
+
+### [1.0.0] - 23/06/2024
+
+#### Adicionado:
+
+1. Todas as funcionalidades implantadas (back-end e front-end).
+2. Aplicação publicada na AWS (back-end e front-end).
